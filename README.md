@@ -1,6 +1,8 @@
-# Claude Code Academic Workflow
+# My Claude Code Setup
 
 > **Work in progress.** This is not meant to be a polished guide for everyone. It's mostly a summary of how I've been using Claude Code for academic work — creating lecture slides, writing R scripts, managing Beamer-to-Quarto workflows, and so on. I keep learning new things, and as I do, I keep updating these files. This is just a way for me to share what I've figured out with friends and colleagues.
+
+**Live site:** [psantanna.com/claude-code-my-workflow](https://psantanna.com/claude-code-my-workflow/)
 
 A ready-to-fork starter kit for academics using [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with **LaTeX/Beamer + R + Quarto**. Contains a complete multi-agent infrastructure — specialized reviewers, quality gates, adversarial QA loops, and automated workflows — extracted and genericized from a production PhD course.
 
@@ -114,7 +116,7 @@ If it compiles, your setup is working.
 
 ## The Guide
 
-For a comprehensive walkthrough of the entire workflow, read the **[Workflow Guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html)** (or see the [source](guide/workflow-guide.qmd)).
+For a comprehensive walkthrough of the entire workflow, read the **[full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html)** (or see the [source](guide/workflow-guide.qmd)).
 
 It covers:
 1. **Why This Workflow Exists** — the problem and the vision
