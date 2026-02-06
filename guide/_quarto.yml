@@ -1,0 +1,19 @@
+project:
+  type: default
+  output-dir: .
+
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme:
+      light: cosmo
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: github
+    smooth-scroll: true
+    self-contained: true
+    title-block-banner: true
+    mainfont: "system-ui, -apple-system, sans-serif"

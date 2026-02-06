@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Website Placeholder</title>
+  <style>
+    body {
+      font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 0 1em;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    h1 { color: #012169; border-bottom: 2px solid #B9975B; padding-bottom: 0.3em; }
+    h2 { color: #012169; }
+    a { color: #012169; }
+    code { background: #f0f0f0; padding: 0.2em 0.4em; border-radius: 3px; }
+    .placeholder {
+      background: #f8f9fa;
+      border: 2px dashed #B9975B;
+      padding: 2em;
+      border-radius: 8px;
+      text-align: center;
+      margin: 2em 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Course Website</h1>
+
+  <div class="placeholder">
+    <h2>GitHub Pages Deployment Target</h2>
+    <p>This directory (<code>docs/</code>) is where rendered Quarto slides are deployed for GitHub Pages.</p>
+    <p>Run <code>./scripts/sync_to_docs.sh</code> to render and deploy your slides here.</p>
+  </div>
+
+  <h2>Getting Started</h2>
+  <ol>
+    <li>Create your first lecture in <code>Quarto/</code> (e.g., <code>Lecture1_Topic.qmd</code>)</li>
+    <li>Run <code>./scripts/sync_to_docs.sh Lecture1</code> to render and deploy</li>
+    <li>Enable GitHub Pages in your repo settings (source: <code>docs/</code> folder)</li>
+    <li>Replace this placeholder with your course homepage</li>
+  </ol>
+
+  <h2>Slides</h2>
+  <p>Rendered slides will appear in <code>docs/slides/</code> after running the sync script.</p>
+</body>
+</html>

@@ -1,0 +1,652 @@
+/*-- scss:defaults --*/
+
+// ==============================================================================
+// INSTITUTIONAL COLORS
+// ==============================================================================
+// Customize these for your university/institution:
+//   1. Replace color values with your institution's brand colors
+//   2. Update variable names if desired (but keep the semantic mapping)
+//   3. The rest of the theme adapts automatically
+
+$primary-blue: #012169;        // Primary institutional color (headings, accents)
+$primary-gold: #B9975B;        // Secondary color (emphasis, borders)
+$highlight-yellow: #F2A900;    // Highlight color (markers, alerts)
+$light-bg: #E8EDF5;           // Light background for title/section slides
+
+// Semantic color mapping (don't change these names)
+$jet: #1a1a1a;
+$accent: $primary-blue;
+$accent2: $primary-gold;
+$right-arrow: "\2192";
+
+// Fonts - use system sans-serif for reliability
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
+$font-family-sans-serif: "Source Sans Pro", "Helvetica Neue", sans-serif !default;
+$presentation-heading-font: "Source Sans Pro", "Helvetica Neue", sans-serif !default;
+
+$presentation-heading-color: $primary-blue !default;
+$presentation-heading-font-weight: 600;
+$presentation-font-size-root: 30px;
+
+// Spacing
+$presentation-block-margin: 12px;
+$presentation-h2-font-size: 1.4em;
+
+// Colors
+$body-color: $jet !default;
+$link-color: $primary-blue !default;
+$selection-bg: $primary-gold !default;
+
+
+/*-- scss:rules --*/
+
+// ==============================================================================
+// SLIDE LAYOUT
+// ==============================================================================
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  padding: 0.5em 1em;
+  top: 0 !important;
+}
+
+.reveal a {
+  line-height: 1.3em;
+  text-decoration: none;
+  border-bottom: 1px dotted $primary-gold;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-bottom-color: $primary-blue;
+  }
+}
+
+.reveal p {
+  font-weight: 300;
+  margin-top: 0.5em;
+  margin-bottom: 0.35em;
+  line-height: 1.45;
+}
+
+.reveal p + ul,
+.reveal p + ol {
+  margin-top: 0.3em;
+}
+
+// ==============================================================================
+// TITLE SLIDE
+// ==============================================================================
+
+#title-slide {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100% !important;
+  background: linear-gradient(180deg, white 0%, $light-bg 100%);
+
+  .title {
+    color: $primary-blue;
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 0.2em;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    color: $primary-gold;
+    font-style: italic;
+    margin-top: 0.3em;
+    margin-bottom: 1.2em;
+    font-weight: 400;
+    font-size: 1.3em;
+  }
+
+  .author,
+  .quarto-title-author-name {
+    color: $primary-blue;
+    font-weight: 600;
+    font-size: 1.2em;
+    margin-top: 0.5em;
+  }
+
+  .institute,
+  .quarto-title-affiliation,
+  .quarto-title-author-email {
+    font-style: italic;
+    color: #555;
+    margin-top: 0.4em;
+    font-size: 1.05em;
+  }
+
+  .date,
+  .quarto-title-meta-contents {
+    color: $primary-gold;
+    font-weight: 600;
+    margin-top: 1.5em;
+    font-size: 1.1em;
+  }
+
+  .quarto-title-authors {
+    display: block;
+    text-align: center;
+
+    .quarto-title-author {
+      padding: 0;
+      width: 100%;
+    }
+  }
+}
+
+// ==============================================================================
+// HEADINGS
+// ==============================================================================
+
+.reveal h2 {
+  color: $primary-blue;
+  font-weight: 600;
+  font-size: 1.5em;
+  margin-bottom: 0.7em;
+  padding-bottom: 0.2em;
+  border-bottom: 2px solid rgba($primary-gold, 0.3);
+}
+
+.reveal h3 {
+  color: $primary-gold;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.reveal h4 {
+  color: $highlight-yellow;
+  font-weight: 600;
+  font-size: 0.95em;
+  margin-top: 0.8em;
+  margin-bottom: 0.3em;
+}
+
+// ==============================================================================
+// COLOR UTILITY CLASSES
+// ==============================================================================
+
+.alert { color: $primary-gold; }
+
+// Customize these class names for your institution:
+.emoryblue { color: $primary-blue; }
+.emorygold { color: $primary-gold; }
+.emoryyellow { color: $highlight-yellow; }
+
+// Semantic colors for diagrams and annotations
+.positive {
+  color: #15803d !important;  // Green - good/observed/identified
+  font-weight: 600;
+}
+
+.negative {
+  color: #b91c1c !important;  // Red - bad/problematic/bias
+  font-weight: 600;
+}
+
+.neutral {
+  color: #525252 !important;  // Gray - reference/context
+}
+
+// Highlight classes
+.hi { font-weight: 600; color: $primary-blue !important; }
+.hi-gold { font-weight: 600; color: $primary-gold !important; }
+.hi-yellow { font-weight: 600; color: $highlight-yellow !important; }
+.hi-slate { font-weight: 600; color: #314f4f !important; }
+.hi-green { font-weight: 600; color: #2E8B57 !important; }
+.hi-red { font-weight: 600; color: #C41E3A !important; }
+
+.fg { color: var(--col, $jet); }
+.bg {
+  background-color: var(--col, #fff);
+  padding: 0.1em;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+// ==============================================================================
+// LISTS
+// ==============================================================================
+
+.reveal ul {
+  font-weight: 300;
+  padding-left: 1.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+
+  li {
+    margin-bottom: 0.35em;
+    line-height: 1.4;
+    padding-left: 0.3em;
+  }
+
+  li::marker {
+    color: $primary-blue;
+    font-size: 0.9em;
+  }
+}
+
+.reveal ul ul {
+  list-style: none;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  padding-left: 1.2em;
+
+  li {
+    margin-bottom: 0.25em;
+    position: relative;
+    padding-left: 0.2em;
+  }
+
+  li:before {
+    content: $right-arrow;
+    color: $primary-gold;
+    position: absolute;
+    left: -1.1em;
+    font-size: 0.9em;
+  }
+}
+
+.reveal ol {
+  font-weight: 300;
+  padding-left: 1.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+
+  li {
+    margin-bottom: 0.35em;
+    line-height: 1.4;
+    padding-left: 0.3em;
+  }
+
+  li::marker {
+    color: $highlight-yellow;
+    font-weight: 700;
+  }
+}
+
+// ==============================================================================
+// BOX ENVIRONMENTS
+// ==============================================================================
+
+.keybox {
+  background-color: rgba($primary-gold, 0.12);
+  border-left: 4px solid $primary-gold;
+  padding: 0.8em 1.2em;
+  margin: 1.2em 0;
+  border-radius: 6px;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.highlightbox {
+  background-color: rgba($highlight-yellow, 0.08);
+  border-left: 4px solid $highlight-yellow;
+  padding: 0.8em 1.2em;
+  margin: 1.2em 0;
+  border-radius: 6px;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.methodbox {
+  background-color: rgba($primary-blue, 0.06);
+  border-left: 4px solid $primary-blue;
+  padding: 0.8em 1.2em;
+  margin: 1.2em 0;
+  border-radius: 6px;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.assumptionbox {
+  background-color: rgba($primary-gold, 0.08);
+  border: 2px solid $primary-gold;
+  padding: 0.8em 1.2em;
+  margin: 1.2em 0;
+  border-radius: 6px;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.quotebox {
+  background-color: rgba($primary-gold, 0.08);
+  border-left: 4px solid darken($primary-gold, 10%);
+  padding: 0.8em 1.2em 0.8em 1.8em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  line-height: 1.5;
+  position: relative;
+
+  &::before {
+    content: "\201C";
+    font-size: 2.5em;
+    color: rgba($primary-gold, 0.4);
+    position: absolute;
+    left: 0.15em;
+    top: -0.1em;
+    font-style: normal;
+    line-height: 1;
+  }
+}
+
+.resultbox {
+  background-color: rgba($primary-gold, 0.15);
+  border: 2px solid $primary-gold;
+  padding: 0.8em 1.2em;
+  margin: 1.2em 0;
+  border-radius: 6px;
+  line-height: 1.6;
+  box-shadow: 1px -1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.eqbox {
+  background-color: rgba($primary-blue, 0.04);
+  padding: 0.6em 1.2em;
+  margin: 0.8em 0;
+  border-radius: 0;
+  line-height: 1.6;
+}
+
+.softbox {
+  background-color: rgba($primary-gold, 0.06);
+  padding: 0.6em 1.2em;
+  margin: 0.8em 0;
+  border-radius: 0;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+// ==============================================================================
+// TABLES
+// ==============================================================================
+
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.8em;
+}
+
+.reveal table th,
+.reveal table td {
+  border: none;
+  padding: .23em;
+  text-align: left;
+  font-weight: 300;
+}
+
+.reveal table thead th,
+.reveal .slides table tr:last-child td,
+.reveal .slides table {
+  border-bottom: 2px solid $primary-blue;
+}
+
+.reveal table thead th {
+  font-weight: 600;
+  color: $primary-blue;
+}
+
+.reveal table caption {
+  color: #666666;
+  font-variant: small-caps;
+}
+
+// ==============================================================================
+// SECTION SLIDES
+// ==============================================================================
+
+.reveal .slide-background-content {
+  background-color: white;
+}
+
+.reveal section h1 {
+  color: $primary-blue;
+  text-align: center;
+  font-size: 2.2em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  border-bottom: none;
+}
+
+.reveal .slides section.level1 {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100% !important;
+  text-align: center !important;
+  top: 0 !important;
+  padding: 0 !important;
+  background: linear-gradient(135deg, white 0%, $light-bg 100%);
+}
+
+.reveal .slides section:has(> h1:only-child),
+.reveal .slides section:has(> h1:first-child:last-of-type) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100% !important;
+  text-align: center !important;
+  background: linear-gradient(135deg, white 0%, $light-bg 100%);
+}
+
+// ==============================================================================
+// FONT SIZE UTILITIES
+// ==============================================================================
+
+.bigger { font-size: 115%; }
+
+.smaller {
+  font-size: 85%;
+
+  p {
+    margin-top: 0.35em;
+    margin-bottom: 0.3em;
+    line-height: 1.35;
+  }
+
+  ul, ol {
+    margin-top: 0.35em;
+    margin-bottom: 0.35em;
+
+    li {
+      margin-bottom: 0.25em;
+      line-height: 1.35;
+    }
+  }
+
+  .highlightbox, .methodbox, .keybox, .assumptionbox {
+    padding: 0.5em 0.9em;
+    margin: 0.6em 0;
+    line-height: 1.35;
+  }
+}
+
+.smallest {
+  font-size: 80%;
+
+  p {
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+  }
+}
+
+// ==============================================================================
+// LAYOUT UTILITIES
+// ==============================================================================
+
+.wide-table {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  table {
+    width: 90%;
+    margin: 0 auto;
+
+    th, td {
+      padding: 0.5em 1em;
+    }
+  }
+}
+
+.compact {
+  p { margin-top: 0.4em; margin-bottom: 0.4em; }
+  ul, ol {
+    margin-top: 0.3em; margin-bottom: 0.5em;
+    li { margin-bottom: 0.25em; line-height: 1.4; }
+  }
+}
+
+.reveal .spaced-list ul li,
+.reveal .spaced-list ol li {
+  margin-bottom: 1.5em !important;
+}
+
+.mono { font-family: monospace; }
+.ul { text-decoration: underline; }
+.clear { clear: both; }
+
+.col-left { float: left; width: 47%; margin-top: 0; }
+.col-right { float: right; width: 47%; margin-top: 0; }
+.col-left-wide { float: left; width: 63%; }
+.col-right-narrow { float: right; width: 33%; }
+
+.footnote {
+  position: absolute;
+  bottom: 1em;
+  font-size: 70%;
+  color: #7f7f7f;
+}
+
+.note { font-style: italic; color: #666666; }
+.qa { font-weight: 600; color: $primary-blue; }
+
+// ==============================================================================
+// IMAGES AND FIGURES
+// ==============================================================================
+
+.reveal figure { margin: 0.8em 0; }
+.reveal img { max-height: 70vh; }
+.reveal p:has(> img) { text-align: center; }
+.reveal figcaption {
+  font-size: 0.75em;
+  color: #666;
+  font-style: italic;
+  margin-top: 0.5em;
+  text-align: center;
+}
+
+// ==============================================================================
+// MATH
+// ==============================================================================
+
+.reveal .math { font-size: 0.95em; }
+.reveal .math.display { margin: 0.8em 0; }
+
+// ==============================================================================
+// COLUMNS
+// ==============================================================================
+
+.reveal .columns {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 2em;
+}
+
+.reveal .column {
+  flex: 1;
+  img { max-width: 100%; height: auto; }
+}
+
+// ==============================================================================
+// BLOCKQUOTES AND CODE
+// ==============================================================================
+
+.reveal blockquote {
+  background-color: rgba($primary-blue, 0.04);
+  border-left: 4px solid $primary-gold;
+  padding: 1em 1.5em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: #444;
+
+  p { margin: 0.3em 0; }
+}
+
+.reveal code {
+  background-color: rgba($primary-blue, 0.06);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+.reveal pre {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 1em;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+// ==============================================================================
+// REFERENCES
+// ==============================================================================
+
+#refs {
+  font-size: 0.5em;
+  line-height: 1.4;
+  column-count: 1;
+
+  div { margin-bottom: 0.5em; break-inside: avoid; }
+  p { margin: 0.2em 0; }
+}
+
+.references { font-size: 0.5em; line-height: 1.4; }
+
+// ==============================================================================
+// NAVIGATION
+// ==============================================================================
+
+.slide-logo {
+  display: block !important;
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 10px !important;
+  max-width: 150px;
+  max-height: 50px;
+  width: auto !important;
+  color: $body-color !important;
+}
+
+.slide-number, .reveal.has-logo .slide-number {
+  bottom: 6px !important;
+  right: 10px !important;
+  top: unset !important;
+  color: #777777 !important;
+}
+
+// ==============================================================================
+// ACCESSIBILITY
+// ==============================================================================
+
+.reveal a:focus,
+.reveal button:focus {
+  outline: 2px solid $primary-gold;
+  outline-offset: 2px;
+}

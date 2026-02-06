@@ -1,0 +1,64 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git branch *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(git fetch *)",
+      "Bash(git checkout *)",
+      "Bash(git merge *)",
+      "Bash(git stash *)",
+      "Bash(gh pr *)",
+      "Bash(gh run *)",
+      "Bash(gh api *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh pr create *)",
+      "Bash(gh repo *)",
+
+      "Bash(xelatex *)",
+      "Bash(TEXINPUTS=*)",
+      "Bash(BIBINPUTS=*)",
+      "Bash(latexmk *)",
+      "Bash(bibtex *)",
+      "Bash(pdfinfo *)",
+      "Bash(pdf2svg *)",
+
+      "Bash(quarto render *)",
+
+      "Bash(Rscript *)",
+      "Bash(python3 *)",
+
+      "Bash(./scripts/sync_to_docs.sh *)",
+      "Bash(./scripts/sync_to_docs.sh)",
+      "Bash(chmod *)",
+      "Bash(open *)",
+      "Bash(ls *)",
+      "Bash(wc *)",
+      "Bash(sort *)",
+      "Bash(for *)",
+      "Bash(gs *)",
+      "Bash(pdftk *)",
+      "Bash(mkdir *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Review the conversation transcript. This project requires that ALL outputs are verified before completion: LaTeX must compile, Quarto must render, images must display, SVGs must contain valid XML. Check if Claude verified its work during this response. If verification was NOT performed and the task involved creating or modifying .tex, .qmd, .R, or .svg files, respond with {\"ok\": false, \"reason\": \"Verification not performed. Please compile/render the modified files and verify output before finishing.\"}. If verification was done, or the task did not involve these file types, or the task was purely informational/planning, respond with {\"ok\": true}.",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
