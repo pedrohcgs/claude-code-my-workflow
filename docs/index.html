@@ -3,48 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course Website Placeholder</title>
+  <title>Claude Code Academic Workflow</title>
   <style>
     body {
-      font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
-      max-width: 800px;
-      margin: 2em auto;
-      padding: 0 1em;
+      font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      max-width: 720px;
+      margin: 3em auto;
+      padding: 0 1.5em;
       color: #1a1a1a;
-      line-height: 1.6;
+      line-height: 1.7;
     }
     h1 { color: #012169; border-bottom: 2px solid #B9975B; padding-bottom: 0.3em; }
-    h2 { color: #012169; }
-    a { color: #012169; }
-    code { background: #f0f0f0; padding: 0.2em 0.4em; border-radius: 3px; }
-    .placeholder {
-      background: #f8f9fa;
-      border: 2px dashed #B9975B;
-      padding: 2em;
-      border-radius: 8px;
-      text-align: center;
-      margin: 2em 0;
+    h2 { color: #012169; margin-top: 2em; }
+    a { color: #012169; text-decoration: underline; }
+    a:hover { color: #B9975B; }
+    .wip-banner {
+      background: #fff8e1;
+      border-left: 4px solid #B9975B;
+      padding: 1em 1.2em;
+      margin: 1.5em 0;
+      border-radius: 0 6px 6px 0;
     }
+    .guide-link {
+      display: inline-block;
+      background: #012169;
+      color: #fff;
+      padding: 0.7em 1.5em;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 0.5em;
+    }
+    .guide-link:hover { background: #B9975B; color: #fff; }
+    .footer { margin-top: 3em; color: #888; font-size: 0.9em; border-top: 1px solid #ddd; padding-top: 1em; }
   </style>
 </head>
 <body>
-  <h1>Course Website</h1>
 
-  <div class="placeholder">
-    <h2>GitHub Pages Deployment Target</h2>
-    <p>This directory (<code>docs/</code>) is where rendered Quarto slides are deployed for GitHub Pages.</p>
-    <p>Run <code>./scripts/sync_to_docs.sh</code> to render and deploy your slides here.</p>
+  <h1>Claude Code Academic Workflow</h1>
+
+  <div class="wip-banner">
+    <strong>Work in progress.</strong> This is a living document that I keep updating as I learn new things. It's mostly a summary of how I've been using Claude Code for academic work — shared here so friends and colleagues can take a look.
   </div>
 
-  <h2>Getting Started</h2>
-  <ol>
-    <li>Create your first lecture in <code>Quarto/</code> (e.g., <code>Lecture1_Topic.qmd</code>)</li>
-    <li>Run <code>./scripts/sync_to_docs.sh Lecture1</code> to render and deploy</li>
-    <li>Enable GitHub Pages in your repo settings (source: <code>docs/</code> folder)</li>
-    <li>Replace this placeholder with your course homepage</li>
-  </ol>
+  <p>A ready-to-fork starter kit for academics using <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> with LaTeX/Beamer, R, and Quarto. Contains a complete multi-agent infrastructure — specialized reviewers, quality gates, adversarial QA loops, and automated workflows — extracted from a production PhD course.</p>
 
-  <h2>Slides</h2>
-  <p>Rendered slides will appear in <code>docs/slides/</code> after running the sync script.</p>
+  <h2>The Guide</h2>
+  <p>The full workflow guide covers everything: why this exists, how to set it up, the agent ecosystem, quality gates, workflow patterns, and how to customize it for your field.</p>
+  <a class="guide-link" href="workflow-guide.html">Read the Workflow Guide</a>
+
+  <h2>Source Code</h2>
+  <p>The full template — agents, skills, rules, and configuration — is on GitHub:</p>
+  <a href="https://github.com/pedrohcgs/claude-code-my-workflow">github.com/pedrohcgs/claude-code-my-workflow</a>
+
+  <div class="footer">
+    Pedro H. C. Sant'Anna &middot; Emory University
+  </div>
+
 </body>
 </html>
