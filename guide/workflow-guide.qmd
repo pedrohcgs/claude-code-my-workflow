@@ -1,5 +1,5 @@
 ---
-title: "Claude Code for Academic Workflows"
+title: "My Claude Code Setup"
 subtitle: "A Comprehensive Guide to Multi-Agent Slide Development, Code Review, and Research Automation"
 author: "Pedro H. C. Sant'Anna"
 date: "2026-02-06"
@@ -23,6 +23,9 @@ format:
         <style>
         :not(pre) > code { background-color: rgba(185,151,91,0.1) !important; color: #8b6914 !important; padding: 0.15em 0.45em !important; border-radius: 3px !important; font-size: 0.87em !important; }
         pre code { background-color: transparent !important; color: inherit !important; padding: 0 !important; font-size: inherit !important; border-radius: 0 !important; }
+        body:not(.floating):not(.docked) .page-columns.toc-left {
+          grid-template-columns: [screen-start] 1.5em [screen-start-inset] 5fr [page-start] 35px [page-start-inset] minmax(0px,175px) [body-start-outset] 35px [body-start] 1.5em [body-content-start] minmax(450px,calc(1100px - 3em)) [body-content-end] 1.5em [body-end] 50px [body-end-outset] minmax(0px,200px) [page-end-inset] 35px [page-end] 5fr [screen-end-inset] 1.5em [screen-end] !important;
+        }
         </style>
 ---
 

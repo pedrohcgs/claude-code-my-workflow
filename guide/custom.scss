@@ -22,9 +22,31 @@ $code-bg: rgba(185, 151, 91, 0.08);
 
 /*-- scss:rules --*/
 
+// ── Widen the main content column ──
+// Quarto uses CSS Grid with hardcoded track sizes for page-columns.toc-left.
+// The default body-content track is calc(800px - 3em). Override to 1100px.
+body:not(.floating):not(.docked) .page-columns.toc-left {
+  grid-template-columns:
+    [screen-start] 1.5em
+    [screen-start-inset] 5fr
+    [page-start] 35px
+    [page-start-inset] minmax(0px, 175px)
+    [body-start-outset] 35px
+    [body-start] 1.5em
+    [body-content-start] minmax(450px, calc(1100px - 3em))
+    [body-content-end] 1.5em
+    [body-end] 50px
+    [body-end-outset] minmax(0px, 200px)
+    [page-end-inset] 35px
+    [page-end] 5fr
+    [screen-end-inset] 1.5em
+    [screen-end] !important;
+}
+
 // ── Base ──
 body {
   -webkit-font-smoothing: antialiased;
+  font-size: 1.2rem;
   line-height: 1.75;
 }
 
@@ -96,7 +118,9 @@ h3, .h3 {
   a {
     color: $text-muted;
     text-decoration: none;
-    font-size: 0.95em;
+    font-size: 1.1em;
+    display: block;
+    padding: 0.75em 0;
 
     &:hover { color: $navy; }
   }
