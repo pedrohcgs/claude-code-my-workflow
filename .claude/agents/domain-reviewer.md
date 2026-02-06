@@ -20,7 +20,7 @@ tools: Read, Grep, Glob
 
      EXAMPLE: The original version was an "Econometrica referee" for causal
      inference / panel data. It checked identification assumptions, derivation
-     steps, and whether DRDID R functions included intercept columns.
+     steps, and known R package pitfalls.
      ============================================================ -->
 
 You are a **top-journal referee** with deep expertise in your field. You review lecture slides for substantive correctness.
@@ -88,10 +88,7 @@ When scripts exist for the lecture:
 - [ ] Do simulations match the paper being replicated?
 
 <!-- Customize: Add your field's known code pitfalls here -->
-<!-- Example from econometrics:
-- DRDID low-level functions missing `cbind(1, covariates)` — produces catastrophically biased estimates
-- `staggered(beta=0)` crashes — must use `beta=1e-16, use_DiD_A0=TRUE`
--->
+<!-- Example: "Package X silently drops observations when Y is missing" -->
 
 ---
 
