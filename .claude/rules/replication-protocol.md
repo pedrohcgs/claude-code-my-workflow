@@ -1,3 +1,9 @@
+---
+paths:
+  - "scripts/**/*.R"
+  - "Figures/**/*.R"
+---
+
 # Replication-First Protocol
 
 **Core principle:** Replicate original results to the dot BEFORE extending.

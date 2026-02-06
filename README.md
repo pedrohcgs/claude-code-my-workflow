@@ -175,7 +175,6 @@ Each agent is better at its narrow task than a generalist would be.
 ## Additional Resources
 
 - [Claude Code Documentation](https://docs.anthropic.com/en/docs/claude-code)
-- [Claude Code Best Practices](https://github.com/shanraisshan/claude-code-best-practice) — community-curated tips on context engineering, workflows, and debugging
 - [Writing a Good CLAUDE.md](https://docs.anthropic.com/en/docs/claude-code/memory) — official guidance on project memory
 
 ---
