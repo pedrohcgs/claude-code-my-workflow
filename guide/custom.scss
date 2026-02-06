@@ -1,0 +1,229 @@
+/*-- scss:defaults --*/
+
+// Colors — Emory Navy & Gold
+$navy: #012169;
+$navy-light: #1a3a7a;
+$gold: #B9975B;
+$gold-pale: #faf6ef;
+$text: #222;
+$text-muted: #6b7280;
+
+$body-bg: #fff;
+$body-color: $text;
+$link-color: $navy;
+$link-hover-color: $gold;
+$headings-color: $navy;
+
+// Bootstrap variable that controls inline code color
+$code-color: #8b6914;
+
+// Bootstrap variable that controls inline code background
+$code-bg: rgba(185, 151, 91, 0.08);
+
+/*-- scss:rules --*/
+
+// ── Base ──
+body {
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.75;
+}
+
+// ── WIP notice ──
+#title-block-header {
+  position: relative;
+
+  &::before {
+    content: 'Work in progress — I keep updating this as I learn new things.';
+    font-weight: 700;
+    display: block;
+    background: #fffbf0;
+    border: 1px solid #e8dcc8;
+    padding: 0.7em 1.1em;
+    margin-bottom: 1.5em;
+    font-size: 0.9em;
+    color: #6b5a30;
+  }
+}
+
+// ── Title ──
+.quarto-title {
+  padding-bottom: 1.2em;
+  border-bottom: 2px solid $gold;
+  margin-bottom: 1.5em;
+}
+
+.quarto-title .title {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: $navy;
+}
+
+.quarto-title .subtitle {
+  font-size: 1.05em;
+  color: $text-muted;
+  margin-top: 0.3em;
+}
+
+// ── Headings ──
+h1, .h1 {
+  font-size: 1.7em;
+  margin-top: 2.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #ddd;
+}
+
+h2, .h2 {
+  font-size: 1.3em;
+  margin-top: 2em;
+  color: $navy;
+}
+
+h3, .h3 {
+  font-size: 1.1em;
+  margin-top: 1.5em;
+  color: $navy-light;
+}
+
+// ── TOC ──
+#TOC {
+  .active {
+    font-weight: 600;
+    color: $navy !important;
+    border-left: 2px solid $gold;
+    padding-left: 0.5em;
+  }
+
+  a {
+    color: $text-muted;
+    text-decoration: none;
+    font-size: 0.95em;
+
+    &:hover { color: $navy; }
+  }
+}
+
+// ── Inline code — force override Bootstrap defaults ──
+p code,
+li code,
+td code,
+th code,
+a code,
+span code,
+.callout code,
+blockquote code,
+#quarto-content code:not(pre code) {
+  font-size: 0.87em !important;
+  padding: 0.15em 0.4em !important;
+  background-color: rgba(185, 151, 91, 0.08) !important;
+  color: #8b6914 !important;
+  border-radius: 3px !important;
+}
+
+pre code {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+}
+
+pre {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
+
+pre:not(.sourceCode) {
+  background: #f8f8f8;
+  color: $text;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+
+// ── Tables ──
+.table {
+  border: 1px solid #ddd;
+
+  thead {
+    background: $navy;
+    color: #fff;
+
+    th {
+      font-weight: 600;
+      font-size: 0.9em;
+      padding: 0.7em 0.9em;
+      border: none;
+    }
+  }
+
+  tbody {
+    tr {
+      &:nth-child(even) { background: #f9f9f9; }
+      &:hover { background: $gold-pale; }
+
+      td {
+        padding: 0.6em 0.9em;
+        border-top: 1px solid #eee;
+        font-size: 0.92em;
+      }
+    }
+  }
+}
+
+// ── Callouts ──
+.callout {
+  margin: 1.5em 0;
+}
+
+.callout-tip {
+  border-left: 3px solid $gold;
+  background: $gold-pale;
+}
+
+.callout-important {
+  border-left: 3px solid #dc2626;
+  background: #fef2f2;
+}
+
+.callout-warning {
+  border-left: 3px solid #f59e0b;
+  background: #fffbeb;
+}
+
+.callout-note {
+  border-left: 3px solid $navy;
+  background: #f0f4ff;
+}
+
+// ── Blockquotes ──
+blockquote {
+  border-left: 3px solid $gold;
+  padding: 0.8em 1.2em;
+  margin: 1.2em 0;
+  background: $gold-pale;
+  font-style: italic;
+  color: #555;
+
+  strong {
+    color: $navy;
+    font-style: normal;
+  }
+}
+
+// ── Horizontal rules ──
+hr {
+  border: none;
+  height: 1px;
+  background: #ddd;
+  margin: 2.5em 0;
+}
+
+// ── Links ──
+#quarto-content a {
+  text-decoration: underline;
+  text-decoration-color: rgba($navy, 0.2);
+  text-underline-offset: 2px;
+
+  &:hover {
+    text-decoration-color: $gold;
+    color: $gold;
+  }
+}

@@ -8,12 +8,10 @@ format:
     toc-depth: 3
     toc-location: left
     number-sections: true
-    theme:
-      light: cosmo
+    theme: cosmo
     code-copy: true
     code-overflow: wrap
     highlight-style: github
     smooth-scroll: true
     self-contained: true
-    title-block-banner: true
     mainfont: "system-ui, -apple-system, sans-serif"

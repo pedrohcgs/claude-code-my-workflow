@@ -9,13 +9,21 @@ format:
     toc-depth: 3
     toc-location: left
     number-sections: true
-    theme: cosmo
+    theme:
+      - cosmo
+      - custom.scss
     code-copy: true
     code-overflow: wrap
-    highlight-style: github
+    highlight-style: github-dark
     smooth-scroll: true
     self-contained: true
-    mainfont: "system-ui, -apple-system, sans-serif"
+    link-external-newwindow: true
+    include-in-header:
+      text: |
+        <style>
+        :not(pre) > code { background-color: rgba(185,151,91,0.1) !important; color: #8b6914 !important; padding: 0.15em 0.45em !important; border-radius: 3px !important; font-size: 0.87em !important; }
+        pre code { background-color: transparent !important; color: inherit !important; padding: 0 !important; font-size: inherit !important; border-radius: 0 !important; }
+        </style>
 ---
 
 # Why This Workflow Exists {#sec-why}
@@ -31,29 +39,18 @@ If you've ever built lecture slides, you know the pain:
 
 This workflow solves all of these problems by turning Claude Code into a **multi-agent academic production system**.
 
-## What Claude Code Can Do That ChatGPT Can't
+## What Makes Claude Code Different
 
-Claude Code is not a chatbot. It's a **CLI tool** that runs on your computer with full access to your file system, terminal, and git. This means:
+Claude Code is a **CLI tool** that runs on your computer with full access to your file system, terminal, and git. Here's what that enables:
 
-| Capability | ChatGPT/Claude.ai | Claude Code |
-|-----------|-------------------|-------------|
-| Read your files | No (upload only) | Yes (reads any file) |
-| Edit your files | No | Yes (surgical edits) |
-| Run shell commands | No | Yes (compile LaTeX, run R, git) |
-| Access git history | No | Yes (commits, PRs, branches) |
-| Persistent memory | Limited | CLAUDE.md + MEMORY.md |
-| Multi-agent workflows | No | Yes (specialized agents) |
-| Quality gates | No | Yes (blocks bad commits) |
-
-## The Vision: Claude as Research Partner
-
-The key insight — borrowed from [Scott's collaborative methodology](https://github.com/scottpurdy/claude-workflow) — is that Claude works best as a **thinking partner**, not a code generator:
-
-> **Not:** "Make slides about difference-in-differences."
->
-> **Instead:** "Here's a paper on DiD. What's the pedagogical narrative? How should we build intuition before formalism? Challenge my ordering with 5 questions."
-
-This workflow embodies that philosophy with specialized agents, quality enforcement, and iterative refinement.
+| Capability | What It Means for You |
+|-----------|----------------------|
+| Read & edit your files | Surgical edits to `.tex`, `.qmd`, `.R` files in place |
+| Run shell commands | Compile LaTeX, run R scripts, render Quarto — directly |
+| Access git history | Commits, PRs, branches — all from the conversation |
+| Persistent memory | CLAUDE.md + MEMORY.md survive across sessions |
+| Multi-agent workflows | Specialized agents for proofreading, layout, pedagogy, code review |
+| Quality gates | Automated scoring that blocks bad commits |
 
 ::: {.callout-tip}
 ## Case Study: Econ 730 at Emory
@@ -279,7 +276,7 @@ Use it for:
 
 ```bash
 # Clone the template
-git clone https://github.com/pedrohcgs/claude-code-academic-workflow.git my-project
+git clone https://github.com/pedrohcgs/claude-code-my-workflow.git my-project
 cd my-project
 
 # Remove template git history and start fresh

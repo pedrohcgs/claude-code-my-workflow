@@ -3,61 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Code Academic Workflow</title>
+  <title>Claude Code for Academic Workflows</title>
   <style>
     body {
-      font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      max-width: 720px;
-      margin: 3em auto;
-      padding: 0 1.5em;
-      color: #1a1a1a;
+      font-family: Georgia, 'Times New Roman', serif;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2.5em 1.5em;
+      color: #222;
+      line-height: 1.8;
+      background: #fff;
+    }
+
+    h1 {
+      font-size: 1.9em;
+      font-weight: normal;
+      color: #012169;
+      margin-bottom: 0.1em;
+      line-height: 1.3;
+    }
+
+    h2 {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #012169;
+      margin-top: 2.5em;
+      margin-bottom: 0.6em;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid #ddd;
+    }
+
+    p { margin: 0.8em 0; }
+
+    a { color: #012169; }
+    a:hover { color: #B9975B; }
+
+    .wip {
+      background: #fffbf0;
+      border: 1px solid #e8dcc8;
+      padding: 0.9em 1.2em;
+      margin-bottom: 2em;
+      font-size: 0.93em;
+      color: #6b5a30;
       line-height: 1.7;
     }
-    h1 { color: #012169; border-bottom: 2px solid #B9975B; padding-bottom: 0.3em; }
-    h2 { color: #012169; margin-top: 2em; }
-    a { color: #012169; text-decoration: underline; }
-    a:hover { color: #B9975B; }
-    .wip-banner {
-      background: #fff8e1;
-      border-left: 4px solid #B9975B;
-      padding: 1em 1.2em;
-      margin: 1.5em 0;
-      border-radius: 0 6px 6px 0;
+
+    .byline {
+      color: #888;
+      font-size: 0.9em;
+      margin-bottom: 2em;
     }
-    .guide-link {
+
+    .guide-btn {
       display: inline-block;
       background: #012169;
       color: #fff;
-      padding: 0.7em 1.5em;
-      border-radius: 6px;
+      padding: 0.6em 1.4em;
       text-decoration: none;
-      font-weight: 600;
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 0.92em;
       margin-top: 0.5em;
     }
-    .guide-link:hover { background: #B9975B; color: #fff; }
-    .footer { margin-top: 3em; color: #888; font-size: 0.9em; border-top: 1px solid #ddd; padding-top: 1em; }
+    .guide-btn:hover { background: #B9975B; color: #fff; }
+
+    .overview-list {
+      list-style: none;
+      padding: 0;
+    }
+    .overview-list li {
+      padding: 0.5em 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .overview-list li:last-child { border-bottom: none; }
+    .overview-list strong {
+      font-family: -apple-system, system-ui, sans-serif;
+      font-size: 0.88em;
+      color: #012169;
+    }
+    .overview-list .desc {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    code {
+      font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+      font-size: 0.85em;
+      background: #f5f5f5;
+      padding: 0.15em 0.4em;
+    }
+
+    pre {
+      background: #f8f8f8;
+      border: 1px solid #e5e5e5;
+      padding: 1.2em 1.4em;
+      overflow-x: auto;
+      font-size: 0.85em;
+      line-height: 1.7;
+      font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+    }
+
+    .footer {
+      margin-top: 3em;
+      padding-top: 1.5em;
+      border-top: 1px solid #ddd;
+      font-size: 0.85em;
+      color: #999;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Claude Code Academic Workflow</h1>
+  <h1>Claude Code for Academic Workflows</h1>
+  <div class="byline">Pedro H. C. Sant'Anna &middot; Emory University</div>
 
-  <div class="wip-banner">
-    <strong>Work in progress.</strong> This is a living document that I keep updating as I learn new things. It's mostly a summary of how I've been using Claude Code for academic work — shared here so friends and colleagues can take a look.
+  <div class="wip">
+    <strong>Work in progress.</strong> This is not a polished guide for everyone. It's mostly a summary of how I've been using Claude Code for academic work &mdash; creating lecture slides, writing R scripts, managing Beamer-to-Quarto workflows. I keep learning new things, and as I do, I keep updating these files. This is just a way for me to share what I've figured out with friends and colleagues.
   </div>
 
-  <p>A ready-to-fork starter kit for academics using <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> with LaTeX/Beamer, R, and Quarto. Contains a complete multi-agent infrastructure — specialized reviewers, quality gates, adversarial QA loops, and automated workflows — extracted from a production PhD course.</p>
+  <p>This is a starter kit for academics using <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> with LaTeX/Beamer, R, and Quarto. It contains a multi-agent infrastructure &mdash; specialized reviewers, quality gates, adversarial QA loops, and automated workflows &mdash; that I extracted and genericized from a PhD course I developed (Econ 730 at Emory, 6 lectures, 800+ slides).</p>
 
-  <h2>The Guide</h2>
-  <p>The full workflow guide covers everything: why this exists, how to set it up, the agent ecosystem, quality gates, workflow patterns, and how to customize it for your field.</p>
-  <a class="guide-link" href="workflow-guide.html">Read the Workflow Guide</a>
+  <p>
+    <a class="guide-btn" href="workflow-guide.html">Read the full guide</a>
+  </p>
 
-  <h2>Source Code</h2>
-  <p>The full template — agents, skills, rules, and configuration — is on GitHub:</p>
-  <a href="https://github.com/pedrohcgs/claude-code-my-workflow">github.com/pedrohcgs/claude-code-my-workflow</a>
+  <h2>What's in the template</h2>
+
+  <ul class="overview-list">
+    <li><strong>10 specialized agents</strong> <span class="desc">&mdash; proofreader, slide auditor, pedagogy reviewer, R reviewer, TikZ critic, domain reviewer, adversarial QA pair, translator, verifier</span></li>
+    <li><strong>13 slash commands</strong> <span class="desc">&mdash; <code>/compile-latex</code>, <code>/proofread</code>, <code>/deploy</code>, <code>/qa-quarto</code>, <code>/translate-to-quarto</code>, and more</span></li>
+    <li><strong>11 auto-loaded rules</strong> <span class="desc">&mdash; quality gates, notation consistency, R conventions, verification protocol, replication-first coding</span></li>
+    <li><strong>Quality scoring</strong> <span class="desc">&mdash; 80/90/95 thresholds for commit, PR, and excellence</span></li>
+    <li><strong>Adversarial critic-fixer loop</strong> <span class="desc">&mdash; two agents that check each other's work across up to 5 rounds</span></li>
+    <li><strong>Beamer &rarr; Quarto pipeline</strong> <span class="desc">&mdash; 11-phase translation with TikZ-to-SVG and ggplot-to-plotly</span></li>
+  </ul>
+
+  <h2>Getting started</h2>
+
+<pre>git clone https://github.com/pedrohcgs/claude-code-my-workflow.git my-project
+cd my-project
+
+# 1. Edit CLAUDE.md with your project info
+# 2. Fill in .claude/rules/knowledge-base-template.md
+# 3. Start Claude Code and test: /compile-latex MyFirstLecture</pre>
+
+  <p>The <a href="workflow-guide.html">full guide</a> walks through everything: setup, agents, quality gates, workflow patterns, and customization.</p>
+
+  <h2>Source</h2>
+
+  <p>Everything is on GitHub: <a href="https://github.com/pedrohcgs/claude-code-my-workflow">pedrohcgs/claude-code-my-workflow</a></p>
 
   <div class="footer">
-    Pedro H. C. Sant'Anna &middot; Emory University
+    MIT License. Use freely for teaching, research, or any academic purpose.
   </div>
 
 </body>
