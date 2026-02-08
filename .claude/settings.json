@@ -58,19 +58,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/log-reminder.py\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Check the tool input in $ARGUMENTS. If the file_path ends with .tex AND is inside a Slides/ directory, respond with {\"ok\": false, \"reason\": \"A Beamer .tex file was modified. Per the beamer-quarto-sync rule, you MUST also update the corresponding Quarto .qmd file in Quarto/ before reporting the task as complete.\"}. If the file is NOT a .tex file in Slides/, respond with {\"ok\": true}.",
+            "command": "python3 \"C:/dev/claude-code-my-workflow/scripts/log-reminder.py\"",
             "timeout": 10
           }
         ]

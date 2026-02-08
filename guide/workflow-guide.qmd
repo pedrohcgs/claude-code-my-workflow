@@ -136,18 +136,14 @@ Points are deducted for issues:
 | Label overlap | -5 | Diagram illegible |
 | Notation inconsistency | -3 | Student confusion |
 
-### The Stop Hook: Mandatory Verification
+### Mandatory Verification
 
-The `.claude/settings.json` includes a Stop hook that runs at the end of every task:
-
-> "Did Claude verify its output? If the task modified .tex, .qmd, .R, or .svg files and verification was NOT performed, block completion."
-
-This means Claude **cannot** say "done" without actually compiling, rendering, or otherwise verifying the output.
+The verification protocol (`.claude/rules/verification-protocol.md`) requires that Claude compile, render, or otherwise verify every output before reporting a task as complete. The orchestrator enforces this as an explicit step in its loop (Step 2: VERIFY). This means Claude **cannot** say "done" without actually checking the output.
 
 ::: {.callout-warning}
-## Don't Disable the Stop Hook
+## Don't Skip Verification
 
-It's tempting to remove the hook for speed. Don't. In practice, the hook caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn't display, and R scripts with missing intercept terms that produced silently wrong estimates.
+In practice, verification caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn't display, and R scripts with missing intercept terms that produced silently wrong estimates.
 :::
 
 ## Creating Your Own Domain Reviewer
@@ -346,6 +342,7 @@ argument-hint: "[filename without .tex extension]"
 | `/qa-quarto` | Adversarial Quarto QA | After translating Beamer to Quarto |
 | `/slide-excellence` | Full multi-agent review | Before major milestones |
 | `/create-lecture` | New lecture from scratch | Starting a new topic |
+| `/commit` | Stage, commit, PR, merge | After any completed task |
 
 ## Agents --- Specialized Reviewers
 
@@ -401,6 +398,24 @@ Save findings to: quality_reports/[FILENAME]_report.md
 A single Claude prompt trying to check grammar, layout, math, and code simultaneously will do a mediocre job at all of them. Specialized agents focus on one dimension and do it thoroughly. The `/slide-excellence` skill runs them all in parallel, then synthesizes results.
 :::
 
+### Multi-Model Strategy: Cost vs. Quality
+
+Not all agents need the same model. The YAML frontmatter in each agent file specifies which model to use:
+
+| Task Type | Model | Why | Examples |
+|-----------|-------|-----|----------|
+| Complex translation | `model: opus` | Needs deep understanding of both formats | beamer-translator, quarto-critic |
+| Fast, constrained work | `model: sonnet` | Speed matters more than depth | r-reviewer, quarto-fixer |
+| Default | `model: inherit` | Uses whatever the main session runs | proofreader, slide-auditor |
+
+**The principle:** Use Opus for tasks that require holding two large documents in mind simultaneously (translation, adversarial comparison). Use Sonnet for tasks with clear, bounded scope (fix these 12 issues, check this R script). Let everything else inherit.
+
+::: {.callout-tip}
+## Cost Savings
+
+In a typical Beamer-to-Quarto translation, the critic runs 2--4 rounds on Opus while the fixer runs the same rounds on Sonnet. This saves roughly 40--60% compared to running everything on Opus, with no quality loss on the fixing step.
+:::
+
 ## Settings --- Permissions and Hooks
 
 `.claude/settings.json` controls what Claude is allowed to do:
@@ -420,8 +435,9 @@ A single Claude prompt trying to check grammar, layout, math, and code simultane
     "Stop": [
       {
         "hooks": [{
-          "type": "prompt",
-          "prompt": "Check if Claude verified its work..."
+          "type": "command",
+          "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/log-reminder.py\"",
+          "timeout": 10
         }]
       }
     ]
@@ -429,7 +445,7 @@ A single Claude prompt trying to check grammar, layout, math, and code simultane
 }
 ```
 
-The **Stop hook** is crucial --- it runs at the end of every task and blocks completion if Claude didn't verify its output. This prevents the common failure mode of "it compiled but I didn't check if it looks right."
+The **Stop hook** runs a fast Python script after every response. No LLM call, no latency. It checks whether the session log is current and reminds Claude to update it if not. Behavioral rules like verification and Beamer-Quarto sync are enforced via auto-loaded rules in `.claude/rules/`, which is the right tool for nuanced judgment that Claude can evaluate in-context.
 
 ## Memory --- Cross-Session Persistence
 
@@ -471,17 +487,30 @@ Because relying on instructions alone is fragile (Claude forgets during long ses
 
 New sessions can read these logs to understand not just the current state of the project, but the reasoning behind it. See Pattern 1 in [Workflow Patterns](#sec-patterns) for the full protocol.
 
+### How It All Fits Together
+
+With CLAUDE.md, MEMORY.md, plans, and session logs, the system has four distinct memory layers. Here is what each one does and when it matters:
+
+| Layer | File | Survives Compression? | Updated When | Purpose |
+|-------|------|----------------------|--------------|---------|
+| Project context | `CLAUDE.md` | Yes (on disk) | Rarely | Project rules, folder structure, commands |
+| Corrections | `MEMORY.md` | Yes (on disk) | On `[LEARN]` tag | Prevent repeating past mistakes |
+| Task strategy | `quality_reports/plans/` | Yes (on disk) | Once per task | Plan survives planning-to-implementation handoff |
+| Decision reasoning | `quality_reports/session_logs/` | Yes (on disk) | Incrementally | Record *why* decisions were made |
+| Conversation | Claude's context window | **No** (compressed) | Every response | Current working memory |
+
+The first four layers are your safety net. Anything written to disk survives indefinitely. The conversation context is ephemeral --- auto-compression will eventually discard details. The workflow's design ensures that anything worth keeping is written to one of the four persistent layers before compression can erase it.
+
 ### Hooks --- Automated Enforcement
 
-The session log reminder above is one example of a broader pattern: using **hooks** to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in `.claude/settings.json` and fire every time, regardless of context state. The template includes three:
+The session log reminder above is one example of a broader pattern: using **hooks** to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in `.claude/settings.json` and fire every time, regardless of context state.
 
-| Hook | Type | What It Enforces |
-|------|------|-----------------|
-| Verification check | Stop (prompt) | All outputs verified before completion |
-| Session log reminder | Stop (command) | Session log updated regularly |
-| Beamer-Quarto sync | PostToolUse (prompt) | Every .tex edit synced to .qmd |
+The template includes one hook: the **session log reminder** (a command-based Stop hook). It runs a fast Python script after every response --- no LLM call, no latency. Verification and Beamer-Quarto sync are enforced via auto-loaded rules (`.claude/rules/verification-protocol.md` and `.claude/rules/beamer-quarto-sync.md`), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that *must* survive context compression.
 
-Stop hooks fire after every response; PostToolUse hooks fire after a tool (like Edit or Write) runs. See the [Appendix](#sec-appendix) for configuration details.
+::: {.callout-tip}
+## Hook Design Principle
+Use **command-based hooks** for fast, mechanical checks (file exists? counter threshold?). Use **rules** for nuanced judgment (did Claude verify correctly?). Avoid prompt-based hooks that trigger an LLM call on every response --- the latency adds up fast.
+:::
 
 ---
 
@@ -765,6 +794,41 @@ This catches:
 - Missing intuition before formalism
 - Cognitive load issues
 
+## Pattern 9: Parallel Agents for Research Tasks
+
+Claude Code can spawn **multiple agents simultaneously** using the Task tool. This is not limited to review --- you can use it for any research or analysis task where independent subtasks can run at the same time.
+
+### When to Use Parallel Agents
+
+| Scenario | Sequential (slow) | Parallel (fast) |
+|----------|-------------------|-----------------|
+| Reviewing a lecture | Run proofreader, then auditor, then pedagogy | Run all 3 simultaneously |
+| Analyzing 3 papers for a new lecture | Read paper 1, then 2, then 3 | Spawn 3 agents, each reading one paper |
+| Generating figures | Create plot 1, then plot 2, then plot 3 | Spawn agents for independent plots |
+| Comparing estimators | Run simulation 1, then 2, then 3 | Spawn agents for each simulation |
+
+### How It Works
+
+You do not need to manage this manually. The orchestrator recognizes independent subtasks in a plan and spawns parallel agents automatically --- both during implementation (Step 1) and review (Step 3). For example, if your plan says "read three papers and extract key results," the orchestrator will spawn 3 agents, one per paper, without you asking.
+
+You can also request parallelism explicitly:
+
+> "Read these three papers in parallel. For each, extract the key identification assumption, the main estimator, and whether they have a replication package. Summarize in a table."
+
+Either way, Claude spawns up to 3 Task agents, each processing one paper simultaneously, then synthesizes the results.
+
+### Practical Limits
+
+- **3 agents** is the sweet spot. More than that increases overhead without proportional speedup.
+- Agents are **independent** --- they cannot see each other's work. If task B depends on task A's output, they must run sequentially.
+- Each agent consumes its own context window. For very large files, sequential processing may be more reliable.
+
+::: {.callout-tip}
+## Cost-Conscious Parallelism
+
+Parallel agents multiply token usage. For cost-sensitive tasks, run the expensive work (Opus agents) sequentially and the cheap work (Sonnet agents) in parallel. The orchestrator already does this: it runs Sonnet-level reviewers in parallel, then the Opus-level critic sequentially.
+:::
+
 ---
 
 # Customizing for Your Domain {#sec-customize}
@@ -827,7 +891,7 @@ Then create `SKILL.md` with YAML frontmatter + step-by-step instructions.
 2. **Add rules incrementally.** Don't try to write all rules upfront. Add them when you discover patterns.
 3. **Use the [LEARN] format.** Every correction was tagged and persisted. This prevents repeating mistakes.
 4. **Trust the adversarial pattern.** The critic-fixer loop catches things you won't. Let it run.
-5. **Verify everything.** The Stop hook exists for a reason. Never skip verification.
+5. **Verify everything.** The verification rule exists for a reason. Never skip verification.
 6. **Session logs matter.** Document design decisions, not just what changed. Future-you will thank present-you.
 7. **Devil's Advocate early.** Challenge slide structure before you've built 50 slides on a shaky foundation.
 
@@ -867,6 +931,7 @@ Then create `SKILL.md` with YAML frontmatter + step-by-step instructions.
 | `/validate-bib` | `.claude/skills/validate-bib/` | Bibliography validation |
 | `/devils-advocate` | `.claude/skills/devils-advocate/` | Design challenge questions |
 | `/create-lecture` | `.claude/skills/create-lecture/` | Full lecture creation |
+| `/commit` | `.claude/skills/commit/` | Stage, commit, PR, merge cycle |
 
 ## All Rules
 
@@ -890,6 +955,4 @@ Then create `SKILL.md` with YAML frontmatter + step-by-step instructions.
 
 | Hook | Type | Configuration |
 |------|------|--------------|
-| Verification check | Stop (prompt) | `.claude/settings.json` |
 | Session log reminder | Stop (command) | `scripts/log-reminder.py` |
-| Beamer-Quarto sync | PostToolUse (prompt) | `.claude/settings.json` |

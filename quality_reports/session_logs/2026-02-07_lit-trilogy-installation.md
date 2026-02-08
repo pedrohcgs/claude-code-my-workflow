@@ -58,3 +58,9 @@ The original plan contained 5 incorrect concept IDs. During implementation, all 
 ## Open Questions for Next Session
 
 - None. Installation complete and verified.
+
+---
+
+## Later Activity (same day)
+
+- **Chrome MCP test:** User asked to test Chrome browser automation. Connection was already active (no need to run `/chrome`). Created a tab group successfully — confirmed MCP bridge is working. Single empty "New Tab" visible in the group.

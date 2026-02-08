@@ -28,6 +28,7 @@ The orchestrator does NOT activate for:
 Plan approved → orchestrator activates
   │
   Step 1: IMPLEMENT — Execute plan steps, create/modify files
+  │         If plan has independent subtasks → spawn parallel agents (max 3)
   │
   Step 2: VERIFY — Run verifier (compile, render, check outputs)
   │         If verification fails → fix compilation errors → re-verify
@@ -60,6 +61,16 @@ Select review agents based on **file types touched during implementation**:
 | Domain-critical content | domain-reviewer (if configured) | Yes (with others) |
 
 **Run independent agents in parallel.** The quarto-critic runs after the parallel batch because it needs their context. If the quarto-critic finds issues, invoke quarto-fixer and re-run quarto-critic (up to 5 sub-rounds within the main loop).
+
+### Parallel Implementation
+
+Parallelism is not limited to review. During **Step 1 (IMPLEMENT)**, if the plan contains independent subtasks, spawn parallel agents rather than working sequentially:
+
+- **Reading multiple papers** — one agent per paper, each extracting key results
+- **Generating independent figures** — one agent per plot or simulation
+- **Processing independent datasets** — one agent per data slice
+
+**Limits:** Max 3 parallel agents. Only for tasks with no dependencies between them. If task B needs task A's output, they must run sequentially. Each agent consumes its own context window, so prefer parallelism for bounded, focused subtasks.
 
 ---
 

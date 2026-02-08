@@ -69,7 +69,7 @@
 
 | Command | What It Does |
 |---------|-------------|
-| `/commit-push-pr [message]` | Stage, commit, push, and create PR with pre-commit checks |
+| `/commit [message]` | Stage, commit, push, PR, merge — full git cycle |
 | `/techdebt [path]` | Find technical debt across LaTeX, R, Quarto, Python, and config |
 
 **Agents** (available for delegation): `proofreader`, `slide-auditor`, `pedagogy-reviewer`, `r-reviewer`, `tikz-reviewer`, `beamer-translator`, `quarto-critic`, `quarto-fixer`, `verifier`, `domain-reviewer`

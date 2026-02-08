@@ -19,7 +19,7 @@ import tempfile
 from pathlib import Path
 from datetime import datetime
 
-THRESHOLD = 8
+THRESHOLD = 15
 STATE_DIR = Path(tempfile.gettempdir()) / "claude-log-reminder"
 
 
@@ -49,7 +49,7 @@ def load_state(state_path: Path) -> dict:
     try:
         return json.loads(state_path.read_text())
     except (FileNotFoundError, json.JSONDecodeError):
-        return {"counter": 0, "last_mtime": 0.0, "reminded": False}
+        return {"counter": 0, "last_mtime": 0.0, "reminded": False, "no_log_reminded": False}
 
 
 def save_state(state_path: Path, state: dict):
@@ -83,24 +83,26 @@ def main():
     latest_log, current_mtime = find_latest_log(project_dir)
     today = datetime.now().strftime("%Y-%m-%d")
 
-    # Case 1: No session log exists at all
+    # Case 1: No session log exists at all — remind once, then let Claude work
     if latest_log is None:
-        # Always remind if there's no log file
-        output = {
-            "decision": "block",
-            "reason": (
-                f"No session log exists yet. Create one at "
-                f"quality_reports/session_logs/{today}_description.md "
-                f"before continuing. Include the current goal and key context."
-            ),
-        }
-        json.dump(output, sys.stdout)
-        # Don't save state — keep reminding until a log exists
+        if not state.get("no_log_reminded", False):
+            state["no_log_reminded"] = True
+            save_state(state_path, state)
+            output = {
+                "decision": "block",
+                "reason": (
+                    f"No session log exists yet. Create one at "
+                    f"quality_reports/session_logs/{today}_description.md "
+                    f"before continuing. Include the current goal and key context."
+                ),
+            }
+            json.dump(output, sys.stdout)
+        # Already reminded — let Claude proceed (it will create the log)
         sys.exit(0)
 
-    # Case 2: Log was updated since last check — reset counter
+    # Case 2: Log was updated since last check — reset everything
     if current_mtime != state["last_mtime"]:
-        state = {"counter": 0, "last_mtime": current_mtime, "reminded": False}
+        state = {"counter": 0, "last_mtime": current_mtime, "reminded": False, "no_log_reminded": False}
         save_state(state_path, state)
         sys.exit(0)
 
@@ -126,4 +128,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        # Fail open — never block Claude due to a hook bug
+        sys.exit(0)

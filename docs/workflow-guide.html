@@ -2361,7 +2361,7 @@ window.Quarto = {
   <li><a href="#sec-quality" id="toc-sec-quality" class="nav-link" data-scroll-target="#sec-quality"><span class="header-section-number">2.4</span> Quality Scoring: The 80/90/95 System</a>
   <ul class="collapse">
   <li><a href="#how-scores-are-calculated" id="toc-how-scores-are-calculated" class="nav-link" data-scroll-target="#how-scores-are-calculated"><span class="header-section-number">2.4.1</span> How Scores Are Calculated</a></li>
-  <li><a href="#the-stop-hook-mandatory-verification" id="toc-the-stop-hook-mandatory-verification" class="nav-link" data-scroll-target="#the-stop-hook-mandatory-verification"><span class="header-section-number">2.4.2</span> The Stop Hook: Mandatory Verification</a></li>
+  <li><a href="#mandatory-verification" id="toc-mandatory-verification" class="nav-link" data-scroll-target="#mandatory-verification"><span class="header-section-number">2.4.2</span> Mandatory Verification</a></li>
   </ul></li>
   <li><a href="#creating-your-own-domain-reviewer" id="toc-creating-your-own-domain-reviewer" class="nav-link" data-scroll-target="#creating-your-own-domain-reviewer"><span class="header-section-number">2.5</span> Creating Your Own Domain Reviewer</a>
   <ul class="collapse">
@@ -2387,12 +2387,15 @@ window.Quarto = {
   <li><a href="#agents-specialized-reviewers" id="toc-agents-specialized-reviewers" class="nav-link" data-scroll-target="#agents-specialized-reviewers"><span class="header-section-number">4.4</span> Agents — Specialized Reviewers</a>
   <ul class="collapse">
   <li><a href="#agent-anatomy" id="toc-agent-anatomy" class="nav-link" data-scroll-target="#agent-anatomy"><span class="header-section-number">4.4.1</span> Agent Anatomy</a></li>
+  <li><a href="#multi-model-strategy-cost-vs.-quality" id="toc-multi-model-strategy-cost-vs.-quality" class="nav-link" data-scroll-target="#multi-model-strategy-cost-vs.-quality"><span class="header-section-number">4.4.2</span> Multi-Model Strategy: Cost vs. Quality</a></li>
   </ul></li>
   <li><a href="#settings-permissions-and-hooks" id="toc-settings-permissions-and-hooks" class="nav-link" data-scroll-target="#settings-permissions-and-hooks"><span class="header-section-number">4.5</span> Settings — Permissions and Hooks</a></li>
   <li><a href="#memory-cross-session-persistence" id="toc-memory-cross-session-persistence" class="nav-link" data-scroll-target="#memory-cross-session-persistence"><span class="header-section-number">4.6</span> Memory — Cross-Session Persistence</a>
   <ul class="collapse">
   <li><a href="#plans-compression-resistant-task-memory" id="toc-plans-compression-resistant-task-memory" class="nav-link" data-scroll-target="#plans-compression-resistant-task-memory"><span class="header-section-number">4.6.1</span> Plans — Compression-Resistant Task Memory</a></li>
-  <li><a href="#session-logs-why-not-just-what-history" id="toc-session-logs-why-not-just-what-history" class="nav-link" data-scroll-target="#session-logs-why-not-just-what-history"><span class="header-section-number">4.6.2</span> Session Logs — Why-Not-Just-What History</a></li>
+  <li><a href="#session-logs-why-not-just-what-history-with-automated-reminders" id="toc-session-logs-why-not-just-what-history-with-automated-reminders" class="nav-link" data-scroll-target="#session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.6.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</a></li>
+  <li><a href="#how-it-all-fits-together" id="toc-how-it-all-fits-together" class="nav-link" data-scroll-target="#how-it-all-fits-together"><span class="header-section-number">4.6.3</span> How It All Fits Together</a></li>
+  <li><a href="#hooks-automated-enforcement" id="toc-hooks-automated-enforcement" class="nav-link" data-scroll-target="#hooks-automated-enforcement"><span class="header-section-number">4.6.4</span> Hooks — Automated Enforcement</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-patterns" id="toc-sec-patterns" class="nav-link" data-scroll-target="#sec-patterns"><span class="header-section-number">5</span> Workflow Patterns</a>
@@ -2418,6 +2421,12 @@ window.Quarto = {
   <li><a href="#pattern-6-multi-agent-review" id="toc-pattern-6-multi-agent-review" class="nav-link" data-scroll-target="#pattern-6-multi-agent-review"><span class="header-section-number">5.6</span> Pattern 6: Multi-Agent Review</a></li>
   <li><a href="#pattern-7-self-improvement-loop" id="toc-pattern-7-self-improvement-loop" class="nav-link" data-scroll-target="#pattern-7-self-improvement-loop"><span class="header-section-number">5.7</span> Pattern 7: Self-Improvement Loop</a></li>
   <li><a href="#pattern-8-devils-advocate" id="toc-pattern-8-devils-advocate" class="nav-link" data-scroll-target="#pattern-8-devils-advocate"><span class="header-section-number">5.8</span> Pattern 8: Devil’s Advocate</a></li>
+  <li><a href="#pattern-9-parallel-agents-for-research-tasks" id="toc-pattern-9-parallel-agents-for-research-tasks" class="nav-link" data-scroll-target="#pattern-9-parallel-agents-for-research-tasks"><span class="header-section-number">5.9</span> Pattern 9: Parallel Agents for Research Tasks</a>
+  <ul class="collapse">
+  <li><a href="#when-to-use-parallel-agents" id="toc-when-to-use-parallel-agents" class="nav-link" data-scroll-target="#when-to-use-parallel-agents"><span class="header-section-number">5.9.1</span> When to Use Parallel Agents</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works"><span class="header-section-number">5.9.2</span> How It Works</a></li>
+  <li><a href="#practical-limits" id="toc-practical-limits" class="nav-link" data-scroll-target="#practical-limits"><span class="header-section-number">5.9.3</span> Practical Limits</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-customize" id="toc-sec-customize" class="nav-link" data-scroll-target="#sec-customize"><span class="header-section-number">6</span> Customizing for Your Domain</a>
   <ul class="collapse">
@@ -2437,6 +2446,7 @@ window.Quarto = {
   <li><a href="#all-agents" id="toc-all-agents" class="nav-link" data-scroll-target="#all-agents"><span class="header-section-number">7.1</span> All Agents</a></li>
   <li><a href="#all-skills" id="toc-all-skills" class="nav-link" data-scroll-target="#all-skills"><span class="header-section-number">7.2</span> All Skills</a></li>
   <li><a href="#all-rules" id="toc-all-rules" class="nav-link" data-scroll-target="#all-rules"><span class="header-section-number">7.3</span> All Rules</a></li>
+  <li><a href="#hooks" id="toc-hooks" class="nav-link" data-scroll-target="#hooks"><span class="header-section-number">7.4</span> Hooks</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -2740,24 +2750,20 @@ APPROVED   NEEDS WORK
 </tbody>
 </table>
 </section>
-<section id="the-stop-hook-mandatory-verification" class="level3" data-number="2.4.2">
-<h3 data-number="2.4.2" class="anchored" data-anchor-id="the-stop-hook-mandatory-verification"><span class="header-section-number">2.4.2</span> The Stop Hook: Mandatory Verification</h3>
-<p>The <code>.claude/settings.json</code> includes a Stop hook that runs at the end of every task:</p>
-<blockquote class="blockquote">
-<p>“Did Claude verify its output? If the task modified .tex, .qmd, .R, or .svg files and verification was NOT performed, block completion.”</p>
-</blockquote>
-<p>This means Claude <strong>cannot</strong> say “done” without actually compiling, rendering, or otherwise verifying the output.</p>
+<section id="mandatory-verification" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="mandatory-verification"><span class="header-section-number">2.4.2</span> Mandatory Verification</h3>
+<p>The verification protocol (<code>.claude/rules/verification-protocol.md</code>) requires that Claude compile, render, or otherwise verify every output before reporting a task as complete. The orchestrator enforces this as an explicit step in its loop (Step 2: VERIFY). This means Claude <strong>cannot</strong> say “done” without actually checking the output.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Don’t Disable the Stop Hook
+<span class="screen-reader-only">Warning</span>Don’t Skip Verification
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>It’s tempting to remove the hook for speed. Don’t. In practice, the hook caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn’t display, and R scripts with missing intercept terms that produced silently wrong estimates.</p>
+<p>In practice, verification caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn’t display, and R scripts with missing intercept terms that produced silently wrong estimates.</p>
 </div>
 </div>
 </section>
@@ -3032,6 +3038,11 @@ APPROVED   NEEDS WORK
 <td>New lecture from scratch</td>
 <td>Starting a new topic</td>
 </tr>
+<tr class="odd">
+<td><code>/commit</code></td>
+<td>Stage, commit, PR, merge</td>
+<td>After any completed task</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3089,6 +3100,60 @@ APPROVED   NEEDS WORK
 </div>
 </div>
 </section>
+<section id="multi-model-strategy-cost-vs.-quality" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="multi-model-strategy-cost-vs.-quality"><span class="header-section-number">4.4.2</span> Multi-Model Strategy: Cost vs. Quality</h3>
+<p>Not all agents need the same model. The YAML frontmatter in each agent file specifies which model to use:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 21%">
+<col style="width: 15%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task Type</th>
+<th>Model</th>
+<th>Why</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Complex translation</td>
+<td><code>model: opus</code></td>
+<td>Needs deep understanding of both formats</td>
+<td>beamer-translator, quarto-critic</td>
+</tr>
+<tr class="even">
+<td>Fast, constrained work</td>
+<td><code>model: sonnet</code></td>
+<td>Speed matters more than depth</td>
+<td>r-reviewer, quarto-fixer</td>
+</tr>
+<tr class="odd">
+<td>Default</td>
+<td><code>model: inherit</code></td>
+<td>Uses whatever the main session runs</td>
+<td>proofreader, slide-auditor</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The principle:</strong> Use Opus for tasks that require holding two large documents in mind simultaneously (translation, adversarial comparison). Use Sonnet for tasks with clear, bounded scope (fix these 12 issues, check this R script). Let everything else inherit.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Cost Savings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In a typical Beamer-to-Quarto translation, the critic runs 2–4 rounds on Opus while the fixer runs the same rounds on Sonnet. This saves roughly 40–60% compared to running everything on Opus, with no quality loss on the fixing step.</p>
+</div>
+</div>
+</section>
 </section>
 <section id="settings-permissions-and-hooks" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="settings-permissions-and-hooks"><span class="header-section-number">4.5</span> Settings — Permissions and Hooks</h2>
@@ -3107,14 +3172,15 @@ APPROVED   NEEDS WORK
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;prompt&quot;</span><span class="fu">,</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;prompt&quot;</span><span class="fu">:</span> <span class="st">&quot;Check if Claude verified its work...&quot;</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <strong>Stop hook</strong> is crucial — it runs at the end of every task and blocks completion if Claude didn’t verify its output. This prevents the common failure mode of “it compiled but I didn’t check if it looks right.”</p>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR/scripts/log-reminder.py</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <strong>Stop hook</strong> runs a fast Python script after every response. No LLM call, no latency. It checks whether the session log is current and reminds Claude to update it if not. Behavioral rules like verification and Beamer-Quarto sync are enforced via auto-loaded rules in <code>.claude/rules/</code>, which is the right tool for nuanced judgment that Claude can evaluate in-context.</p>
 </section>
 <section id="memory-cross-session-persistence" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="memory-cross-session-persistence"><span class="header-section-number">4.6</span> Memory — Cross-Session Persistence</h2>
@@ -3140,10 +3206,89 @@ APPROVED   NEEDS WORK
 </ul>
 <p>See Pattern 1 in <a href="#sec-patterns">Workflow Patterns</a> for the full protocol.</p>
 </section>
-<section id="session-logs-why-not-just-what-history" class="level3" data-number="4.6.2">
-<h3 data-number="4.6.2" class="anchored" data-anchor-id="session-logs-why-not-just-what-history"><span class="header-section-number">4.6.2</span> Session Logs — Why-Not-Just-What History</h3>
+<section id="session-logs-why-not-just-what-history-with-automated-reminders" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.6.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</h3>
 <p>Git commits record what changed, but not <em>why</em>. Session logs fill this gap. Claude writes to <code>quality_reports/session_logs/</code> at three points: right after plan approval, incrementally during implementation (as decisions happen), and at session end. This means the log captures reasoning <em>as it happens</em>, before auto-compression can discard it.</p>
+<p>Because relying on instructions alone is fragile (Claude forgets during long sessions), a <strong>Stop hook</strong> (<code>scripts/log-reminder.py</code>) fires after every response. It tracks how many responses have passed since the session log was last updated. After a threshold, it blocks Claude from stopping until the log is current. This turns a best practice into an enforced behavior.</p>
 <p>New sessions can read these logs to understand not just the current state of the project, but the reasoning behind it. See Pattern 1 in <a href="#sec-patterns">Workflow Patterns</a> for the full protocol.</p>
+</section>
+<section id="how-it-all-fits-together" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="how-it-all-fits-together"><span class="header-section-number">4.6.3</span> How It All Fits Together</h3>
+<p>With CLAUDE.md, MEMORY.md, plans, and session logs, the system has four distinct memory layers. Here is what each one does and when it matters:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 37%">
+<col style="width: 24%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>File</th>
+<th>Survives Compression?</th>
+<th>Updated When</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Project context</td>
+<td><code>CLAUDE.md</code></td>
+<td>Yes (on disk)</td>
+<td>Rarely</td>
+<td>Project rules, folder structure, commands</td>
+</tr>
+<tr class="even">
+<td>Corrections</td>
+<td><code>MEMORY.md</code></td>
+<td>Yes (on disk)</td>
+<td>On <code>[LEARN]</code> tag</td>
+<td>Prevent repeating past mistakes</td>
+</tr>
+<tr class="odd">
+<td>Task strategy</td>
+<td><code>quality_reports/plans/</code></td>
+<td>Yes (on disk)</td>
+<td>Once per task</td>
+<td>Plan survives planning-to-implementation handoff</td>
+</tr>
+<tr class="even">
+<td>Decision reasoning</td>
+<td><code>quality_reports/session_logs/</code></td>
+<td>Yes (on disk)</td>
+<td>Incrementally</td>
+<td>Record <em>why</em> decisions were made</td>
+</tr>
+<tr class="odd">
+<td>Conversation</td>
+<td>Claude’s context window</td>
+<td><strong>No</strong> (compressed)</td>
+<td>Every response</td>
+<td>Current working memory</td>
+</tr>
+</tbody>
+</table>
+<p>The first four layers are your safety net. Anything written to disk survives indefinitely. The conversation context is ephemeral — auto-compression will eventually discard details. The workflow’s design ensures that anything worth keeping is written to one of the four persistent layers before compression can erase it.</p>
+</section>
+<section id="hooks-automated-enforcement" class="level3" data-number="4.6.4">
+<h3 data-number="4.6.4" class="anchored" data-anchor-id="hooks-automated-enforcement"><span class="header-section-number">4.6.4</span> Hooks — Automated Enforcement</h3>
+<p>The session log reminder above is one example of a broader pattern: using <strong>hooks</strong> to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in <code>.claude/settings.json</code> and fire every time, regardless of context state.</p>
+<p>The template includes one hook: the <strong>session log reminder</strong> (a command-based Stop hook). It runs a fast Python script after every response — no LLM call, no latency. Verification and Beamer-Quarto sync are enforced via auto-loaded rules (<code>.claude/rules/verification-protocol.md</code> and <code>.claude/rules/beamer-quarto-sync.md</code>), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hook Design Principle
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <strong>command-based hooks</strong> for fast, mechanical checks (file exists? counter threshold?). Use <strong>rules</strong> for nuanced judgment (did Claude verify correctly?). Avoid prompt-based hooks that trigger an LLM call on every response — the latency adds up fast.</p>
+</div>
+</div>
 <hr>
 </section>
 </section>
@@ -3464,7 +3609,80 @@ Phase 4: Only then extend
 <li>Missing intuition before formalism</li>
 <li>Cognitive load issues</li>
 </ul>
+</section>
+<section id="pattern-9-parallel-agents-for-research-tasks" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="pattern-9-parallel-agents-for-research-tasks"><span class="header-section-number">5.9</span> Pattern 9: Parallel Agents for Research Tasks</h2>
+<p>Claude Code can spawn <strong>multiple agents simultaneously</strong> using the Task tool. This is not limited to review — you can use it for any research or analysis task where independent subtasks can run at the same time.</p>
+<section id="when-to-use-parallel-agents" class="level3" data-number="5.9.1">
+<h3 data-number="5.9.1" class="anchored" data-anchor-id="when-to-use-parallel-agents"><span class="header-section-number">5.9.1</span> When to Use Parallel Agents</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 41%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Sequential (slow)</th>
+<th>Parallel (fast)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Reviewing a lecture</td>
+<td>Run proofreader, then auditor, then pedagogy</td>
+<td>Run all 3 simultaneously</td>
+</tr>
+<tr class="even">
+<td>Analyzing 3 papers for a new lecture</td>
+<td>Read paper 1, then 2, then 3</td>
+<td>Spawn 3 agents, each reading one paper</td>
+</tr>
+<tr class="odd">
+<td>Generating figures</td>
+<td>Create plot 1, then plot 2, then plot 3</td>
+<td>Spawn agents for independent plots</td>
+</tr>
+<tr class="even">
+<td>Comparing estimators</td>
+<td>Run simulation 1, then 2, then 3</td>
+<td>Spawn agents for each simulation</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-it-works" class="level3" data-number="5.9.2">
+<h3 data-number="5.9.2" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">5.9.2</span> How It Works</h3>
+<p>You do not need to manage this manually. The orchestrator recognizes independent subtasks in a plan and spawns parallel agents automatically — both during implementation (Step 1) and review (Step 3). For example, if your plan says “read three papers and extract key results,” the orchestrator will spawn 3 agents, one per paper, without you asking.</p>
+<p>You can also request parallelism explicitly:</p>
+<blockquote class="blockquote">
+<p>“Read these three papers in parallel. For each, extract the key identification assumption, the main estimator, and whether they have a replication package. Summarize in a table.”</p>
+</blockquote>
+<p>Either way, Claude spawns up to 3 Task agents, each processing one paper simultaneously, then synthesizes the results.</p>
+</section>
+<section id="practical-limits" class="level3" data-number="5.9.3">
+<h3 data-number="5.9.3" class="anchored" data-anchor-id="practical-limits"><span class="header-section-number">5.9.3</span> Practical Limits</h3>
+<ul>
+<li><strong>3 agents</strong> is the sweet spot. More than that increases overhead without proportional speedup.</li>
+<li>Agents are <strong>independent</strong> — they cannot see each other’s work. If task B depends on task A’s output, they must run sequentially.</li>
+<li>Each agent consumes its own context window. For very large files, sequential processing may be more reliable.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Cost-Conscious Parallelism
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Parallel agents multiply token usage. For cost-sensitive tasks, run the expensive work (Opus agents) sequentially and the cheap work (Sonnet agents) in parallel. The orchestrator already does this: it runs Sonnet-level reviewers in parallel, then the Opus-level critic sequentially.</p>
+</div>
+</div>
 <hr>
+</section>
 </section>
 </section>
 <section id="sec-customize" class="level1" data-number="6">
@@ -3519,7 +3737,7 @@ Phase 4: Only then extend
 <li><strong>Add rules incrementally.</strong> Don’t try to write all rules upfront. Add them when you discover patterns.</li>
 <li><strong>Use the [LEARN] format.</strong> Every correction was tagged and persisted. This prevents repeating mistakes.</li>
 <li><strong>Trust the adversarial pattern.</strong> The critic-fixer loop catches things you won’t. Let it run.</li>
-<li><strong>Verify everything.</strong> The Stop hook exists for a reason. Never skip verification.</li>
+<li><strong>Verify everything.</strong> The verification rule exists for a reason. Never skip verification.</li>
 <li><strong>Session logs matter.</strong> Document design decisions, not just what changed. Future-you will thank present-you.</li>
 <li><strong>Devil’s Advocate early.</strong> Challenge slide structure before you’ve built 50 slides on a shaky foundation.</li>
 </ol>
@@ -3678,6 +3896,11 @@ Phase 4: Only then extend
 <td><code>.claude/skills/create-lecture/</code></td>
 <td>Full lecture creation</td>
 </tr>
+<tr class="even">
+<td><code>/commit</code></td>
+<td><code>.claude/skills/commit/</code></td>
+<td>Stage, commit, PR, merge cycle</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -3761,6 +3984,25 @@ Phase 4: Only then extend
 <td>Orchestrator Protocol</td>
 <td><code>.claude/rules/orchestrator-protocol.md</code></td>
 <td>Contractor mode: autonomous implement-verify-review-fix loop</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="hooks" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="hooks"><span class="header-section-number">7.4</span> Hooks</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Hook</th>
+<th>Type</th>
+<th>Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Session log reminder</td>
+<td>Stop (command)</td>
+<td><code>scripts/log-reminder.py</code></td>
 </tr>
 </tbody>
 </table>
