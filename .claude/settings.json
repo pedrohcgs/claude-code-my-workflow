@@ -57,15 +57,6 @@
       {
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Review the conversation transcript. This project requires that ALL outputs are verified before completion: LaTeX must compile, Quarto must render, images must display, SVGs must contain valid XML. Check if Claude verified its work during this response. If verification was NOT performed and the task involved creating or modifying .tex, .qmd, .R, or .svg files, respond with {\"ok\": false, \"reason\": \"Verification not performed. Please compile/render the modified files and verify output before finishing.\"}. If verification was done, or the task did not involve these file types, or the task was purely informational/planning, respond with {\"ok\": true}.",
-            "timeout": 30
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/log-reminder.py\"",
             "timeout": 10
