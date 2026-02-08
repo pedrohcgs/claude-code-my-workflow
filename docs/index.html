@@ -182,10 +182,10 @@
     <li><strong>Beamer &rarr; Quarto pipeline</strong> <span class="desc">&mdash; 11-phase translation with TikZ-to-SVG and ggplot-to-plotly conversion</span></li>
     <li><strong>10 specialized agents</strong> <span class="desc">&mdash; proofreader, slide auditor, pedagogy reviewer, R reviewer, TikZ critic, domain reviewer, adversarial QA pair, translator, verifier</span></li>
     <li><strong>Adversarial critic-fixer loop</strong> <span class="desc">&mdash; two agents that check each other's work across up to 5 rounds &mdash; the critic can't fix, the fixer can't approve</span></li>
-    <li><strong>Quality scoring with enforcement hooks</strong> <span class="desc">&mdash; every file scored 0&ndash;100; nothing ships below 80; a Stop hook blocks completion until output is verified</span></li>
+    <li><strong>Quality scoring with mandatory verification</strong> <span class="desc">&mdash; every file scored 0&ndash;100; nothing ships below 80; the orchestrator verifies every output before reporting done</span></li>
     <li><strong>13 slash commands + 12 auto-loaded rules</strong> <span class="desc">&mdash; <code>/compile-latex</code>, <code>/proofread</code>, <code>/deploy</code>, <code>/qa-quarto</code>, and more &mdash; plus quality gates, notation consistency, and R conventions</span></li>
     <li><strong>Plan-first workflow with continuous learning</strong> <span class="desc">&mdash; non-trivial tasks start in plan mode; <code>[LEARN:tag]</code> corrections persist in MEMORY.md across sessions; plans survive context compression</span></li>
-    <li><strong>Automated session logs + Beamer-Quarto sync</strong> <span class="desc">&mdash; hooks enforce session logging after every few responses and auto-sync .tex edits to their Quarto counterparts</span></li>
+    <li><strong>Automated session log enforcement</strong> <span class="desc">&mdash; a lightweight Stop hook reminds Claude to keep session logs current; Beamer-Quarto sync enforced via auto-loaded rules</span></li>
   </ul>
 
   <h2>Getting started</h2>

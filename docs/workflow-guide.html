@@ -2369,7 +2369,7 @@ window.Quarto = {
   <li><a href="#sec-quality" id="toc-sec-quality" class="nav-link" data-scroll-target="#sec-quality"><span class="header-section-number">2.4</span> Quality Scoring: The 80/90/95 System</a>
   <ul class="collapse">
   <li><a href="#how-scores-are-calculated" id="toc-how-scores-are-calculated" class="nav-link" data-scroll-target="#how-scores-are-calculated"><span class="header-section-number">2.4.1</span> How Scores Are Calculated</a></li>
-  <li><a href="#the-stop-hook-mandatory-verification" id="toc-the-stop-hook-mandatory-verification" class="nav-link" data-scroll-target="#the-stop-hook-mandatory-verification"><span class="header-section-number">2.4.2</span> The Stop Hook: Mandatory Verification</a></li>
+  <li><a href="#mandatory-verification" id="toc-mandatory-verification" class="nav-link" data-scroll-target="#mandatory-verification"><span class="header-section-number">2.4.2</span> Mandatory Verification</a></li>
   </ul></li>
   <li><a href="#creating-your-own-domain-reviewer" id="toc-creating-your-own-domain-reviewer" class="nav-link" data-scroll-target="#creating-your-own-domain-reviewer"><span class="header-section-number">2.5</span> Creating Your Own Domain Reviewer</a>
   <ul class="collapse">
@@ -2395,13 +2395,15 @@ window.Quarto = {
   <li><a href="#agents-specialized-reviewers" id="toc-agents-specialized-reviewers" class="nav-link" data-scroll-target="#agents-specialized-reviewers"><span class="header-section-number">4.4</span> Agents — Specialized Reviewers</a>
   <ul class="collapse">
   <li><a href="#agent-anatomy" id="toc-agent-anatomy" class="nav-link" data-scroll-target="#agent-anatomy"><span class="header-section-number">4.4.1</span> Agent Anatomy</a></li>
+  <li><a href="#multi-model-strategy-cost-vs.-quality" id="toc-multi-model-strategy-cost-vs.-quality" class="nav-link" data-scroll-target="#multi-model-strategy-cost-vs.-quality"><span class="header-section-number">4.4.2</span> Multi-Model Strategy: Cost vs. Quality</a></li>
   </ul></li>
   <li><a href="#settings-permissions-and-hooks" id="toc-settings-permissions-and-hooks" class="nav-link" data-scroll-target="#settings-permissions-and-hooks"><span class="header-section-number">4.5</span> Settings — Permissions and Hooks</a></li>
   <li><a href="#memory-cross-session-persistence" id="toc-memory-cross-session-persistence" class="nav-link" data-scroll-target="#memory-cross-session-persistence"><span class="header-section-number">4.6</span> Memory — Cross-Session Persistence</a>
   <ul class="collapse">
   <li><a href="#plans-compression-resistant-task-memory" id="toc-plans-compression-resistant-task-memory" class="nav-link" data-scroll-target="#plans-compression-resistant-task-memory"><span class="header-section-number">4.6.1</span> Plans — Compression-Resistant Task Memory</a></li>
   <li><a href="#session-logs-why-not-just-what-history-with-automated-reminders" id="toc-session-logs-why-not-just-what-history-with-automated-reminders" class="nav-link" data-scroll-target="#session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.6.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</a></li>
-  <li><a href="#hooks-automated-enforcement" id="toc-hooks-automated-enforcement" class="nav-link" data-scroll-target="#hooks-automated-enforcement"><span class="header-section-number">4.6.3</span> Hooks — Automated Enforcement</a></li>
+  <li><a href="#how-it-all-fits-together" id="toc-how-it-all-fits-together" class="nav-link" data-scroll-target="#how-it-all-fits-together"><span class="header-section-number">4.6.3</span> How It All Fits Together</a></li>
+  <li><a href="#hooks-automated-enforcement" id="toc-hooks-automated-enforcement" class="nav-link" data-scroll-target="#hooks-automated-enforcement"><span class="header-section-number">4.6.4</span> Hooks — Automated Enforcement</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-patterns" id="toc-sec-patterns" class="nav-link" data-scroll-target="#sec-patterns"><span class="header-section-number">5</span> Workflow Patterns</a>
@@ -2756,24 +2758,20 @@ APPROVED   NEEDS WORK
 </tbody>
 </table>
 </section>
-<section id="the-stop-hook-mandatory-verification" class="level3" data-number="2.4.2">
-<h3 data-number="2.4.2" class="anchored" data-anchor-id="the-stop-hook-mandatory-verification"><span class="header-section-number">2.4.2</span> The Stop Hook: Mandatory Verification</h3>
-<p>The <code>.claude/settings.json</code> includes a Stop hook that runs at the end of every task:</p>
-<blockquote class="blockquote">
-<p>“Did Claude verify its output? If the task modified .tex, .qmd, .R, or .svg files and verification was NOT performed, block completion.”</p>
-</blockquote>
-<p>This means Claude <strong>cannot</strong> say “done” without actually compiling, rendering, or otherwise verifying the output.</p>
+<section id="mandatory-verification" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="mandatory-verification"><span class="header-section-number">2.4.2</span> Mandatory Verification</h3>
+<p>The verification protocol (<code>.claude/rules/verification-protocol.md</code>) requires that Claude compile, render, or otherwise verify every output before reporting a task as complete. The orchestrator enforces this as an explicit step in its loop (Step 2: VERIFY). This means Claude <strong>cannot</strong> say “done” without actually checking the output.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Don’t Disable the Stop Hook
+<span class="screen-reader-only">Warning</span>Don’t Skip Verification
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>It’s tempting to remove the hook for speed. Don’t. In Econ 730, the hook caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn’t display, and R scripts with missing intercept terms that produced silently wrong estimates.</p>
+<p>In Econ 730, verification caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn’t display, and R scripts with missing intercept terms that produced silently wrong estimates.</p>
 </div>
 </div>
 </section>
@@ -3105,6 +3103,60 @@ APPROVED   NEEDS WORK
 </div>
 </div>
 </section>
+<section id="multi-model-strategy-cost-vs.-quality" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="multi-model-strategy-cost-vs.-quality"><span class="header-section-number">4.4.2</span> Multi-Model Strategy: Cost vs. Quality</h3>
+<p>Not all agents need the same model. The YAML frontmatter in each agent file specifies which model to use:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 21%">
+<col style="width: 15%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task Type</th>
+<th>Model</th>
+<th>Why</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Complex translation</td>
+<td><code>model: opus</code></td>
+<td>Needs deep understanding of both formats</td>
+<td>beamer-translator, quarto-critic</td>
+</tr>
+<tr class="even">
+<td>Fast, constrained work</td>
+<td><code>model: sonnet</code></td>
+<td>Speed matters more than depth</td>
+<td>r-reviewer, quarto-fixer</td>
+</tr>
+<tr class="odd">
+<td>Default</td>
+<td><code>model: inherit</code></td>
+<td>Uses whatever the main session runs</td>
+<td>proofreader, slide-auditor</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The principle:</strong> Use Opus for tasks that require holding two large documents in mind simultaneously (translation, adversarial comparison). Use Sonnet for tasks with clear, bounded scope (fix these 12 issues, check this R script). Let everything else inherit.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Cost Savings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In a typical Beamer-to-Quarto translation, the critic runs 2–4 rounds on Opus while the fixer runs the same rounds on Sonnet. This saves roughly 40–60% compared to running everything on Opus, with no quality loss on the fixing step.</p>
+</div>
+</div>
+</section>
 </section>
 <section id="settings-permissions-and-hooks" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="settings-permissions-and-hooks"><span class="header-section-number">4.5</span> Settings — Permissions and Hooks</h2>
@@ -3123,14 +3175,15 @@ APPROVED   NEEDS WORK
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;prompt&quot;</span><span class="fu">,</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;prompt&quot;</span><span class="fu">:</span> <span class="st">&quot;Check if Claude verified its work...&quot;</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <strong>Stop hook</strong> is crucial — it runs at the end of every task and blocks completion if Claude didn’t verify its output. This prevents the common failure mode of “it compiled but I didn’t check if it looks right.”</p>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR/scripts/log-reminder.py</span><span class="ch">\&quot;</span><span class="st">&quot;</span><span class="fu">,</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <strong>Stop hook</strong> runs a fast Python script after every response. No LLM call, no latency. It checks whether the session log is current and reminds Claude to update it if not. Behavioral rules like verification and Beamer-Quarto sync are enforced via auto-loaded rules in <code>.claude/rules/</code>, which is the right tool for nuanced judgment that Claude can evaluate in-context.</p>
 </section>
 <section id="memory-cross-session-persistence" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="memory-cross-session-persistence"><span class="header-section-number">4.6</span> Memory — Cross-Session Persistence</h2>
@@ -3162,41 +3215,83 @@ APPROVED   NEEDS WORK
 <p>Because relying on instructions alone is fragile (Claude forgets during long sessions), a <strong>Stop hook</strong> (<code>scripts/log-reminder.py</code>) fires after every response. It tracks how many responses have passed since the session log was last updated. After a threshold, it blocks Claude from stopping until the log is current. This turns a best practice into an enforced behavior.</p>
 <p>New sessions can read these logs to understand not just the current state of the project, but the reasoning behind it. See Pattern 1 in <a href="#sec-patterns">Workflow Patterns</a> for the full protocol.</p>
 </section>
-<section id="hooks-automated-enforcement" class="level3" data-number="4.6.3">
-<h3 data-number="4.6.3" class="anchored" data-anchor-id="hooks-automated-enforcement"><span class="header-section-number">4.6.3</span> Hooks — Automated Enforcement</h3>
-<p>The session log reminder above is one example of a broader pattern: using <strong>hooks</strong> to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in <code>.claude/settings.json</code> and fire every time, regardless of context state. The template includes three:</p>
+<section id="how-it-all-fits-together" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="how-it-all-fits-together"><span class="header-section-number">4.6.3</span> How It All Fits Together</h3>
+<p>With CLAUDE.md, MEMORY.md, plans, and session logs, the system has four distinct memory layers. Here is what each one does and when it matters:</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 58%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 37%">
+<col style="width: 24%">
+<col style="width: 15%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Hook</th>
-<th>Type</th>
-<th>What It Enforces</th>
+<th>Layer</th>
+<th>File</th>
+<th>Survives Compression?</th>
+<th>Updated When</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Verification check</td>
-<td>Stop (prompt)</td>
-<td>All outputs verified before completion</td>
+<td>Project context</td>
+<td><code>CLAUDE.md</code></td>
+<td>Yes (on disk)</td>
+<td>Rarely</td>
+<td>Project rules, folder structure, commands</td>
 </tr>
 <tr class="even">
-<td>Session log reminder</td>
-<td>Stop (command)</td>
-<td>Session log updated regularly</td>
+<td>Corrections</td>
+<td><code>MEMORY.md</code></td>
+<td>Yes (on disk)</td>
+<td>On <code>[LEARN]</code> tag</td>
+<td>Prevent repeating past mistakes</td>
 </tr>
 <tr class="odd">
-<td>Beamer-Quarto sync</td>
-<td>PostToolUse (prompt)</td>
-<td>Every .tex edit synced to .qmd</td>
+<td>Task strategy</td>
+<td><code>quality_reports/plans/</code></td>
+<td>Yes (on disk)</td>
+<td>Once per task</td>
+<td>Plan survives planning-to-implementation handoff</td>
+</tr>
+<tr class="even">
+<td>Decision reasoning</td>
+<td><code>quality_reports/session_logs/</code></td>
+<td>Yes (on disk)</td>
+<td>Incrementally</td>
+<td>Record <em>why</em> decisions were made</td>
+</tr>
+<tr class="odd">
+<td>Conversation</td>
+<td>Claude’s context window</td>
+<td><strong>No</strong> (compressed)</td>
+<td>Every response</td>
+<td>Current working memory</td>
 </tr>
 </tbody>
 </table>
-<p>Stop hooks fire after every response; PostToolUse hooks fire after a tool (like Edit or Write) runs. See the <a href="#sec-appendix">Appendix</a> for configuration details.</p>
+<p>The first four layers are your safety net. Anything written to disk survives indefinitely. The conversation context is ephemeral — auto-compression will eventually discard details. The workflow’s design ensures that anything worth keeping is written to one of the four persistent layers before compression can erase it.</p>
+</section>
+<section id="hooks-automated-enforcement" class="level3" data-number="4.6.4">
+<h3 data-number="4.6.4" class="anchored" data-anchor-id="hooks-automated-enforcement"><span class="header-section-number">4.6.4</span> Hooks — Automated Enforcement</h3>
+<p>The session log reminder above is one example of a broader pattern: using <strong>hooks</strong> to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in <code>.claude/settings.json</code> and fire every time, regardless of context state.</p>
+<p>The template includes one hook: the <strong>session log reminder</strong> (a command-based Stop hook). It runs a fast Python script after every response — no LLM call, no latency. Verification and Beamer-Quarto sync are enforced via auto-loaded rules (<code>.claude/rules/verification-protocol.md</code> and <code>.claude/rules/beamer-quarto-sync.md</code>), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hook Design Principle
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <strong>command-based hooks</strong> for fast, mechanical checks (file exists? counter threshold?). Use <strong>rules</strong> for nuanced judgment (did Claude verify correctly?). Avoid prompt-based hooks that trigger an LLM call on every response — the latency adds up fast.</p>
+</div>
+</div>
 <hr>
 </section>
 </section>
@@ -3572,7 +3667,7 @@ Phase 4: Only then extend
 <li><strong>Add rules incrementally.</strong> Don’t try to write all rules upfront. Add them when you discover patterns.</li>
 <li><strong>Use the [LEARN] format.</strong> Every correction Pedro made was tagged and persisted. This prevents repeating mistakes.</li>
 <li><strong>Trust the adversarial pattern.</strong> The critic-fixer loop catches things you won’t. Let it run.</li>
-<li><strong>Verify everything.</strong> The Stop hook exists for a reason. Never skip verification.</li>
+<li><strong>Verify everything.</strong> The verification rule exists for a reason. Never skip compilation or rendering checks.</li>
 <li><strong>Session logs matter.</strong> Document design decisions, not just what changed. Future-you will thank present-you.</li>
 <li><strong>Devil’s Advocate early.</strong> Challenge slide structure before you’ve built 50 slides on a shaky foundation.</li>
 </ol>
@@ -3830,19 +3925,9 @@ Phase 4: Only then extend
 </thead>
 <tbody>
 <tr class="odd">
-<td>Verification check</td>
-<td>Stop (prompt)</td>
-<td><code>.claude/settings.json</code></td>
-</tr>
-<tr class="even">
 <td>Session log reminder</td>
 <td>Stop (command)</td>
 <td><code>scripts/log-reminder.py</code></td>
-</tr>
-<tr class="odd">
-<td>Beamer-Quarto sync</td>
-<td>PostToolUse (prompt)</td>
-<td><code>.claude/settings.json</code></td>
 </tr>
 </tbody>
 </table>

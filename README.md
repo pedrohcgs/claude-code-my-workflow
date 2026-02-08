@@ -186,11 +186,7 @@ Every correction gets tagged with `[LEARN:tag]` format and persists in MEMORY.md
 
 ### Session Logging (with Automated Reminders)
 
-Claude saves session logs to `quality_reports/session_logs/`. A **Stop hook** (`scripts/log-reminder.py`) fires after every response and tracks how many responses have passed since the log was last updated. After a threshold, it blocks Claude from stopping until the log is updated. Git records *what* changed; session logs record *why*.
-
-### Beamer-Quarto Sync Hook
-
-A **PostToolUse hook** fires whenever Claude edits a `.tex` file in `Slides/`, automatically reminding it to sync the corresponding `.qmd` file. This enforces the single-source-of-truth principle without manual oversight.
+Claude saves session logs to `quality_reports/session_logs/`. A lightweight **Stop hook** (`scripts/log-reminder.py`) tracks how many responses have passed since the log was last updated. After a threshold, it reminds Claude to update the log. Git records *what* changed; session logs record *why*.
 
 ---
 
