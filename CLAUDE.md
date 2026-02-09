@@ -296,6 +296,34 @@ TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode filename.tex
 
 ---
 
+## Research Projects: Additional Features
+
+<!-- These features are especially useful for research projects (papers, simulations,
+     empirical analysis) as opposed to course slide development. They can also be used
+     for any project type. -->
+
+### Exploration Folder
+
+All experimental work goes into `explorations/` first — never directly into production folders. This prevents scattered files and provides a clear lifecycle: explore → validate → graduate to production OR archive with explanation.
+
+- **Protocol:** `.claude/rules/exploration-folder-protocol.md`
+- **Fast-Track Workflow:** `.claude/rules/exploration-fast-track.md` (60/100 quality threshold, no plan needed)
+- **Structure:** `explorations/[project]/` with R/, scripts/, output/, README.md
+
+### Simplified Orchestrator
+
+For R code and research projects, a simplified orchestrator is available: implement → verify → score → done. No multi-round agent reviews. See the "Research Project Variant" section in `.claude/rules/orchestrator-protocol.md`.
+
+### Enhanced Session Logging
+
+Session logs now include structured tables for changes, design decisions, verification results, and quality gates. Quality reports are generated **only at merge time** to reduce overhead. See `.claude/rules/session-logging.md`.
+
+### Workflow Quick Reference
+
+A one-page cheat sheet at `.claude/WORKFLOW_QUICK_REF.md` summarizes the entire workflow: The Loop, when Claude asks vs. executes autonomously, quality gates, and your locked-in preferences.
+
+---
+
 ## Session Startup Ritual
 
 Start each session with:

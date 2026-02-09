@@ -145,3 +145,78 @@ paths:
 | Bug | Impact | Fix |
 |-----|--------|-----|
 | | | |
+
+---
+
+## 5. Research Project Variant
+
+<!--
+  For RESEARCH PROJECTS (papers, simulations, empirical analysis) rather than
+  courses, use this section instead of (or in addition to) sections 2-3 above.
+
+  Fill in the subsections below with YOUR domain-specific content.
+-->
+
+### Estimand Registry
+
+<!-- Define the key estimands in your paper/project -->
+
+| Estimand | Formula | Key Parameters |
+|----------|---------|----------------|
+| [e.g., ATE] | [e.g., E[Y(1) - Y(0)]] | [e.g., treatment, outcome] |
+| | | |
+
+### Mathematical Objects
+
+<!-- Document key mathematical functions, algorithms, and their implementations -->
+
+| Object | Function Name | Location | Notes |
+|--------|--------------|----------|-------|
+| [e.g., Basis functions] | [e.g., `build_basis()`] | [e.g., `R/utils.R`] | [e.g., Orthogonal on [0,1]] |
+| | | | |
+
+### DGP / Simulation Configurations
+
+<!-- If your project includes Monte Carlo simulations, document each DGP -->
+
+| Config | Description | Key Parameters | Expected Behavior |
+|--------|------------|----------------|-------------------|
+| DGP1 | [e.g., Baseline] | [e.g., n=1000, effect=1] | [e.g., All estimators work well] |
+| DGP2 | [e.g., Challenging case] | [e.g., n=500, weak signal] | [e.g., Naive estimator fails] |
+| | | | |
+
+### Empirical Applications
+
+<!-- Document each application with its data source and expected outputs -->
+
+| Application | Data Source | Treatment | Outcome | Output Location |
+|------------|------------|-----------|---------|-----------------|
+| [e.g., App 1] | [e.g., `data/app1.csv`] | [e.g., Policy X] | [e.g., Income Y] | [e.g., `output/applications/app1/`] |
+| | | | | |
+
+### Tolerance Thresholds
+
+<!-- For replication/comparison purposes -->
+
+| Quantity | Tolerance | Rationale |
+|----------|-----------|-----------|
+| Point estimates | [e.g., 1e-6] | [Numerical precision] |
+| Standard errors | [e.g., 1e-4] | [MC variability] |
+| Coverage rates | [e.g., +/- 0.01] | [MC with B reps] |
+
+### Output Directory Structure
+
+<!-- Document where results go -->
+
+```
+output/
+├── applications/
+│   ├── [App1]/
+│   │   ├── results.csv
+│   │   └── plots/
+│   └── [App2]/
+└── simulations/
+    ├── results/
+    │   └── [config]_[params].csv
+    └── plots/
+```

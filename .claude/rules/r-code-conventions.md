@@ -127,3 +127,29 @@ saveRDS(result, file.path(out_dir, "descriptive_name.rds"))
 | Missing `bg = "transparent"` | White boxes on slides | Always include in ggsave() |
 | `cat()` for status | Noisy stdout | Use message() sparingly |
 | Hardcoded paths | Breaks on other machines | Use relative paths |
+
+## 10. Line Length & Mathematical Exceptions
+
+**Standard:** Keep lines <= 100 characters for readability.
+
+**Exception: Mathematical Formulas** — Lines containing complex mathematical operations may exceed 100 characters **if and only if:**
+
+1. **Breaking the line would harm readability of the math.** Examples:
+   - Influence function calculations with multiple components
+   - Matrix operations (row/column definitions, element-wise operations)
+   - Numerical derivative / finite-difference approximations
+   - Complex formula implementations matching paper equations
+
+2. **An inline comment explains the mathematical operation.** Example:
+   ```r
+   # Sieve projection: inner product of residuals onto basis functions P_k
+   alpha_k <- sum(r_i * basis[, k]) / sum(basis[, k]^2)
+   ```
+
+3. **The line is in a numerically intensive section** (simulation loops, estimation routines, inference calculations).
+
+**Rationale:** Mathematical code is harder to read when broken across multiple lines. Preserving formula structure reduces bugs, improves maintainability, and matches standard statistical computing practice.
+
+**Quality Gate Impact:**
+- Long lines in non-mathematical code → minor penalty (-1 to -2 points per line)
+- Long lines in documented mathematical sections → no penalty (acceptable exception)

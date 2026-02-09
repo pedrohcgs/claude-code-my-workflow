@@ -41,6 +41,7 @@ paths:
 |-------|-----------|
 | Font size reduction used | -1 per slide |
 | Missing framing sentence | -1 per definition |
+| Long lines (>100 chars) | -1 per line, EXCEPT documented mathematical formulas (see `r-code-conventions.md`) |
 
 ---
 
@@ -82,3 +83,62 @@ Block commit. List blocking issues with required actions.
 Allow commit but warn. List issues with recommendations to reach PR quality.
 
 ### User can override with justification when needed.
+
+---
+
+## Quality Report Timing
+
+**Quality reports are generated ONLY at merge time** (not at every commit or PR):
+
+- **Before commit:** No quality report (too frequent)
+- **Before PR:** No quality report (use session logs)
+- **Before merge to main:** Generate quality report and save to `quality_reports/merges/`
+
+This prevents documentation overhead during frequent commits while maintaining a quality snapshot for every feature merged to main.
+
+---
+
+## Merge Quality Report Template
+
+**When:** Generated only at merge to main
+**Where:** `quality_reports/merges/YYYY-MM-DD_[branch-name].md`
+
+```markdown
+# Quality Report: Merge to Main — [Date]
+
+## Summary
+[1-2 sentences: what was merged and why]
+
+## Files Modified
+| File | Type | Quality Score |
+|------|------|---|
+| `path/to/file` | [Code/Slides/Config] | [N]/100 |
+
+## Verification
+- [ ] Compilation/execution succeeds
+- [ ] Tolerance checks PASS (if applicable)
+- [ ] Tests pass (if applicable)
+- [ ] Quality gates >= 80
+
+## Status
+MERGED
+
+## Notes
+[Any learnings or follow-ups]
+```
+
+---
+
+## Tolerance Thresholds (Research Projects)
+
+<!-- Customize for your domain's precision requirements -->
+
+| Quantity | Tolerance | Rationale |
+|----------|-----------|-----------|
+| Point estimates | [e.g., 1e-6 relative] | [Numerical precision] |
+| Standard errors | [e.g., 1e-4 relative] | [MC variability + numerical methods] |
+| Coverage rates | [e.g., +/- 0.01] | [MC variability with B reps] |
+| RMSE | [e.g., 1e-2] | [MC + numerical error] |
+
+**Pass criteria:** All quantities within tolerance.
+**Failure handling:** Investigate before committing. If just beyond tolerance, check numerical stability. If far beyond, likely a code bug.

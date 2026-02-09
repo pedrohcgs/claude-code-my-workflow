@@ -144,37 +144,12 @@ Common categories: `notation`, `citation`, `r-code`, `workflow`, `latex`. Add a 
 
 **Session logs live at `quality_reports/session_logs/YYYY-MM-DD_description.md`.** They are a running record of *why* things happened — not what changed (git handles that).
 
-There are **three distinct logging behaviors:**
+There are **three distinct logging triggers:**
 
-### 5a. Post-Plan Log (special trigger)
+1. **Post-Plan Log** — immediately after plan approval, capture goal, approach, rationale
+2. **Incremental Logging** — append 1-3 lines whenever a decision is made, a problem is solved, or the approach changes
+3. **End-of-Session Log** — summary, open questions, blockers
 
-**Immediately after a plan is approved**, create the session log file with:
-- The goal and plan summary
-- Key context and constraints discussed during planning
-- Rationale for the chosen approach, including rejected alternatives
+**All three are proactive — do not wait to be asked.**
 
-This is a specific, predictable trigger: plan approved → save log. It captures decisions while context is richest, before implementation eats up the context window.
-
-### 5b. Incremental Logging (during implementation)
-
-**As you work, append to the session log whenever something worth remembering happens:**
-- A design decision is made or changed mid-implementation
-- An unexpected problem is discovered and solved
-- The user expresses a preference or corrects an assumption
-- A review agent catches something significant
-- The approach deviates from the original plan
-
-This is the most important behavior. Context gets compressed as the session progresses. If a key decision lives only in the conversation, it will be lost. Writing it to the log file immediately makes it permanent.
-
-**Do not batch these updates.** Append a 1-3 line entry as soon as the event happens.
-
-### 5c. End-of-Session Log (closing trigger)
-
-**When the session is ending**, add a final section to the log with:
-- Summary of what was accomplished
-- Open questions for next session
-- Any unresolved issues
-
-Trigger: end-of-session signals ("let's wrap up", "commit this", "we're done").
-
-**Do not wait to be asked for any of these.** All three behaviors are proactive.
+See `.claude/rules/session-logging.md` for the full protocol, enhanced template, and merge-only quality reporting.

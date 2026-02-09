@@ -130,3 +130,58 @@ When the user signals blanket approval ("just do it", "you decide", "handle it")
 5. Still present the summary (the user should see what was done), but do not wait for approval to continue
 
 "Just do it" does NOT skip the orchestrator loop itself — verification and review still happen. It only skips the approval pause at the end.
+
+---
+
+## Research Project Variant: Simple Execution Loop
+
+For **research projects** (R scripts, simulations, data analysis) — as opposed to course materials (slides, LaTeX, Quarto) — use this simplified orchestrator. It removes the multi-round agent review loop in favor of a straightforward implement-verify-score cycle.
+
+### When to Use the Simple Variant
+
+- Solo research projects (not multi-format course materials)
+- R code, simulations, and data analysis
+- Projects without LaTeX/Quarto slide pairs to synchronize
+- When the full agent selection table (proofreader, slide-auditor, pedagogy-reviewer, etc.) doesn't apply
+
+### The Simple Loop
+
+```
+Plan approved → orchestrator activates
+  │
+  Step 1: IMPLEMENT — Execute plan steps, create/modify files
+  │
+  Step 2: VERIFY — Run code, check outputs
+  │         R scripts: Rscript execution, syntax check
+  │         CSVs: loadable, no NaN/Inf values
+  │         Simulations: set.seed reproducibility, tolerance checks
+  │         Plots: PDF created, correct dimensions and format
+  │         If verification fails → fix errors → re-verify
+  │
+  Step 3: SCORE — Apply quality-gates rubric
+  │
+  └── Score >= 80?
+        YES → Done (commit when user signals)
+        NO  → Fix blocking issues, re-verify, re-score
+              If still < 80 after fixes → present issues + context to user
+```
+
+**No 5-round loops. No multi-agent orchestration. Just: write → test → done.**
+
+### Simple Verification Checklist
+
+For any code change:
+- [ ] Syntax: script runs without errors
+- [ ] Dependencies: all packages available and loaded at top
+- [ ] Paths: no hardcoded absolute paths
+- [ ] Reproducibility: `set.seed()` once at top if stochastic
+- [ ] Outputs: files created at expected paths with correct structure
+- [ ] Tolerance: replication check passes (if applicable)
+- [ ] Quality: score >= 80
+
+### Key Principles
+
+1. **Verify immediately** — code must run before considering it done
+2. **Quality gates are gates** — score < 80 blocks progress, no exceptions
+3. **Log everything** — decisions, fixes, surprises persist in session log
+4. **Keep it simple** — implement, verify, done. No unnecessary complexity.

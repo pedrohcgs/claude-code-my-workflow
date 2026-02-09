@@ -854,13 +854,74 @@ Either way, Claude spawns up to 3 Task agents, each processing one paper simulta
 Parallel agents multiply token usage. For cost-sensitive tasks, run the expensive work (Opus agents) sequentially and the cheap work (Sonnet agents) in parallel. The orchestrator already does this: it runs Sonnet-level reviewers in parallel, then the Opus-level critic sequentially.
 :::
 
+## Pattern 10: Research Exploration Workflow {#pattern-10-exploration}
+
+Research projects need a different rhythm than course materials. Ideas are uncertain, experiments may fail, and code is often written to answer a question, not to ship. The **exploration workflow** provides a structured sandbox for this kind of work.
+
+### The Problem
+
+Without structure, experimental code scatters across the repository: analysis scripts in `scripts/`, test files in root, comparison documents in `quality_reports/`. After a week of exploration, the repo is cluttered with files that may or may not be useful, and nobody remembers which version was the good one.
+
+### The Solution: Exploration Folder
+
+All experimental work goes into `explorations/` first:
+
+```
+explorations/
+├── [active-project]/
+│   ├── README.md           # Goal, hypotheses, status
+│   ├── R/                  # Code iterations (_v1, _v2)
+│   ├── scripts/            # Test scripts
+│   └── output/             # Results
+└── ARCHIVE/
+    ├── completed_[name]/   # Graduated to production
+    └── abandoned_[name]/   # Documented why stopped
+```
+
+### Fast-Track vs. Plan-First
+
+The decision tree is simple:
+
+| Question | Answer | Workflow |
+|----------|--------|----------|
+| "Will this ship?" | YES | Plan-First (80/100 quality) |
+| "Am I testing an idea?" | YES | Fast-Track (60/100 quality) |
+| "Does this improve the project?" | NO | Don't build it |
+
+Fast-Track explorations skip formal planning. Instead, a 2-minute **research value check** gates the work: "Does this improve the paper/slides/analysis?" If the answer is "maybe", explore. If "no", skip. If "yes", use Plan-First rigor.
+
+### The Lifecycle
+
+```
+Research value check (2 min)
+  ↓
+Create explorations/[project]/ (5 min)
+  ↓
+Code without overhead (60/100 quality)
+  ↓
+Decision point (1-2 hours):
+  ├── Graduate → Move to R/, scripts/, tests/ (upgrade to 80/100)
+  ├── Keep exploring → Stay in explorations/
+  └── Abandon → Archive with brief explanation
+```
+
+The **kill switch** is explicit: at any point, you can stop, archive with a one-paragraph explanation, and move on. No guilt, no sunk cost. See `.claude/rules/exploration-folder-protocol.md` and `.claude/rules/exploration-fast-track.md` for the full protocols.
+
+### Simplified Orchestrator for Research
+
+The full orchestrator (Pattern 2) is designed for course materials with multi-agent review loops. For research projects, the **simple variant** strips this down to: implement → verify → score → done. No multi-round reviews, no parallel agent spawning. See the "Research Project Variant" section in `.claude/rules/orchestrator-protocol.md`.
+
+### Merge-Only Quality Reporting
+
+In research projects, commits are frequent and incremental. Generating a quality report for each commit creates noise. Instead, quality reports are generated **only at merge time** --- a permanent snapshot of what was merged and why. Session logs capture the ongoing reasoning. See `.claude/rules/session-logging.md`.
+
 ---
 
 # Customizing for Your Domain {#sec-customize}
 
 ## Step 1: Build Your Knowledge Base
 
-The knowledge base (`.claude/rules/knowledge-base-template.md`) is the most domain-specific component. It has three sections:
+The knowledge base (`.claude/rules/knowledge-base-template.md`) is the most domain-specific component. For **courses**, it has sections for notation, lecture progression, applications, and design principles. For **research projects**, Section 5 adds templates for estimand registries, mathematical objects, DGP configurations, tolerance thresholds, and output directory structure.
 
 ### Notation Registry
 
@@ -974,7 +1035,10 @@ Then create `SKILL.md` with YAML frontmatter + step-by-step instructions.
 | Replication Protocol | `.claude/rules/replication-protocol.md` | Replicate-first workflow |
 | Knowledge Base | `.claude/rules/knowledge-base-template.md` | Domain notation template |
 | Plan-First Workflow | `.claude/rules/plan-first-workflow.md` | Plan mode, plan saving, context preservation, session logging |
-| Orchestrator Protocol | `.claude/rules/orchestrator-protocol.md` | Contractor mode: autonomous implement-verify-review-fix loop |
+| Orchestrator Protocol | `.claude/rules/orchestrator-protocol.md` | Contractor mode: full loop (slides) or simple loop (research) |
+| Exploration Folder | `.claude/rules/exploration-folder-protocol.md` | Structured sandbox for experimental work |
+| Exploration Fast-Track | `.claude/rules/exploration-fast-track.md` | Lightweight workflow for explorations (60/100 threshold) |
+| Session Logging | `.claude/rules/session-logging.md` | Enhanced logging with structured templates + merge-only reporting |
 
 ## Hooks
 
