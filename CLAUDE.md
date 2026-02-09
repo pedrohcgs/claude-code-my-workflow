@@ -33,6 +33,11 @@
 | `/devils-advocate` | Challenge slide design with pedagogical questions |
 | `/create-lecture` | Full lecture creation workflow |
 | `/commit [message]` | Stage, commit, create PR, and merge to main |
+| `/lit-review [topic]` | Literature search, synthesis, and gap identification |
+| `/research-ideation [topic]` | Generate research questions and empirical strategies |
+| `/interview-me [topic]` | Interactive interview to formalize a research idea |
+| `/review-paper [filename]` | Manuscript review: structure, econometrics, referee objections |
+| `/data-analysis [dataset]` | End-to-end R analysis with publication-ready output |
 
 **Agents** (available for delegation): `proofreader`, `slide-auditor`, `pedagogy-reviewer`, `r-reviewer`, `tikz-reviewer`, `beamer-translator`, `quarto-critic`, `quarto-fixer`, `verifier`, `domain-reviewer`
 

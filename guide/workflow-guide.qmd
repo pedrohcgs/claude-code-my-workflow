@@ -530,7 +530,16 @@ The first four layers are your safety net. Anything written to disk survives ind
 
 The session log reminder above is one example of a broader pattern: using **hooks** to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in `.claude/settings.json` and fire every time, regardless of context state.
 
-The template includes one hook: the **session log reminder** (a command-based Stop hook). It runs a fast Python script after every response --- no LLM call, no latency. Verification and Beamer-Quarto sync are enforced via auto-loaded rules (`.claude/rules/verification-protocol.md` and `.claude/rules/beamer-quarto-sync.md`), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that *must* survive context compression.
+The template includes four hooks:
+
+| Hook | Event | What It Does |
+|------|-------|-------------|
+| Session log reminder | `Stop` | Runs a Python script after every response to remind about session logs |
+| Desktop notification | `Notification` | macOS alert when Claude needs attention (permission prompts, idle) |
+| File protection | `PreToolUse` | Blocks accidental edits to bibliography and settings files |
+| Context snapshot | `PreCompact` | Saves a note to the session log before auto-compaction triggers |
+
+Verification and Beamer-Quarto sync are enforced via auto-loaded rules (`.claude/rules/verification-protocol.md` and `.claude/rules/beamer-quarto-sync.md`), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that *must* survive context compression.
 
 ::: {.callout-tip}
 ## Hook Design Principle
@@ -914,6 +923,25 @@ The full orchestrator (Pattern 2) is designed for course materials with multi-ag
 ### Merge-Only Quality Reporting
 
 In research projects, commits are frequent and incremental. Generating a quality report for each commit creates noise. Instead, quality reports are generated **only at merge time** --- a permanent snapshot of what was merged and why. Session logs capture the ongoing reasoning. See `.claude/rules/session-logging.md`.
+
+## Pattern 11: Research Skills {#pattern-11-research-skills}
+
+Five skills support the research workflow beyond slide development:
+
+| Skill | What It Does | When to Use |
+|-------|-------------|-------------|
+| `/lit-review [topic]` | Search, synthesize, and identify gaps in the literature | Starting a new project or section |
+| `/research-ideation [topic]` | Generate research questions, hypotheses, and empirical strategies | Brainstorming phase |
+| `/interview-me [topic]` | Interactive interview to formalize a vague idea into a concrete specification | When you have an intuition but not a plan |
+| `/review-paper [file]` | Full manuscript review with referee objections | Before submission or after a draft |
+| `/data-analysis [data]` | End-to-end R analysis: explore, regress, produce publication-ready output | Empirical analysis phase |
+
+These skills produce structured reports saved to `quality_reports/`. The `/data-analysis` skill also generates R scripts (saved to `scripts/R/`) and runs the r-reviewer agent automatically.
+
+::: {.callout-tip}
+## Research Workflow Sequence
+A typical research project might flow: `/research-ideation` (what to study?) → `/interview-me` (formalize the idea) → `/lit-review` (what's been done?) → `/data-analysis` (run the analysis) → `/review-paper` (check the draft).
+:::
 
 ---
 

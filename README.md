@@ -17,7 +17,9 @@ This repository provides the **transportable infrastructure** behind a Claude Co
 - **Quality scoring** with commit/PR/excellence thresholds (80/90/95) — nothing ships below 80
 - **Automated Beamer-to-Quarto translation** with TikZ-to-SVG and ggplot-to-plotly conversion
 - **Research exploration workflow** with structured sandbox, fast-track prototyping, and simplified orchestrator
-- 10 specialized agents, 14 slash commands, 16 auto-loaded rules
+- **Research skills** — `/lit-review`, `/research-ideation`, `/interview-me`, `/review-paper`, `/data-analysis`
+- **Smart hooks** — desktop notifications, file protection, pre-compaction context snapshots
+- 10 specialized agents, 19 slash commands, 16 auto-loaded rules
 
 All domain-specific content has been replaced with `[PLACEHOLDER]` markers and `<!-- Customize -->` comments so you can adapt it to your field.
 
@@ -110,6 +112,12 @@ If it compiles, your setup is working.
 | `/validate-bib` | Cross-reference citations against bibliography |
 | `/devils-advocate` | Challenge design decisions before committing |
 | `/create-lecture` | Full lecture creation workflow |
+| `/commit` | Stage, commit, create PR, and merge to main |
+| `/lit-review` | Literature search, synthesis, and gap identification |
+| `/research-ideation` | Generate research questions and empirical strategies |
+| `/interview-me` | Interactive interview to formalize a research idea |
+| `/review-paper` | Manuscript review: structure, econometrics, referee objections |
+| `/data-analysis` | End-to-end R analysis with publication-ready output |
 
 ### Research Workflow
 

@@ -2444,6 +2444,7 @@ window.Quarto = {
   <li><a href="#simplified-orchestrator-for-research" id="toc-simplified-orchestrator-for-research" class="nav-link" data-scroll-target="#simplified-orchestrator-for-research"><span class="header-section-number">5.10.5</span> Simplified Orchestrator for Research</a></li>
   <li><a href="#merge-only-quality-reporting" id="toc-merge-only-quality-reporting" class="nav-link" data-scroll-target="#merge-only-quality-reporting"><span class="header-section-number">5.10.6</span> Merge-Only Quality Reporting</a></li>
   </ul></li>
+  <li><a href="#pattern-11-research-skills" id="toc-pattern-11-research-skills" class="nav-link" data-scroll-target="#pattern-11-research-skills"><span class="header-section-number">5.11</span> Pattern 11: Research Skills</a></li>
   </ul></li>
   <li><a href="#sec-customize" id="toc-sec-customize" class="nav-link" data-scroll-target="#sec-customize"><span class="header-section-number">6</span> Customizing for Your Domain</a>
   <ul class="collapse">
@@ -3298,7 +3299,44 @@ APPROVED   NEEDS WORK
 <section id="hooks-automated-enforcement" class="level3" data-number="4.6.4">
 <h3 data-number="4.6.4" class="anchored" data-anchor-id="hooks-automated-enforcement"><span class="header-section-number">4.6.4</span> Hooks — Automated Enforcement</h3>
 <p>The session log reminder above is one example of a broader pattern: using <strong>hooks</strong> to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in <code>.claude/settings.json</code> and fire every time, regardless of context state.</p>
-<p>The template includes one hook: the <strong>session log reminder</strong> (a command-based Stop hook). It runs a fast Python script after every response — no LLM call, no latency. Verification and Beamer-Quarto sync are enforced via auto-loaded rules (<code>.claude/rules/verification-protocol.md</code> and <code>.claude/rules/beamer-quarto-sync.md</code>), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
+<p>The template includes four hooks:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 26%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hook</th>
+<th>Event</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Session log reminder</td>
+<td><code>Stop</code></td>
+<td>Runs a Python script after every response to remind about session logs</td>
+</tr>
+<tr class="even">
+<td>Desktop notification</td>
+<td><code>Notification</code></td>
+<td>macOS alert when Claude needs attention (permission prompts, idle)</td>
+</tr>
+<tr class="odd">
+<td>File protection</td>
+<td><code>PreToolUse</code></td>
+<td>Blocks accidental edits to bibliography and settings files</td>
+</tr>
+<tr class="even">
+<td>Context snapshot</td>
+<td><code>PreCompact</code></td>
+<td>Saves a note to the session log before auto-compaction triggers</td>
+</tr>
+</tbody>
+</table>
+<p>Verification and Beamer-Quarto sync are enforced via auto-loaded rules (<code>.claude/rules/verification-protocol.md</code> and <code>.claude/rules/beamer-quarto-sync.md</code>), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3778,8 +3816,67 @@ Decision point (1-2 hours):
 <section id="merge-only-quality-reporting" class="level3" data-number="5.10.6">
 <h3 data-number="5.10.6" class="anchored" data-anchor-id="merge-only-quality-reporting"><span class="header-section-number">5.10.6</span> Merge-Only Quality Reporting</h3>
 <p>In research projects, commits are frequent and incremental. Generating a quality report for each commit creates noise. Instead, quality reports are generated <strong>only at merge time</strong> — a permanent snapshot of what was merged and why. Session logs capture the ongoing reasoning. See <code>.claude/rules/session-logging.md</code>.</p>
-<hr>
 </section>
+</section>
+<section id="pattern-11-research-skills" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="pattern-11-research-skills"><span class="header-section-number">5.11</span> Pattern 11: Research Skills</h2>
+<p>Five skills support the research workflow beyond slide development:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 39%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Skill</th>
+<th>What It Does</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/lit-review [topic]</code></td>
+<td>Search, synthesize, and identify gaps in the literature</td>
+<td>Starting a new project or section</td>
+</tr>
+<tr class="even">
+<td><code>/research-ideation [topic]</code></td>
+<td>Generate research questions, hypotheses, and empirical strategies</td>
+<td>Brainstorming phase</td>
+</tr>
+<tr class="odd">
+<td><code>/interview-me [topic]</code></td>
+<td>Interactive interview to formalize a vague idea into a concrete specification</td>
+<td>When you have an intuition but not a plan</td>
+</tr>
+<tr class="even">
+<td><code>/review-paper [file]</code></td>
+<td>Full manuscript review with referee objections</td>
+<td>Before submission or after a draft</td>
+</tr>
+<tr class="odd">
+<td><code>/data-analysis [data]</code></td>
+<td>End-to-end R analysis: explore, regress, produce publication-ready output</td>
+<td>Empirical analysis phase</td>
+</tr>
+</tbody>
+</table>
+<p>These skills produce structured reports saved to <code>quality_reports/</code>. The <code>/data-analysis</code> skill also generates R scripts (saved to <code>scripts/R/</code>) and runs the r-reviewer agent automatically.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Research Workflow Sequence
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A typical research project might flow: <code>/research-ideation</code> (what to study?) → <code>/interview-me</code> (formalize the idea) → <code>/lit-review</code> (what’s been done?) → <code>/data-analysis</code> (run the analysis) → <code>/review-paper</code> (check the draft).</p>
+</div>
+</div>
+<hr>
 </section>
 </section>
 <section id="sec-customize" class="level1" data-number="6">
