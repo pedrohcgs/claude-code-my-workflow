@@ -1,7 +1,6 @@
 ---
 name: visual-audit
 description: Perform adversarial visual audit of Quarto or Beamer slides checking for overflow, font consistency, box fatigue, and layout issues.
-disable-model-invocation: true
 argument-hint: "[QMD or TEX filename]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Task"]
 ---

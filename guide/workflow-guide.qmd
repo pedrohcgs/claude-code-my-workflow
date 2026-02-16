@@ -62,10 +62,64 @@ Claude Code runs on your computer with full access to your file system, terminal
 This workflow was developed over 6+ sessions building a PhD course on Causal Panel Data. The result: 6 complete lectures (140+ slides each), with Beamer + Quarto versions, interactive Plotly charts, TikZ diagrams, and R replication scripts --- all managed by the orchestrator and reviewed by 10 specialized agents across 5 quality dimensions.
 :::
 
+## How It All Works Together
+
+Before diving into setup, here is the key insight: **most of this workflow is automatic**. You describe what you want in plain English, and Claude figures out which tools to use.
+
+### What You Do vs What Happens Automatically
+
+| You Do | Happens Automatically |
+|--------|----------------------|
+| Describe what you want | Claude selects and runs the right skills |
+| Approve plans | Orchestrator coordinates agents |
+| Review final output | Hooks fire on events (edit, save, compact) |
+| Say "commit" when ready | Rules load based on files you touch |
+
+### Example: "Fix my slides before tomorrow"
+
+```
+You: "Review my lecture slides and fix all issues before tomorrow's class"
+     ↓
+Claude automatically:
+  → Runs /proofread (grammar, typos, consistency)
+  → Runs /visual-audit (overflow, layout, spacing)
+  → Runs /pedagogy-review (narrative flow, notation clarity)
+  → Synthesizes findings into prioritized fix list
+  → Applies fixes (critical → major → minor)
+  → Re-verifies everything compiles
+  → Scores against quality gates
+     ↓
+You see: "Done. Fixed 12 issues. Score: 88/100. Ready to commit?"
+You: "Yes"
+     ↓
+Claude runs /commit (only because you explicitly approved)
+```
+
+### What You Never Touch Directly
+
+- **Agents** --- Specialized reviewers called by skills, not by you
+- **Hooks** --- Fire automatically on events (you never run them)
+- **Rules** --- Load automatically based on file paths
+
+### Skills: The Only Commands You Might Type
+
+Skills like `/proofread` or `/compile-latex` can be invoked two ways:
+
+1. **Explicitly** --- You type `/proofread MySlides.tex`
+2. **Automatically** --- Claude invokes them when relevant to your request
+
+Most of the time, you just describe what you want and Claude handles the rest. Explicit skill invocation is there when you want precise control.
+
+::: {.callout-important}
+## The Bottom Line
+
+**You talk, Claude orchestrates.** The 10 agents, 21 skills, and 17 rules exist so you don't have to think about them. Describe your goal, approve the plan, and let the system work.
+:::
+
 ::: {.callout-note}
 ## You Don't Need All of This on Day One
 
-This guide describes the full system --- 10 agents, 19 skills, 17 rules. That is the ceiling, not the floor. **Start with just CLAUDE.md and 2--3 skills** (`/compile-latex`, `/proofread`, `/commit`). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you're ready.
+This guide describes the full system --- 10 agents, 21 skills, 17 rules. That is the ceiling, not the floor. **Start with just CLAUDE.md and 2--3 skills** (`/compile-latex`, `/proofread`, `/commit`). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you're ready.
 :::
 
 ---
@@ -73,6 +127,20 @@ This guide describes the full system --- 10 agents, 19 skills, 17 rules. That is
 # Getting Started {#sec-setup}
 
 You need two things: fork the repo, and paste a prompt. Claude handles everything else.
+
+::: {.callout-tip}
+## Day 1 Checklist
+
+- [ ] Fork the repo and clone it locally
+- [ ] Run `claude` in the project directory
+- [ ] Paste the starter prompt (fill in your project details)
+- [ ] Wait for Claude to customize `CLAUDE.md` for your project
+- [ ] Approve the configuration plan
+- [ ] Ask Claude to do something: *"Review my slides"* or *"Create a lecture on [topic]"*
+- [ ] Approve the task plan, watch it work, review the output
+
+That's it. Everything else — agents, hooks, rules — runs automatically in the background.
+:::
 
 ## Step 1: Fork & Clone
 
@@ -677,21 +745,87 @@ The first four layers are your safety net. Anything written to disk survives ind
 
 The session log reminder above is one example of a broader pattern: using **hooks** to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in `.claude/settings.json` and fire every time, regardless of context state.
 
-The template includes four hooks:
+The template includes hooks for logging, notifications, file protection, and context survival:
 
 | Hook | Event | What It Does |
 |------|-------|-------------|
-| Session log reminder | `Stop` | Runs a Python script after every response to remind about session logs |
-| Desktop notification | `Notification` | macOS alert when Claude needs attention (permission prompts, idle) |
-| File protection | `PreToolUse` | Blocks accidental edits to bibliography and settings files |
-| Context snapshot | `PreCompact` | Saves a note to the session log before auto-compaction triggers |
+| Session log reminder | `Stop` | Reminds about session logs after every response |
+| Desktop notification | `Notification` | macOS alert when Claude needs attention |
+| File protection | `PreToolUse` | Blocks accidental edits to bibliography and settings |
+| Context state capture | `PreCompact` | Saves plan state before auto-compaction |
+| Context restoration | `SessionStart[compact|resume]` | Restores context after compaction or resume |
+| Context monitor | `PostToolUse[Bash|Task]` | Progressive warnings at 40%/55%/65%/80%/90% context |
+| Verification reminder | `PostToolUse[Write|Edit]` | Reminds to compile/render before marking done |
 
-Verification and Beamer-Quarto sync are enforced via auto-loaded rules (`.claude/rules/verification-protocol.md` and `.claude/rules/beamer-quarto-sync.md`), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that *must* survive context compression.
+Verification and Beamer-Quarto sync are enforced via auto-loaded rules, which are the right tool for nuanced judgment. Hooks are reserved for enforcement that *must* survive context compression.
 
 ::: {.callout-tip}
 ## Hook Design Principle
 Use **command-based hooks** for fast, mechanical checks (file exists? counter threshold?). Use **rules** for nuanced judgment (did Claude verify correctly?). Avoid prompt-based hooks that trigger an LLM call on every response --- the latency adds up fast.
 :::
+
+### Context Survival System (Advanced) {#context-survival-system-advanced}
+
+When context compaction happens, Claude loses working memory. The **context survival system** ensures you can recover seamlessly.
+
+#### How It Works
+
+Two hooks work together to preserve and restore state:
+
+```
+Session running → context fills up → PreCompact fires
+                                           ↓
+                                    pre-compact.py saves:
+                                    • Active plan path
+                                    • Current task
+                                    • Recent decisions
+                                           ↓
+                                    Auto-compaction happens
+                                           ↓
+                                    SessionStart(compact|resume) fires
+                                           ↓
+                                    post-compact-restore.py:
+                                    • Reads saved state
+                                    • Prints context summary
+                                    • Claude knows where it left off
+```
+
+#### What Gets Saved
+
+| State | Location | Purpose |
+|-------|----------|---------|
+| Plan path | Session cache | So Claude can read the plan file |
+| Current task | Session cache | First unchecked `- [ ]` item |
+| Recent decisions | Session cache | Last 3 decision-like entries from session log |
+| Compaction note | Session log | Timestamp marker for reference |
+
+#### Context Monitoring
+
+The `context-monitor.py` hook tracks approximate context usage and provides progressive warnings:
+
+| Threshold | Message | Purpose |
+|-----------|---------|---------|
+| 40%, 55%, 65% | Suggest `/learn` | Capture non-obvious discoveries before compaction |
+| 80% | Info message | Auto-compact approaching, no rush |
+| 90% | Caution | Complete current task with full quality |
+
+Use `/context-status` to check current session health at any time.
+
+::: {.callout-note}
+## Context % Is Estimated
+The monitor uses tool call count as a proxy for context usage since direct access to context window state isn't available. Warnings may appear earlier or later than actual compaction.
+:::
+
+#### Recovery After Compaction
+
+If compaction happens mid-task, Claude will automatically see:
+
+1. **Restoration message** --- what plan was active, what task was in progress
+2. **Recovery actions** --- read the plan, check git status, continue
+
+You can also manually point Claude to the right context:
+
+> "We just had compaction. Read `quality_reports/plans/2026-02-06_translate-lecture5.md` and continue from where we left off."
 
 ---
 
@@ -734,26 +868,11 @@ Non-trivial task arrives
   +-- Step 8: Update session log + plan status to COMPLETED
 ```
 
-### Context Preservation: Prefer Auto-Compression
+### Context Preservation
 
-An important companion to plan-first development is context preservation. Claude Code has two ways to free context space:
+Plans are saved to disk specifically so they survive context compression. The rule: **avoid `/clear`** --- prefer auto-compression. Use `/clear` only when context is genuinely polluted.
 
-- **`/clear`** --- destroys everything. All context, corrections, and reasoning are gone. Starting over from zero.
-- **Auto-compression** --- Claude Code automatically compresses the conversation when it gets long. It keeps the most important context and discards redundant detail. This is graceful degradation.
-
-The rule: **avoid `/clear`** --- prefer auto-compression. Use `/clear` only when context is genuinely polluted (e.g., a large irrelevant file was read by mistake, or you explored the wrong branch). Always save important context to disk first. As a safety net, plans and important decisions live in files on disk, where they cannot be compressed away.
-
-::: {.callout-tip}
-## Recovery After Compression
-
-If you notice Claude has lost context after auto-compression, point it to the saved plan file:
-
-> "Read `quality_reports/plans/2026-02-06_translate-lecture5.md` --- that's our current plan."
-
-Because the plan is on disk, recovery is instant.
-:::
-
-Combined with the `[LEARN]` tag system from [Pattern 7](#pattern-7-self-improvement-loop), plans and context preservation form a complete memory layer: plans save task strategy, `[LEARN]` tags save corrections, and auto-compression keeps the conversation manageable without losing what matters.
+For details on how the system automatically preserves and restores context during compaction, see [Context Survival System](#context-survival-system-advanced) in the Building Blocks section.
 
 ### Session Logging
 
@@ -953,7 +1072,11 @@ The `/slide-excellence` skill runs up to 6 agents in parallel:
 
 ## Pattern 7: Self-Improvement Loop {#pattern-7-self-improvement-loop}
 
-Every correction gets tagged for future reference:
+There are two levels of self-improvement: **quick corrections** via `[LEARN]` tags and **full skill extraction** via `/learn`.
+
+### Quick Corrections: [LEARN] Tags
+
+Every correction gets tagged for future reference in MEMORY.md:
 
 ```markdown
 ## Corrections Log
@@ -963,7 +1086,67 @@ Every correction gets tagged for future reference:
 - [LEARN:workflow] Every Beamer edit must auto-sync to Quarto
 ```
 
-These tags are searchable and persist in MEMORY.md across sessions. When Claude encounters a similar situation, it checks memory first.
+These tags are searchable and persist across sessions. When Claude encounters a similar situation, it checks memory first.
+
+### Automated Skill Capture: /learn
+
+For discoveries that deserve more than a one-line tag, use `/learn` to create a full skill:
+
+```
+/learn fixest-missing-covariate-handling
+```
+
+The `/learn` skill guides you through a 4-phase workflow:
+
+```
+Phase 1: EVALUATE
+  "Was this non-obvious? Would future-me benefit?"
+  → If YES to any, continue
+         ↓
+Phase 2: CHECK EXISTING
+  Search .claude/skills/ for related skills
+  → Nothing related? Create new. Overlap? Update existing.
+         ↓
+Phase 3: CREATE SKILL
+  Write to .claude/skills/[name]/SKILL.md
+  • Problem statement
+  • Trigger conditions (exact errors, symptoms)
+  • Step-by-step solution
+  • Verification steps
+         ↓
+Phase 4: QUALITY GATE
+  • Description has specific triggers?
+  • Solution verified to work?
+  • Specific enough to be actionable?
+  • General enough to be reusable?
+```
+
+#### When to Use /learn
+
+The context monitor suggests `/learn` at 40%, 55%, and 65% context usage. Consider extracting a skill when you encounter:
+
+| Trigger | Example |
+|---------|---------|
+| Non-obvious debugging | 10+ minute investigation not in docs |
+| Misleading errors | Error message was wrong, found real cause |
+| Workarounds | Found limitation with creative solution |
+| Undocumented APIs | Tool integration not in official docs |
+| Trial-and-error | Multiple attempts before success |
+| Repeatable workflows | Multi-step task you'd do again |
+
+#### Skill vs. [LEARN] Tag
+
+| Situation | Use |
+|-----------|-----|
+| One-liner fix | `[LEARN:category]` tag in MEMORY.md |
+| Multi-step workflow | `/learn` to create full skill |
+| Error + root cause + solution | `/learn` if reusable, `[LEARN]` if not |
+| Package quirk | `/learn` if affects multiple projects |
+
+::: {.callout-tip}
+## Skills Persist, Context Doesn't
+Skills saved to `.claude/skills/` survive compaction and session boundaries. If you discover something valuable late in a session, extract it before compaction erases the details.
+:::
 
 ## Pattern 8: Devil's Advocate
 
@@ -1097,6 +1280,93 @@ These skills produce structured reports saved to `quality_reports/`. The `/data-
 ## Research Workflow Sequence
 A typical research project might flow: `/research-ideation` (what to study?) → `/interview-me` (formalize the idea) → `/lit-review` (what's been done?) → `/data-analysis` (run the analysis) → `/review-paper` (check the draft).
 :::
+
+### Pattern 12: Branch Isolation with Git Worktrees (Advanced) {#pattern-12-branch-isolation}
+
+::: {.callout-note}
+## Advanced Pattern
+This pattern is optional and primarily useful for major translations, risky refactors, or multi-day projects. Most day-to-day work doesn't need it.
+:::
+
+Git worktrees create a **separate working directory** linked to the same repository. Each directory has its own branch but shares commit history.
+
+```
+your-project/                     ← main branch (stays clean)
+.worktrees/lecture-06-quarto/     ← isolated branch (Claude works here)
+```
+
+#### Why Use Worktrees?
+
+| Benefit | Example |
+|---------|---------|
+| **Safe experimentation** | Translate Lecture 6 to Quarto --- if it fails, main is untouched |
+| **Clean history** | 50 intermediate commits squash into one clean commit |
+| **Easy discard** | Wrong approach? Delete worktree, no trace in main |
+| **Multi-session work** | Resume worktree next day, no context loss |
+| **Parallel work** | Work on slides (main) while Claude translates (worktree) |
+
+#### The Workflow
+
+```
+1. CREATE WORKTREE
+   git worktree add .worktrees/lecture-06-quarto -b quarto/lecture-06
+   cd .worktrees/lecture-06-quarto
+         ↓
+2. IMPLEMENT
+   All changes happen in the worktree
+   Commit frequently (intermediate commits are OK)
+         ↓
+3. VERIFY
+   Run tests, render, review against worktree only
+         ↓
+4. SYNC TO MAIN (when ready)
+   git checkout main
+   git merge --squash quarto/lecture-06
+   git commit -m "feat: add Lecture 6 Quarto version"
+         ↓
+5. CLEANUP
+   git worktree remove .worktrees/lecture-06-quarto
+   git branch -d quarto/lecture-06
+```
+
+#### Commands Reference
+
+```bash
+# Create a worktree with new branch
+git worktree add .worktrees/[name] -b [branch-name]
+
+# List active worktrees
+git worktree list
+
+# Remove a worktree (after merging or abandoning)
+git worktree remove .worktrees/[name]
+
+# Delete the branch (after removal)
+git branch -d [branch-name]
+
+# Squash-merge into main
+git checkout main
+git merge --squash [branch-name]
+git commit -m "feat: description of changes"
+```
+
+#### When to Use
+
+| Situation | Use Worktree? |
+|-----------|---------------|
+| Quick fix to one file | No --- just edit main |
+| New lecture creation | Maybe --- if multi-session |
+| Beamer → Quarto translation | Yes --- many intermediate states |
+| Major refactor | Yes --- safe rollback |
+| Experimenting with new approach | Yes --- easy discard |
+
+#### Complexity Cost
+
+- Adds ~3 commands to learn
+- Adds mental model: "Where am I working?"
+- Requires discipline to sync/discard, not leave orphan worktrees
+
+For most novice users, working directly on main with frequent commits is simpler and sufficient. Use worktrees when the benefits of isolation outweigh the added complexity.
 
 ---
 
@@ -1321,6 +1591,8 @@ Cross-references in-text citations against bibliography entries. Identifies miss
 | `/interview-me` | `.claude/skills/interview-me/` | Interactive research interview |
 | `/review-paper` | `.claude/skills/review-paper/` | Manuscript review |
 | `/data-analysis` | `.claude/skills/data-analysis/` | End-to-end R analysis |
+| `/learn` | `.claude/skills/learn/` | Extract discoveries into persistent skills |
+| `/context-status` | `.claude/skills/context-status/` | Show session health and context usage |
 
 ## All Rules
 
@@ -1358,4 +1630,72 @@ Cross-references in-text citations against bibliography entries. Identifies miss
 | Session log reminder | Stop (command) | `.claude/hooks/log-reminder.py` |
 | Desktop notification | Notification (command) | `.claude/hooks/notify.sh` |
 | File protection | PreToolUse (command) | `.claude/hooks/protect-files.sh` |
-| Context snapshot | PreCompact (command) | `.claude/hooks/pre-compact.sh` |
+| Context state capture | PreCompact (command) | `.claude/hooks/pre-compact.py` |
+| Context restoration | SessionStart[compact\|resume] (command) | `.claude/hooks/post-compact-restore.py` |
+| Context monitor | PostToolUse[Bash\|Task] (command) | `.claude/hooks/context-monitor.py` |
+| Verification reminder | PostToolUse[Write\|Edit] (command) | `.claude/hooks/verify-reminder.py` |
+
+## Troubleshooting
+
+### LaTeX Won't Compile
+
+**Symptom:** `xelatex` errors or missing packages.
+
+**Fix:**
+1. Check you have XeLaTeX installed: `which xelatex`
+2. Ensure `TEXINPUTS` includes `Preambles/`: the `/compile-latex` skill handles this
+3. Missing package? Install via TeX Live: `tlmgr install [package]`
+
+### Quarto Won't Render
+
+**Symptom:** `quarto render` fails or produces broken HTML.
+
+**Fix:**
+1. Check Quarto version: `quarto --version` (need 1.3+)
+2. Check for syntax errors in YAML frontmatter
+3. Missing TikZ SVGs? Run `/extract-tikz` first
+
+### Hooks Not Firing
+
+**Symptom:** No context warnings, no verification reminders.
+
+**Fix:**
+1. Check hooks are configured: `cat .claude/settings.json | grep hooks`
+2. Ensure Python 3 is available: `which python3`
+3. Check hook file permissions: `ls -la .claude/hooks/`
+
+### Claude Ignores Rules
+
+**Symptom:** Claude doesn't follow conventions in `.claude/rules/`.
+
+**Fix:**
+1. Rules use `paths:` frontmatter — check the path matches your files
+2. Too many rules? Claude follows ~150 instructions reliably. Consolidate.
+3. Try: *"Read `.claude/rules/[rule].md` and follow it for this task"*
+
+### Context Lost After Compaction
+
+**Symptom:** Claude forgets what you were working on.
+
+**Fix:**
+1. Point Claude to the plan: *"Read `quality_reports/plans/[latest].md`"*
+2. Check session log: *"Read `quality_reports/session_logs/[latest].md`"*
+3. The `post-compact-restore.py` hook should print recovery info automatically
+
+### Quality Score Too Low
+
+**Symptom:** Score stuck below 80, can't commit.
+
+**Fix:**
+1. Run `/slide-excellence` to get detailed issue breakdown
+2. Fix critical issues first (they cost -10 to -20 points each)
+3. Ask Claude: *"What are the remaining critical issues?"*
+
+### Skills Not Auto-Invoked
+
+**Symptom:** Claude doesn't use skills when you describe a task.
+
+**Fix:**
+1. Be explicit in your request: *"Review my slides for grammar and layout issues"*
+2. Check skill has auto-invocation enabled (no `disable-model-invocation: true`)
+3. Skill descriptions help Claude know when to use them — check they're clear

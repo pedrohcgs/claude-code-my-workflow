@@ -1,7 +1,6 @@
 ---
 name: review-r
 description: Run the R code review protocol on R scripts. Checks code quality, reproducibility, domain correctness, and professional standards. Produces a report without editing files.
-disable-model-invocation: true
 argument-hint: "[filename or 'all' or 'LectureN']"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Task"]
 ---

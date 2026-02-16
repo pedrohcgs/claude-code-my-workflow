@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -2360,6 +2360,13 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#the-problem" id="toc-the-problem" class="nav-link" data-scroll-target="#the-problem"><span class="header-section-number">1.1</span> The Problem</a></li>
   <li><a href="#what-makes-claude-code-different" id="toc-what-makes-claude-code-different" class="nav-link" data-scroll-target="#what-makes-claude-code-different"><span class="header-section-number">1.2</span> What Makes Claude Code Different</a></li>
+  <li><a href="#how-it-all-works-together" id="toc-how-it-all-works-together" class="nav-link" data-scroll-target="#how-it-all-works-together"><span class="header-section-number">1.3</span> How It All Works Together</a>
+  <ul class="collapse">
+  <li><a href="#what-you-do-vs-what-happens-automatically" id="toc-what-you-do-vs-what-happens-automatically" class="nav-link" data-scroll-target="#what-you-do-vs-what-happens-automatically"><span class="header-section-number">1.3.1</span> What You Do vs What Happens Automatically</a></li>
+  <li><a href="#example-fix-my-slides-before-tomorrow" id="toc-example-fix-my-slides-before-tomorrow" class="nav-link" data-scroll-target="#example-fix-my-slides-before-tomorrow"><span class="header-section-number">1.3.2</span> Example: “Fix my slides before tomorrow”</a></li>
+  <li><a href="#what-you-never-touch-directly" id="toc-what-you-never-touch-directly" class="nav-link" data-scroll-target="#what-you-never-touch-directly"><span class="header-section-number">1.3.3</span> What You Never Touch Directly</a></li>
+  <li><a href="#skills-the-only-commands-you-might-type" id="toc-skills-the-only-commands-you-might-type" class="nav-link" data-scroll-target="#skills-the-only-commands-you-might-type"><span class="header-section-number">1.3.4</span> Skills: The Only Commands You Might Type</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#sec-setup" id="toc-sec-setup" class="nav-link" data-scroll-target="#sec-setup"><span class="header-section-number">2</span> Getting Started</a>
   <ul class="collapse">
@@ -2407,6 +2414,7 @@ window.Quarto = {
   <li><a href="#session-logs-why-not-just-what-history-with-automated-reminders" id="toc-session-logs-why-not-just-what-history-with-automated-reminders" class="nav-link" data-scroll-target="#session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.7.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</a></li>
   <li><a href="#how-it-all-fits-together" id="toc-how-it-all-fits-together" class="nav-link" data-scroll-target="#how-it-all-fits-together"><span class="header-section-number">4.7.3</span> How It All Fits Together</a></li>
   <li><a href="#hooks-automated-enforcement" id="toc-hooks-automated-enforcement" class="nav-link" data-scroll-target="#hooks-automated-enforcement"><span class="header-section-number">4.7.4</span> Hooks — Automated Enforcement</a></li>
+  <li><a href="#context-survival-system-advanced" id="toc-context-survival-system-advanced" class="nav-link" data-scroll-target="#context-survival-system-advanced"><span class="header-section-number">4.7.5</span> Context Survival System (Advanced)</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-patterns" id="toc-sec-patterns" class="nav-link" data-scroll-target="#sec-patterns"><span class="header-section-number">5</span> Workflow Patterns</a>
@@ -2415,7 +2423,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#why-planning-matters" id="toc-why-planning-matters" class="nav-link" data-scroll-target="#why-planning-matters"><span class="header-section-number">5.1.1</span> Why Planning Matters</a></li>
   <li><a href="#the-protocol" id="toc-the-protocol" class="nav-link" data-scroll-target="#the-protocol"><span class="header-section-number">5.1.2</span> The Protocol</a></li>
-  <li><a href="#context-preservation-prefer-auto-compression" id="toc-context-preservation-prefer-auto-compression" class="nav-link" data-scroll-target="#context-preservation-prefer-auto-compression"><span class="header-section-number">5.1.3</span> Context Preservation: Prefer Auto-Compression</a></li>
+  <li><a href="#context-preservation" id="toc-context-preservation" class="nav-link" data-scroll-target="#context-preservation"><span class="header-section-number">5.1.3</span> Context Preservation</a></li>
   <li><a href="#session-logging" id="toc-session-logging" class="nav-link" data-scroll-target="#session-logging"><span class="header-section-number">5.1.4</span> Session Logging</a></li>
   </ul></li>
   <li><a href="#pattern-2-contractor-mode-orchestrator" id="toc-pattern-2-contractor-mode-orchestrator" class="nav-link" data-scroll-target="#pattern-2-contractor-mode-orchestrator"><span class="header-section-number">5.2</span> Pattern 2: Contractor Mode (Orchestrator)</a>
@@ -2430,13 +2438,18 @@ window.Quarto = {
   <li><a href="#pattern-4-translating-beamer-to-quarto" id="toc-pattern-4-translating-beamer-to-quarto" class="nav-link" data-scroll-target="#pattern-4-translating-beamer-to-quarto"><span class="header-section-number">5.4</span> Pattern 4: Translating Beamer to Quarto</a></li>
   <li><a href="#pattern-5-replication-first-coding" id="toc-pattern-5-replication-first-coding" class="nav-link" data-scroll-target="#pattern-5-replication-first-coding"><span class="header-section-number">5.5</span> Pattern 5: Replication-First Coding</a></li>
   <li><a href="#pattern-6-multi-agent-review" id="toc-pattern-6-multi-agent-review" class="nav-link" data-scroll-target="#pattern-6-multi-agent-review"><span class="header-section-number">5.6</span> Pattern 6: Multi-Agent Review</a></li>
-  <li><a href="#pattern-7-self-improvement-loop" id="toc-pattern-7-self-improvement-loop" class="nav-link" data-scroll-target="#pattern-7-self-improvement-loop"><span class="header-section-number">5.7</span> Pattern 7: Self-Improvement Loop</a></li>
+  <li><a href="#pattern-7-self-improvement-loop" id="toc-pattern-7-self-improvement-loop" class="nav-link" data-scroll-target="#pattern-7-self-improvement-loop"><span class="header-section-number">5.7</span> Pattern 7: Self-Improvement Loop</a>
+  <ul class="collapse">
+  <li><a href="#quick-corrections-learn-tags" id="toc-quick-corrections-learn-tags" class="nav-link" data-scroll-target="#quick-corrections-learn-tags"><span class="header-section-number">5.7.1</span> Quick Corrections: [LEARN] Tags</a></li>
+  <li><a href="#automated-skill-capture-learn" id="toc-automated-skill-capture-learn" class="nav-link" data-scroll-target="#automated-skill-capture-learn"><span class="header-section-number">5.7.2</span> Automated Skill Capture: /learn</a></li>
+  </ul></li>
   <li><a href="#pattern-8-devils-advocate" id="toc-pattern-8-devils-advocate" class="nav-link" data-scroll-target="#pattern-8-devils-advocate"><span class="header-section-number">5.8</span> Pattern 8: Devil’s Advocate</a></li>
   <li><a href="#sec-research-workflows" id="toc-sec-research-workflows" class="nav-link" data-scroll-target="#sec-research-workflows"><span class="header-section-number">5.9</span> Research Workflows</a>
   <ul class="collapse">
   <li><a href="#pattern-9-parallel-agents-for-research-tasks" id="toc-pattern-9-parallel-agents-for-research-tasks" class="nav-link" data-scroll-target="#pattern-9-parallel-agents-for-research-tasks"><span class="header-section-number">5.9.1</span> Pattern 9: Parallel Agents for Research Tasks</a></li>
   <li><a href="#pattern-10-exploration" id="toc-pattern-10-exploration" class="nav-link" data-scroll-target="#pattern-10-exploration"><span class="header-section-number">5.9.2</span> Pattern 10: Research Exploration Workflow</a></li>
   <li><a href="#pattern-11-research-skills" id="toc-pattern-11-research-skills" class="nav-link" data-scroll-target="#pattern-11-research-skills"><span class="header-section-number">5.9.3</span> Pattern 11: Research Skills</a></li>
+  <li><a href="#pattern-12-branch-isolation" id="toc-pattern-12-branch-isolation" class="nav-link" data-scroll-target="#pattern-12-branch-isolation"><span class="header-section-number">5.9.4</span> Pattern 12: Branch Isolation with Git Worktrees (Advanced)</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-customize" id="toc-sec-customize" class="nav-link" data-scroll-target="#sec-customize"><span class="header-section-number">6</span> Customizing for Your Domain</a>
@@ -2465,6 +2478,16 @@ window.Quarto = {
   <li><a href="#all-skills" id="toc-all-skills" class="nav-link" data-scroll-target="#all-skills"><span class="header-section-number">7.2</span> All Skills</a></li>
   <li><a href="#all-rules" id="toc-all-rules" class="nav-link" data-scroll-target="#all-rules"><span class="header-section-number">7.3</span> All Rules</a></li>
   <li><a href="#hooks" id="toc-hooks" class="nav-link" data-scroll-target="#hooks"><span class="header-section-number">7.4</span> Hooks</a></li>
+  <li><a href="#troubleshooting" id="toc-troubleshooting" class="nav-link" data-scroll-target="#troubleshooting"><span class="header-section-number">7.5</span> Troubleshooting</a>
+  <ul class="collapse">
+  <li><a href="#latex-wont-compile" id="toc-latex-wont-compile" class="nav-link" data-scroll-target="#latex-wont-compile"><span class="header-section-number">7.5.1</span> LaTeX Won’t Compile</a></li>
+  <li><a href="#quarto-wont-render" id="toc-quarto-wont-render" class="nav-link" data-scroll-target="#quarto-wont-render"><span class="header-section-number">7.5.2</span> Quarto Won’t Render</a></li>
+  <li><a href="#hooks-not-firing" id="toc-hooks-not-firing" class="nav-link" data-scroll-target="#hooks-not-firing"><span class="header-section-number">7.5.3</span> Hooks Not Firing</a></li>
+  <li><a href="#claude-ignores-rules" id="toc-claude-ignores-rules" class="nav-link" data-scroll-target="#claude-ignores-rules"><span class="header-section-number">7.5.4</span> Claude Ignores Rules</a></li>
+  <li><a href="#context-lost-after-compaction" id="toc-context-lost-after-compaction" class="nav-link" data-scroll-target="#context-lost-after-compaction"><span class="header-section-number">7.5.5</span> Context Lost After Compaction</a></li>
+  <li><a href="#quality-score-too-low" id="toc-quality-score-too-low" class="nav-link" data-scroll-target="#quality-score-too-low"><span class="header-section-number">7.5.6</span> Quality Score Too Low</a></li>
+  <li><a href="#skills-not-auto-invoked" id="toc-skills-not-auto-invoked" class="nav-link" data-scroll-target="#skills-not-auto-invoked"><span class="header-section-number">7.5.7</span> Skills Not Auto-Invoked</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -2576,6 +2599,86 @@ window.Quarto = {
 <p>This workflow was developed over 6+ sessions building a PhD course on Causal Panel Data. The result: 6 complete lectures (140+ slides each), with Beamer + Quarto versions, interactive Plotly charts, TikZ diagrams, and R replication scripts — all managed by the orchestrator and reviewed by 10 specialized agents across 5 quality dimensions.</p>
 </div>
 </div>
+</section>
+<section id="how-it-all-works-together" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="how-it-all-works-together"><span class="header-section-number">1.3</span> How It All Works Together</h2>
+<p>Before diving into setup, here is the key insight: <strong>most of this workflow is automatic</strong>. You describe what you want in plain English, and Claude figures out which tools to use.</p>
+<section id="what-you-do-vs-what-happens-automatically" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="what-you-do-vs-what-happens-automatically"><span class="header-section-number">1.3.1</span> What You Do vs What Happens Automatically</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>You Do</th>
+<th>Happens Automatically</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Describe what you want</td>
+<td>Claude selects and runs the right skills</td>
+</tr>
+<tr class="even">
+<td>Approve plans</td>
+<td>Orchestrator coordinates agents</td>
+</tr>
+<tr class="odd">
+<td>Review final output</td>
+<td>Hooks fire on events (edit, save, compact)</td>
+</tr>
+<tr class="even">
+<td>Say “commit” when ready</td>
+<td>Rules load based on files you touch</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="example-fix-my-slides-before-tomorrow" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="example-fix-my-slides-before-tomorrow"><span class="header-section-number">1.3.2</span> Example: “Fix my slides before tomorrow”</h3>
+<pre><code>You: &quot;Review my lecture slides and fix all issues before tomorrow&#39;s class&quot;
+     ↓
+Claude automatically:
+  → Runs /proofread (grammar, typos, consistency)
+  → Runs /visual-audit (overflow, layout, spacing)
+  → Runs /pedagogy-review (narrative flow, notation clarity)
+  → Synthesizes findings into prioritized fix list
+  → Applies fixes (critical → major → minor)
+  → Re-verifies everything compiles
+  → Scores against quality gates
+     ↓
+You see: &quot;Done. Fixed 12 issues. Score: 88/100. Ready to commit?&quot;
+You: &quot;Yes&quot;
+     ↓
+Claude runs /commit (only because you explicitly approved)</code></pre>
+</section>
+<section id="what-you-never-touch-directly" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="what-you-never-touch-directly"><span class="header-section-number">1.3.3</span> What You Never Touch Directly</h3>
+<ul>
+<li><strong>Agents</strong> — Specialized reviewers called by skills, not by you</li>
+<li><strong>Hooks</strong> — Fire automatically on events (you never run them)</li>
+<li><strong>Rules</strong> — Load automatically based on file paths</li>
+</ul>
+</section>
+<section id="skills-the-only-commands-you-might-type" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="skills-the-only-commands-you-might-type"><span class="header-section-number">1.3.4</span> Skills: The Only Commands You Might Type</h3>
+<p>Skills like <code>/proofread</code> or <code>/compile-latex</code> can be invoked two ways:</p>
+<ol type="1">
+<li><strong>Explicitly</strong> — You type <code>/proofread MySlides.tex</code></li>
+<li><strong>Automatically</strong> — Claude invokes them when relevant to your request</li>
+</ol>
+<p>Most of the time, you just describe what you want and Claude handles the rest. Explicit skill invocation is there when you want precise control.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The Bottom Line
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>You talk, Claude orchestrates.</strong> The 10 agents, 21 skills, and 17 rules exist so you don’t have to think about them. Describe your goal, approve the plan, and let the system work.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2586,27 +2689,50 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This guide describes the full system — 10 agents, 19 skills, 17 rules. That is the ceiling, not the floor. <strong>Start with just CLAUDE.md and 2–3 skills</strong> (<code>/compile-latex</code>, <code>/proofread</code>, <code>/commit</code>). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you’re ready.</p>
+<p>This guide describes the full system — 10 agents, 21 skills, 17 rules. That is the ceiling, not the floor. <strong>Start with just CLAUDE.md and 2–3 skills</strong> (<code>/compile-latex</code>, <code>/proofread</code>, <code>/commit</code>). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you’re ready.</p>
 </div>
 </div>
 <hr>
 </section>
 </section>
+</section>
 <section id="sec-setup" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Getting Started</h1>
 <p>You need two things: fork the repo, and paste a prompt. Claude handles everything else.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Day 1 Checklist
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul class="task-list">
+<li><label><input type="checkbox">Fork the repo and clone it locally</label></li>
+<li><label><input type="checkbox">Run <code>claude</code> in the project directory</label></li>
+<li><label><input type="checkbox">Paste the starter prompt (fill in your project details)</label></li>
+<li><label><input type="checkbox">Wait for Claude to customize <code>CLAUDE.md</code> for your project</label></li>
+<li><label><input type="checkbox">Approve the configuration plan</label></li>
+<li><label><input type="checkbox">Ask Claude to do something: <em>“Review my slides”</em> or <em>“Create a lecture on [topic]”</em></label></li>
+<li><label><input type="checkbox">Approve the task plan, watch it work, review the output</label></li>
+</ul>
+<p>That’s it. Everything else — agents, hooks, rules — runs automatically in the background.</p>
+</div>
+</div>
 <section id="step-1-fork-clone" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="step-1-fork-clone"><span class="header-section-number">2.1</span> Step 1: Fork &amp; Clone</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fork this repo on GitHub (click &quot;Fork&quot; on the repo page), then:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fork this repo on GitHub (click &quot;Fork&quot; on the repo page), then:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Replace <code>YOUR_USERNAME</code> with your GitHub username.</p>
 </section>
 <section id="sec-first-session" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="sec-first-session"><span class="header-section-number">2.2</span> Step 2: Start Claude Code and Paste This Prompt</h2>
 <p>Open your terminal in the project directory, run <code>claude</code>, and paste the following. Fill in the <strong>bolded placeholders</strong> with your project details:</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2615,7 +2741,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Everything in this guide works the same in any Claude Code interface. In <strong>VS Code</strong>, open the Claude Code panel (click the Claude icon in the sidebar or press Cmd+Shift+P → “Claude Code: Open”). In <strong>Claude Desktop</strong>, open your project folder and start a local session. Then paste the starter prompt below.</p>
 <p>The guide shows terminal commands because they are the most universal way to explain things, but every skill, agent, hook, and rule works identically regardless of which interface you use.</p>
@@ -2645,7 +2771,7 @@ window.Quarto = {
 <h2 data-number="2.3" class="anchored" data-anchor-id="optional-manual-setup"><span class="header-section-number">2.3</span> Optional: Manual Setup</h2>
 <p>If you prefer to configure things yourself instead of letting Claude handle it:</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2654,7 +2780,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Customize CLAUDE.md</strong> — Open <code>CLAUDE.md</code> and replace all <code>[BRACKETED PLACEHOLDERS]</code>:</p>
 <ol type="1">
@@ -2672,10 +2798,10 @@ window.Quarto = {
 </ol>
 <p><strong>Configure permissions</strong> — Review <code>.claude/settings.json</code>. The template includes permissions for git, LaTeX, Quarto, R, and utility scripts. Add any additional tools you use.</p>
 <p><strong>Test it:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In Claude Code, type:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/compile-latex</span> MyFirstLecture</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">/proofread</span> Slides/MyFirstLecture.tex</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/quality_score.py Slides/MyFirstLecture.tex</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In Claude Code, type:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/compile-latex</span> MyFirstLecture</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">/proofread</span> Slides/MyFirstLecture.tex</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> scripts/quality_score.py Slides/MyFirstLecture.tex</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -3039,24 +3165,24 @@ APPROVED   NEEDS WORK
 <li><strong>Skill quick reference</strong> — table of available slash commands</li>
 </ul>
 <p>Move everything else into <code>.claude/rules/</code> files (with path-scoping so they only load when relevant).</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># CLAUDE.MD --- My Course Development</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>**Project:** Econ 730 --- Causal Panel Data</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>**Institution:** Emory University</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Core Principles</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Plan-first** — enter plan mode before non-trivial tasks</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Verify-after** — compile/render and check before reporting done</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Quality gates** — 80 to commit, 90 for PR, 95 for excellence</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**LEARN tags** — persist corrections in MEMORY.md</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Single source of truth** — Beamer is authoritative; derive, don&#39;t duplicate</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick Reference</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Command <span class="pp">|</span> What It Does <span class="pp">|</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-------------|</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`/compile-latex [file]`</span> <span class="pp">|</span> 3-pass XeLaTeX compilation <span class="pp">|</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`/proofread [file]`</span> <span class="pp">|</span> Grammar/typo review <span class="pp">|</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`/deploy [Lecture]`</span> <span class="pp">|</span> Render and deploy to GitHub Pages <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># CLAUDE.MD --- My Course Development</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>**Project:** Econ 730 --- Causal Panel Data</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>**Institution:** Emory University</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Core Principles</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Plan-first** — enter plan mode before non-trivial tasks</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Verify-after** — compile/render and check before reporting done</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Quality gates** — 80 to commit, 90 for PR, 95 for excellence</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**LEARN tags** — persist corrections in MEMORY.md</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Single source of truth** — Beamer is authoritative; derive, don&#39;t duplicate</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick Reference</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Command <span class="pp">|</span> What It Does <span class="pp">|</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-------------|</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`/compile-latex [file]`</span> <span class="pp">|</span> 3-pass XeLaTeX compilation <span class="pp">|</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`/proofread [file]`</span> <span class="pp">|</span> Grammar/typo review <span class="pp">|</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`/deploy [Lecture]`</span> <span class="pp">|</span> Render and deploy to GitHub Pages <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3092,22 +3218,22 @@ APPROVED   NEEDS WORK
 <p><strong>Why rules matter:</strong> Without them, Claude will use generic defaults. With them, Claude follows <em>your</em> standards consistently across sessions.</p>
 <section id="example-path-scoped-r-code-conventions-rule" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="example-path-scoped-r-code-conventions-rule"><span class="header-section-number">4.2.1</span> Example: Path-Scoped R Code Conventions Rule</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paths</span><span class="kw">:</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;**/*.R&quot;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;Figures/**/*.R&quot;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;scripts/**/*.R&quot;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># R Code Standards</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducibility</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>set.seed() called ONCE at top (YYYYMMDD format)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All packages loaded at top via library()</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All paths relative to repository root</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visual Identity</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>primary_blue  &lt;- &quot;#012169&quot;</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>primary_gold  &lt;- &quot;#f2a900&quot;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;**/*.R&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;Figures/**/*.R&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;scripts/**/*.R&quot;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># R Code Standards</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducibility</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>set.seed() called ONCE at top (YYYYMMDD format)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All packages loaded at top via library()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All paths relative to repository root</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visual Identity</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>primary_blue  &lt;- &quot;#012169&quot;</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>primary_gold  &lt;- &quot;#f2a900&quot;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>paths:</code> block means this rule only loads when Claude reads or edits an <code>.R</code> file. When Claude works on a <code>.tex</code> file, this rule doesn’t consume any of the instruction budget.</p>
 </section>
 </section>
@@ -3149,21 +3275,21 @@ APPROVED   NEEDS WORK
 <section id="skills-reusable-slash-commands" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="skills-reusable-slash-commands"><span class="header-section-number">4.4</span> Skills — Reusable Slash Commands</h2>
 <p>Skills are multi-step workflows invoked with <code>/command</code>. Each skill lives in <code>.claude/skills/[name]/SKILL.md</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> compile-latex</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Compile LaTeX with 3-pass XeLaTeX + bibtex</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">disable-model-invocation</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">argument-hint</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;[filename without .tex extension]&quot;</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Steps:</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="at">1. cd to Slides/</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="at">2. Run xelatex pass 1</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="at">3. Run bibtex</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="at">4. Run xelatex pass 2</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="at">5. Run xelatex pass 3</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="at">6. Check for errors</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="at">7. Report results</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> compile-latex</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Compile LaTeX with 3-pass XeLaTeX + bibtex</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">disable-model-invocation</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">argument-hint</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;[filename without .tex extension]&quot;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Steps:</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">1. cd to Slides/</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">2. Run xelatex pass 1</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">3. Run bibtex</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="at">4. Run xelatex pass 2</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="at">5. Run xelatex pass 3</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="at">6. Check for errors</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="at">7. Report results</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Skills you get in the template:</strong></p>
 <table class="caption-top table">
 <colgroup>
@@ -3234,29 +3360,29 @@ APPROVED   NEEDS WORK
 <section id="agent-anatomy" class="level3" data-number="4.5.1">
 <h3 data-number="4.5.1" class="anchored" data-anchor-id="agent-anatomy"><span class="header-section-number">4.5.1</span> Agent Anatomy</h3>
 <p>Each agent file has YAML frontmatter + detailed instructions:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> proofreader</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Reviews slides for grammar, typos, and consistency</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># Proofreader Agent</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Role</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>You are an expert academic proofreader reviewing lecture slides.</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## What to Check</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Grammar and spelling errors</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Inconsistent notation</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Missing or broken citations</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Content overflow (text exceeding slide bounds)</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Report Format</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>Save findings to: quality_reports/<span class="co">[</span><span class="ot">FILENAME</span><span class="co">]</span>_report.md</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Severity Levels</span></span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Critical:** Math errors, broken citations</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Major:** Grammar errors, overflow</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Minor:** Style inconsistencies</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> proofreader</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Reviews slides for grammar, typos, and consistency</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># Proofreader Agent</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Role</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>You are an expert academic proofreader reviewing lecture slides.</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## What to Check</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Grammar and spelling errors</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Inconsistent notation</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Missing or broken citations</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Content overflow (text exceeding slide bounds)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Report Format</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>Save findings to: quality_reports/<span class="co">[</span><span class="ot">FILENAME</span><span class="co">]</span>_report.md</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Severity Levels</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Critical:** Math errors, broken citations</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Major:** Grammar errors, overflow</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Minor:** Style inconsistencies</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3312,10 +3438,10 @@ APPROVED   NEEDS WORK
 </table>
 <p><strong>The principle:</strong> Use Opus for tasks that require holding two large documents in mind simultaneously (translation, adversarial comparison). Use Sonnet for tasks with clear, bounded scope (fix these 12 issues, check this R script). Let everything else inherit.</p>
 <p>To change an agent’s model, edit its YAML frontmatter:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> quarto-critic</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> opus</span><span class="co">   # was: inherit</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> quarto-critic</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> opus</span><span class="co">   # was: inherit</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3334,44 +3460,44 @@ APPROVED   NEEDS WORK
 <section id="settings-permissions-and-hooks" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="settings-permissions-and-hooks"><span class="header-section-number">4.6</span> Settings — Permissions and Hooks</h2>
 <p><code>.claude/settings.json</code> controls what Claude is allowed to do. Here is a simplified excerpt — the template includes additional permission entries for git, GitHub CLI, PDF tools, and more:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;allow&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git status *)&quot;</span><span class="ot">,</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(xelatex *)&quot;</span><span class="ot">,</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(Rscript *)&quot;</span><span class="ot">,</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(quarto render *)&quot;</span><span class="ot">,</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(./scripts/sync_to_docs.sh *)&quot;</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR</span><span class="ch">\&quot;</span><span class="st">/.claude/hooks/log-reminder.py&quot;</span><span class="fu">,</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;allow&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git status *)&quot;</span><span class="ot">,</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(xelatex *)&quot;</span><span class="ot">,</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(Rscript *)&quot;</span><span class="ot">,</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(quarto render *)&quot;</span><span class="ot">,</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(./scripts/sync_to_docs.sh *)&quot;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR</span><span class="ch">\&quot;</span><span class="st">/.claude/hooks/log-reminder.py&quot;</span><span class="fu">,</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <strong>Stop hook</strong> runs a fast Python script after every response. No LLM call, no latency. It checks whether the session log is current and reminds Claude to update it if not. Behavioral rules like verification and Beamer-Quarto sync are enforced via auto-loaded rules in <code>.claude/rules/</code>, which is the right tool for nuanced judgment that Claude can evaluate in-context.</p>
 </section>
 <section id="memory-cross-session-persistence" class="level2" data-number="4.7">
 <h2 data-number="4.7" class="anchored" data-anchor-id="memory-cross-session-persistence"><span class="header-section-number">4.7</span> Memory — Cross-Session Persistence</h2>
 <p>Claude Code has an auto-memory system at <code>~/.claude/projects/[project]/memory/MEMORY.md</code>. This file persists across sessions and is loaded into every conversation.</p>
 <p>Use it for: - Key project facts that never change - Corrections you don’t want repeated (<code>[LEARN:tag]</code> format) - Current plan status</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Auto Memory</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Facts</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Project uses XeLaTeX, not pdflatex</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Bibliography file: Bibliography_base.bib</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X drops obs silently when covariate is missing</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Auto Memory</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Facts</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Project uses XeLaTeX, not pdflatex</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Bibliography file: Bibliography_base.bib</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X drops obs silently when covariate is missing</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="plans-compression-resistant-task-memory" class="level3" data-number="4.7.1">
 <h3 data-number="4.7.1" class="anchored" data-anchor-id="plans-compression-resistant-task-memory"><span class="header-section-number">4.7.1</span> Plans — Compression-Resistant Task Memory</h3>
 <p>While MEMORY.md stores long-lived project facts, <strong>plans</strong> store task-specific strategy. Every non-trivial plan is saved to <code>quality_reports/plans/</code> with a timestamp. This means:</p>
@@ -3451,7 +3577,7 @@ APPROVED   NEEDS WORK
 <section id="hooks-automated-enforcement" class="level3" data-number="4.7.4">
 <h3 data-number="4.7.4" class="anchored" data-anchor-id="hooks-automated-enforcement"><span class="header-section-number">4.7.4</span> Hooks — Automated Enforcement</h3>
 <p>The session log reminder above is one example of a broader pattern: using <strong>hooks</strong> to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in <code>.claude/settings.json</code> and fire every time, regardless of context state.</p>
-<p>The template includes four hooks:</p>
+<p>The template includes hooks for logging, notifications, file protection, and context survival:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 23%">
@@ -3469,26 +3595,41 @@ APPROVED   NEEDS WORK
 <tr class="odd">
 <td>Session log reminder</td>
 <td><code>Stop</code></td>
-<td>Runs a Python script after every response to remind about session logs</td>
+<td>Reminds about session logs after every response</td>
 </tr>
 <tr class="even">
 <td>Desktop notification</td>
 <td><code>Notification</code></td>
-<td>macOS alert when Claude needs attention (permission prompts, idle)</td>
+<td>macOS alert when Claude needs attention</td>
 </tr>
 <tr class="odd">
 <td>File protection</td>
 <td><code>PreToolUse</code></td>
-<td>Blocks accidental edits to bibliography and settings files</td>
+<td>Blocks accidental edits to bibliography and settings</td>
 </tr>
 <tr class="even">
-<td>Context snapshot</td>
+<td>Context state capture</td>
 <td><code>PreCompact</code></td>
-<td>Saves a note to the session log before auto-compaction triggers</td>
+<td>Saves plan state before auto-compaction</td>
+</tr>
+<tr class="odd">
+<td>Context restoration</td>
+<td><code>SessionStart[compact|resume]</code></td>
+<td>Restores context after compaction or resume</td>
+</tr>
+<tr class="even">
+<td>Context monitor</td>
+<td><code>PostToolUse[Bash|Task]</code></td>
+<td>Progressive warnings at 40%/55%/65%/80%/90% context</td>
+</tr>
+<tr class="odd">
+<td>Verification reminder</td>
+<td><code>PostToolUse[Write|Edit]</code></td>
+<td>Reminds to compile/render before marking done</td>
 </tr>
 </tbody>
 </table>
-<p>Verification and Beamer-Quarto sync are enforced via auto-loaded rules (<code>.claude/rules/verification-protocol.md</code> and <code>.claude/rules/beamer-quarto-sync.md</code>), which are the right tool for behavioral guidance that Claude can evaluate in-context. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
+<p>Verification and Beamer-Quarto sync are enforced via auto-loaded rules, which are the right tool for nuanced judgment. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3502,7 +3643,130 @@ APPROVED   NEEDS WORK
 <p>Use <strong>command-based hooks</strong> for fast, mechanical checks (file exists? counter threshold?). Use <strong>rules</strong> for nuanced judgment (did Claude verify correctly?). Avoid prompt-based hooks that trigger an LLM call on every response — the latency adds up fast.</p>
 </div>
 </div>
+</section>
+<section id="context-survival-system-advanced" class="level3" data-number="4.7.5">
+<h3 data-number="4.7.5" class="anchored" data-anchor-id="context-survival-system-advanced"><span class="header-section-number">4.7.5</span> Context Survival System (Advanced)</h3>
+<p>When context compaction happens, Claude loses working memory. The <strong>context survival system</strong> ensures you can recover seamlessly.</p>
+<section id="how-it-works" class="level4" data-number="4.7.5.1">
+<h4 data-number="4.7.5.1" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">4.7.5.1</span> How It Works</h4>
+<p>Two hooks work together to preserve and restore state:</p>
+<pre><code>Session running → context fills up → PreCompact fires
+                                           ↓
+                                    pre-compact.py saves:
+                                    • Active plan path
+                                    • Current task
+                                    • Recent decisions
+                                           ↓
+                                    Auto-compaction happens
+                                           ↓
+                                    SessionStart(compact|resume) fires
+                                           ↓
+                                    post-compact-restore.py:
+                                    • Reads saved state
+                                    • Prints context summary
+                                    • Claude knows where it left off</code></pre>
+</section>
+<section id="what-gets-saved" class="level4" data-number="4.7.5.2">
+<h4 data-number="4.7.5.2" class="anchored" data-anchor-id="what-gets-saved"><span class="header-section-number">4.7.5.2</span> What Gets Saved</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 38%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>State</th>
+<th>Location</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Plan path</td>
+<td>Session cache</td>
+<td>So Claude can read the plan file</td>
+</tr>
+<tr class="even">
+<td>Current task</td>
+<td>Session cache</td>
+<td>First unchecked <code>- [ ]</code> item</td>
+</tr>
+<tr class="odd">
+<td>Recent decisions</td>
+<td>Session cache</td>
+<td>Last 3 decision-like entries from session log</td>
+</tr>
+<tr class="even">
+<td>Compaction note</td>
+<td>Session log</td>
+<td>Timestamp marker for reference</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="context-monitoring" class="level4" data-number="4.7.5.3">
+<h4 data-number="4.7.5.3" class="anchored" data-anchor-id="context-monitoring"><span class="header-section-number">4.7.5.3</span> Context Monitoring</h4>
+<p>The <code>context-monitor.py</code> hook tracks approximate context usage and provides progressive warnings:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 31%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Threshold</th>
+<th>Message</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>40%, 55%, 65%</td>
+<td>Suggest <code>/learn</code></td>
+<td>Capture non-obvious discoveries before compaction</td>
+</tr>
+<tr class="even">
+<td>80%</td>
+<td>Info message</td>
+<td>Auto-compact approaching, no rush</td>
+</tr>
+<tr class="odd">
+<td>90%</td>
+<td>Caution</td>
+<td>Complete current task with full quality</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>/context-status</code> to check current session health at any time.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Context % Is Estimated
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The monitor uses tool call count as a proxy for context usage since direct access to context window state isn’t available. Warnings may appear earlier or later than actual compaction.</p>
+</div>
+</div>
+</section>
+<section id="recovery-after-compaction" class="level4" data-number="4.7.5.4">
+<h4 data-number="4.7.5.4" class="anchored" data-anchor-id="recovery-after-compaction"><span class="header-section-number">4.7.5.4</span> Recovery After Compaction</h4>
+<p>If compaction happens mid-task, Claude will automatically see:</p>
+<ol type="1">
+<li><strong>Restoration message</strong> — what plan was active, what task was in progress</li>
+<li><strong>Recovery actions</strong> — read the plan, check git status, continue</li>
+</ol>
+<p>You can also manually point Claude to the right context:</p>
+<blockquote class="blockquote">
+<p>“We just had compaction. Read <code>quality_reports/plans/2026-02-06_translate-lecture5.md</code> and continue from where we left off.”</p>
+</blockquote>
 <hr>
+</section>
 </section>
 </section>
 </section>
@@ -3541,32 +3805,10 @@ APPROVED   NEEDS WORK
   +-- Step 7: Orchestrator takes over (see Pattern 2)
   +-- Step 8: Update session log + plan status to COMPLETED</code></pre>
 </section>
-<section id="context-preservation-prefer-auto-compression" class="level3" data-number="5.1.3">
-<h3 data-number="5.1.3" class="anchored" data-anchor-id="context-preservation-prefer-auto-compression"><span class="header-section-number">5.1.3</span> Context Preservation: Prefer Auto-Compression</h3>
-<p>An important companion to plan-first development is context preservation. Claude Code has two ways to free context space:</p>
-<ul>
-<li><strong><code>/clear</code></strong> — destroys everything. All context, corrections, and reasoning are gone. Starting over from zero.</li>
-<li><strong>Auto-compression</strong> — Claude Code automatically compresses the conversation when it gets long. It keeps the most important context and discards redundant detail. This is graceful degradation.</li>
-</ul>
-<p>The rule: <strong>avoid <code>/clear</code></strong> — prefer auto-compression. Use <code>/clear</code> only when context is genuinely polluted (e.g., a large irrelevant file was read by mistake, or you explored the wrong branch). Always save important context to disk first. As a safety net, plans and important decisions live in files on disk, where they cannot be compressed away.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Recovery After Compression
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you notice Claude has lost context after auto-compression, point it to the saved plan file:</p>
-<blockquote class="blockquote">
-<p>“Read <code>quality_reports/plans/2026-02-06_translate-lecture5.md</code> — that’s our current plan.”</p>
-</blockquote>
-<p>Because the plan is on disk, recovery is instant.</p>
-</div>
-</div>
-<p>Combined with the <code>[LEARN]</code> tag system from <a href="#pattern-7-self-improvement-loop">Pattern 7</a>, plans and context preservation form a complete memory layer: plans save task strategy, <code>[LEARN]</code> tags save corrections, and auto-compression keeps the conversation manageable without losing what matters.</p>
+<section id="context-preservation" class="level3" data-number="5.1.3">
+<h3 data-number="5.1.3" class="anchored" data-anchor-id="context-preservation"><span class="header-section-number">5.1.3</span> Context Preservation</h3>
+<p>Plans are saved to disk specifically so they survive context compression. The rule: <strong>avoid <code>/clear</code></strong> — prefer auto-compression. Use <code>/clear</code> only when context is genuinely polluted.</p>
+<p>For details on how the system automatically preserves and restores context during compaction, see <a href="#context-survival-system-advanced">Context Survival System</a> in the Building Blocks section.</p>
 </section>
 <section id="session-logging" class="level3" data-number="5.1.4">
 <h3 data-number="5.1.4" class="anchored" data-anchor-id="session-logging"><span class="header-section-number">5.1.4</span> Session Logging</h3>
@@ -3802,13 +4044,127 @@ Phase 4: Only then extend
 </section>
 <section id="pattern-7-self-improvement-loop" class="level2" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="pattern-7-self-improvement-loop"><span class="header-section-number">5.7</span> Pattern 7: Self-Improvement Loop</h2>
-<p>Every correction gets tagged for future reference:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:notation</span><span class="co">]</span> T_t = 1{t=2} is deterministic -&gt; use T_i in {1,2}</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X: ALWAYS include intercept in design matrix</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>These tags are searchable and persist in MEMORY.md across sessions. When Claude encounters a similar situation, it checks memory first.</p>
+<p>There are two levels of self-improvement: <strong>quick corrections</strong> via <code>[LEARN]</code> tags and <strong>full skill extraction</strong> via <code>/learn</code>.</p>
+<section id="quick-corrections-learn-tags" class="level3" data-number="5.7.1">
+<h3 data-number="5.7.1" class="anchored" data-anchor-id="quick-corrections-learn-tags"><span class="header-section-number">5.7.1</span> Quick Corrections: [LEARN] Tags</h3>
+<p>Every correction gets tagged for future reference in MEMORY.md:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:notation</span><span class="co">]</span> T_t = 1{t=2} is deterministic -&gt; use T_i in {1,2}</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X: ALWAYS include intercept in design matrix</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These tags are searchable and persist across sessions. When Claude encounters a similar situation, it checks memory first.</p>
+</section>
+<section id="automated-skill-capture-learn" class="level3" data-number="5.7.2">
+<h3 data-number="5.7.2" class="anchored" data-anchor-id="automated-skill-capture-learn"><span class="header-section-number">5.7.2</span> Automated Skill Capture: /learn</h3>
+<p>For discoveries that deserve more than a one-line tag, use <code>/learn</code> to create a full skill:</p>
+<pre><code>/learn fixest-missing-covariate-handling</code></pre>
+<p>The <code>/learn</code> skill guides you through a 4-phase workflow:</p>
+<pre><code>Phase 1: EVALUATE
+  &quot;Was this non-obvious? Would future-me benefit?&quot;
+  → If YES to any, continue
+         ↓
+Phase 2: CHECK EXISTING
+  Search .claude/skills/ for related skills
+  → Nothing related? Create new. Overlap? Update existing.
+         ↓
+Phase 3: CREATE SKILL
+  Write to .claude/skills/[name]/SKILL.md
+  • Problem statement
+  • Trigger conditions (exact errors, symptoms)
+  • Step-by-step solution
+  • Verification steps
+         ↓
+Phase 4: QUALITY GATE
+  • Description has specific triggers?
+  • Solution verified to work?
+  • Specific enough to be actionable?
+  • General enough to be reusable?</code></pre>
+<section id="when-to-use-learn" class="level4" data-number="5.7.2.1">
+<h4 data-number="5.7.2.1" class="anchored" data-anchor-id="when-to-use-learn"><span class="header-section-number">5.7.2.1</span> When to Use /learn</h4>
+<p>The context monitor suggests <code>/learn</code> at 40%, 55%, and 65% context usage. Consider extracting a skill when you encounter:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Trigger</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Non-obvious debugging</td>
+<td>10+ minute investigation not in docs</td>
+</tr>
+<tr class="even">
+<td>Misleading errors</td>
+<td>Error message was wrong, found real cause</td>
+</tr>
+<tr class="odd">
+<td>Workarounds</td>
+<td>Found limitation with creative solution</td>
+</tr>
+<tr class="even">
+<td>Undocumented APIs</td>
+<td>Tool integration not in official docs</td>
+</tr>
+<tr class="odd">
+<td>Trial-and-error</td>
+<td>Multiple attempts before success</td>
+</tr>
+<tr class="even">
+<td>Repeatable workflows</td>
+<td>Multi-step task you’d do again</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="skill-vs.-learn-tag" class="level4" data-number="5.7.2.2">
+<h4 data-number="5.7.2.2" class="anchored" data-anchor-id="skill-vs.-learn-tag"><span class="header-section-number">5.7.2.2</span> Skill vs. [LEARN] Tag</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 68%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>One-liner fix</td>
+<td><code>[LEARN:category]</code> tag in MEMORY.md</td>
+</tr>
+<tr class="even">
+<td>Multi-step workflow</td>
+<td><code>/learn</code> to create full skill</td>
+</tr>
+<tr class="odd">
+<td>Error + root cause + solution</td>
+<td><code>/learn</code> if reusable, <code>[LEARN]</code> if not</td>
+</tr>
+<tr class="even">
+<td>Package quirk</td>
+<td><code>/learn</code> if affects multiple projects</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Skills Persist, Context Doesn’t
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Skills saved to <code>.claude/skills/</code> survive compaction and session boundaries. If you discover something valuable late in a session, extract it before compaction erases the details.</p>
+</div>
+</div>
+</section>
+</section>
 </section>
 <section id="pattern-8-devils-advocate" class="level2" data-number="5.8">
 <h2 data-number="5.8" class="anchored" data-anchor-id="pattern-8-devils-advocate"><span class="header-section-number">5.8</span> Pattern 8: Devil’s Advocate</h2>
@@ -3870,8 +4226,8 @@ Phase 4: Only then extend
 </tbody>
 </table>
 </section>
-<section id="how-it-works" class="level4" data-number="5.9.1.2">
-<h4 data-number="5.9.1.2" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">5.9.1.2</span> How It Works</h4>
+<section id="how-it-works-1" class="level4" data-number="5.9.1.2">
+<h4 data-number="5.9.1.2" class="anchored" data-anchor-id="how-it-works-1"><span class="header-section-number">5.9.1.2</span> How It Works</h4>
 <p>You do not need to manage this manually. The orchestrator recognizes independent subtasks in a plan and spawns parallel agents automatically — both during implementation (Step 1) and review (Step 3). For example, if your plan says “read three papers and extract key results,” the orchestrator will spawn 3 agents, one per paper, without you asking.</p>
 <p>You can also request parallelism explicitly:</p>
 <blockquote class="blockquote">
@@ -4033,7 +4389,146 @@ Decision point (1-2 hours):
 <p>A typical research project might flow: <code>/research-ideation</code> (what to study?) → <code>/interview-me</code> (formalize the idea) → <code>/lit-review</code> (what’s been done?) → <code>/data-analysis</code> (run the analysis) → <code>/review-paper</code> (check the draft).</p>
 </div>
 </div>
+</section>
+<section id="pattern-12-branch-isolation" class="level3" data-number="5.9.4">
+<h3 data-number="5.9.4" class="anchored" data-anchor-id="pattern-12-branch-isolation"><span class="header-section-number">5.9.4</span> Pattern 12: Branch Isolation with Git Worktrees (Advanced)</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Advanced Pattern
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This pattern is optional and primarily useful for major translations, risky refactors, or multi-day projects. Most day-to-day work doesn’t need it.</p>
+</div>
+</div>
+<p>Git worktrees create a <strong>separate working directory</strong> linked to the same repository. Each directory has its own branch but shares commit history.</p>
+<pre><code>your-project/                     ← main branch (stays clean)
+.worktrees/lecture-06-quarto/     ← isolated branch (Claude works here)</code></pre>
+<section id="why-use-worktrees" class="level4" data-number="5.9.4.1">
+<h4 data-number="5.9.4.1" class="anchored" data-anchor-id="why-use-worktrees"><span class="header-section-number">5.9.4.1</span> Why Use Worktrees?</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Benefit</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Safe experimentation</strong></td>
+<td>Translate Lecture 6 to Quarto — if it fails, main is untouched</td>
+</tr>
+<tr class="even">
+<td><strong>Clean history</strong></td>
+<td>50 intermediate commits squash into one clean commit</td>
+</tr>
+<tr class="odd">
+<td><strong>Easy discard</strong></td>
+<td>Wrong approach? Delete worktree, no trace in main</td>
+</tr>
+<tr class="even">
+<td><strong>Multi-session work</strong></td>
+<td>Resume worktree next day, no context loss</td>
+</tr>
+<tr class="odd">
+<td><strong>Parallel work</strong></td>
+<td>Work on slides (main) while Claude translates (worktree)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-workflow" class="level4" data-number="5.9.4.2">
+<h4 data-number="5.9.4.2" class="anchored" data-anchor-id="the-workflow"><span class="header-section-number">5.9.4.2</span> The Workflow</h4>
+<pre><code>1. CREATE WORKTREE
+   git worktree add .worktrees/lecture-06-quarto -b quarto/lecture-06
+   cd .worktrees/lecture-06-quarto
+         ↓
+2. IMPLEMENT
+   All changes happen in the worktree
+   Commit frequently (intermediate commits are OK)
+         ↓
+3. VERIFY
+   Run tests, render, review against worktree only
+         ↓
+4. SYNC TO MAIN (when ready)
+   git checkout main
+   git merge --squash quarto/lecture-06
+   git commit -m &quot;feat: add Lecture 6 Quarto version&quot;
+         ↓
+5. CLEANUP
+   git worktree remove .worktrees/lecture-06-quarto
+   git branch -d quarto/lecture-06</code></pre>
+</section>
+<section id="commands-reference" class="level4" data-number="5.9.4.3">
+<h4 data-number="5.9.4.3" class="anchored" data-anchor-id="commands-reference"><span class="header-section-number">5.9.4.3</span> Commands Reference</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a worktree with new branch</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span> <span class="at">-b</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List active worktrees</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree list</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove a worktree (after merging or abandoning)</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete the branch (after removal)</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-d</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Squash-merge into main</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge <span class="at">--squash</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;feat: description of changes&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="when-to-use" class="level4" data-number="5.9.4.4">
+<h4 data-number="5.9.4.4" class="anchored" data-anchor-id="when-to-use"><span class="header-section-number">5.9.4.4</span> When to Use</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Use Worktree?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Quick fix to one file</td>
+<td>No — just edit main</td>
+</tr>
+<tr class="even">
+<td>New lecture creation</td>
+<td>Maybe — if multi-session</td>
+</tr>
+<tr class="odd">
+<td>Beamer → Quarto translation</td>
+<td>Yes — many intermediate states</td>
+</tr>
+<tr class="even">
+<td>Major refactor</td>
+<td>Yes — safe rollback</td>
+</tr>
+<tr class="odd">
+<td>Experimenting with new approach</td>
+<td>Yes — easy discard</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="complexity-cost" class="level4" data-number="5.9.4.5">
+<h4 data-number="5.9.4.5" class="anchored" data-anchor-id="complexity-cost"><span class="header-section-number">5.9.4.5</span> Complexity Cost</h4>
+<ul>
+<li>Adds ~3 commands to learn</li>
+<li>Adds mental model: “Where am I working?”</li>
+<li>Requires discipline to sync/discard, not leave orphan worktrees</li>
+</ul>
+<p>For most novice users, working directly on main with frequent commits is simpler and sufficient. Use worktrees when the benefits of isolation outweigh the added complexity.</p>
 <hr>
+</section>
 </section>
 </section>
 </section>
@@ -4044,23 +4539,23 @@ Decision point (1-2 hours):
 <p>The knowledge base (<code>.claude/rules/knowledge-base-template.md</code>) is the most domain-specific component. It provides skeleton tables for notation conventions, lecture progression, applications, design principles, anti-patterns, and R code pitfalls. Fill them in as you develop your project — you don’t need everything upfront.</p>
 <section id="notation-registry" class="level3" data-number="6.1.1">
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="notation-registry"><span class="header-section-number">6.1.1</span> Notation Registry</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Meaning <span class="pp">|</span> Introduced <span class="pp">|</span> Anti-Pattern <span class="pp">|</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|---------|------------|-------------|</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\beta$ <span class="pp">|</span> Regression coefficient <span class="pp">|</span> Lecture 1 <span class="pp">|</span> Don&#39;t use $b$ <span class="pp">|</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\hat{\theta}$ <span class="pp">|</span> Estimator <span class="pp">|</span> Lecture 2 <span class="pp">|</span> Don&#39;t use $\hat{\beta}$ for different estimand <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Meaning <span class="pp">|</span> Introduced <span class="pp">|</span> Anti-Pattern <span class="pp">|</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|---------|------------|-------------|</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\beta$ <span class="pp">|</span> Regression coefficient <span class="pp">|</span> Lecture 1 <span class="pp">|</span> Don&#39;t use $b$ <span class="pp">|</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\hat{\theta}$ <span class="pp">|</span> Estimator <span class="pp">|</span> Lecture 2 <span class="pp">|</span> Don&#39;t use $\hat{\beta}$ for different estimand <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="applications-database" class="level3" data-number="6.1.2">
 <h3 data-number="6.1.2" class="anchored" data-anchor-id="applications-database"><span class="header-section-number">6.1.2</span> Applications Database</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Application <span class="pp">|</span> Paper <span class="pp">|</span> Dataset <span class="pp">|</span> Package <span class="pp">|</span> Lecture <span class="pp">|</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|------------|-------|---------|---------|--------|</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Minimum Wage <span class="pp">|</span> Card &amp; Krueger (1994) <span class="pp">|</span> NJ/PA fast food <span class="pp">|</span> <span class="in">`fixest`</span> <span class="pp">|</span> 3 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Application <span class="pp">|</span> Paper <span class="pp">|</span> Dataset <span class="pp">|</span> Package <span class="pp">|</span> Lecture <span class="pp">|</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|------------|-------|---------|---------|--------|</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Minimum Wage <span class="pp">|</span> Card &amp; Krueger (1994) <span class="pp">|</span> NJ/PA fast food <span class="pp">|</span> <span class="in">`fixest`</span> <span class="pp">|</span> 3 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="validated-design-principles" class="level3" data-number="6.1.3">
 <h3 data-number="6.1.3" class="anchored" data-anchor-id="validated-design-principles"><span class="header-section-number">6.1.3</span> Validated Design Principles</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Principle <span class="pp">|</span> Evidence <span class="pp">|</span> Lectures Applied <span class="pp">|</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------|-----------------|</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Motivation before formalism <span class="pp">|</span> DA challenge: &quot;students lost&quot; <span class="pp">|</span> All <span class="pp">|</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Max 3 new symbols per slide <span class="pp">|</span> Pedagogy review caught overload <span class="pp">|</span> 2, 4 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Principle <span class="pp">|</span> Evidence <span class="pp">|</span> Lectures Applied <span class="pp">|</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------|-----------------|</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Motivation before formalism <span class="pp">|</span> DA challenge: &quot;students lost&quot; <span class="pp">|</span> All <span class="pp">|</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Max 3 new symbols per slide <span class="pp">|</span> Pedagogy review caught overload <span class="pp">|</span> 2, 4 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="step-2-create-your-domain-reviewer" class="level2" data-number="6.2">
@@ -4087,37 +4582,37 @@ Decision point (1-2 hours):
 <section id="skill-structure" class="level3" data-number="6.4.2">
 <h3 data-number="6.4.2" class="anchored" data-anchor-id="skill-structure"><span class="header-section-number">6.4.2</span> Skill Structure</h3>
 <p>Each skill is a directory in <code>.claude/skills/</code> with a <code>SKILL.md</code> file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> your-skill-name</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> [What it does] + [When to use] + [Key capabilities]</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> &quot;[brief hint for user]&quot;</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="an">allowed-tools:</span><span class="co"> [&quot;Read&quot;, &quot;Write&quot;, &quot;Edit&quot;, &quot;Bash&quot;, &quot;Task&quot;]</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Your Skill Name</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Instructions</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>Step 1: <span class="co">[</span><span class="ot">First action with details</span><span class="co">]</span></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>Step 2: <span class="co">[</span><span class="ot">Second action</span><span class="co">]</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Examples</span></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>Example 1: <span class="co">[</span><span class="ot">Common scenario</span><span class="co">]</span></span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Troubleshooting</span></span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>Error: <span class="co">[</span><span class="ot">Common error</span><span class="co">]</span></span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>Solution: <span class="co">[</span><span class="ot">How to fix</span><span class="co">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> your-skill-name</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> [What it does] + [When to use] + [Key capabilities]</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> &quot;[brief hint for user]&quot;</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="an">allowed-tools:</span><span class="co"> [&quot;Read&quot;, &quot;Write&quot;, &quot;Edit&quot;, &quot;Bash&quot;, &quot;Task&quot;]</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Your Skill Name</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Instructions</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>Step 1: <span class="co">[</span><span class="ot">First action with details</span><span class="co">]</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>Step 2: <span class="co">[</span><span class="ot">Second action</span><span class="co">]</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Examples</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>Example 1: <span class="co">[</span><span class="ot">Common scenario</span><span class="co">]</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Troubleshooting</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>Error: <span class="co">[</span><span class="ot">Common error</span><span class="co">]</span></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>Solution: <span class="co">[</span><span class="ot">How to fix</span><span class="co">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="writing-effective-trigger-descriptions" class="level3" data-number="6.4.3">
 <h3 data-number="6.4.3" class="anchored" data-anchor-id="writing-effective-trigger-descriptions"><span class="header-section-number">6.4.3</span> Writing Effective Trigger Descriptions</h3>
 <p>The <code>description</code> field determines when Claude loads your skill. Use specific trigger phrases users would actually say:</p>
 <p><strong>Good (Citation Style Enforcement):</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Enforces APA 7th edition citation format. Use when user asks to &quot;check citations&quot;, &quot;fix references&quot;, &quot;apply APA style&quot;, or when reviewing .tex/.qmd files with bibliographies.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Enforces APA 7th edition citation format. Use when user asks to &quot;check citations&quot;, &quot;fix references&quot;, &quot;apply APA style&quot;, or when reviewing .tex/.qmd files with bibliographies.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Good (Lab Notebook Entry):</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Generates structured lab notebook entries from experimental notes. Use when user provides &quot;experiment notes&quot;, &quot;protocol results&quot;, or asks to &quot;format lab entry&quot;.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Generates structured lab notebook entries from experimental notes. Use when user provides &quot;experiment notes&quot;, &quot;protocol results&quot;, or asks to &quot;format lab entry&quot;.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Bad (Too Vague):</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Helps with citations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Helps with citations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="domain-specific-examples" class="level3" data-number="6.4.4">
 <h3 data-number="6.4.4" class="anchored" data-anchor-id="domain-specific-examples"><span class="header-section-number">6.4.4</span> Domain-Specific Examples</h3>
@@ -4149,7 +4644,7 @@ Decision point (1-2 hours):
 <h3 data-number="6.4.5" class="anchored" data-anchor-id="quick-start"><span class="header-section-number">6.4.5</span> Quick Start</h3>
 <ol type="1">
 <li><p><strong>Copy the template:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> templates/skill-template.md .claude/skills/your-skill-name/SKILL.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> templates/skill-template.md .claude/skills/your-skill-name/SKILL.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Customize for your domain:</strong></p>
 <ul>
 <li>Replace trigger phrases with your field’s terminology</li>
@@ -4369,6 +4864,16 @@ Decision point (1-2 hours):
 <td><code>.claude/skills/data-analysis/</code></td>
 <td>End-to-end R analysis</td>
 </tr>
+<tr class="even">
+<td><code>/learn</code></td>
+<td><code>.claude/skills/learn/</code></td>
+<td>Extract discoveries into persistent skills</td>
+</tr>
+<tr class="odd">
+<td><code>/context-status</code></td>
+<td><code>.claude/skills/context-status/</code></td>
+<td>Show session health and context usage</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -4526,12 +5031,65 @@ Decision point (1-2 hours):
 <td><code>.claude/hooks/protect-files.sh</code></td>
 </tr>
 <tr class="even">
-<td>Context snapshot</td>
+<td>Context state capture</td>
 <td>PreCompact (command)</td>
-<td><code>.claude/hooks/pre-compact.sh</code></td>
+<td><code>.claude/hooks/pre-compact.py</code></td>
+</tr>
+<tr class="odd">
+<td>Context restoration</td>
+<td>SessionStart[compact|resume] (command)</td>
+<td><code>.claude/hooks/post-compact-restore.py</code></td>
+</tr>
+<tr class="even">
+<td>Context monitor</td>
+<td>PostToolUse[Bash|Task] (command)</td>
+<td><code>.claude/hooks/context-monitor.py</code></td>
+</tr>
+<tr class="odd">
+<td>Verification reminder</td>
+<td>PostToolUse[Write|Edit] (command)</td>
+<td><code>.claude/hooks/verify-reminder.py</code></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="troubleshooting" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="troubleshooting"><span class="header-section-number">7.5</span> Troubleshooting</h2>
+<section id="latex-wont-compile" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="latex-wont-compile"><span class="header-section-number">7.5.1</span> LaTeX Won’t Compile</h3>
+<p><strong>Symptom:</strong> <code>xelatex</code> errors or missing packages.</p>
+<p><strong>Fix:</strong> 1. Check you have XeLaTeX installed: <code>which xelatex</code> 2. Ensure <code>TEXINPUTS</code> includes <code>Preambles/</code>: the <code>/compile-latex</code> skill handles this 3. Missing package? Install via TeX Live: <code>tlmgr install [package]</code></p>
+</section>
+<section id="quarto-wont-render" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="quarto-wont-render"><span class="header-section-number">7.5.2</span> Quarto Won’t Render</h3>
+<p><strong>Symptom:</strong> <code>quarto render</code> fails or produces broken HTML.</p>
+<p><strong>Fix:</strong> 1. Check Quarto version: <code>quarto --version</code> (need 1.3+) 2. Check for syntax errors in YAML frontmatter 3. Missing TikZ SVGs? Run <code>/extract-tikz</code> first</p>
+</section>
+<section id="hooks-not-firing" class="level3" data-number="7.5.3">
+<h3 data-number="7.5.3" class="anchored" data-anchor-id="hooks-not-firing"><span class="header-section-number">7.5.3</span> Hooks Not Firing</h3>
+<p><strong>Symptom:</strong> No context warnings, no verification reminders.</p>
+<p><strong>Fix:</strong> 1. Check hooks are configured: <code>cat .claude/settings.json | grep hooks</code> 2. Ensure Python 3 is available: <code>which python3</code> 3. Check hook file permissions: <code>ls -la .claude/hooks/</code></p>
+</section>
+<section id="claude-ignores-rules" class="level3" data-number="7.5.4">
+<h3 data-number="7.5.4" class="anchored" data-anchor-id="claude-ignores-rules"><span class="header-section-number">7.5.4</span> Claude Ignores Rules</h3>
+<p><strong>Symptom:</strong> Claude doesn’t follow conventions in <code>.claude/rules/</code>.</p>
+<p><strong>Fix:</strong> 1. Rules use <code>paths:</code> frontmatter — check the path matches your files 2. Too many rules? Claude follows ~150 instructions reliably. Consolidate. 3. Try: <em>“Read <code>.claude/rules/[rule].md</code> and follow it for this task”</em></p>
+</section>
+<section id="context-lost-after-compaction" class="level3" data-number="7.5.5">
+<h3 data-number="7.5.5" class="anchored" data-anchor-id="context-lost-after-compaction"><span class="header-section-number">7.5.5</span> Context Lost After Compaction</h3>
+<p><strong>Symptom:</strong> Claude forgets what you were working on.</p>
+<p><strong>Fix:</strong> 1. Point Claude to the plan: <em>“Read <code>quality_reports/plans/[latest].md</code>”</em> 2. Check session log: <em>“Read <code>quality_reports/session_logs/[latest].md</code>”</em> 3. The <code>post-compact-restore.py</code> hook should print recovery info automatically</p>
+</section>
+<section id="quality-score-too-low" class="level3" data-number="7.5.6">
+<h3 data-number="7.5.6" class="anchored" data-anchor-id="quality-score-too-low"><span class="header-section-number">7.5.6</span> Quality Score Too Low</h3>
+<p><strong>Symptom:</strong> Score stuck below 80, can’t commit.</p>
+<p><strong>Fix:</strong> 1. Run <code>/slide-excellence</code> to get detailed issue breakdown 2. Fix critical issues first (they cost -10 to -20 points each) 3. Ask Claude: <em>“What are the remaining critical issues?”</em></p>
+</section>
+<section id="skills-not-auto-invoked" class="level3" data-number="7.5.7">
+<h3 data-number="7.5.7" class="anchored" data-anchor-id="skills-not-auto-invoked"><span class="header-section-number">7.5.7</span> Skills Not Auto-Invoked</h3>
+<p><strong>Symptom:</strong> Claude doesn’t use skills when you describe a task.</p>
+<p><strong>Fix:</strong> 1. Be explicit in your request: <em>“Review my slides for grammar and layout issues”</em> 2. Check skill has auto-invocation enabled (no <code>disable-model-invocation: true</code>) 3. Skill descriptions help Claude know when to use them — check they’re clear</p>
+</section>
 </section>
 </section>
 

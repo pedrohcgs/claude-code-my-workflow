@@ -1,9 +1,9 @@
 ---
 name: qa-quarto
-description: Adversarial QA workflow comparing Quarto HTML against Beamer PDF benchmark. Iterates between critic (finds issues) and fixer (applies fixes) until APPROVED or max iterations reached.
-disable-model-invocation: true
-argument-hint: "[LectureN, e.g., Lecture1]"
+description: Adversarial Quarto vs Beamer QA. Critic finds issues, fixer applies fixes, loops until APPROVED (max 5 rounds).
+argument-hint: "[LectureN]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
+context: fork
 ---
 
 # Adversarial Quarto vs Beamer QA Workflow

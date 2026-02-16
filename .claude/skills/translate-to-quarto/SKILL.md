@@ -1,9 +1,9 @@
 ---
 name: translate-to-quarto
-description: Translate a Beamer LaTeX lecture to Quarto RevealJS. Multi-phase workflow covering content translation, TikZ extraction, citation mapping, figure handling, overflow audit, and deployment.
-disable-model-invocation: true
-argument-hint: "[Beamer .tex filename, e.g., LectureN_Topic]"
+description: Translate Beamer LaTeX to Quarto RevealJS. Multi-phase workflow with TikZ extraction and QA.
+argument-hint: "[LectureN_Topic.tex]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
+context: fork
 ---
 
 # Beamer → Quarto Translation Workflow

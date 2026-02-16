@@ -99,7 +99,7 @@ It covers:
 ## What's Included
 
 <details>
-<summary><strong>10 agents, 19 skills, 17 rules, 4 hooks</strong> (click to expand)</summary>
+<summary><strong>10 agents, 21 skills, 17 rules, 7 hooks</strong> (click to expand)</summary>
 
 ### Agents (`.claude/agents/`)
 
@@ -139,6 +139,8 @@ It covers:
 | `/interview-me` | Interactive interview to formalize a research idea |
 | `/review-paper` | Manuscript review: structure, econometrics, referee objections |
 | `/data-analysis` | End-to-end R analysis with publication-ready output |
+| `/learn` | Extract non-obvious discoveries into persistent skills |
+| `/context-status` | Show session health and context usage |
 
 ### Research Workflow
 

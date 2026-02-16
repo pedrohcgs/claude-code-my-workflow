@@ -1,7 +1,6 @@
 ---
 name: compile-latex
 description: Compile a Beamer LaTeX slide deck with XeLaTeX (3 passes + bibtex). Use when compiling lecture slides.
-disable-model-invocation: true
 argument-hint: "[filename without .tex extension]"
 allowed-tools: ["Read", "Bash", "Glob"]
 ---

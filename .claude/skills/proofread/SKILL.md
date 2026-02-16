@@ -1,7 +1,6 @@
 ---
 name: proofread
 description: Run the proofreading protocol on lecture files. Checks grammar, typos, overflow, consistency, and academic writing quality. Produces a report without editing files.
-disable-model-invocation: true
 argument-hint: "[filename or 'all']"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Task"]
 ---
