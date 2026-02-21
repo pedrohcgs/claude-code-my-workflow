@@ -14,12 +14,12 @@ When you modify a Beamer `.tex` file, you MUST also apply the equivalent change 
 
 ## Lecture Mapping
 
-<!-- Customize this table for your lectures -->
-| Lecture | Beamer | Quarto |
-|---------|--------|--------|
-| 1 | `Slides/Lecture1_Topic.tex` | `Quarto/Lecture1_Topic.qmd` |
-| 2 | `Slides/Lecture2_Topic.tex` | `Quarto/Lecture2_Topic.qmd` |
-<!-- Add rows as you create lectures -->
+| Module | Beamer | Quarto |
+|--------|--------|--------|
+| 1: Optical Degradation | `Slides/Lecture01_Optical.tex` | `Quarto/Lecture1_Optical.qmd` |
+| 2: Thermal Stress | `Slides/Lecture02_Thermal.tex` | `Quarto/Lecture2_Thermal.qmd` |
+| 3: Mechanical Failure | `Slides/Lecture03_Mechanical.tex` | `Quarto/Lecture3_Mechanical.qmd` |
+| 4: Environmental Exposure | `Slides/Lecture04_Environmental.tex` | `Quarto/Lecture4_Environmental.qmd` |
 
 ## Workflow (Every Time)
 
@@ -40,6 +40,9 @@ When you modify a Beamer `.tex` file, you MUST also apply the equivalent change 
 | `\item text` | `- text` |
 | `\begin{highlightbox}` | `::: {.highlightbox}` |
 | `\begin{methodbox}` | `::: {.methodbox}` |
+| `\begin{resultbox}` | `::: {.resultbox}` |
+| `\begin{warningbox}` | `::: {.warningbox}` |
+| `\begin{specbox}{Title}` | `::: {.specbox title="Title"}` |
 | `$formula$` | `$formula$` (same) |
 
 ## When NOT to Sync

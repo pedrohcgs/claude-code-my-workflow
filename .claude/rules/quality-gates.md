@@ -3,6 +3,8 @@ paths:
   - "Slides/**/*.tex"
   - "Quarto/**/*.qmd"
   - "scripts/**/*.R"
+  - "**/*.py"
+  - "notebooks/**"
 ---
 
 # Quality Gates & Scoring Rubrics
@@ -26,6 +28,20 @@ paths:
 | Major | Notation inconsistency | -3 |
 | Minor | Font size reduction | -1 per slide |
 | Minor | Long lines (>100 chars) | -1 (EXCEPT documented math formulas) |
+
+## Python Scripts (.py)
+
+| Severity | Issue | Deduction |
+|----------|-------|-----------|
+| Critical | Syntax errors or import failures | -100 |
+| Critical | Unit confusion (W/m² vs kW/m²) | -30 |
+| Critical | Hardcoded absolute paths | -20 |
+| Critical | Timezone-naive solar timestamps | -15 |
+| Major | Missing random seed in stochastic code | -10 |
+| Major | No docstrings on public functions | -5 |
+| Major | Missing unit labels on plot axes | -5 |
+| Minor | PEP 8 violations (not auto-fixed by black) | -2 |
+| Minor | Missing type hints on public API | -1 |
 
 ## R Scripts (.R)
 
@@ -56,12 +72,12 @@ paths:
 Generated **only at merge time**. Use `templates/quality-report.md` for format.
 Save to `quality_reports/merges/YYYY-MM-DD_[branch-name].md`.
 
-## Tolerance Thresholds (Research)
-
-<!-- Customize for your domain -->
+## Tolerance Thresholds (PV Reliability)
 
 | Quantity | Tolerance | Rationale |
 |----------|-----------|-----------|
-| Point estimates | [e.g., 1e-6] | [Numerical precision] |
-| Standard errors | [e.g., 1e-4] | [MC variability] |
-| Coverage rates | [e.g., +/- 0.01] | [MC with B reps] |
+| Degradation rate (R_d) | ±0.05 %/year | Measurement uncertainty |
+| Energy yield | ±2% | Combined model uncertainty |
+| Temperature coefficients | ±0.02 %/°C | Typical measurement precision |
+| Irradiance calibration | ±1% | Pyranometer accuracy (secondary standard) |
+| Weibull shape parameter | ±0.1 | Fit uncertainty with limited samples |

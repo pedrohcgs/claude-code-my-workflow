@@ -1,12 +1,7 @@
 # CLAUDE.MD -- Academic Project Development with Claude Code
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
+**Project:** PV Module Reliability Assessment Framework
+**Institution:** Amp Tech
 **Branch:** main
 
 ---
@@ -15,16 +10,16 @@
 
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
 - **Verify after** -- compile/render and confirm output at the end of every task
-- **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
+- **Code-first** -- Python/R analysis code is authoritative; slides and reports derive from it
 - **Quality gates** -- nothing ships below 80/100
-- **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to MEMORY.md
+- **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong -> right` to MEMORY.md
 
 ---
 
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
+pv-module-reliability/
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
@@ -34,6 +29,12 @@
 ├── Quarto/                      # RevealJS .qmd files + theme
 ├── docs/                        # GitHub Pages (auto-generated)
 ├── scripts/                     # Utility scripts + R code
+├── notebooks/                   # Jupyter notebooks (analysis, exploration)
+├── data/                        # Data directory
+│   ├── raw/                     # Original unmodified datasets
+│   ├── processed/               # Cleaned/transformed data
+│   └── external/                # Third-party data (NREL, Sandia, LBNL)
+├── reports/                     # Generated reports and deliverables
 ├── quality_reports/             # Plans, session logs, merge reports
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates
@@ -50,6 +51,11 @@ cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode 
 BIBINPUTS=..:$BIBINPUTS bibtex file
 TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
 TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
+
+# Python
+pip install -r requirements.txt
+pytest tests/
+jupyter lab notebooks/
 
 # Deploy Quarto to GitHub Pages
 ./scripts/sync_to_docs.sh LectureN
@@ -76,14 +82,14 @@ python scripts/quality_score.py Quarto/file.qmd
 |---------|-------------|
 | `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
 | `/deploy [LectureN]` | Render Quarto + sync to docs/ |
-| `/extract-tikz [LectureN]` | TikZ → PDF → SVG |
+| `/extract-tikz [LectureN]` | TikZ -> PDF -> SVG |
 | `/proofread [file]` | Grammar/typo/overflow review |
 | `/visual-audit [file]` | Slide layout audit |
 | `/pedagogy-review [file]` | Narrative, notation, pacing review |
 | `/review-r [file]` | R code quality review |
 | `/qa-quarto [LectureN]` | Adversarial Quarto vs Beamer QA |
 | `/slide-excellence [file]` | Combined multi-agent review |
-| `/translate-to-quarto [file]` | Beamer → Quarto translation |
+| `/translate-to-quarto [file]` | Beamer -> Quarto translation |
 | `/validate-bib` | Cross-reference citations |
 | `/devils-advocate` | Challenge slide design |
 | `/create-lecture` | Full lecture creation |
@@ -92,42 +98,33 @@ python scripts/quality_score.py Quarto/file.qmd
 | `/research-ideation [topic]` | Research questions + strategies |
 | `/interview-me [topic]` | Interactive research interview |
 | `/review-paper [file]` | Manuscript review |
-| `/data-analysis [dataset]` | End-to-end R analysis |
+| `/data-analysis [dataset]` | End-to-end data analysis (R or Python) |
 
 ---
 
-<!-- CUSTOMIZE: Replace the example entries below with your own
-     Beamer environments and Quarto CSS classes. These are examples
-     from the original project — delete them and add yours. -->
-
 ## Beamer Custom Environments
 
-| Environment       | Effect        | Use Case       |
-|-------------------|---------------|----------------|
-| `[your-env]`      | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `keybox` | Gold background box | Key points |
-| `highlightbox` | Gold left-accent box | Highlights |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions |
--->
+| Environment | Effect | Use Case |
+|-------------|--------|----------|
+| `resultbox` | Green-bordered box | Key findings and results |
+| `warningbox` | Red-bordered box | Failure modes, degradation alerts |
+| `specbox[Title]` | Blue-bordered titled box | IEC specifications, module specs |
 
 ## Quarto CSS Classes
 
-| Class              | Effect        | Use Case       |
-|--------------------|---------------|----------------|
-| `[.your-class]`    | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `.smaller` | 85% font | Dense content slides |
-| `.positive` | Green bold | Good annotations |
--->
+| Class | Effect | Use Case |
+|-------|--------|----------|
+| `.smaller` | 85% font | Dense data tables |
+| `.pass` | Green bold | Pass criteria met |
+| `.fail` | Red bold | Failure threshold exceeded |
 
 ---
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
-|---------|--------|--------|-------------|
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
-| 2: [Topic] | `Lecture02_Topic.tex` | -- | [Brief description] |
+| Module | Beamer | Quarto | Key Content |
+|--------|--------|--------|-------------|
+| 1: Optical Degradation | `Lecture01_Optical.tex` | -- | Transmittance loss, yellowing, AR coating |
+| 2: Thermal Stress | `Lecture02_Thermal.tex` | -- | Thermal cycling, hot spots, Arrhenius models |
+| 3: Mechanical Failure | `Lecture03_Mechanical.tex` | -- | Cell cracking, solder fatigue, backsheet |
+| 4: Environmental Exposure | `Lecture04_Environmental.tex` | -- | Damp heat, UV, PID, corrosion |

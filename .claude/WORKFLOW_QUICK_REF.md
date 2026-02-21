@@ -24,7 +24,7 @@ Repeat
 
 - **Design forks:** "Option A (fast) vs. Option B (robust). Which?"
 - **Code ambiguity:** "Spec unclear on X. Assume Y?"
-- **Replication edge case:** "Just missed tolerance. Investigate?"
+- **Data edge case:** "Outlier filtering removed 15% of data. Investigate?"
 - **Scope question:** "Also refactor Y while here, or focus on X?"
 
 ---
@@ -48,26 +48,24 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **SI units throughout** -- W/m², °C, %, kWh/kWp; convert at data ingestion
+- **Reproducible seeds** -- `np.random.seed(42)` or `set.seed(42)` at top of every stochastic script
+- **IEC standard references** -- cite specific standard number and clause (e.g., IEC 61215:2021 clause 10.13)
+- **Transparent figure backgrounds** -- all figures PNG/SVG with transparent or white bg, 300 DPI min
+- **Timezone-aware timestamps** -- all solar time series data must use tz-aware datetimes
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** matplotlib for publication figures, plotly for interactive exploration
+**Formatting:** Python: `black`; R: `styler`
+**Testing:** `pytest` for Python validation, known reference values for regression tests
+**Reporting:** Concise bullets for progress updates; detailed prose in reports
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Data formats:** Parquet for large datasets, CSV for small reference data
 
 ---
 
@@ -76,7 +74,8 @@ Repeat
 For experimental work, use the **Fast-Track** workflow:
 - Work in `explorations/` folder
 - 60/100 quality threshold (vs. 80/100 for production)
-- No plan needed — just a research value check (2 min)
+- No plan needed -- just a research value check (2 min)
+- Good for: testing new pvlib features, exploring datasets, prototyping degradation models
 - See `.claude/rules/exploration-fast-track.md`
 
 ---

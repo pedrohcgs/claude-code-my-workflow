@@ -25,6 +25,30 @@
 __pycache__/
 *.pyc
 *.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+venv/
+.venv/
+env/
+.env
+*.ipynb_checkpoints/
+.ipynb_checkpoints/
+
+# Python model/data artifacts
+*.pkl
+*.joblib
+*.h5
+*.hdf5
+
+# Large data files (keep small reference CSVs, ignore large binary data)
+*.parquet
+data/raw/**/*.csv
+!data/raw/**/*_reference.csv
+data/processed/**
+!data/processed/.gitkeep
 
 # R
 .Rproj.user/
