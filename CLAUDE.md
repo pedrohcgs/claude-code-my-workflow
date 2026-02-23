@@ -151,17 +151,10 @@ python scripts/quality_score.py scripts/stata/analysis.do
 
 ---
 
-## Dropbox sync
+## Sync
 
-<!-- If you sync project/ with Dropbox collaborators, configure these: -->
-
-```
-[REPO_PATH]:    [e.g., C:/git/my-project]
-[DROPBOX_PATH]: [e.g., C:/Users/you/Dropbox/shared-project]
-```
-
-See `templates/post-commit-hook.sh` and `templates/sync-from-dropbox.sh`.
-If no Dropbox, skip this section entirely.
+<!-- Configure with: bash templates/setup-sync.sh -->
+<!-- Paths are stored in .sync-config (gitignored). If no Dropbox/Overleaf, skip this. -->
 
 ---
 

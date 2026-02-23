@@ -37,7 +37,7 @@ Then paste the following, filling in your project details:
 >
 > I've set up a Claude Code academic workflow. The configuration files are already in this repo. Please read them, understand the workflow, and then **update all configuration files to fit my project**: fill in placeholders in `CLAUDE.md`, adjust rules if needed, and propose any customizations specific to my use case.
 >
-> My project files live in **[Dropbox path, e.g., C:/Users/me/Dropbox/shared-project]**. Set up Dropbox sync by running `bash templates/setup-sync.sh` with my repo and Dropbox paths, then pull the existing files into `project/` with `bash sync-from-dropbox.sh`. *(If no Dropbox, delete this paragraph and just copy files into `project/` manually.)*
+> Set up sync by running `bash templates/setup-sync.sh`---my main Dropbox folder is **[path, e.g., C:/Users/me/Dropbox/shared-project]** and my Overleaf Dropbox folder is **[path, e.g., C:/Users/me/Dropbox/Apps/Overleaf/my-paper]** with outputs going to **[mappings, e.g., project/output/tables:tables and project/output/figures:figures]**. After setup, pull existing files with `bash sync-from-dropbox.sh`. *(If no Dropbox or Overleaf, delete this paragraph and just copy files into `project/` manually.)*
 >
 > After that, use the plan-first workflow for all non-trivial tasks. Once I approve a plan, switch to contractor mode---coordinate everything autonomously and only come back to me when there's ambiguity or a decision to make.
 >

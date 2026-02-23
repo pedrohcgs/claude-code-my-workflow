@@ -42,6 +42,18 @@ All 11 phases of the approved plan executed successfully:
 - No banned terms (Rscript, quarto render, TEXINPUTS=, /tmp/, etc.)
 - 84 files changed total (23 deleted, 4 renamed, 14 new, 43 modified)
 
+## Post-commit updates
+
+- Committed all 85 files as `c6ab8d0`, force-pushed to origin
+- User preference: co-authoring line is `with Claude` (no email, no model version)---saved to global `~/.claude/CLAUDE.md`
+- Folded Dropbox setup into the starter prompt so Claude handles it on first session
+- Committed and pushed as `22c192c`
+- Created `templates/sync-to-workflow.sh` (push infrastructure improvements from project → workflow repo)
+- Created `templates/sync-from-workflow.sh` (pull infrastructure updates from workflow repo → project)
+- Added sync instructions to README.md
+- Committed and pushed as `753859a`
+- Discussing Overleaf Dropbox integration (second sync target for paper outputs)
+
 ## Status
 
-Ready for commit. User restarting terminal to fix Python PATH issue first.
+All transformation work committed and pushed. Designing Overleaf sync extension.
