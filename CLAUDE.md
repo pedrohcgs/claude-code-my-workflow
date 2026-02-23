@@ -96,8 +96,8 @@ xelatex --include-directory=../preambles -interaction=nonstopmode file.tex
 # Python
 python scripts/python/analysis.py
 
-# Stata
-stata-mp -b do scripts/stata/analysis.do
+# Stata (StataNow 19, cd into script directory so log lands there)
+cd scripts/stata && stata-mp -b do analysis.do
 
 # Quality score
 python scripts/quality_score.py slides/Lecture01_Topic.tex

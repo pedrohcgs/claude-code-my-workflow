@@ -39,7 +39,7 @@ set seed 12345
 
 ## 3. Path Management
 
-Use globals for all paths -- never hardcode absolute paths:
+Use globals for all paths---never hardcode absolute paths (e.g., `C:/Users/...` or `/home/...`). Every path must be relative to the project root so scripts work on any machine:
 
 ```stata
 global root    "."
@@ -50,6 +50,8 @@ global output  "$root/output"
 global tables  "$output/tables"
 global figures "$output/figures"
 ```
+
+Never use `c(pwd)` to build absolute paths for file output. Use globals instead.
 
 ## 4. Estimation & Output
 
@@ -84,7 +86,7 @@ graph export "$figures/figure1.png", replace as(png) width(3600)
 | Pitfall | Impact | Prevention |
 |---------|--------|------------|
 | Missing `clear all` | Residual data contamination | Always start with `clear all` |
-| Hardcoded paths | Breaks on other machines | Use globals for all paths |
+| Hardcoded absolute paths | Breaks on other machines | Use relative globals; reject any `C:/`, `/home/`, or `c(pwd)` in file paths |
 | Missing `log close` | Log file stays locked | Always close log at end |
 | No `set seed` | Non-reproducible bootstrap/simulation | Set seed after `clear all` |
 
