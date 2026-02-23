@@ -1,13 +1,23 @@
 #!/bin/bash
 # One-time setup: configure Dropbox and/or Overleaf sync for this project
 #
-# Usage: bash templates/setup-sync.sh
+# Usage (interactive):
+#   bash templates/setup-sync.sh
+#
+# Usage (non-interactive, for Claude Code):
+#   bash templates/setup-sync.sh \
+#     --dropbox "C:/Users/me/Dropbox/shared-project" \
+#     --overleaf "C:/Users/me/Dropbox/Apps/Overleaf/my-paper" \
+#     --push "project/output/tables:tables,project/output/figures:figures" \
+#     --pull ".:project/paper"
+#
+# All flags are optional. Omit --dropbox if no main Dropbox sync.
+# Omit --overleaf/--push/--pull if no Overleaf sync.
 #
 # What this does:
-#   1. Asks for your sync targets (main Dropbox, Overleaf Dropbox, or both)
-#   2. Writes .sync-config at repo root (gitignored, contains local paths)
-#   3. Installs the post-commit hook (auto-pushes on every commit)
-#   4. Creates sync-pull.sh at repo root (manually pull external changes)
+#   1. Writes .sync-config at repo root (gitignored, contains local paths)
+#   2. Installs the post-commit hook (auto-pushes on every commit)
+#   3. Creates sync-pull.sh at repo root (manually pull external changes)
 
 set -e
 
@@ -18,79 +28,88 @@ if [[ ! -f "$REPO_PATH/CLAUDE.md" ]]; then
     exit 1
 fi
 
-echo "=== Sync setup ==="
-echo ""
-
-# --- Main Dropbox ---
-read -rp "Do you sync project/ with a main Dropbox folder? (y/n): " USE_DROPBOX
-
+# --- Parse command-line arguments ---
 DROPBOX_PATH=""
-if [[ "$USE_DROPBOX" == "y" || "$USE_DROPBOX" == "Y" ]]; then
-    read -rp "Dropbox path (e.g., C:/Users/you/Dropbox/shared-project): " DROPBOX_PATH
-    if [[ -z "$DROPBOX_PATH" ]]; then
-        echo "Error: Dropbox path is required."
-        exit 1
-    fi
-fi
-
-# --- Overleaf Dropbox ---
-read -rp "Do you sync with an Overleaf Dropbox folder? (y/n): " USE_OVERLEAF
-
 OVERLEAF_PATH=""
 OVERLEAF_PUSH=""
 OVERLEAF_PULL=""
-if [[ "$USE_OVERLEAF" == "y" || "$USE_OVERLEAF" == "Y" ]]; then
-    read -rp "Overleaf Dropbox path (e.g., C:/Users/you/Dropbox/Apps/Overleaf/my-paper): " OVERLEAF_PATH
-    if [[ -z "$OVERLEAF_PATH" ]]; then
-        echo "Error: Overleaf path is required."
-        exit 1
+NON_INTERACTIVE=false
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --dropbox)    DROPBOX_PATH="$2";  NON_INTERACTIVE=true; shift 2 ;;
+        --overleaf)   OVERLEAF_PATH="$2"; NON_INTERACTIVE=true; shift 2 ;;
+        --push)       OVERLEAF_PUSH="$2"; shift 2 ;;
+        --pull)       OVERLEAF_PULL="$2"; shift 2 ;;
+        *)            echo "Unknown option: $1"; exit 1 ;;
+    esac
+done
+
+# --- Interactive mode if no arguments ---
+if [[ "$NON_INTERACTIVE" == "false" ]]; then
+    echo "=== Sync setup ==="
+    echo ""
+
+    # Main Dropbox
+    read -rp "Do you sync project/ with a main Dropbox folder? (y/n): " USE_DROPBOX
+    if [[ "$USE_DROPBOX" == "y" || "$USE_DROPBOX" == "Y" ]]; then
+        read -rp "Dropbox path (e.g., C:/Users/you/Dropbox/shared-project): " DROPBOX_PATH
+        if [[ -z "$DROPBOX_PATH" ]]; then
+            echo "Error: Dropbox path is required."
+            exit 1
+        fi
     fi
 
-    echo ""
-    echo "PUSH mappings: directories pushed TO Overleaf on every commit."
-    echo "  Format: local-path:overleaf-path (both relative to their roots)"
-    echo "  Example: project/output/tables:tables"
-    echo "  Enter one per line, empty line to finish:"
-
-    OVERLEAF_PUSH=""
-    while true; do
-        read -rp "  push> " mapping
-        if [[ -z "$mapping" ]]; then break; fi
-        if [[ "$mapping" != *":"* ]]; then
-            echo "  Invalid format. Use local:overleaf (e.g., project/output/tables:tables)"
-            continue
+    # Overleaf Dropbox
+    read -rp "Do you sync with an Overleaf Dropbox folder? (y/n): " USE_OVERLEAF
+    if [[ "$USE_OVERLEAF" == "y" || "$USE_OVERLEAF" == "Y" ]]; then
+        read -rp "Overleaf Dropbox path (e.g., C:/Users/you/Dropbox/Apps/Overleaf/my-paper): " OVERLEAF_PATH
+        if [[ -z "$OVERLEAF_PATH" ]]; then
+            echo "Error: Overleaf path is required."
+            exit 1
         fi
-        if [[ -n "$OVERLEAF_PUSH" ]]; then
-            OVERLEAF_PUSH="$OVERLEAF_PUSH,$mapping"
-        else
-            OVERLEAF_PUSH="$mapping"
-        fi
-    done
 
-    echo ""
-    echo "PULL mappings: directories pulled FROM Overleaf at session start."
-    echo "  Format: overleaf-path:local-path (both relative to their roots)"
-    echo "  Example: .:project/paper  (pulls entire Overleaf folder into project/paper/)"
-    echo "  Example: sections:project/paper/sections"
-    echo "  Enter one per line, empty line to finish:"
+        echo ""
+        echo "PUSH mappings: directories pushed TO Overleaf on every commit."
+        echo "  Format: local-path:overleaf-path (both relative to their roots)"
+        echo "  Example: project/output/tables:tables"
+        echo "  Enter one per line, empty line to finish:"
 
-    OVERLEAF_PULL=""
-    while true; do
-        read -rp "  pull> " mapping
-        if [[ -z "$mapping" ]]; then break; fi
-        if [[ "$mapping" != *":"* ]]; then
-            echo "  Invalid format. Use overleaf:local (e.g., .:project/paper)"
-            continue
-        fi
-        if [[ -n "$OVERLEAF_PULL" ]]; then
-            OVERLEAF_PULL="$OVERLEAF_PULL,$mapping"
-        else
-            OVERLEAF_PULL="$mapping"
-        fi
-    done
+        OVERLEAF_PUSH=""
+        while true; do
+            read -rp "  push> " mapping
+            if [[ -z "$mapping" ]]; then break; fi
+            if [[ "$mapping" != *":"* ]]; then
+                echo "  Invalid format. Use local:overleaf (e.g., project/output/tables:tables)"
+                continue
+            fi
+            if [[ -n "$OVERLEAF_PUSH" ]]; then
+                OVERLEAF_PUSH="$OVERLEAF_PUSH,$mapping"
+            else
+                OVERLEAF_PUSH="$mapping"
+            fi
+        done
 
-    if [[ -z "$OVERLEAF_PUSH" && -z "$OVERLEAF_PULL" ]]; then
-        echo "Warning: no Overleaf mappings configured. Overleaf sync will be inactive."
+        echo ""
+        echo "PULL mappings: directories pulled FROM Overleaf at session start."
+        echo "  Format: overleaf-path:local-path (both relative to their roots)"
+        echo "  Example: .:project/paper  (pulls entire Overleaf folder into project/paper/)"
+        echo "  Enter one per line, empty line to finish:"
+
+        OVERLEAF_PULL=""
+        while true; do
+            read -rp "  pull> " mapping
+            if [[ -z "$mapping" ]]; then break; fi
+            if [[ "$mapping" != *":"* ]]; then
+                echo "  Invalid format. Use overleaf:local (e.g., .:project/paper)"
+                continue
+            fi
+            if [[ -n "$OVERLEAF_PULL" ]]; then
+                OVERLEAF_PULL="$OVERLEAF_PULL,$mapping"
+            else
+                OVERLEAF_PULL="$mapping"
+            fi
+        done
     fi
 fi
 

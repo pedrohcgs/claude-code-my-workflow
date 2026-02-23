@@ -17,10 +17,18 @@ Anything your collaborators need: data, code, output, documentation. The repo's 
 If your project lives in a shared Dropbox folder, or if you push outputs to an Overleaf Dropbox folder, run the one-time setup script from the repo root:
 
 ```bash
+# Interactive (asks for paths)
 bash templates/setup-sync.sh
+
+# Non-interactive (Claude Code uses this)
+bash templates/setup-sync.sh \
+  --dropbox "C:/Users/me/Dropbox/shared-project" \
+  --overleaf "C:/Users/me/Dropbox/Apps/Overleaf/my-paper" \
+  --push "project/output/tables:tables,project/output/figures:figures" \
+  --pull ".:project/paper"
 ```
 
-The script asks which sync targets you use and configures everything:
+All flags are optional---omit `--dropbox` or `--overleaf` if you don't use them. The script configures:
 
 - Main Dropbox: bidirectional sync between `project/` and a Dropbox folder. Every commit pushes automatically; run `bash sync-pull.sh` to pull collaborator changes.
 - Overleaf Dropbox: bidirectional sync with an Overleaf-synced Dropbox folder. Push mappings send outputs (tables, figures) on every commit; pull mappings bring back paper edits at session start.
