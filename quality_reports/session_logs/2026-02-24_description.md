@@ -43,3 +43,8 @@
 - Should we modernize the pipeline (create config.do, deduplicate scripts)?
 - Should we attempt to run the existing pipeline to verify outputs?
 - What is the research status---is this being revived for a paper?
+
+
+---
+**Context compaction (auto) at 10:38**
+Check git log and quality_reports/plans/ for current state.
