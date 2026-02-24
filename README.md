@@ -1,6 +1,8 @@
-# Claude Code workflow for data analysis
+# Fertilizer Quality in Kenya
 
-Personal upstream repo for economics research projects using Claude Code with LaTeX/Beamer slides and Python/Stata analysis scripts.
+PEDL-funded study on fertilizer quality using mystery shopping and lab testing of agro-dealer fertilizer in Kenya. Built on a Claude Code academic workflow template with Stata analysis scripts and bidirectional Dropbox sync.
+
+The `project/` directory syncs with the `PEDL/` subfolder in Dropbox only---root-level admin documents are excluded.
 
 ## What this is
 

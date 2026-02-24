@@ -3,6 +3,10 @@ paths:
   - "slides/**/*.tex"
   - "scripts/**/*.py"
   - "scripts/stata/**/*.do"
+  - "project/**/*.do"
+  - "project/**/*.py"
+  - "project/**/*.do"
+  - "project/**/*.py"
 ---
 
 # Task Completion Verification Protocol

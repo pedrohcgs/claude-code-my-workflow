@@ -2,6 +2,10 @@
 paths:
   - "scripts/**/*.py"
   - "scripts/stata/**/*.do"
+  - "project/**/*.do"
+  - "project/**/*.py"
+  - "project/**/*.do"
+  - "project/**/*.py"
 ---
 
 # Replication-First Protocol

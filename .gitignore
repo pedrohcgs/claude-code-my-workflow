@@ -32,15 +32,61 @@ __pycache__/
 *.smcl
 *.gph
 
-# Data files (large, should not be in git)
-data/raw/*.csv
-data/raw/*.dta
-data/raw/*.xlsx
-data/raw/*.tsv
-data/processed/*.csv
-data/processed/*.dta
-data/processed/*.parquet
-data/processed/*.pkl
+# ==============================================================================
+# Project data and binary files (synced via Dropbox, NOT tracked by git)
+# ==============================================================================
+
+# Data files --- all formats, anywhere under project/
+project/**/*.csv
+project/**/*.dta
+project/**/*.xlsx
+project/**/*.xlsm
+project/**/*.xls
+project/**/*.tsv
+project/**/*.parquet
+project/**/*.pkl
+project/**/*.sav
+project/**/*.rds
+
+# Documents --- Word, PDF, PowerPoint
+project/**/*.doc
+project/**/*.docx
+project/**/*.pdf
+project/**/*.pptx
+project/**/*.ppt
+
+# Media --- photos, audio, video
+project/**/*.jpg
+project/**/*.jpeg
+project/**/*.png
+project/**/*.tif
+project/**/*.tiff
+project/**/*.gif
+project/**/*.3gpp
+project/**/*.mp4
+project/**/*.mp3
+
+# Geospatial
+project/**/*.tfw
+project/**/*.shp
+project/**/*.dbf
+project/**/*.shx
+project/**/*.prj
+
+# Archives
+project/**/*.zip
+project/**/*.gz
+project/**/*.tar
+project/**/*.7z
+
+# HTML and XML (scraped directory pages)
+project/**/*.html
+project/**/*.xml
+
+# Stata artifacts (under project/)
+project/**/*.smcl
+project/**/*.gph
+project/**/*.log
 
 # Output artifacts
 output/**/*.pdf

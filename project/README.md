@@ -1,6 +1,6 @@
-# Project files
+# Fertilizer Quality in Kenya---PEDL project files
 
-Drop your existing project folder contents here. Do not reorganize---describe the structure in `CLAUDE.md` instead, and Claude will navigate it as-is.
+This directory is synced bidirectionally with the `PEDL/` subfolder in Dropbox. Only the PEDL folder is pulled---root-level admin documents in the Dropbox "Fake fertilizer" folder are excluded from sync.
 
 ## Convention
 

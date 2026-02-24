@@ -48,26 +48,23 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `Path()` for Python, `$root` globals for Stata, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `np.random.seed()` / `set seed` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- Stata globals (`$dir`, `$data`, `$output`) for all paths; no hardcoded absolute paths
+- `set seed YYYYMMDD` after `clear all` for any stochastic code
+- `scheme(plotplain)` for figures, export PNG at default resolution
+- Output chain: `build/code/` reads from `build/input/`, writes to `build/output/`; `function/code/` reads from `build/output/`, writes to `function/output/`
+- All .do files must have `clear all` at top and `log using`/`log close` pair
+- Existing .do files use hardcoded `C:\Users\Emilia\Dropbox\...` paths---must modernize before running locally
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** Stata `scheme(plotplain)`, histogram PNGs for distributions
+**Reporting:** Concise bullets; details on request
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Replication:** Strict---existing pipeline must reproduce before extending
 
 ---
 
