@@ -8,7 +8,7 @@
 global root "C:/git/fake-fertilizer"
 
 * --- Load remaining path configuration ---
-do "$root/analysis/config.do"
+do "$root/project/analysis/config.do"
 
 * --- 0. Check/install required packages ---
 do "$code/0_setup.do"

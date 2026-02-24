@@ -7,7 +7,7 @@ Clean, portable Stata pipeline for the Fertilizer Quality in Kenya project. Buil
 ```stata
 * In Stata:
 global root "C:/git/fake-fertilizer"   // edit for your machine
-do "$root/analysis/master.do"
+do "$root/project/analysis/master.do"
 ```
 
 `master.do` sets `$root`, loads `config.do` (which derives all other paths), checks that required packages are installed, then runs scripts 1--4 in order.
@@ -30,9 +30,9 @@ Derives all path globals from `$root`. Edit `$root` in `master.do` once per mach
 |--------|-----------|
 | `$project` | `$root/project` |
 | `$input` | `$project/data/build/input` (raw data, read-only) |
-| `$output` | `$root/analysis/output` (final datasets) |
-| `$temp` | `$root/analysis/temp` (intermediate files) |
-| `$figures` | `$root/analysis/figures` (tables + graphs) |
+| `$output` | `$project/analysis/output` (final datasets) |
+| `$temp` | `$project/analysis/temp` (intermediate files) |
+| `$figures` | `$project/analysis/figures` (tables + graphs) |
 
 ### `0_setup.do` --- package checks
 

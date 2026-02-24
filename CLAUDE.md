@@ -100,7 +100,7 @@ project/                              # Synced from Dropbox PEDL/ folder
 stata-mp -b do project/data/build/code/ff_master.do
 
 # Stata --- analysis pipeline
-stata-mp -b do analysis/master.do
+stata-mp -b do project/analysis/master.do
 
 # Stata --- individual scripts (legacy, in project/)
 stata-mp -b do project/data/function/code/ff_summary_stats.do

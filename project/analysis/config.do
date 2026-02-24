@@ -11,7 +11,7 @@ set more off
 global project  "$root/project"
 global data     "$project/data"
 global input    "$data/build/input"
-global analysis "$root/analysis"
+global analysis "$project/analysis"
 global code     "$analysis/code"
 global output   "$analysis/output"
 global temp     "$analysis/temp"
