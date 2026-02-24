@@ -15,6 +15,7 @@ paths:
 
 - **Never** use `ggtitle()`, `labs(title = ...)`, or `labs(subtitle = ...)`
 - **Never** use `labs(caption = ...)` or `annotate()` for source notes
+- X Axis ticks must be complete. No skipping.
 - Titles, numbering, and notes belong in the paper/presentation, not the figure
 - The figure file name and folder location identify what the figure shows
 
