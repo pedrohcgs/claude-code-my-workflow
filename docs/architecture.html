@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Architecture Reference – The Clo-Author</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f58846fd744234689b98dee20f811e2d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">The Clo-Author</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Quick Start</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./user-guide.html"> 
+<span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./architecture.html" aria-current="page"> 
+<span class="menu-text">Architecture</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/hsantanna88/clo-author"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#system-overview" id="toc-system-overview" class="nav-link active" data-scroll-target="#system-overview">System Overview</a></li>
+  <li><a href="#claude.md-the-project-constitution" id="toc-claude.md-the-project-constitution" class="nav-link" data-scroll-target="#claude.md-the-project-constitution">CLAUDE.md — The Project Constitution</a></li>
+  <li><a href="#rules-auto-loading-domain-knowledge" id="toc-rules-auto-loading-domain-knowledge" class="nav-link" data-scroll-target="#rules-auto-loading-domain-knowledge">Rules — Auto-Loading Domain Knowledge</a>
+  <ul class="collapse">
+  <li><a href="#always-on-rules" id="toc-always-on-rules" class="nav-link" data-scroll-target="#always-on-rules">Always-On Rules</a></li>
+  <li><a href="#path-scoped-rules" id="toc-path-scoped-rules" class="nav-link" data-scroll-target="#path-scoped-rules">Path-Scoped Rules</a>
+  <ul class="collapse">
+  <li><a href="#example-path-scoped-r-code-conventions" id="toc-example-path-scoped-r-code-conventions" class="nav-link" data-scroll-target="#example-path-scoped-r-code-conventions">Example: Path-Scoped R Code Conventions</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#agents-specialized-reviewers" id="toc-agents-specialized-reviewers" class="nav-link" data-scroll-target="#agents-specialized-reviewers">Agents — Specialized Reviewers</a>
+  <ul class="collapse">
+  <li><a href="#agent-anatomy" id="toc-agent-anatomy" class="nav-link" data-scroll-target="#agent-anatomy">Agent Anatomy</a></li>
+  <li><a href="#all-12-agents" id="toc-all-12-agents" class="nav-link" data-scroll-target="#all-12-agents">All 12 Agents</a></li>
+  <li><a href="#multi-model-strategy" id="toc-multi-model-strategy" class="nav-link" data-scroll-target="#multi-model-strategy">Multi-Model Strategy</a></li>
+  </ul></li>
+  <li><a href="#skills-reusable-slash-commands" id="toc-skills-reusable-slash-commands" class="nav-link" data-scroll-target="#skills-reusable-slash-commands">Skills — Reusable Slash Commands</a></li>
+  <li><a href="#hooks-automated-enforcement" id="toc-hooks-automated-enforcement" class="nav-link" data-scroll-target="#hooks-automated-enforcement">Hooks — Automated Enforcement</a>
+  <ul class="collapse">
+  <li><a href="#design-principles" id="toc-design-principles" class="nav-link" data-scroll-target="#design-principles">Design Principles</a></li>
+  <li><a href="#all-7-hooks" id="toc-all-7-hooks" class="nav-link" data-scroll-target="#all-7-hooks">All 7 Hooks</a></li>
+  </ul></li>
+  <li><a href="#memory-system" id="toc-memory-system" class="nav-link" data-scroll-target="#memory-system">Memory System</a></li>
+  <li><a href="#context-survival-system" id="toc-context-survival-system" class="nav-link" data-scroll-target="#context-survival-system">Context Survival System</a>
+  <ul class="collapse">
+  <li><a href="#what-gets-saved" id="toc-what-gets-saved" class="nav-link" data-scroll-target="#what-gets-saved">What Gets Saved</a></li>
+  <li><a href="#context-monitoring" id="toc-context-monitoring" class="nav-link" data-scroll-target="#context-monitoring">Context Monitoring</a></li>
+  </ul></li>
+  <li><a href="#sec-orchestrator" id="toc-sec-orchestrator" class="nav-link" data-scroll-target="#sec-orchestrator">The Orchestrator (Contractor Mode)</a>
+  <ul class="collapse">
+  <li><a href="#the-mental-model" id="toc-the-mental-model" class="nav-link" data-scroll-target="#the-mental-model">The Mental Model</a></li>
+  <li><a href="#the-loop" id="toc-the-loop" class="nav-link" data-scroll-target="#the-loop">The Loop</a>
+  <ul class="collapse">
+  <li><a href="#agent-selection-by-file-type" id="toc-agent-selection-by-file-type" class="nav-link" data-scroll-target="#agent-selection-by-file-type">Agent Selection by File Type</a></li>
+  <li><a href="#just-do-it-mode" id="toc-just-do-it-mode" class="nav-link" data-scroll-target="#just-do-it-mode">“Just Do It” Mode</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#sec-plan-first" id="toc-sec-plan-first" class="nav-link" data-scroll-target="#sec-plan-first">Plan-First Workflow</a>
+  <ul class="collapse">
+  <li><a href="#the-protocol" id="toc-the-protocol" class="nav-link" data-scroll-target="#the-protocol">The Protocol</a></li>
+  <li><a href="#session-logging-3-triggers" id="toc-session-logging-3-triggers" class="nav-link" data-scroll-target="#session-logging-3-triggers">Session Logging (3 Triggers)</a></li>
+  </ul></li>
+  <li><a href="#the-adversarial-pattern" id="toc-the-adversarial-pattern" class="nav-link" data-scroll-target="#the-adversarial-pattern">The Adversarial Pattern</a></li>
+  <li><a href="#parallel-agents" id="toc-parallel-agents" class="nav-link" data-scroll-target="#parallel-agents">Parallel Agents</a>
+  <ul class="collapse">
+  <li><a href="#when-to-use" id="toc-when-to-use" class="nav-link" data-scroll-target="#when-to-use">When to Use</a></li>
+  <li><a href="#practical-limits" id="toc-practical-limits" class="nav-link" data-scroll-target="#practical-limits">Practical Limits</a></li>
+  </ul></li>
+  <li><a href="#sec-constitutional" id="toc-sec-constitutional" class="nav-link" data-scroll-target="#sec-constitutional">Constitutional Governance (Optional)</a>
+  <ul class="collapse">
+  <li><a href="#example-articles" id="toc-example-articles" class="nav-link" data-scroll-target="#example-articles">Example Articles</a></li>
+  </ul></li>
+  <li><a href="#additional-workflows-slides-lectures" id="toc-additional-workflows-slides-lectures" class="nav-link" data-scroll-target="#additional-workflows-slides-lectures">Additional Workflows: Slides &amp; Lectures</a>
+  <ul class="collapse">
+  <li><a href="#creating-a-new-lecture" id="toc-creating-a-new-lecture" class="nav-link" data-scroll-target="#creating-a-new-lecture">Creating a New Lecture</a></li>
+  <li><a href="#beamer-to-quarto-translation" id="toc-beamer-to-quarto-translation" class="nav-link" data-scroll-target="#beamer-to-quarto-translation">Beamer to Quarto Translation</a></li>
+  <li><a href="#multi-agent-slide-review" id="toc-multi-agent-slide-review" class="nav-link" data-scroll-target="#multi-agent-slide-review">Multi-Agent Slide Review</a></li>
+  <li><a href="#devils-advocate" id="toc-devils-advocate" class="nav-link" data-scroll-target="#devils-advocate">Devil’s Advocate</a></li>
+  <li><a href="#replication-first-coding" id="toc-replication-first-coding" class="nav-link" data-scroll-target="#replication-first-coding">Replication-First Coding</a></li>
+  <li><a href="#branch-isolation-with-git-worktrees-advanced" id="toc-branch-isolation-with-git-worktrees-advanced" class="nav-link" data-scroll-target="#branch-isolation-with-git-worktrees-advanced">Branch Isolation with Git Worktrees (Advanced)</a></li>
+  </ul></li>
+  <li><a href="#appendix-complete-reference-tables" id="toc-appendix-complete-reference-tables" class="nav-link" data-scroll-target="#appendix-complete-reference-tables">Appendix: Complete Reference Tables</a>
+  <ul class="collapse">
+  <li><a href="#all-12-agents-1" id="toc-all-12-agents-1" class="nav-link" data-scroll-target="#all-12-agents-1">All 12 Agents</a></li>
+  <li><a href="#all-26-skills" id="toc-all-26-skills" class="nav-link" data-scroll-target="#all-26-skills">All 26 Skills</a></li>
+  <li><a href="#all-17-rules" id="toc-all-17-rules" class="nav-link" data-scroll-target="#all-17-rules">All 17 Rules</a></li>
+  <li><a href="#all-7-hooks-1" id="toc-all-7-hooks-1" class="nav-link" data-scroll-target="#all-7-hooks-1">All 7 Hooks</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Architecture Reference</h1>
+<p class="subtitle lead">How the Clo-Author System Works</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="system-overview" class="level1">
+<h1>System Overview</h1>
+<p>Claude Code’s power comes from five configuration layers that work together:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 33%">
+<col style="width: 43%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>Location</th>
+<th>Loaded When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>CLAUDE.md</strong></td>
+<td>Project root</td>
+<td>Every session</td>
+</tr>
+<tr class="even">
+<td><strong>Rules</strong></td>
+<td><code>.claude/rules/</code></td>
+<td>Always-on or path-scoped</td>
+</tr>
+<tr class="odd">
+<td><strong>Skills</strong></td>
+<td><code>.claude/skills/</code></td>
+<td>On demand (slash commands)</td>
+</tr>
+<tr class="even">
+<td><strong>Agents</strong></td>
+<td><code>.claude/agents/</code></td>
+<td>On demand (via skills or orchestrator)</td>
+</tr>
+<tr class="odd">
+<td><strong>Hooks</strong></td>
+<td><code>.claude/settings.json</code></td>
+<td>On events (automatic)</td>
+</tr>
+</tbody>
+</table>
+<p>Claude reliably follows about <strong>100–150 custom instructions</strong>. Your system prompt uses ~50, leaving ~100–150 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, skills, and agents load on demand and don’t compete for this budget.</p>
+<hr>
+</section>
+<section id="claude.md-the-project-constitution" class="level1">
+<h1>CLAUDE.md — The Project Constitution</h1>
+<p><code>CLAUDE.md</code> is the single most important file. Claude reads it at the start of every session. It should be a <strong>slim constitution</strong> — short directives and pointers, not comprehensive documentation. Aim for ~120 lines:</p>
+<ul>
+<li><strong>Core principles</strong> — 4–5 bullets (plan-first, verify-after, quality gates, LEARN tags)</li>
+<li><strong>Folder structure</strong> — where everything lives</li>
+<li><strong>Commands</strong> — compilation, deployment, key tools</li>
+<li><strong>Customization tables</strong> — Beamer environments, notation conventions</li>
+<li><strong>Current state</strong> — what’s done, what’s in progress</li>
+<li><strong>Skill quick reference</strong> — table of available slash commands</li>
+</ul>
+<p>Move everything else into <code>.claude/rules/</code> files with path-scoping so they only load when relevant.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Keep It Lean
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If CLAUDE.md exceeds ~150 lines, Claude starts ignoring rules silently. Put detailed standards in path-scoped rules instead.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="rules-auto-loading-domain-knowledge" class="level1">
+<h1>Rules — Auto-Loading Domain Knowledge</h1>
+<p>Rules are markdown files in <code>.claude/rules/</code> that Claude loads automatically. The key design principle is <strong>path-scoping</strong>: rules with a <code>paths:</code> YAML frontmatter only load when Claude works on matching files.</p>
+<section id="always-on-rules" class="level2">
+<h2 class="anchored" data-anchor-id="always-on-rules">Always-On Rules</h2>
+<p>Always-on rules (no <code>paths:</code> frontmatter) load every session. Keep these few and lean:</p>
+<pre><code>.claude/rules/
+├── plan-first-workflow.md       # ~35 lines — plan before you build
+├── orchestrator-protocol.md     # ~40 lines — contractor mode loop
+└── session-logging.md           # ~22 lines — three logging triggers</code></pre>
+</section>
+<section id="path-scoped-rules" class="level2">
+<h2 class="anchored" data-anchor-id="path-scoped-rules">Path-Scoped Rules</h2>
+<p>Path-scoped rules load only when relevant:</p>
+<pre><code>.claude/rules/
+├── r-code-conventions.md          # paths: ["**/*.R"]
+├── quality-gates.md               # paths: ["*.tex", "*.qmd", "*.R"]
+├── verification-protocol.md       # paths: ["*.tex", "*.qmd", "docs/"]
+├── replication-protocol.md        # paths: ["scripts/**/*.R"]
+├── exploration-folder-protocol.md # paths: ["explorations/**"]
+├── orchestrator-research.md       # paths: ["scripts/**/*.R", "explorations/**"]
+└── ...14 path-scoped rules total</code></pre>
+<p>This design keeps always-on context under ~100 lines while providing rich, domain-specific guidance exactly when Claude needs it.</p>
+<section id="example-path-scoped-r-code-conventions" class="level3">
+<h3 class="anchored" data-anchor-id="example-path-scoped-r-code-conventions">Example: Path-Scoped R Code Conventions</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paths</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"**/*.R"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"Figures/**/*.R"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"scripts/**/*.R"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># R Code Standards</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducibility</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>set.seed() called ONCE at top (YYYYMMDD format)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All packages loaded at top via library()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All paths relative to repository root</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>paths:</code> block means this rule only loads when Claude reads or edits an <code>.R</code> file. When Claude works on a <code>.tex</code> file, this rule doesn’t consume any of the instruction budget.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="agents-specialized-reviewers" class="level1">
+<h1>Agents — Specialized Reviewers</h1>
+<p>Each agent is an expert in one dimension of quality. Agents are <strong>read-only</strong> — they produce reports but never edit files. The orchestrator (or you) decides what to fix.</p>
+<section id="agent-anatomy" class="level2">
+<h2 class="anchored" data-anchor-id="agent-anatomy">Agent Anatomy</h2>
+<p>Each agent file has YAML frontmatter + detailed instructions:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> proofreader</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Reviews files for grammar, typos, and consistency</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># Proofreader Agent</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## Role</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>You are an expert academic proofreader.</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## What to Check</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Grammar and spelling errors</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Inconsistent notation</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Missing or broken citations</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Content overflow</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Report Format</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>Save findings to: quality_reports/<span class="co">[</span><span class="ot">FILENAME</span><span class="co">]</span>_report.md</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Severity Levels</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Critical:** Math errors, broken citations</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Major:** Grammar errors, overflow</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Minor:** Style inconsistencies</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="all-12-agents" class="level2">
+<h2 class="anchored" data-anchor-id="all-12-agents">All 12 Agents</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 27%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Agent</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Econometrician</td>
+<td><code>econometrician.md</code></td>
+<td>Sequential 4-phase causal inference audit</td>
+</tr>
+<tr class="even">
+<td>Proofreader</td>
+<td><code>proofreader.md</code></td>
+<td>Grammar, typos, consistency</td>
+</tr>
+<tr class="odd">
+<td>R Reviewer</td>
+<td><code>r-reviewer.md</code></td>
+<td>R code quality, reproducibility</td>
+</tr>
+<tr class="even">
+<td>Domain Reviewer</td>
+<td><code>domain-reviewer.md</code></td>
+<td>Your domain-specific substance review</td>
+</tr>
+<tr class="odd">
+<td>Replication Auditor</td>
+<td><code>replication-auditor.md</code></td>
+<td>Replication package validation</td>
+</tr>
+<tr class="even">
+<td>Verifier</td>
+<td><code>verifier.md</code></td>
+<td>Task completion verification</td>
+</tr>
+<tr class="odd">
+<td>Slide Auditor</td>
+<td><code>slide-auditor.md</code></td>
+<td>Visual layout, overflow, spacing</td>
+</tr>
+<tr class="even">
+<td>TikZ Reviewer</td>
+<td><code>tikz-reviewer.md</code></td>
+<td>Diagram visual quality</td>
+</tr>
+<tr class="odd">
+<td>Pedagogy Reviewer</td>
+<td><code>pedagogy-reviewer.md</code></td>
+<td>Narrative arc, notation clarity</td>
+</tr>
+<tr class="even">
+<td>Beamer Translator</td>
+<td><code>beamer-translator.md</code></td>
+<td>Beamer to Quarto translation</td>
+</tr>
+<tr class="odd">
+<td>Quarto Critic</td>
+<td><code>quarto-critic.md</code></td>
+<td>Adversarial Quarto QA</td>
+</tr>
+<tr class="even">
+<td>Quarto Fixer</td>
+<td><code>quarto-fixer.md</code></td>
+<td>Applies critic’s fixes</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="multi-model-strategy" class="level2">
+<h2 class="anchored" data-anchor-id="multi-model-strategy">Multi-Model Strategy</h2>
+<p>Not all agents need the same model. Each agent file has a <code>model:</code> field in its YAML frontmatter:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 54%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Task Type</th>
+<th>Recommended Model</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Complex translation</td>
+<td><code>model: opus</code></td>
+<td>Needs deep understanding of both formats</td>
+</tr>
+<tr class="even">
+<td>Fast, constrained work</td>
+<td><code>model: sonnet</code></td>
+<td>Speed matters more than depth</td>
+</tr>
+<tr class="odd">
+<td>Default</td>
+<td><code>model: inherit</code></td>
+<td>Uses whatever the main session runs</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The principle:</strong> Use Opus for tasks that require holding two large documents in mind simultaneously. Use Sonnet for tasks with clear, bounded scope. Let everything else inherit.</p>
+<hr>
+</section>
+</section>
+<section id="skills-reusable-slash-commands" class="level1">
+<h1>Skills — Reusable Slash Commands</h1>
+<p>Skills are multi-step workflows invoked with <code>/command</code>. Each skill lives in <code>.claude/skills/[name]/SKILL.md</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> compile-latex</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Compile LaTeX with 3-pass XeLaTeX + bibtex</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">disable-model-invocation</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">argument-hint</span><span class="kw">:</span><span class="at"> </span><span class="st">"[filename without .tex extension]"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Steps:</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="at">1. cd to Paper/</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="at">2. Run xelatex pass 1</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="at">3. Run bibtex</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="at">4. Run xelatex pass 2</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="at">5. Run xelatex pass 3</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="at">6. Check for errors</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="at">7. Report results</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Skills can be invoked two ways: <strong>explicitly</strong> (you type <code>/proofread Paper/main.tex</code>) or <strong>automatically</strong> (Claude invokes them when relevant to your request). Most of the time, you just describe what you want and Claude handles the rest.</p>
+<hr>
+</section>
+<section id="hooks-automated-enforcement" class="level1">
+<h1>Hooks — Automated Enforcement</h1>
+<p>Hooks live in <code>.claude/settings.json</code> and fire on events, regardless of context state. They are reserved for enforcement that <strong>must</strong> survive context compression.</p>
+<section id="design-principles" class="level2">
+<h2 class="anchored" data-anchor-id="design-principles">Design Principles</h2>
+<ul>
+<li>Use <strong>command-based hooks</strong> for fast, mechanical checks (file exists? counter threshold?)</li>
+<li>Use <strong>rules</strong> for nuanced judgment (did Claude verify correctly?)</li>
+<li>Avoid prompt-based hooks that trigger an LLM call on every response — the latency adds up</li>
+</ul>
+</section>
+<section id="all-7-hooks" class="level2">
+<h2 class="anchored" data-anchor-id="all-7-hooks">All 7 Hooks</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 26%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hook</th>
+<th>Event</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Session log reminder</td>
+<td><code>Stop</code></td>
+<td>Reminds about session logs after every response</td>
+</tr>
+<tr class="even">
+<td>Desktop notification</td>
+<td><code>Notification</code></td>
+<td>macOS alert when Claude needs attention</td>
+</tr>
+<tr class="odd">
+<td>File protection</td>
+<td><code>PreToolUse</code></td>
+<td>Blocks accidental edits to bibliography and settings</td>
+</tr>
+<tr class="even">
+<td>Context state capture</td>
+<td><code>PreCompact</code></td>
+<td>Saves plan state before auto-compaction</td>
+</tr>
+<tr class="odd">
+<td>Context restoration</td>
+<td><code>SessionStart[compact\|resume]</code></td>
+<td>Restores context after compaction or resume</td>
+</tr>
+<tr class="even">
+<td>Context monitor</td>
+<td><code>PostToolUse[Bash\|Task]</code></td>
+<td>Progressive warnings at 40%/55%/65%/80%/90% context</td>
+</tr>
+<tr class="odd">
+<td>Verification reminder</td>
+<td><code>PostToolUse[Write\|Edit]</code></td>
+<td>Reminds to compile/render before marking done</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="memory-system" class="level1">
+<h1>Memory System</h1>
+<p>The Clo-Author has four distinct memory layers. The first four are your safety net — anything written to disk survives indefinitely. The conversation context is ephemeral.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 16%">
+<col style="width: 38%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Layer</th>
+<th>File</th>
+<th>Updated When</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Project context</td>
+<td><code>CLAUDE.md</code></td>
+<td>Rarely</td>
+<td>Project rules, folder structure, commands</td>
+</tr>
+<tr class="even">
+<td>Corrections</td>
+<td><code>MEMORY.md</code></td>
+<td>On <code>[LEARN]</code> tag</td>
+<td>Prevent repeating past mistakes</td>
+</tr>
+<tr class="odd">
+<td>Task strategy</td>
+<td><code>quality_reports/plans/</code></td>
+<td>Once per task</td>
+<td>Plan survives planning-to-implementation handoff</td>
+</tr>
+<tr class="even">
+<td>Decision reasoning</td>
+<td><code>quality_reports/session_logs/</code></td>
+<td>Incrementally</td>
+<td>Record <em>why</em> decisions were made</td>
+</tr>
+<tr class="odd">
+<td>Conversation</td>
+<td>Claude’s context window</td>
+<td>Every response</td>
+<td>Current working memory (<strong>not</strong> persistent)</td>
+</tr>
+</tbody>
+</table>
+<p>The workflow ensures that anything worth keeping is written to one of the four persistent layers before compression can erase it.</p>
+<hr>
+</section>
+<section id="context-survival-system" class="level1">
+<h1>Context Survival System</h1>
+<p>When context compaction happens, Claude loses working memory. Two hooks work together to preserve and restore state:</p>
+<pre><code>Session running → context fills up → PreCompact fires
+                                           ↓
+                                    pre-compact.py saves:
+                                    • Active plan path
+                                    • Current task
+                                    • Recent decisions
+                                           ↓
+                                    Auto-compaction happens
+                                           ↓
+                                    SessionStart(compact|resume) fires
+                                           ↓
+                                    post-compact-restore.py:
+                                    • Reads saved state
+                                    • Prints context summary
+                                    • Claude knows where it left off</code></pre>
+<section id="what-gets-saved" class="level3">
+<h3 class="anchored" data-anchor-id="what-gets-saved">What Gets Saved</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 38%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>State</th>
+<th>Location</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Plan path</td>
+<td>Session cache</td>
+<td>So Claude can read the plan file</td>
+</tr>
+<tr class="even">
+<td>Current task</td>
+<td>Session cache</td>
+<td>First unchecked <code>- [ ]</code> item</td>
+</tr>
+<tr class="odd">
+<td>Recent decisions</td>
+<td>Session cache</td>
+<td>Last 3 decision-like entries from session log</td>
+</tr>
+<tr class="even">
+<td>Compaction note</td>
+<td>Session log</td>
+<td>Timestamp marker for reference</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="context-monitoring" class="level3">
+<h3 class="anchored" data-anchor-id="context-monitoring">Context Monitoring</h3>
+<p>The <code>context-monitor.py</code> hook tracks approximate context usage:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 31%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Threshold</th>
+<th>Message</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>40%, 55%, 65%</td>
+<td>Suggest <code>/learn</code></td>
+<td>Capture discoveries before compaction</td>
+</tr>
+<tr class="even">
+<td>80%</td>
+<td>Info message</td>
+<td>Auto-compact approaching</td>
+</tr>
+<tr class="odd">
+<td>90%</td>
+<td>Caution</td>
+<td>Complete current task with full quality</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>/context-status</code> to check current session health at any time.</p>
+<hr>
+</section>
+</section>
+<section id="sec-orchestrator" class="level1">
+<h1>The Orchestrator (Contractor Mode)</h1>
+<p>Once a plan is approved, the orchestrator takes over autonomously.</p>
+<section id="the-mental-model" class="level2">
+<h2 class="anchored" data-anchor-id="the-mental-model">The Mental Model</h2>
+<p>Think of the orchestrator as a <strong>general contractor</strong>. You are the client. You describe what you want. The plan-first protocol is the blueprint phase. Once you approve the blueprint, the contractor takes over: hires the right specialists (agents), inspects their work (verification), sends them back to fix issues (review-fix loop), and only calls you when the job passes inspection (quality gates).</p>
+</section>
+<section id="the-loop" class="level2">
+<h2 class="anchored" data-anchor-id="the-loop">The Loop</h2>
+<pre><code>Plan approved → orchestrator activates
+  │
+  Step 1: IMPLEMENT — Execute plan steps
+  │
+  Step 2: VERIFY — Compile, render, check outputs
+  │         If verification fails → fix → re-verify
+  │
+  Step 3: REVIEW — Run agents (selected by file type)
+  │
+  Step 4: FIX — Apply fixes (critical → major → minor)
+  │
+  Step 5: RE-VERIFY — Confirm fixes are clean
+  │
+  Step 6: SCORE — Apply quality-gates rubric
+  │
+  └── Score &gt;= threshold?
+        YES → Present summary to user
+        NO  → Loop to Step 3 (max 5 rounds)</code></pre>
+<section id="agent-selection-by-file-type" class="level3">
+<h3 class="anchored" data-anchor-id="agent-selection-by-file-type">Agent Selection by File Type</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Files Modified</th>
+<th>Agents Selected</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>.tex</code> only</td>
+<td>proofreader + slide-auditor + pedagogy-reviewer</td>
+</tr>
+<tr class="even">
+<td><code>.qmd</code> only</td>
+<td>proofreader + slide-auditor + pedagogy-reviewer</td>
+</tr>
+<tr class="odd">
+<td><code>.qmd</code> with matching <code>.tex</code></td>
+<td>Above + quarto-critic (parity check)</td>
+</tr>
+<tr class="even">
+<td><code>.R</code> scripts</td>
+<td>r-reviewer</td>
+</tr>
+<tr class="odd">
+<td>TikZ diagrams present</td>
+<td>tikz-reviewer</td>
+</tr>
+<tr class="even">
+<td>Domain content</td>
+<td>domain-reviewer (if configured)</td>
+</tr>
+<tr class="odd">
+<td>Multiple formats</td>
+<td>verifier for cross-format parity</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="just-do-it-mode" class="level3">
+<h3 class="anchored" data-anchor-id="just-do-it-mode">“Just Do It” Mode</h3>
+<p>When you say “just do it”, the orchestrator still runs the full verify-review-fix loop, but skips the final approval pause and auto-commits if the score is &gt;= 80. It still presents the summary so you can see what was done.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="sec-plan-first" class="level1">
+<h1>Plan-First Workflow</h1>
+<p>For any non-trivial task, Claude enters plan mode before writing code.</p>
+<section id="the-protocol" class="level2">
+<h2 class="anchored" data-anchor-id="the-protocol">The Protocol</h2>
+<pre><code>Non-trivial task arrives
+  │
+  Step 1: Enter Plan Mode
+  Step 2: Draft plan (approach, files, verification)
+  Step 3: Save to quality_reports/plans/YYYY-MM-DD_description.md
+  Step 4: Present plan to user
+  Step 5: User approves (or revises)
+  Step 6: Save initial session log
+  Step 7: Orchestrator takes over
+  Step 8: Update session log + plan status to COMPLETED</code></pre>
+<p>Plans are saved to disk specifically so they survive context compression. The rule: <strong>avoid <code>/clear</code></strong> — prefer auto-compression. Use <code>/clear</code> only when context is genuinely polluted.</p>
+</section>
+<section id="session-logging-3-triggers" class="level2">
+<h2 class="anchored" data-anchor-id="session-logging-3-triggers">Session Logging (3 Triggers)</h2>
+<p>Session logs (<code>quality_reports/session_logs/</code>) capture <em>why</em> things happened:</p>
+<ol type="1">
+<li><strong>After plan approval</strong> — create the log with goal, plan summary, rationale (including rejected alternatives)</li>
+<li><strong>During implementation</strong> — append 1–3 lines as design decisions happen. This is the most important behavior: context compresses, but decisions already on disk survive.</li>
+<li><strong>At session end</strong> — add what was accomplished, open questions, unresolved issues</li>
+</ol>
+<p>A <strong>Stop hook</strong> fires after every response and reminds Claude to update the session log if it’s stale.</p>
+<hr>
+</section>
+</section>
+<section id="the-adversarial-pattern" class="level1">
+<h1>The Adversarial Pattern</h1>
+<p>The single most powerful pattern in the system: <strong>critic + fixer</strong>.</p>
+<pre><code>+------------------+
+|  quarto-critic   |  "I found 12 issues. 3 Critical."
+|  (READ-ONLY)     |
++--------+---------+
+         |
+    +----v----+
+    | Verdict |
+    +----+----+
+     /       \
+APPROVED   NEEDS WORK
+    |          |
+  Done    +----v---------+
+          | quarto-fixer |  "Fixed 12/12 issues."
+          | (READ-WRITE) |
+          +----+---------+
+               |
+          +----v----------+
+          | quarto-critic |  "Re-audit: 2 remaining."
+          | (Round 2)     |
+          +----+----------+
+               |
+          ... (up to 5 rounds)</code></pre>
+<p><strong>Why it works:</strong> The critic can’t fix files (read-only), so it has no incentive to downplay issues. The fixer can’t approve itself (the critic re-audits). This prevents the common failure of Claude saying “looks good” about its own work.</p>
+<hr>
+</section>
+<section id="parallel-agents" class="level1">
+<h1>Parallel Agents</h1>
+<p>Claude Code can spawn <strong>multiple agents simultaneously</strong> using the Task tool.</p>
+<section id="when-to-use" class="level2">
+<h2 class="anchored" data-anchor-id="when-to-use">When to Use</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 41%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Sequential (slow)</th>
+<th>Parallel (fast)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Reviewing a paper</td>
+<td>Run proofreader, then econometrician, then domain</td>
+<td>Run all 3 simultaneously</td>
+</tr>
+<tr class="even">
+<td>Analyzing 3 papers</td>
+<td>Read paper 1, then 2, then 3</td>
+<td>Spawn 3 agents, each reading one paper</td>
+</tr>
+<tr class="odd">
+<td>Generating figures</td>
+<td>Create plot 1, then plot 2, then plot 3</td>
+<td>Spawn agents for independent plots</td>
+</tr>
+<tr class="even">
+<td>Comparing estimators</td>
+<td>Run simulation 1, then 2, then 3</td>
+<td>Spawn agents for each simulation</td>
+</tr>
+</tbody>
+</table>
+<p>The orchestrator recognizes independent subtasks and spawns parallel agents automatically.</p>
+</section>
+<section id="practical-limits" class="level2">
+<h2 class="anchored" data-anchor-id="practical-limits">Practical Limits</h2>
+<ul>
+<li><strong>3 agents</strong> is the sweet spot. More increases overhead without proportional speedup.</li>
+<li>Agents are <strong>independent</strong> — they cannot see each other’s work. If task B depends on task A, they must run sequentially.</li>
+<li>Parallel agents multiply token usage. The orchestrator runs Sonnet-level reviewers in parallel, then the Opus-level critic sequentially.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="sec-constitutional" class="level1">
+<h1>Constitutional Governance (Optional)</h1>
+<p>As your project grows, some decisions become non-negotiable. The <code>templates/constitutional-governance.md</code> template helps you distinguish between:</p>
+<ul>
+<li><strong>Immutable principles</strong> (Articles I–V): Non-negotiable rules</li>
+<li><strong>User preferences</strong>: Flexible patterns that can vary</li>
+</ul>
+<section id="example-articles" class="level3">
+<h3 class="anchored" data-anchor-id="example-articles">Example Articles</h3>
+<ul>
+<li><strong>Article I: Primary Artifact</strong> — Which file is authoritative (e.g., <code>main.tex</code>)</li>
+<li><strong>Article II: Plan-First Threshold</strong> — When to enter plan mode (&gt;3 files, &gt;30 min)</li>
+<li><strong>Article III: Quality Gate</strong> — Minimum score to commit (80/100)</li>
+<li><strong>Article IV: Verification Standard</strong> — What must pass before commit</li>
+<li><strong>Article V: File Organization</strong> — Where different file types live</li>
+</ul>
+<p>Use it <strong>after</strong> you’ve established 3–7 recurring patterns that you want to enforce consistently. Don’t create it on day one.</p>
+<hr>
+</section>
+</section>
+<section id="additional-workflows-slides-lectures" class="level1">
+<h1>Additional Workflows: Slides &amp; Lectures</h1>
+<p>The Clo-Author inherits a full lecture production pipeline from <a href="https://github.com/pedrohcgs/claude-code-my-workflow">its origin</a>. These workflows are available for users who also produce course materials.</p>
+<section id="creating-a-new-lecture" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-new-lecture">Creating a New Lecture</h2>
+<p>The <code>/create-lecture</code> skill guides you through structured lecture creation:</p>
+<pre><code>/create-lecture
+  │
+  Phase 1: Gather materials (papers, outlines)
+  Phase 2: Design slide structure
+  Phase 3: Draft Beamer slides
+  Phase 4: Generate R figures
+  Phase 5: Polish and verify
+  │   /slide-excellence (domain + visual + pedagogy)
+  │   /proofread (grammar/typos)
+  │   /visual-audit (layout)
+  Phase 6: Deploy
+      /translate-to-quarto (optional)
+      /deploy</code></pre>
+</section>
+<section id="beamer-to-quarto-translation" class="level2">
+<h2 class="anchored" data-anchor-id="beamer-to-quarto-translation">Beamer to Quarto Translation</h2>
+<p>Translation preserves all content while adapting format, converting TikZ to SVG and ggplot to interactive Plotly charts:</p>
+<pre><code>/translate-to-quarto Lecture5_Topic.tex
+  │
+  Phase 1-3: Environment mapping + content translation
+  Phase 4-5: Figure conversion (TikZ → SVG)
+  Phase 6-7: Interactive charts (ggplot → plotly)
+  Phase 8-9: Render + verify
+  Phase 10-11: /qa-quarto adversarial QA
+      Critic → Fixer → Critic (up to 5 rounds)</code></pre>
+</section>
+<section id="multi-agent-slide-review" class="level2">
+<h2 class="anchored" data-anchor-id="multi-agent-slide-review">Multi-Agent Slide Review</h2>
+<p>The <code>/slide-excellence</code> skill runs up to 6 agents in parallel:</p>
+<pre><code>/slide-excellence Lecture5_Topic.tex
+  │
+  Agent 1: Visual Audit (slide-auditor)
+  Agent 2: Pedagogical Review (pedagogy-reviewer)
+  Agent 3: Proofreading (proofreader)
+  Agent 4: TikZ Review (tikz-reviewer, if applicable)
+  Agent 5: Content Parity (if Quarto version exists)
+  Agent 6: Substance Review (domain-reviewer)
+  │
+  Synthesize: Combined quality score + prioritized fix list</code></pre>
+</section>
+<section id="devils-advocate" class="level2">
+<h2 class="anchored" data-anchor-id="devils-advocate">Devil’s Advocate</h2>
+<p>At any design decision, invoke the Devil’s Advocate:</p>
+<blockquote class="blockquote">
+<p>“Create a Devil’s Advocate. Have it challenge this slide design with 5–7 specific pedagogical questions.”</p>
+</blockquote>
+<p>This catches unstated assumptions, alternative orderings, notation confusion, missing intuition, and cognitive load issues.</p>
+</section>
+<section id="replication-first-coding" class="level2">
+<h2 class="anchored" data-anchor-id="replication-first-coding">Replication-First Coding</h2>
+<p>When working with papers that have replication packages:</p>
+<pre><code>Phase 1: Inventory original code → record "gold standard" numbers
+Phase 2: Translate (e.g., Stata → R) → match original spec EXACTLY
+Phase 3: Verify match → tolerance &lt; 0.01 for estimates, &lt; 0.05 for SEs
+Phase 4: Only then extend with new estimators and specifications</code></pre>
+</section>
+<section id="branch-isolation-with-git-worktrees-advanced" class="level2">
+<h2 class="anchored" data-anchor-id="branch-isolation-with-git-worktrees-advanced">Branch Isolation with Git Worktrees (Advanced)</h2>
+<p>Git worktrees create a separate working directory linked to the same repository. Useful for major translations, risky refactors, or multi-day projects.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a worktree with new branch</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span> <span class="at">-b</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Work in the worktree</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># When ready, squash-merge into main</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge <span class="at">--squash</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat: description of changes"</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleanup</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-d</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Use Worktree?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Quick fix to one file</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td>Major refactor</td>
+<td>Yes</td>
+</tr>
+<tr class="odd">
+<td>Beamer to Quarto translation</td>
+<td>Yes</td>
+</tr>
+<tr class="even">
+<td>Experimenting with new approach</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>For most users, working directly on main with frequent commits is simpler and sufficient.</p>
+<hr>
+</section>
+</section>
+<section id="appendix-complete-reference-tables" class="level1">
+<h1>Appendix: Complete Reference Tables</h1>
+<section id="all-12-agents-1" class="level2">
+<h2 class="anchored" data-anchor-id="all-12-agents-1">All 12 Agents</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 27%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Agent</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Econometrician</td>
+<td><code>.claude/agents/econometrician.md</code></td>
+<td>Sequential 4-phase causal inference audit</td>
+</tr>
+<tr class="even">
+<td>Proofreader</td>
+<td><code>.claude/agents/proofreader.md</code></td>
+<td>Grammar, typos, consistency</td>
+</tr>
+<tr class="odd">
+<td>R Reviewer</td>
+<td><code>.claude/agents/r-reviewer.md</code></td>
+<td>R code quality, reproducibility</td>
+</tr>
+<tr class="even">
+<td>Domain Reviewer</td>
+<td><code>.claude/agents/domain-reviewer.md</code></td>
+<td>Your domain-specific substance review</td>
+</tr>
+<tr class="odd">
+<td>Replication Auditor</td>
+<td><code>.claude/agents/replication-auditor.md</code></td>
+<td>Replication package validation</td>
+</tr>
+<tr class="even">
+<td>Verifier</td>
+<td><code>.claude/agents/verifier.md</code></td>
+<td>Task completion verification</td>
+</tr>
+<tr class="odd">
+<td>Slide Auditor</td>
+<td><code>.claude/agents/slide-auditor.md</code></td>
+<td>Visual layout, overflow, spacing</td>
+</tr>
+<tr class="even">
+<td>TikZ Reviewer</td>
+<td><code>.claude/agents/tikz-reviewer.md</code></td>
+<td>Diagram visual quality</td>
+</tr>
+<tr class="odd">
+<td>Pedagogy Reviewer</td>
+<td><code>.claude/agents/pedagogy-reviewer.md</code></td>
+<td>Narrative arc, notation clarity</td>
+</tr>
+<tr class="even">
+<td>Beamer Translator</td>
+<td><code>.claude/agents/beamer-translator.md</code></td>
+<td>Beamer to Quarto translation</td>
+</tr>
+<tr class="odd">
+<td>Quarto Critic</td>
+<td><code>.claude/agents/quarto-critic.md</code></td>
+<td>Adversarial Quarto QA</td>
+</tr>
+<tr class="even">
+<td>Quarto Fixer</td>
+<td><code>.claude/agents/quarto-fixer.md</code></td>
+<td>Applies critic’s fixes</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="all-26-skills" class="level2">
+<h2 class="anchored" data-anchor-id="all-26-skills">All 26 Skills</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 40%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Skill</th>
+<th>Directory</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/compile-latex</code></td>
+<td><code>.claude/skills/compile-latex/</code></td>
+<td>XeLaTeX 3-pass compilation</td>
+</tr>
+<tr class="even">
+<td><code>/deploy</code></td>
+<td><code>.claude/skills/deploy/</code></td>
+<td>Quarto render + GitHub Pages sync</td>
+</tr>
+<tr class="odd">
+<td><code>/proofread</code></td>
+<td><code>.claude/skills/proofread/</code></td>
+<td>Run proofreading agent</td>
+</tr>
+<tr class="even">
+<td><code>/visual-audit</code></td>
+<td><code>.claude/skills/visual-audit/</code></td>
+<td>Run layout audit agent</td>
+</tr>
+<tr class="odd">
+<td><code>/review-r</code></td>
+<td><code>.claude/skills/review-r/</code></td>
+<td>Run R code review agent</td>
+</tr>
+<tr class="even">
+<td><code>/validate-bib</code></td>
+<td><code>.claude/skills/validate-bib/</code></td>
+<td>Bibliography validation</td>
+</tr>
+<tr class="odd">
+<td><code>/slide-excellence</code></td>
+<td><code>.claude/skills/slide-excellence/</code></td>
+<td>Combined multi-agent review</td>
+</tr>
+<tr class="even">
+<td><code>/devils-advocate</code></td>
+<td><code>.claude/skills/devils-advocate/</code></td>
+<td>Design challenge questions</td>
+</tr>
+<tr class="odd">
+<td><code>/create-lecture</code></td>
+<td><code>.claude/skills/create-lecture/</code></td>
+<td>Full lecture creation</td>
+</tr>
+<tr class="even">
+<td><code>/commit</code></td>
+<td><code>.claude/skills/commit/</code></td>
+<td>Stage, commit, PR, and merge</td>
+</tr>
+<tr class="odd">
+<td><code>/lit-review</code></td>
+<td><code>.claude/skills/lit-review/</code></td>
+<td>Literature search and synthesis</td>
+</tr>
+<tr class="even">
+<td><code>/research-ideation</code></td>
+<td><code>.claude/skills/research-ideation/</code></td>
+<td>Research questions and strategies</td>
+</tr>
+<tr class="odd">
+<td><code>/interview-me</code></td>
+<td><code>.claude/skills/interview-me/</code></td>
+<td>Interactive research interview</td>
+</tr>
+<tr class="even">
+<td><code>/review-paper</code></td>
+<td><code>.claude/skills/review-paper/</code></td>
+<td>Manuscript review</td>
+</tr>
+<tr class="odd">
+<td><code>/data-analysis</code></td>
+<td><code>.claude/skills/data-analysis/</code></td>
+<td>End-to-end R analysis</td>
+</tr>
+<tr class="even">
+<td><code>/learn</code></td>
+<td><code>.claude/skills/learn/</code></td>
+<td>Extract discoveries into persistent skills</td>
+</tr>
+<tr class="odd">
+<td><code>/context-status</code></td>
+<td><code>.claude/skills/context-status/</code></td>
+<td>Show session health and context usage</td>
+</tr>
+<tr class="even">
+<td><code>/econometrics-check</code></td>
+<td><code>.claude/skills/econometrics-check/</code></td>
+<td>4-phase causal inference audit</td>
+</tr>
+<tr class="odd">
+<td><code>/audit-replication</code></td>
+<td><code>.claude/skills/audit-replication/</code></td>
+<td>Replication package validation</td>
+</tr>
+<tr class="even">
+<td><code>/create-talk</code></td>
+<td><code>.claude/skills/create-talk/</code></td>
+<td>Generate Beamer talk from paper</td>
+</tr>
+<tr class="odd">
+<td><code>/data-deposit</code></td>
+<td><code>.claude/skills/data-deposit/</code></td>
+<td>AEA Data Editor compliance</td>
+</tr>
+<tr class="even">
+<td><code>/draft-paper</code></td>
+<td><code>.claude/skills/draft-paper/</code></td>
+<td>Draft paper sections</td>
+</tr>
+<tr class="odd">
+<td><code>/paper-excellence</code></td>
+<td><code>.claude/skills/paper-excellence/</code></td>
+<td>Combined multi-agent paper review</td>
+</tr>
+<tr class="even">
+<td><code>/pre-analysis-plan</code></td>
+<td><code>.claude/skills/pre-analysis-plan/</code></td>
+<td>Draft pre-analysis plan</td>
+</tr>
+<tr class="odd">
+<td><code>/respond-to-referee</code></td>
+<td><code>.claude/skills/respond-to-referee/</code></td>
+<td>Point-by-point referee response</td>
+</tr>
+<tr class="even">
+<td><code>/target-journal</code></td>
+<td><code>.claude/skills/target-journal/</code></td>
+<td>Journal targeting + submission strategy</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="all-17-rules" class="level2">
+<h2 class="anchored" data-anchor-id="all-17-rules">All 17 Rules</h2>
+<p><strong>Always-on</strong> (load every session):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Plan-First Workflow</td>
+<td><code>plan-first-workflow.md</code></td>
+<td>Plan mode + context preservation</td>
+</tr>
+<tr class="even">
+<td>Orchestrator Protocol</td>
+<td><code>orchestrator-protocol.md</code></td>
+<td>Contractor mode loop</td>
+</tr>
+<tr class="odd">
+<td>Session Logging</td>
+<td><code>session-logging.md</code></td>
+<td>Three logging triggers</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Path-scoped</strong> (load only when working on matching files):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>File</th>
+<th>Triggers On</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Verification Protocol</td>
+<td><code>verification-protocol.md</code></td>
+<td><code>.tex</code>, <code>.qmd</code>, <code>docs/</code></td>
+</tr>
+<tr class="even">
+<td>Single Source of Truth</td>
+<td><code>single-source-of-truth.md</code></td>
+<td><code>Figures/</code>, <code>.tex</code>, <code>.qmd</code></td>
+</tr>
+<tr class="odd">
+<td>Quality Gates</td>
+<td><code>quality-gates.md</code></td>
+<td><code>.tex</code>, <code>.qmd</code>, <code>*.R</code></td>
+</tr>
+<tr class="even">
+<td>R Code Conventions</td>
+<td><code>r-code-conventions.md</code></td>
+<td><code>*.R</code></td>
+</tr>
+<tr class="odd">
+<td>TikZ Quality</td>
+<td><code>tikz-visual-quality.md</code></td>
+<td><code>.tex</code></td>
+</tr>
+<tr class="even">
+<td>Beamer-Quarto Sync</td>
+<td><code>beamer-quarto-sync.md</code></td>
+<td><code>.tex</code>, <code>.qmd</code></td>
+</tr>
+<tr class="odd">
+<td>PDF Processing</td>
+<td><code>pdf-processing.md</code></td>
+<td><code>master_supporting_docs/</code></td>
+</tr>
+<tr class="even">
+<td>Proofreading Protocol</td>
+<td><code>proofreading-protocol.md</code></td>
+<td><code>.tex</code>, <code>.qmd</code>, <code>quality_reports/</code></td>
+</tr>
+<tr class="odd">
+<td>No Pause</td>
+<td><code>no-pause-beamer.md</code></td>
+<td><code>.tex</code></td>
+</tr>
+<tr class="even">
+<td>Replication Protocol</td>
+<td><code>replication-protocol.md</code></td>
+<td><code>*.R</code></td>
+</tr>
+<tr class="odd">
+<td>Knowledge Base</td>
+<td><code>knowledge-base-template.md</code></td>
+<td><code>.tex</code>, <code>.qmd</code>, <code>*.R</code></td>
+</tr>
+<tr class="even">
+<td>Orchestrator Research</td>
+<td><code>orchestrator-research.md</code></td>
+<td><code>*.R</code>, <code>explorations/</code></td>
+</tr>
+<tr class="odd">
+<td>Exploration Folder</td>
+<td><code>exploration-folder-protocol.md</code></td>
+<td><code>explorations/</code></td>
+</tr>
+<tr class="even">
+<td>Exploration Fast-Track</td>
+<td><code>exploration-fast-track.md</code></td>
+<td><code>explorations/</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="all-7-hooks-1" class="level2">
+<h2 class="anchored" data-anchor-id="all-7-hooks-1">All 7 Hooks</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 53%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Hook</th>
+<th>Type</th>
+<th>Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Session log reminder</td>
+<td>Stop (command)</td>
+<td><code>.claude/hooks/log-reminder.py</code></td>
+</tr>
+<tr class="even">
+<td>Desktop notification</td>
+<td>Notification (command)</td>
+<td><code>.claude/hooks/notify.sh</code></td>
+</tr>
+<tr class="odd">
+<td>File protection</td>
+<td>PreToolUse (command)</td>
+<td><code>.claude/hooks/protect-files.sh</code></td>
+</tr>
+<tr class="even">
+<td>Context state capture</td>
+<td>PreCompact (command)</td>
+<td><code>.claude/hooks/pre-compact.py</code></td>
+</tr>
+<tr class="odd">
+<td>Context restoration</td>
+<td>SessionStart[compact|resume] (command)</td>
+<td><code>.claude/hooks/post-compact-restore.py</code></td>
+</tr>
+<tr class="even">
+<td>Context monitor</td>
+<td>PostToolUse[Bash|Task] (command)</td>
+<td><code>.claude/hooks/context-monitor.py</code></td>
+</tr>
+<tr class="odd">
+<td>Verification reminder</td>
+<td>PostToolUse[Write|Edit] (command)</td>
+<td><code>.claude/hooks/verify-reminder.py</code></td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Built with <a href="https://quarto.org">Quarto</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

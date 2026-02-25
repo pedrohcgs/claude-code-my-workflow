@@ -50,21 +50,14 @@ body {
   line-height: 1.75;
 }
 
-// ── WIP notice ──
-#title-block-header {
-  position: relative;
+// ── Navbar ──
+.navbar {
+  border-bottom: 2px solid $gold;
+}
 
-  &::before {
-    content: 'Work in progress — I keep updating this as I learn new things.';
-    font-weight: 700;
-    display: block;
-    background: #fffbf0;
-    border: 1px solid #e8dcc8;
-    padding: 0.7em 1.1em;
-    margin-bottom: 1.5em;
-    font-size: 0.9em;
-    color: #6b5a30;
-  }
+.navbar-brand {
+  font-weight: 700;
+  color: $navy !important;
 }
 
 // ── Title ──

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -2578,7 +2578,7 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td>Multi-agent workflows</td>
-<td>10 specialized agents for proofreading, layout, pedagogy, code review</td>
+<td>12 specialized agents for proofreading, layout, econometrics, code review, replication</td>
 </tr>
 <tr class="odd">
 <td>Quality gates</td>
@@ -2596,7 +2596,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This workflow was developed over 6+ sessions building a PhD course on Causal Panel Data. The result: 6 complete lectures (140+ slides each), with Beamer + Quarto versions, interactive Plotly charts, TikZ diagrams, and R replication scripts — all managed by the orchestrator and reviewed by 10 specialized agents across 5 quality dimensions.</p>
+<p>This workflow was developed over 6+ sessions building a PhD course on Causal Panel Data. The result: 6 complete lectures (140+ slides each), with Beamer + Quarto versions, interactive Plotly charts, TikZ diagrams, and R replication scripts — all managed by the orchestrator and reviewed by 12 specialized agents across 5 quality dimensions.</p>
 </div>
 </div>
 </section>
@@ -4333,7 +4333,7 @@ Decision point (1-2 hours):
 </section>
 <section id="pattern-11-research-skills" class="level3" data-number="5.9.3">
 <h3 data-number="5.9.3" class="anchored" data-anchor-id="pattern-11-research-skills"><span class="header-section-number">5.9.3</span> Pattern 11: Research Skills</h3>
-<p>Five skills support the research workflow beyond slide development:</p>
+<p>Fourteen skills support the research workflow beyond slide development:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 21%">
@@ -4373,9 +4373,67 @@ Decision point (1-2 hours):
 <td>End-to-end R analysis: explore, regress, produce publication-ready output</td>
 <td>Empirical analysis phase</td>
 </tr>
+<tr class="even">
+<td><code>/econometrics-check [file]</code></td>
+<td>Sequential 4-phase causal inference audit (claim → design → inference → polish)</td>
+<td>After empirical content is drafted</td>
+</tr>
+<tr class="odd">
+<td><code>/draft-paper [section]</code></td>
+<td>Draft paper sections with proper structure and academic style</td>
+<td>Writing phase</td>
+</tr>
+<tr class="even">
+<td><code>/respond-to-referee [report]</code></td>
+<td>Point-by-point referee response</td>
+<td>After receiving referee reports</td>
+</tr>
+<tr class="odd">
+<td><code>/pre-analysis-plan [spec]</code></td>
+<td>Draft pre-analysis plan (AEA/OSF/EGAP format)</td>
+<td>Before data collection or analysis</td>
+</tr>
+<tr class="even">
+<td><code>/data-deposit</code></td>
+<td>AEA Data Editor compliance check</td>
+<td>Before journal submission</td>
+</tr>
+<tr class="odd">
+<td><code>/audit-replication [dir]</code></td>
+<td>Validate replication package completeness</td>
+<td>Before data deposit</td>
+</tr>
+<tr class="even">
+<td><code>/target-journal [paper]</code></td>
+<td>Journal targeting + submission strategy</td>
+<td>When choosing where to submit</td>
+</tr>
+<tr class="odd">
+<td><code>/create-talk [format]</code></td>
+<td>Generate Beamer talk from paper</td>
+<td>Conference preparation</td>
+</tr>
+<tr class="even">
+<td><code>/paper-excellence [file]</code></td>
+<td>Combined multi-agent paper review (econometrics + proofreading + domain)</td>
+<td>Before submission</td>
+</tr>
 </tbody>
 </table>
 <p>These skills produce structured reports saved to <code>quality_reports/</code>. The <code>/data-analysis</code> skill also generates R scripts (saved to <code>scripts/R/</code>) and runs the r-reviewer agent automatically.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Econometrics Check: 4-Phase Sequential Audit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>/econometrics-check</code> skill runs the econometrician agent, which audits causal inference through 4 sequential phases with early stopping. Unlike <code>/review-paper</code> (which gives broad manuscript feedback), <code>/econometrics-check</code> focuses exclusively on identification, estimation, and inference. The two are complementary — run <code>/review-paper</code> for structure and writing, <code>/econometrics-check</code> for causal validity.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -4386,7 +4444,7 @@ Decision point (1-2 hours):
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A typical research project might flow: <code>/research-ideation</code> (what to study?) → <code>/interview-me</code> (formalize the idea) → <code>/lit-review</code> (what’s been done?) → <code>/data-analysis</code> (run the analysis) → <code>/review-paper</code> (check the draft).</p>
+<p>A typical research project might flow: <code>/research-ideation</code> (what to study?) → <code>/interview-me</code> (formalize the idea) → <code>/lit-review</code> (what’s been done?) → <code>/data-analysis</code> (run the analysis) → <code>/econometrics-check</code> (validate causal design) → <code>/review-paper</code> (check the draft) → <code>/target-journal</code> (where to submit?).</p>
 </div>
 </div>
 </section>
@@ -4750,6 +4808,16 @@ Decision point (1-2 hours):
 <td><code>.claude/agents/domain-reviewer.md</code></td>
 <td>Your domain-specific review</td>
 </tr>
+<tr class="odd">
+<td>Econometrician</td>
+<td><code>.claude/agents/econometrician.md</code></td>
+<td>Sequential 4-phase causal inference audit</td>
+</tr>
+<tr class="even">
+<td>Replication Auditor</td>
+<td><code>.claude/agents/replication-auditor.md</code></td>
+<td>Replication package validation</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -4873,6 +4941,51 @@ Decision point (1-2 hours):
 <td><code>/context-status</code></td>
 <td><code>.claude/skills/context-status/</code></td>
 <td>Show session health and context usage</td>
+</tr>
+<tr class="even">
+<td><code>/econometrics-check</code></td>
+<td><code>.claude/skills/econometrics-check/</code></td>
+<td>4-phase causal inference audit</td>
+</tr>
+<tr class="odd">
+<td><code>/audit-replication</code></td>
+<td><code>.claude/skills/audit-replication/</code></td>
+<td>Replication package validation</td>
+</tr>
+<tr class="even">
+<td><code>/create-talk</code></td>
+<td><code>.claude/skills/create-talk/</code></td>
+<td>Generate Beamer talk from paper</td>
+</tr>
+<tr class="odd">
+<td><code>/data-deposit</code></td>
+<td><code>.claude/skills/data-deposit/</code></td>
+<td>AEA Data Editor compliance</td>
+</tr>
+<tr class="even">
+<td><code>/draft-paper</code></td>
+<td><code>.claude/skills/draft-paper/</code></td>
+<td>Draft paper sections</td>
+</tr>
+<tr class="odd">
+<td><code>/paper-excellence</code></td>
+<td><code>.claude/skills/paper-excellence/</code></td>
+<td>Combined multi-agent paper review</td>
+</tr>
+<tr class="even">
+<td><code>/pre-analysis-plan</code></td>
+<td><code>.claude/skills/pre-analysis-plan/</code></td>
+<td>Draft pre-analysis plan (AEA/OSF/EGAP)</td>
+</tr>
+<tr class="odd">
+<td><code>/respond-to-referee</code></td>
+<td><code>.claude/skills/respond-to-referee/</code></td>
+<td>Point-by-point referee response</td>
+</tr>
+<tr class="even">
+<td><code>/target-journal</code></td>
+<td><code>.claude/skills/target-journal/</code></td>
+<td>Journal targeting + submission strategy</td>
 </tr>
 </tbody>
 </table>

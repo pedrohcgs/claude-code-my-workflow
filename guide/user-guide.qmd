@@ -1,0 +1,365 @@
+---
+title: "User Guide"
+subtitle: "What You Can Do with the Clo-Author"
+---
+
+# How It Works
+
+You describe what you want in plain English. Claude handles the rest.
+
+| You Do | Happens Automatically |
+|--------|----------------------|
+| Describe what you want | Claude selects and runs the right skills |
+| Approve plans | Orchestrator coordinates agents |
+| Review final output | Hooks fire on events (edit, save, compact) |
+| Say "commit" when ready | Rules load based on files you touch |
+
+For complex or ambiguous tasks, Claude may ask 3--5 clarifying questions to create a **requirements specification** before planning. This catches ambiguity early and reduces rework. Each requirement is tagged MUST/SHOULD/MAY, and each aspect is marked CLEAR/ASSUMED/BLOCKED.
+
+---
+
+# Research Workflow
+
+A typical research project flows through these stages:
+
+```
+/research-ideation → /interview-me → /lit-review → /data-analysis
+    → /econometrics-check → /draft-paper → /review-paper
+    → /paper-excellence → /target-journal → submission
+```
+
+You can enter at any stage. Each skill produces structured output and saves reports to `quality_reports/`.
+
+## Writing Your Paper
+
+### `/draft-paper [section]`
+
+Drafts paper sections with proper economics structure:
+
+- **Introduction**: contribution paragraph within first 2 pages, effect sizes stated, clear identification preview
+- **Empirical Strategy**: per-design template (DiD, IV, RDD, etc.) with assumption discussion
+- **Results**: proper table/figure references, statistical vs economic significance
+- **Notation protocol**: $Y_{it}$, $D_{it}$, $ATT(g,t)$ --- consistent throughout
+
+Anti-hedging rules enforced: no "interestingly", no "it is worth noting", no "arguably".
+
+### `/review-paper [file]`
+
+Simulates a top-journal referee. Reviews structure, writing quality, and manuscript completeness. Complements `/econometrics-check` (which focuses exclusively on causal validity).
+
+### `/respond-to-referee [report]`
+
+Classifies each referee comment into:
+
+- **NEW ANALYSIS** --- requires new estimation or data work
+- **CLARIFICATION** --- text revision sufficient
+- **DISAGREE** --- diplomatic pushback needed (flagged for your review)
+- **MINOR** --- typos, formatting
+
+Produces a point-by-point response letter with diplomatic disagreement protocol.
+
+## Running Analysis
+
+### `/data-analysis [dataset]`
+
+End-to-end R analysis: explore data, run regressions, produce publication-ready output. Generates R scripts (saved to `scripts/R/`) and runs the r-reviewer agent automatically.
+
+### `/econometrics-check [file]`
+
+The centerpiece agent. Validates causal inference through **4 sequential phases** with early stopping:
+
+| Phase | What It Does |
+|-------|-------------|
+| **1. What's the Claim?** | Identify the design (DiD/IV/RDD/SC/Event Study), estimand, treatment, control. Early stops if no causal claims. |
+| **2. Core Design Validity** | Design-specific assumption checks (3--5 critical items) plus mandatory sanity check --- sign, magnitude, dynamics. Early stops on critical issues. |
+| **3. Inference** | SE clustering, few-clusters correction, multiple testing, code-theory alignment with package-specific checks. |
+| **4. Polish** | Robustness (Oster bounds, placebos, alternative specs), assumption stress test, citation fidelity. Only runs if Phases 2--3 pass. |
+
+**Package-flexible:** Recommends best practices (Callaway-Sant'Anna for staggered DiD, `fixest` for panels, `rdrobust` for RDD) but accepts and validates alternative packages without flagging them as errors.
+
+## Preparing for Submission
+
+### `/pre-analysis-plan [spec]`
+
+Drafts a pre-analysis plan in AEA/OSF/EGAP format. Use before data collection or analysis begins.
+
+### `/audit-replication [dir]`
+
+Validates your replication package against the AEA Data Editor standard:
+
+1. Package inventory --- all scripts, data files, documentation present
+2. Dependency verification --- R package versions recorded
+3. Data provenance --- sources documented, access instructions for restricted data
+4. Execution verification --- runs scripts, checks for errors
+5. Output cross-reference --- every table/figure traced to a script
+6. README completeness --- AEA-format README with numbered script descriptions
+
+### `/data-deposit`
+
+AEA Data Editor compliance check. Run before journal submission.
+
+### `/target-journal [paper]`
+
+Given your paper (or abstract), produces a ranked journal list with fit rationale, formatting requirements, submission checklist, and strategic notes (editor preferences, desk rejection risk).
+
+## Giving a Talk
+
+### `/create-talk [format]`
+
+Generates Beamer `.tex` talks derived from your paper in 4 formats:
+
+| Format | Slides | Duration | Content |
+|--------|--------|----------|---------|
+| Job Market | 40--50 | 45--60 min | Full story, all results, mechanism, robustness |
+| Seminar | 25--35 | 30--45 min | Motivation, main result, 2 robustness checks |
+| Short | 10--15 | 15 min | Question, method, key result, implication |
+| Lightning | 3--5 | 5 min | Hook, result, so-what |
+
+For details on Beamer environments and multi-agent slide review, see the [Architecture Reference](architecture.qmd#additional-workflows-slides-lectures).
+
+---
+
+# Quality Gates
+
+Every file gets a quality score from 0 to 100. The orchestrator manages this automatically --- you just see the result.
+
+| Score | Gate | Applies To |
+|-------|------|------------|
+| **95+** | Excellence | Aspirational --- ready for top-5 |
+| **90+** | PR | Paper, R scripts (blocking) |
+| **80+** | Commit | Paper, R scripts (blocking) |
+| **< 80** | Blocked | Must fix before committing |
+| -- | Advisory | Talks (reported, non-blocking) |
+
+### How Scores Are Calculated
+
+Points are deducted for issues:
+
+| Issue | Deduction | Why Critical |
+|-------|-----------|-------------|
+| Equation overflow | -20 | Math cut off = unusable |
+| Broken citation | -15 | Academic integrity |
+| Equation typo | -10 | Teaches wrong content |
+| Text overflow | -5 | Content cut off |
+| Label overlap | -5 | Diagram illegible |
+| Notation inconsistency | -3 | Student confusion |
+
+---
+
+# Exploration Workflow {#sec-exploration}
+
+The `explorations/` folder provides a structured sandbox for experimental work.
+
+**The problem:** Without structure, experimental code scatters across the repository. After a week of exploration, nobody remembers which version was the good one.
+
+**The solution:** All experimental work goes into `explorations/` first:
+
+```
+explorations/
+├── [active-project]/
+│   ├── README.md           # Goal, hypotheses, status
+│   ├── R/                  # Code iterations (_v1, _v2)
+│   └── output/             # Results
+└── ARCHIVE/
+    ├── completed_[name]/   # Graduated to production
+    └── abandoned_[name]/   # Documented why stopped
+```
+
+### Fast-Track vs Plan-First
+
+| Question | Answer | Workflow |
+|----------|--------|----------|
+| "Will this ship?" | YES | Plan-First (80/100 quality) |
+| "Am I testing an idea?" | YES | Fast-Track (60/100 quality) |
+| "Does this improve the project?" | NO | Don't build it |
+
+Fast-track explorations skip formal planning. A 2-minute **research value check** gates the work. The **kill switch** is explicit: archive with a one-paragraph explanation and move on. No guilt, no sunk cost.
+
+---
+
+# Self-Improvement
+
+## Quick Corrections: [LEARN] Tags
+
+Every correction gets tagged for future reference in MEMORY.md:
+
+```markdown
+- [LEARN:notation] T_t = 1{t=2} is deterministic -> use T_i in {1,2}
+- [LEARN:citation] Post-LASSO is Belloni (2013), NOT Belloni (2014)
+- [LEARN:r-code] Package X: ALWAYS include intercept in design matrix
+```
+
+These tags persist across sessions. When Claude encounters a similar situation, it checks memory first.
+
+## Skill Extraction: /learn
+
+For discoveries that deserve more than a one-line tag, use `/learn` to create a full skill. The `/learn` skill guides you through: evaluate (was this non-obvious?) → check existing skills → create skill → quality gate.
+
+| Situation | Use |
+|-----------|-----|
+| One-liner fix | `[LEARN:category]` tag in MEMORY.md |
+| Multi-step workflow | `/learn` to create full skill |
+| Error + root cause + solution | `/learn` if reusable, `[LEARN]` if not |
+| Package quirk | `/learn` if affects multiple projects |
+
+---
+
+# Customizing for Your Domain
+
+## Domain Reviewer
+
+The template includes `domain-reviewer.md` --- a skeleton for building a substance reviewer specific to your field. It uses a **5-lens framework**:
+
+| Lens | What It Checks | Example (Economics) | Example (Physics) |
+|------|---------------|--------------------|--------------------|
+| **Assumption Audit** | Are stated assumptions sufficient? | Is overlap required for ATT? | Is the adiabatic approximation valid here? |
+| **Derivation Check** | Does the math check out? | Do decomposition terms sum? | Do the units balance? |
+| **Citation Fidelity** | Do slides match cited papers? | Is the theorem from the right paper? | Is the experimental setup correctly described? |
+| **Code-Theory Alignment** | Does code implement the formula? | R script matches the slide equation? | Simulation parameters match theory? |
+| **Logic Chain** | Does the reasoning flow? | Can a PhD student follow backwards? | Are prerequisites established? |
+
+To customize, open `.claude/agents/domain-reviewer.md` and fill in your domain's checks for each lens.
+
+## Knowledge Base
+
+The knowledge base (`.claude/rules/knowledge-base-template.md`) provides skeleton tables for:
+
+- **Notation registry** --- every symbol, where it's introduced, and anti-patterns
+- **Applications database** --- datasets, papers, and R packages you reference
+- **Validated design principles** --- what works for your audience
+
+Fill them in as you develop your project --- you don't need everything upfront.
+
+## Creating Custom Skills {#sec-create-skills}
+
+Create a skill when you repeatedly explain the same 3+ step workflow to Claude. Each skill lives in `.claude/skills/[name]/SKILL.md`:
+
+```yaml
+---
+name: your-skill-name
+description: [What it does] + [When to use] + [Key capabilities]
+argument-hint: "[brief hint for user]"
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Task"]
+---
+```
+
+The `description` field determines when Claude loads your skill. Use specific trigger phrases users would actually say.
+
+**Quick start:** Copy `templates/skill-template.md` to `.claude/skills/your-skill-name/SKILL.md` and customize.
+
+---
+
+# All Skills Reference
+
+## Research & Ideation
+
+| Skill | What It Does |
+|-------|-------------|
+| `/lit-review [topic]` | Literature search (top-5, NBER, field journals, SSRN/RePEc) + synthesis |
+| `/research-ideation [topic]` | Research questions from descriptive to causal |
+| `/interview-me [topic]` | Interactive Q&A to formalize a vague idea into a concrete specification |
+
+## Writing
+
+| Skill | What It Does |
+|-------|-------------|
+| `/draft-paper [section]` | Paper sections with proper econ structure |
+| `/proofread [file]` | Grammar, typos, writing quality |
+| `/compile-latex [file]` | 3-pass XeLaTeX + BibTeX |
+
+## Econometrics
+
+| Skill | What It Does |
+|-------|-------------|
+| `/econometrics-check [file]` | Sequential 4-phase causal design audit |
+| `/data-analysis [dataset]` | End-to-end R analysis with publication-ready output |
+| `/review-r [file]` | R code quality + econometric correctness |
+
+## Submission & Deposit
+
+| Skill | What It Does |
+|-------|-------------|
+| `/target-journal [paper]` | Journal targeting + submission strategy |
+| `/respond-to-referee [report]` | Point-by-point referee response |
+| `/data-deposit` | AEA Data Editor compliance check |
+| `/audit-replication [dir]` | Validate replication package |
+| `/pre-analysis-plan [spec]` | Draft PAP (AEA/OSF/EGAP format) |
+
+## Quality Control
+
+| Skill | What It Does |
+|-------|-------------|
+| `/paper-excellence [file]` | Multi-agent paper review (parallel agents + scoring) |
+| `/review-paper [file]` | Top-journal referee simulation |
+| `/validate-bib` | Cross-reference citations |
+
+## Presentations
+
+| Skill | What It Does |
+|-------|-------------|
+| `/create-talk [format]` | Generate Beamer talk from paper (4 formats) |
+| `/visual-audit [file]` | Slide layout audit |
+| `/devils-advocate [file]` | Challenge presentation design |
+| `/slide-excellence [file]` | Combined multi-agent slide review |
+| `/create-lecture [topic]` | Full lecture creation workflow |
+
+## Infrastructure
+
+| Skill | What It Does |
+|-------|-------------|
+| `/commit [msg]` | Stage, commit, PR, merge |
+| `/learn` | Extract session discoveries into persistent skills |
+| `/context-status` | Show session health and context usage |
+| `/deploy` | Build and deploy to GitHub Pages |
+
+---
+
+# Troubleshooting
+
+### LaTeX Won't Compile
+
+**Symptom:** `xelatex` errors or missing packages.
+
+1. Check you have XeLaTeX installed: `which xelatex`
+2. Ensure `TEXINPUTS` includes `Preambles/`: the `/compile-latex` skill handles this
+3. Missing package? Install via TeX Live: `tlmgr install [package]`
+
+### Hooks Not Firing
+
+**Symptom:** No context warnings, no verification reminders.
+
+1. Check hooks are configured in `.claude/settings.json`
+2. Ensure Python 3 is available: `which python3`
+3. Check hook file permissions: `ls -la .claude/hooks/`
+
+### Claude Ignores Rules
+
+**Symptom:** Claude doesn't follow conventions in `.claude/rules/`.
+
+1. Rules use `paths:` frontmatter --- check the path matches your files
+2. Too many rules? Claude follows ~150 instructions reliably. Consolidate.
+3. Try: "Read `.claude/rules/[rule].md` and follow it for this task"
+
+### Context Lost After Compaction
+
+**Symptom:** Claude forgets what you were working on.
+
+1. Point Claude to the plan: "Read `quality_reports/plans/[latest].md`"
+2. Check session log: "Read `quality_reports/session_logs/[latest].md`"
+3. The `post-compact-restore.py` hook should print recovery info automatically
+
+### Quality Score Too Low
+
+**Symptom:** Score stuck below 80, can't commit.
+
+1. Run `/paper-excellence` to get detailed issue breakdown
+2. Fix critical issues first (they cost -10 to -20 points each)
+3. Ask Claude: "What are the remaining critical issues?"
+
+### Skills Not Auto-Invoked
+
+**Symptom:** Claude doesn't use skills when you describe a task.
+
+1. Be explicit in your request: "Review my paper for econometric validity"
+2. Check skill has auto-invocation enabled (no `disable-model-invocation: true`)
+3. Skill descriptions help Claude know when to use them --- check they're clear
