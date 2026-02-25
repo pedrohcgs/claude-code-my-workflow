@@ -4,7 +4,7 @@
 
 ---
 
-## The Loop
+## The Research Loop
 
 ```
 Your instruction
@@ -20,63 +20,93 @@ Repeat
 
 ---
 
-## I Ask You When
+## Key Skills by Research Stage
 
-- **Design forks:** "Option A (fast) vs. Option B (robust). Which?"
-- **Code ambiguity:** "Spec unclear on X. Assume Y?"
-- **Replication edge case:** "Just missed tolerance. Investigate?"
-- **Scope question:** "Also refactor Y while here, or focus on X?"
+### Ideation & Literature
+| Command | What It Does |
+|---------|-------------|
+| `/lit-review [topic]` | Literature search + synthesis |
+| `/research-ideation [topic]` | Research questions + strategies |
+| `/interview-me [topic]` | Interactive research interview |
+
+### Writing & Drafting
+| Command | What It Does |
+|---------|-------------|
+| `/draft-paper [section]` | Draft paper sections (intro, results, etc.) |
+| `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
+| `/proofread [file]` | Grammar/typo/writing review |
+
+### Econometrics & Analysis
+| Command | What It Does |
+|---------|-------------|
+| `/econometrics-check [file]` | Causal inference design audit |
+| `/data-analysis [dataset]` | End-to-end R analysis |
+| `/review-r [file]` | R code quality review |
+| `/validate-bib` | Cross-reference citations |
+
+### Quality & Review
+| Command | What It Does |
+|---------|-------------|
+| `/paper-excellence [file]` | Multi-agent paper review (primary score) |
+| `/review-paper [file]` | Manuscript review (referee simulation) |
+| `/visual-audit [file]` | Layout audit |
+
+### Submission & Deposit
+| Command | What It Does |
+|---------|-------------|
+| `/target-journal [paper]` | Journal targeting + strategy |
+| `/respond-to-referee [report]` | Point-by-point response |
+| `/data-deposit` | AEA Data Editor compliance |
+| `/audit-replication [dir]` | Validate replication package |
+| `/pre-analysis-plan [spec]` | Draft PAP (AEA/OSF/EGAP) |
+
+### Presentations
+| Command | What It Does |
+|---------|-------------|
+| `/create-talk [format]` | Generate Beamer talk (job-market/seminar/short/lightning) |
+| `/devils-advocate [file]` | Challenge talk design |
+
+### Workflow
+| Command | What It Does |
+|---------|-------------|
+| `/commit [msg]` | Stage, commit, PR, merge |
+| `/context-status` | Check context usage + session health |
 
 ---
+
+## Quality Gates
+
+| Score | Paper & R (blocking) | Talks (advisory) |
+|-------|---------------------|------------------|
+| >= 95 | Excellence | - |
+| >= 90 | Ready to submit | - |
+| >= 80 | Ready to commit | - |
+| < 80 | **Blocked** — fix issues | Reported only |
+
+---
+
+## I Ask You When
+
+- **Design forks:** "Option A vs. Option B. Which?"
+- **Identification choice:** "CS DiD vs. Sun-Abraham for this setting?"
+- **Scope question:** "Also run robustness X while here?"
+- **Disagreement with referee:** "DISAGREE classification — please review"
 
 ## I Just Execute When
 
-- Code fix is obvious (bug, pattern application)
-- Verification (tolerance checks, tests, compilation)
+- Code fix is obvious (bug, pattern)
+- Verification (compilation, tolerance checks)
 - Documentation (logs, commits)
 - Plotting (per established standards)
-- Deployment (after you approve, I ship automatically)
-
----
-
-## Quality Gates (No Exceptions)
-
-| Score | Action |
-|-------|--------|
-| >= 80 | Ready to commit |
-| < 80  | Fix blocking issues |
-
----
-
-## Non-Negotiables (Customize These)
-
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
-
----
-
-## Preferences
-
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
-**Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
 
 ---
 
 ## Exploration Mode
 
-For experimental work, use the **Fast-Track** workflow:
+For experimental work:
 - Work in `explorations/` folder
 - 60/100 quality threshold (vs. 80/100 for production)
-- No plan needed — just a research value check (2 min)
+- No plan needed — just a research value check
 - See `.claude/rules/exploration-fast-track.md`
 
 ---

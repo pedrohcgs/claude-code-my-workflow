@@ -25,10 +25,19 @@ paths:
 - Default parameters, no magic numbers
 - Named return values (lists or tibbles)
 
-## 3. Domain Correctness
+## 3. Domain Correctness (Applied Econometrics)
 
-<!-- Customize for your field's known pitfalls -->
-- Verify estimator implementations match slide formulas
+- Verify estimator implementations match paper equations exactly
+- Check estimand: ATT vs ATE vs LATE — does the code produce what the paper claims?
+- Clustering level must match treatment assignment unit (not individual if treatment is at group level)
+- For staggered DiD: NEVER use TWFE without checking for negative weights / heterogeneous TE bias
+  - Use `did::att_gt()` (Callaway-Sant'Anna), `fastdid`, `fixest::sunab()`, or `did2s` instead
+  - If TWFE is used, must include Goodman-Bacon decomposition or de Chaisemartin-D'Haultfoeuille diagnostics
+- For IV: ALWAYS report first-stage F-statistic; flag if < 10 (prefer Montiel Olea-Pflueger effective F)
+- For RDD: ALWAYS run `rddensity` (McCrary test) before `rdrobust`; check bandwidth is MSE-optimal or justified
+- For event studies: use `fixest::i()` with explicit reference period; check pre-trend coefficients
+- `did::att_gt()` requires `control_group = "nevertreated"` or `"notyettreated"` — document choice
+- Standard errors: `fixest` defaults to appropriate cluster-robust; verify `lm()` scripts use `sandwich` or `clubSandwich`
 - Check known package bugs (document below in Common Pitfalls)
 
 ## 4. Visual Identity
@@ -68,11 +77,20 @@ saveRDS(result, file.path(out_dir, "descriptive_name.rds"))
 
 ## 6. Common Pitfalls
 
-<!-- Add your field-specific pitfalls here -->
 | Pitfall | Impact | Prevention |
 |---------|--------|------------|
 | Missing `bg = "transparent"` | White boxes on slides | Always include in ggsave() |
 | Hardcoded paths | Breaks on other machines | Use relative paths |
+| TWFE with staggered DiD + heterogeneous TE | Biased ATT estimate, negative weights | Use `did` (CS), `fastdid`, or `fixest::sunab()` |
+| Clustering at individual level when treatment is at group level | SEs too small, over-rejection | Cluster at treatment assignment unit |
+| Wild bootstrap not used with few clusters ($\leq 50$) | Invalid inference | Use `fwildclusterboot::boottest()` or `fixest::feols(..., vcov = ~unit)` with `boottest` |
+| RDD without McCrary density test | Invalid continuity assumption | Always run `rddensity::rddensity()` first |
+| Synthetic control without permutation inference | No valid p-values | Run placebo for every donor unit, compute RMSPE ratios |
+| Event study binning endpoints without documentation | Masks pre-trends or treatment dynamics | Use `fixest::i(rel_time, ref = -1)` with explicit bin-and-label |
+| IV with F < 10 using standard Wald CI | Size distortion under weak instruments | Report Anderson-Rubin CI or use `fixest` tF procedure |
+| `lm()` for panel data | Wrong SEs, slow, no FE absorption | Use `fixest::feols()` for any panel specification |
+| `feols(..., se = "cluster")` (deprecated) | May not work in future versions | Use `feols(..., cluster = ~unit)` |
+| Missing first-stage report in IV | Referee red flag | Always report and interpret first stage |
 
 ## 7. Line Length & Mathematical Exceptions
 

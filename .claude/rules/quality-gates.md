@@ -1,7 +1,7 @@
 ---
 paths:
-  - "Slides/**/*.tex"
-  - "Quarto/**/*.qmd"
+  - "Paper/**/*.tex"
+  - "Talks/**/*.tex"
   - "scripts/**/*.R"
 ---
 
@@ -10,40 +10,48 @@ paths:
 ## Thresholds
 
 - **80/100 = Commit** -- good enough to save
-- **90/100 = PR** -- ready for deployment
+- **90/100 = PR** -- ready for submission/deployment
 - **95/100 = Excellence** -- aspirational
 
-## Quarto Slides (.qmd)
-
-| Severity | Issue | Deduction |
-|----------|-------|-----------|
-| Critical | Compilation failure | -100 |
-| Critical | Equation overflow | -20 |
-| Critical | Broken citation | -15 |
-| Critical | Typo in equation | -10 |
-| Major | Text overflow | -5 |
-| Major | TikZ label overlap | -5 |
-| Major | Notation inconsistency | -3 |
-| Minor | Font size reduction | -1 per slide |
-| Minor | Long lines (>100 chars) | -1 (EXCEPT documented math formulas) |
-
-## R Scripts (.R)
-
-| Severity | Issue | Deduction |
-|----------|-------|-----------|
-| Critical | Syntax errors | -100 |
-| Critical | Domain-specific bugs | -30 |
-| Critical | Hardcoded absolute paths | -20 |
-| Major | Missing set.seed() | -10 |
-| Major | Missing figure generation | -5 |
-
-## Beamer Slides (.tex)
+## Paper LaTeX (.tex in Paper/)
 
 | Severity | Issue | Deduction |
 |----------|-------|-----------|
 | Critical | XeLaTeX compilation failure | -100 |
 | Critical | Undefined citation | -15 |
 | Critical | Overfull hbox > 10pt | -10 |
+| Critical | Typo in equation | -10 |
+| Major | Undefined reference (\ref) | -5 |
+| Major | Notation inconsistency | -5 |
+| Major | Missing figure/table at referenced path | -5 |
+| Major | Hedging language ("interestingly", "it is worth noting") | -3 |
+| Minor | Overfull hbox 1-10pt | -1 |
+| Minor | Long lines (>100 chars) | -1 (EXCEPT math formulas) |
+
+## R Scripts (.R)
+
+| Severity | Issue | Deduction |
+|----------|-------|-----------|
+| Critical | Syntax errors | -100 |
+| Critical | Domain-specific bugs (wrong clustering, wrong estimand) | -30 |
+| Critical | Hardcoded absolute paths | -20 |
+| Major | Missing set.seed() | -10 |
+| Major | Missing figure/table generation | -5 |
+| Major | Non-reproducible output (no session info) | -5 |
+
+## Talks (Auxiliary — Advisory Only, Non-Blocking)
+
+| Severity | Issue | Deduction |
+|----------|-------|-----------|
+| Critical | XeLaTeX compilation failure | -100 |
+| Major | Slide count outside format range | -10 |
+| Major | Result not in paper (talk-only result) | -10 |
+| Major | Notation mismatch with paper | -5 |
+| Minor | Overfull hbox | -2 |
+| Minor | Dense slide without font reduction | -1 |
+
+Talk scores are reported as "Talk: XX/100" but do **not** block commits or PRs.
+Only the paper and R script scores are blocking.
 
 ## Enforcement
 

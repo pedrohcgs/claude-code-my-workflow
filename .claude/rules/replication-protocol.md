@@ -99,5 +99,38 @@ Save to `quality_reports/LectureNN_replication_report.md`:
 After replication is verified (all targets PASS):
 
 - [ ] Commit replication script: "Replicate [Paper] Table X -- all targets match"
-- [ ] Now extend with course-specific modifications (different estimators, new figures, etc.)
+- [ ] Now extend with new estimators, additional robustness, novel analyses
 - [ ] Each extension builds on the verified baseline
+
+---
+
+## Phase 5: AEA Data Deposit Preparation
+
+After all analyses are complete and paper is ready for submission:
+
+### 5.1 Package Assembly
+- [ ] All scripts numbered sequentially (01_, 02_, ...)
+- [ ] Master script present and tested end-to-end
+- [ ] README in AEA Data Editor format (use `/data-deposit` skill)
+- [ ] No hardcoded absolute paths anywhere
+- [ ] No API keys or credentials in scripts
+- [ ] sessionInfo() or package versions documented
+
+### 5.2 Audit
+- [ ] Run `/audit-replication` skill
+- [ ] All 6 audit checks PASS
+- [ ] Runtime documented (time a fresh R session run)
+
+### 5.3 Deposit
+- [ ] openICPSR deposit: upload package, set DOI
+- [ ] Update paper with Data Availability Statement
+- [ ] Add data citation to `Bibliography_base.bib`
+
+### Audit Tolerance Thresholds
+
+| Item | Standard |
+|------|----------|
+| Table values | Exact match (same R version) |
+| Figure appearance | Visual match + same underlying data |
+| Runtime estimate | Within 2x of documented time |
+| Package version mismatch | Warning (not failure) |
