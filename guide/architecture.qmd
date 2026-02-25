@@ -1,0 +1,628 @@
+---
+title: "Architecture Reference"
+subtitle: "How the Clo-Author System Works"
+---
+
+# System Overview
+
+Claude Code's power comes from five configuration layers that work together:
+
+| Layer | Location | Loaded When |
+|-------|----------|-------------|
+| **CLAUDE.md** | Project root | Every session |
+| **Rules** | `.claude/rules/` | Always-on or path-scoped |
+| **Skills** | `.claude/skills/` | On demand (slash commands) |
+| **Agents** | `.claude/agents/` | On demand (via skills or orchestrator) |
+| **Hooks** | `.claude/settings.json` | On events (automatic) |
+
+Claude reliably follows about **100--150 custom instructions**. Your system prompt uses ~50, leaving ~100--150 for your project. CLAUDE.md and always-on rules share this budget. Path-scoped rules, skills, and agents load on demand and don't compete for this budget.
+
+---
+
+# CLAUDE.md --- The Project Constitution
+
+`CLAUDE.md` is the single most important file. Claude reads it at the start of every session. It should be a **slim constitution** --- short directives and pointers, not comprehensive documentation. Aim for ~120 lines:
+
+- **Core principles** --- 4--5 bullets (plan-first, verify-after, quality gates, LEARN tags)
+- **Folder structure** --- where everything lives
+- **Commands** --- compilation, deployment, key tools
+- **Customization tables** --- Beamer environments, notation conventions
+- **Current state** --- what's done, what's in progress
+- **Skill quick reference** --- table of available slash commands
+
+Move everything else into `.claude/rules/` files with path-scoping so they only load when relevant.
+
+::: {.callout-important}
+## Keep It Lean
+
+If CLAUDE.md exceeds ~150 lines, Claude starts ignoring rules silently. Put detailed standards in path-scoped rules instead.
+:::
+
+---
+
+# Rules --- Auto-Loading Domain Knowledge
+
+Rules are markdown files in `.claude/rules/` that Claude loads automatically. The key design principle is **path-scoping**: rules with a `paths:` YAML frontmatter only load when Claude works on matching files.
+
+## Always-On Rules
+
+Always-on rules (no `paths:` frontmatter) load every session. Keep these few and lean:
+
+```
+.claude/rules/
+├── plan-first-workflow.md       # ~35 lines — plan before you build
+├── orchestrator-protocol.md     # ~40 lines — contractor mode loop
+└── session-logging.md           # ~22 lines — three logging triggers
+```
+
+## Path-Scoped Rules
+
+Path-scoped rules load only when relevant:
+
+```
+.claude/rules/
+├── r-code-conventions.md          # paths: ["**/*.R"]
+├── quality-gates.md               # paths: ["*.tex", "*.qmd", "*.R"]
+├── verification-protocol.md       # paths: ["*.tex", "*.qmd", "docs/"]
+├── replication-protocol.md        # paths: ["scripts/**/*.R"]
+├── exploration-folder-protocol.md # paths: ["explorations/**"]
+├── orchestrator-research.md       # paths: ["scripts/**/*.R", "explorations/**"]
+└── ...14 path-scoped rules total
+```
+
+This design keeps always-on context under ~100 lines while providing rich, domain-specific guidance exactly when Claude needs it.
+
+### Example: Path-Scoped R Code Conventions
+
+```yaml
+---
+paths:
+  - "**/*.R"
+  - "Figures/**/*.R"
+  - "scripts/**/*.R"
+---
+```
+
+```markdown
+# R Code Standards
+
+## Reproducibility
+- set.seed() called ONCE at top (YYYYMMDD format)
+- All packages loaded at top via library()
+- All paths relative to repository root
+```
+
+The `paths:` block means this rule only loads when Claude reads or edits an `.R` file. When Claude works on a `.tex` file, this rule doesn't consume any of the instruction budget.
+
+---
+
+# Agents --- Specialized Reviewers
+
+Each agent is an expert in one dimension of quality. Agents are **read-only** --- they produce reports but never edit files. The orchestrator (or you) decides what to fix.
+
+## Agent Anatomy
+
+Each agent file has YAML frontmatter + detailed instructions:
+
+```markdown
+---
+name: proofreader
+description: Reviews files for grammar, typos, and consistency
+---
+
+# Proofreader Agent
+
+## Role
+You are an expert academic proofreader.
+
+## What to Check
+1. Grammar and spelling errors
+2. Inconsistent notation
+3. Missing or broken citations
+4. Content overflow
+
+## Report Format
+Save findings to: quality_reports/[FILENAME]_report.md
+
+## Severity Levels
+- **Critical:** Math errors, broken citations
+- **Major:** Grammar errors, overflow
+- **Minor:** Style inconsistencies
+```
+
+## All 12 Agents
+
+| Agent | File | Purpose |
+|-------|------|---------|
+| Econometrician | `econometrician.md` | Sequential 4-phase causal inference audit |
+| Proofreader | `proofreader.md` | Grammar, typos, consistency |
+| R Reviewer | `r-reviewer.md` | R code quality, reproducibility |
+| Domain Reviewer | `domain-reviewer.md` | Your domain-specific substance review |
+| Replication Auditor | `replication-auditor.md` | Replication package validation |
+| Verifier | `verifier.md` | Task completion verification |
+| Slide Auditor | `slide-auditor.md` | Visual layout, overflow, spacing |
+| TikZ Reviewer | `tikz-reviewer.md` | Diagram visual quality |
+| Pedagogy Reviewer | `pedagogy-reviewer.md` | Narrative arc, notation clarity |
+| Beamer Translator | `beamer-translator.md` | Beamer to Quarto translation |
+| Quarto Critic | `quarto-critic.md` | Adversarial Quarto QA |
+| Quarto Fixer | `quarto-fixer.md` | Applies critic's fixes |
+
+## Multi-Model Strategy
+
+Not all agents need the same model. Each agent file has a `model:` field in its YAML frontmatter:
+
+| Task Type | Recommended Model | Why |
+|-----------|-------------------|-----|
+| Complex translation | `model: opus` | Needs deep understanding of both formats |
+| Fast, constrained work | `model: sonnet` | Speed matters more than depth |
+| Default | `model: inherit` | Uses whatever the main session runs |
+
+**The principle:** Use Opus for tasks that require holding two large documents in mind simultaneously. Use Sonnet for tasks with clear, bounded scope. Let everything else inherit.
+
+---
+
+# Skills --- Reusable Slash Commands
+
+Skills are multi-step workflows invoked with `/command`. Each skill lives in `.claude/skills/[name]/SKILL.md`:
+
+```yaml
+---
+name: compile-latex
+description: Compile LaTeX with 3-pass XeLaTeX + bibtex
+disable-model-invocation: true
+argument-hint: "[filename without .tex extension]"
+---
+
+# Steps:
+1. cd to Paper/
+2. Run xelatex pass 1
+3. Run bibtex
+4. Run xelatex pass 2
+5. Run xelatex pass 3
+6. Check for errors
+7. Report results
+```
+
+Skills can be invoked two ways: **explicitly** (you type `/proofread Paper/main.tex`) or **automatically** (Claude invokes them when relevant to your request). Most of the time, you just describe what you want and Claude handles the rest.
+
+---
+
+# Hooks --- Automated Enforcement
+
+Hooks live in `.claude/settings.json` and fire on events, regardless of context state. They are reserved for enforcement that **must** survive context compression.
+
+## Design Principles
+
+- Use **command-based hooks** for fast, mechanical checks (file exists? counter threshold?)
+- Use **rules** for nuanced judgment (did Claude verify correctly?)
+- Avoid prompt-based hooks that trigger an LLM call on every response --- the latency adds up
+
+## All 7 Hooks
+
+| Hook | Event | What It Does |
+|------|-------|-------------|
+| Session log reminder | `Stop` | Reminds about session logs after every response |
+| Desktop notification | `Notification` | macOS alert when Claude needs attention |
+| File protection | `PreToolUse` | Blocks accidental edits to bibliography and settings |
+| Context state capture | `PreCompact` | Saves plan state before auto-compaction |
+| Context restoration | `SessionStart[compact\|resume]` | Restores context after compaction or resume |
+| Context monitor | `PostToolUse[Bash\|Task]` | Progressive warnings at 40%/55%/65%/80%/90% context |
+| Verification reminder | `PostToolUse[Write\|Edit]` | Reminds to compile/render before marking done |
+
+---
+
+# Memory System
+
+The Clo-Author has four distinct memory layers. The first four are your safety net --- anything written to disk survives indefinitely. The conversation context is ephemeral.
+
+| Layer | File | Updated When | Purpose |
+|-------|------|--------------|---------|
+| Project context | `CLAUDE.md` | Rarely | Project rules, folder structure, commands |
+| Corrections | `MEMORY.md` | On `[LEARN]` tag | Prevent repeating past mistakes |
+| Task strategy | `quality_reports/plans/` | Once per task | Plan survives planning-to-implementation handoff |
+| Decision reasoning | `quality_reports/session_logs/` | Incrementally | Record *why* decisions were made |
+| Conversation | Claude's context window | Every response | Current working memory (**not** persistent) |
+
+The workflow ensures that anything worth keeping is written to one of the four persistent layers before compression can erase it.
+
+---
+
+# Context Survival System
+
+When context compaction happens, Claude loses working memory. Two hooks work together to preserve and restore state:
+
+```
+Session running → context fills up → PreCompact fires
+                                           ↓
+                                    pre-compact.py saves:
+                                    • Active plan path
+                                    • Current task
+                                    • Recent decisions
+                                           ↓
+                                    Auto-compaction happens
+                                           ↓
+                                    SessionStart(compact|resume) fires
+                                           ↓
+                                    post-compact-restore.py:
+                                    • Reads saved state
+                                    • Prints context summary
+                                    • Claude knows where it left off
+```
+
+### What Gets Saved
+
+| State | Location | Purpose |
+|-------|----------|---------|
+| Plan path | Session cache | So Claude can read the plan file |
+| Current task | Session cache | First unchecked `- [ ]` item |
+| Recent decisions | Session cache | Last 3 decision-like entries from session log |
+| Compaction note | Session log | Timestamp marker for reference |
+
+### Context Monitoring
+
+The `context-monitor.py` hook tracks approximate context usage:
+
+| Threshold | Message | Purpose |
+|-----------|---------|---------|
+| 40%, 55%, 65% | Suggest `/learn` | Capture discoveries before compaction |
+| 80% | Info message | Auto-compact approaching |
+| 90% | Caution | Complete current task with full quality |
+
+Use `/context-status` to check current session health at any time.
+
+---
+
+# The Orchestrator (Contractor Mode) {#sec-orchestrator}
+
+Once a plan is approved, the orchestrator takes over autonomously.
+
+## The Mental Model
+
+Think of the orchestrator as a **general contractor**. You are the client. You describe what you want. The plan-first protocol is the blueprint phase. Once you approve the blueprint, the contractor takes over: hires the right specialists (agents), inspects their work (verification), sends them back to fix issues (review-fix loop), and only calls you when the job passes inspection (quality gates).
+
+## The Loop
+
+```
+Plan approved → orchestrator activates
+  │
+  Step 1: IMPLEMENT — Execute plan steps
+  │
+  Step 2: VERIFY — Compile, render, check outputs
+  │         If verification fails → fix → re-verify
+  │
+  Step 3: REVIEW — Run agents (selected by file type)
+  │
+  Step 4: FIX — Apply fixes (critical → major → minor)
+  │
+  Step 5: RE-VERIFY — Confirm fixes are clean
+  │
+  Step 6: SCORE — Apply quality-gates rubric
+  │
+  └── Score >= threshold?
+        YES → Present summary to user
+        NO  → Loop to Step 3 (max 5 rounds)
+```
+
+### Agent Selection by File Type
+
+| Files Modified | Agents Selected |
+|---------------|----------------|
+| `.tex` only | proofreader + slide-auditor + pedagogy-reviewer |
+| `.qmd` only | proofreader + slide-auditor + pedagogy-reviewer |
+| `.qmd` with matching `.tex` | Above + quarto-critic (parity check) |
+| `.R` scripts | r-reviewer |
+| TikZ diagrams present | tikz-reviewer |
+| Domain content | domain-reviewer (if configured) |
+| Multiple formats | verifier for cross-format parity |
+
+### "Just Do It" Mode
+
+When you say "just do it", the orchestrator still runs the full verify-review-fix loop, but skips the final approval pause and auto-commits if the score is >= 80. It still presents the summary so you can see what was done.
+
+---
+
+# Plan-First Workflow {#sec-plan-first}
+
+For any non-trivial task, Claude enters plan mode before writing code.
+
+## The Protocol
+
+```
+Non-trivial task arrives
+  │
+  Step 1: Enter Plan Mode
+  Step 2: Draft plan (approach, files, verification)
+  Step 3: Save to quality_reports/plans/YYYY-MM-DD_description.md
+  Step 4: Present plan to user
+  Step 5: User approves (or revises)
+  Step 6: Save initial session log
+  Step 7: Orchestrator takes over
+  Step 8: Update session log + plan status to COMPLETED
+```
+
+Plans are saved to disk specifically so they survive context compression. The rule: **avoid `/clear`** --- prefer auto-compression. Use `/clear` only when context is genuinely polluted.
+
+## Session Logging (3 Triggers)
+
+Session logs (`quality_reports/session_logs/`) capture *why* things happened:
+
+1. **After plan approval** --- create the log with goal, plan summary, rationale (including rejected alternatives)
+2. **During implementation** --- append 1--3 lines as design decisions happen. This is the most important behavior: context compresses, but decisions already on disk survive.
+3. **At session end** --- add what was accomplished, open questions, unresolved issues
+
+A **Stop hook** fires after every response and reminds Claude to update the session log if it's stale.
+
+---
+
+# The Adversarial Pattern
+
+The single most powerful pattern in the system: **critic + fixer**.
+
+```
++------------------+
+|  quarto-critic   |  "I found 12 issues. 3 Critical."
+|  (READ-ONLY)     |
++--------+---------+
+         |
+    +----v----+
+    | Verdict |
+    +----+----+
+     /       \
+APPROVED   NEEDS WORK
+    |          |
+  Done    +----v---------+
+          | quarto-fixer |  "Fixed 12/12 issues."
+          | (READ-WRITE) |
+          +----+---------+
+               |
+          +----v----------+
+          | quarto-critic |  "Re-audit: 2 remaining."
+          | (Round 2)     |
+          +----+----------+
+               |
+          ... (up to 5 rounds)
+```
+
+**Why it works:** The critic can't fix files (read-only), so it has no incentive to downplay issues. The fixer can't approve itself (the critic re-audits). This prevents the common failure of Claude saying "looks good" about its own work.
+
+---
+
+# Parallel Agents
+
+Claude Code can spawn **multiple agents simultaneously** using the Task tool.
+
+## When to Use
+
+| Scenario | Sequential (slow) | Parallel (fast) |
+|----------|-------------------|-----------------|
+| Reviewing a paper | Run proofreader, then econometrician, then domain | Run all 3 simultaneously |
+| Analyzing 3 papers | Read paper 1, then 2, then 3 | Spawn 3 agents, each reading one paper |
+| Generating figures | Create plot 1, then plot 2, then plot 3 | Spawn agents for independent plots |
+| Comparing estimators | Run simulation 1, then 2, then 3 | Spawn agents for each simulation |
+
+The orchestrator recognizes independent subtasks and spawns parallel agents automatically.
+
+## Practical Limits
+
+- **3 agents** is the sweet spot. More increases overhead without proportional speedup.
+- Agents are **independent** --- they cannot see each other's work. If task B depends on task A, they must run sequentially.
+- Parallel agents multiply token usage. The orchestrator runs Sonnet-level reviewers in parallel, then the Opus-level critic sequentially.
+
+---
+
+# Constitutional Governance (Optional) {#sec-constitutional}
+
+As your project grows, some decisions become non-negotiable. The `templates/constitutional-governance.md` template helps you distinguish between:
+
+- **Immutable principles** (Articles I--V): Non-negotiable rules
+- **User preferences**: Flexible patterns that can vary
+
+### Example Articles
+
+- **Article I: Primary Artifact** --- Which file is authoritative (e.g., `main.tex`)
+- **Article II: Plan-First Threshold** --- When to enter plan mode (>3 files, >30 min)
+- **Article III: Quality Gate** --- Minimum score to commit (80/100)
+- **Article IV: Verification Standard** --- What must pass before commit
+- **Article V: File Organization** --- Where different file types live
+
+Use it **after** you've established 3--7 recurring patterns that you want to enforce consistently. Don't create it on day one.
+
+---
+
+# Additional Workflows: Slides & Lectures {#additional-workflows-slides-lectures}
+
+The Clo-Author inherits a full lecture production pipeline from [its origin](https://github.com/pedrohcgs/claude-code-my-workflow). These workflows are available for users who also produce course materials.
+
+## Creating a New Lecture
+
+The `/create-lecture` skill guides you through structured lecture creation:
+
+```
+/create-lecture
+  │
+  Phase 1: Gather materials (papers, outlines)
+  Phase 2: Design slide structure
+  Phase 3: Draft Beamer slides
+  Phase 4: Generate R figures
+  Phase 5: Polish and verify
+  │   /slide-excellence (domain + visual + pedagogy)
+  │   /proofread (grammar/typos)
+  │   /visual-audit (layout)
+  Phase 6: Deploy
+      /translate-to-quarto (optional)
+      /deploy
+```
+
+## Beamer to Quarto Translation
+
+Translation preserves all content while adapting format, converting TikZ to SVG and ggplot to interactive Plotly charts:
+
+```
+/translate-to-quarto Lecture5_Topic.tex
+  │
+  Phase 1-3: Environment mapping + content translation
+  Phase 4-5: Figure conversion (TikZ → SVG)
+  Phase 6-7: Interactive charts (ggplot → plotly)
+  Phase 8-9: Render + verify
+  Phase 10-11: /qa-quarto adversarial QA
+      Critic → Fixer → Critic (up to 5 rounds)
+```
+
+## Multi-Agent Slide Review
+
+The `/slide-excellence` skill runs up to 6 agents in parallel:
+
+```
+/slide-excellence Lecture5_Topic.tex
+  │
+  Agent 1: Visual Audit (slide-auditor)
+  Agent 2: Pedagogical Review (pedagogy-reviewer)
+  Agent 3: Proofreading (proofreader)
+  Agent 4: TikZ Review (tikz-reviewer, if applicable)
+  Agent 5: Content Parity (if Quarto version exists)
+  Agent 6: Substance Review (domain-reviewer)
+  │
+  Synthesize: Combined quality score + prioritized fix list
+```
+
+## Devil's Advocate
+
+At any design decision, invoke the Devil's Advocate:
+
+> "Create a Devil's Advocate. Have it challenge this slide design with 5--7 specific pedagogical questions."
+
+This catches unstated assumptions, alternative orderings, notation confusion, missing intuition, and cognitive load issues.
+
+## Replication-First Coding
+
+When working with papers that have replication packages:
+
+```
+Phase 1: Inventory original code → record "gold standard" numbers
+Phase 2: Translate (e.g., Stata → R) → match original spec EXACTLY
+Phase 3: Verify match → tolerance < 0.01 for estimates, < 0.05 for SEs
+Phase 4: Only then extend with new estimators and specifications
+```
+
+## Branch Isolation with Git Worktrees (Advanced)
+
+Git worktrees create a separate working directory linked to the same repository. Useful for major translations, risky refactors, or multi-day projects.
+
+```bash
+# Create a worktree with new branch
+git worktree add .worktrees/[name] -b [branch-name]
+
+# Work in the worktree
+cd .worktrees/[name]
+
+# When ready, squash-merge into main
+git checkout main
+git merge --squash [branch-name]
+git commit -m "feat: description of changes"
+
+# Cleanup
+git worktree remove .worktrees/[name]
+git branch -d [branch-name]
+```
+
+| Situation | Use Worktree? |
+|-----------|---------------|
+| Quick fix to one file | No |
+| Major refactor | Yes |
+| Beamer to Quarto translation | Yes |
+| Experimenting with new approach | Yes |
+
+For most users, working directly on main with frequent commits is simpler and sufficient.
+
+---
+
+# Appendix: Complete Reference Tables
+
+## All 12 Agents
+
+| Agent | File | Purpose |
+|-------|------|---------|
+| Econometrician | `.claude/agents/econometrician.md` | Sequential 4-phase causal inference audit |
+| Proofreader | `.claude/agents/proofreader.md` | Grammar, typos, consistency |
+| R Reviewer | `.claude/agents/r-reviewer.md` | R code quality, reproducibility |
+| Domain Reviewer | `.claude/agents/domain-reviewer.md` | Your domain-specific substance review |
+| Replication Auditor | `.claude/agents/replication-auditor.md` | Replication package validation |
+| Verifier | `.claude/agents/verifier.md` | Task completion verification |
+| Slide Auditor | `.claude/agents/slide-auditor.md` | Visual layout, overflow, spacing |
+| TikZ Reviewer | `.claude/agents/tikz-reviewer.md` | Diagram visual quality |
+| Pedagogy Reviewer | `.claude/agents/pedagogy-reviewer.md` | Narrative arc, notation clarity |
+| Beamer Translator | `.claude/agents/beamer-translator.md` | Beamer to Quarto translation |
+| Quarto Critic | `.claude/agents/quarto-critic.md` | Adversarial Quarto QA |
+| Quarto Fixer | `.claude/agents/quarto-fixer.md` | Applies critic's fixes |
+
+## All 26 Skills
+
+| Skill | Directory | Purpose |
+|-------|-----------|---------|
+| `/compile-latex` | `.claude/skills/compile-latex/` | XeLaTeX 3-pass compilation |
+| `/deploy` | `.claude/skills/deploy/` | Quarto render + GitHub Pages sync |
+| `/proofread` | `.claude/skills/proofread/` | Run proofreading agent |
+| `/visual-audit` | `.claude/skills/visual-audit/` | Run layout audit agent |
+| `/review-r` | `.claude/skills/review-r/` | Run R code review agent |
+| `/validate-bib` | `.claude/skills/validate-bib/` | Bibliography validation |
+| `/slide-excellence` | `.claude/skills/slide-excellence/` | Combined multi-agent review |
+| `/devils-advocate` | `.claude/skills/devils-advocate/` | Design challenge questions |
+| `/create-lecture` | `.claude/skills/create-lecture/` | Full lecture creation |
+| `/commit` | `.claude/skills/commit/` | Stage, commit, PR, and merge |
+| `/lit-review` | `.claude/skills/lit-review/` | Literature search and synthesis |
+| `/research-ideation` | `.claude/skills/research-ideation/` | Research questions and strategies |
+| `/interview-me` | `.claude/skills/interview-me/` | Interactive research interview |
+| `/review-paper` | `.claude/skills/review-paper/` | Manuscript review |
+| `/data-analysis` | `.claude/skills/data-analysis/` | End-to-end R analysis |
+| `/learn` | `.claude/skills/learn/` | Extract discoveries into persistent skills |
+| `/context-status` | `.claude/skills/context-status/` | Show session health and context usage |
+| `/econometrics-check` | `.claude/skills/econometrics-check/` | 4-phase causal inference audit |
+| `/audit-replication` | `.claude/skills/audit-replication/` | Replication package validation |
+| `/create-talk` | `.claude/skills/create-talk/` | Generate Beamer talk from paper |
+| `/data-deposit` | `.claude/skills/data-deposit/` | AEA Data Editor compliance |
+| `/draft-paper` | `.claude/skills/draft-paper/` | Draft paper sections |
+| `/paper-excellence` | `.claude/skills/paper-excellence/` | Combined multi-agent paper review |
+| `/pre-analysis-plan` | `.claude/skills/pre-analysis-plan/` | Draft pre-analysis plan |
+| `/respond-to-referee` | `.claude/skills/respond-to-referee/` | Point-by-point referee response |
+| `/target-journal` | `.claude/skills/target-journal/` | Journal targeting + submission strategy |
+
+## All 17 Rules
+
+**Always-on** (load every session):
+
+| Rule | File | Purpose |
+|------|------|---------|
+| Plan-First Workflow | `plan-first-workflow.md` | Plan mode + context preservation |
+| Orchestrator Protocol | `orchestrator-protocol.md` | Contractor mode loop |
+| Session Logging | `session-logging.md` | Three logging triggers |
+
+**Path-scoped** (load only when working on matching files):
+
+| Rule | File | Triggers On |
+|------|------|------------|
+| Verification Protocol | `verification-protocol.md` | `.tex`, `.qmd`, `docs/` |
+| Single Source of Truth | `single-source-of-truth.md` | `Figures/`, `.tex`, `.qmd` |
+| Quality Gates | `quality-gates.md` | `.tex`, `.qmd`, `*.R` |
+| R Code Conventions | `r-code-conventions.md` | `*.R` |
+| TikZ Quality | `tikz-visual-quality.md` | `.tex` |
+| Beamer-Quarto Sync | `beamer-quarto-sync.md` | `.tex`, `.qmd` |
+| PDF Processing | `pdf-processing.md` | `master_supporting_docs/` |
+| Proofreading Protocol | `proofreading-protocol.md` | `.tex`, `.qmd`, `quality_reports/` |
+| No Pause | `no-pause-beamer.md` | `.tex` |
+| Replication Protocol | `replication-protocol.md` | `*.R` |
+| Knowledge Base | `knowledge-base-template.md` | `.tex`, `.qmd`, `*.R` |
+| Orchestrator Research | `orchestrator-research.md` | `*.R`, `explorations/` |
+| Exploration Folder | `exploration-folder-protocol.md` | `explorations/` |
+| Exploration Fast-Track | `exploration-fast-track.md` | `explorations/` |
+
+## All 7 Hooks
+
+| Hook | Type | Configuration |
+|------|------|--------------|
+| Session log reminder | Stop (command) | `.claude/hooks/log-reminder.py` |
+| Desktop notification | Notification (command) | `.claude/hooks/notify.sh` |
+| File protection | PreToolUse (command) | `.claude/hooks/protect-files.sh` |
+| Context state capture | PreCompact (command) | `.claude/hooks/pre-compact.py` |
+| Context restoration | SessionStart[compact\|resume] (command) | `.claude/hooks/post-compact-restore.py` |
+| Context monitor | PostToolUse[Bash\|Task] (command) | `.claude/hooks/context-monitor.py` |
+| Verification reminder | PostToolUse[Write\|Edit] (command) | `.claude/hooks/verify-reminder.py` |

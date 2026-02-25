@@ -4,7 +4,7 @@
 
 An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service applied econometrics research assistant — from literature review to journal submission.
 
-**Live guide:** [hsantanna.org/clo-author](https://hsantanna.org/clo-author/)
+**Live guide:** [hsantanna88.github.io/clo-author](https://hsantanna88.github.io/clo-author/)
 <br>**Built on:** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow)
 
 ---
@@ -44,7 +44,7 @@ Instead of one general-purpose reviewer, focused agents each check one dimension
 
 | Agent | What It Checks |
 |-------|---------------|
-| **Econometrician** | Identification, causal design, SE clustering, estimator choice |
+| **Econometrician** | Sequential 4-phase causal audit: claim → design validity → inference → polish |
 | **Proofreader** | Grammar, typos, consistency |
 | **R-Reviewer** | Code quality, reproducibility, domain correctness |
 | **Domain Reviewer** | Field-specific substance (customizable for your field) |

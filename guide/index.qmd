@@ -1,0 +1,116 @@
+---
+title: "The Clo-Author"
+subtitle: "Your Econ AI Research Assistant for Claude Code"
+---
+
+An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service applied econometrics research assistant --- from literature review to journal submission.
+
+**Built on** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), reoriented for applied econometrics research publication.
+
+## What You Get
+
+| Component | Count | Examples |
+|-----------|-------|---------|
+| Specialized agents | 12 | Econometrician, Proofreader, R-Reviewer, Replication Auditor |
+| Slash commands | 26 | `/econometrics-check`, `/paper-excellence`, `/data-analysis` |
+| Auto-loading rules | 17 | Quality gates, verification protocol, R code conventions |
+| Hooks | 7 | Session log reminder, context survival, file protection |
+
+You describe a task in plain English. Claude plans the approach, implements it, runs specialized review agents, fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.
+
+## Get Started in 5 Minutes
+
+### Step 1: Fork & Clone
+
+```bash
+gh repo fork hsantanna88/clo-author --clone
+cd clo-author
+```
+
+### Step 2: Start Claude Code
+
+```bash
+claude
+```
+
+Using VS Code? Open the Claude Code panel instead. Everything works the same.
+
+### Step 3: Paste the Starter Prompt
+
+Fill in the **bolded placeholders** with your project details:
+
+> I am starting a new applied econometrics research project on **[YOUR TOPIC]**.
+> Read CLAUDE.md and help me set up the project structure.
+> Start with a literature review on [YOUR TOPIC].
+
+Claude reads the configuration, fills in your project details, and enters contractor mode --- planning, implementing, reviewing, and verifying autonomously.
+
+### Step 4: Start Working
+
+Once setup is done, just describe what you need:
+
+- "Review my paper and check the econometrics" --- runs `/paper-excellence` with parallel agents
+- `/econometrics-check Paper/main.tex` --- sequential 4-phase causal inference audit
+- `/data-analysis Data/cleaned/survey.csv` --- end-to-end R analysis with publication-ready output
+- "Prepare my replication package for AEA deposit" --- runs `/audit-replication` + `/data-deposit`
+
+## What Happens Behind the Scenes
+
+You talk, Claude orchestrates. The 12 agents, 26 skills, and 17 rules exist so you don't have to think about them. Claude selects the right tools, runs review agents in parallel, applies fixes in priority order, and scores against quality gates (80/90/95) --- all autonomously after you approve the plan.
+
+For the full picture, see the [User Guide](user-guide.qmd) (what you can do) and [Architecture Reference](architecture.qmd) (how the system works).
+
+## Day 1 Checklist
+
+- [ ] Fork the repo and clone it locally
+- [ ] Run `claude` in the project directory
+- [ ] Paste the starter prompt (fill in your project details)
+- [ ] Wait for Claude to customize `CLAUDE.md` for your project
+- [ ] Approve the configuration plan
+- [ ] Ask Claude to do something: "Review my paper" or "/lit-review [topic]"
+- [ ] Approve the task plan, watch it work, review the output
+
+That's it. Everything else --- agents, hooks, rules --- runs automatically in the background.
+
+::: {.callout-note collapse="true"}
+## Optional: Manual Setup
+
+If you prefer to configure things yourself instead of letting Claude handle it:
+
+**Customize CLAUDE.md** --- Open `CLAUDE.md` and replace all `[BRACKETED PLACEHOLDERS]`:
+
+1. **Project name and institution**
+2. **Folder structure** (adjust to your layout)
+3. **Current project state** (your papers and analyses)
+
+**Create your knowledge base** --- Open `.claude/rules/knowledge-base-template.md` and fill in:
+
+1. **Notation registry** --- every symbol you use, where it's introduced, and anti-patterns
+2. **Applications database** --- datasets, papers, and R packages you reference
+
+**Configure permissions** --- Review `.claude/settings.json`. The template includes permissions for git, LaTeX, R, and utility scripts. Add any additional tools you use.
+
+**Test it:**
+
+```bash
+/compile-latex main
+/proofread Paper/main.tex
+```
+:::
+
+## Prerequisites
+
+| Tool | Required For | Install |
+|------|-------------|---------|
+| [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | Everything | `npm install -g @anthropic-ai/claude-code` |
+| XeLaTeX | Paper compilation | [TeX Live](https://tug.org/texlive/) or [MacTeX](https://tug.org/mactex/) |
+| R | Analysis & figures | [r-project.org](https://www.r-project.org/) |
+| [gh CLI](https://cli.github.com/) | GitHub integration | `brew install gh` (macOS) |
+
+Optional: [Quarto](https://quarto.org) (web slides), pdf2svg (TikZ to SVG).
+
+## Origin
+
+This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to applied econometrics research publication.
+
+Maintained by [Hugo Sant'Anna](https://hsantanna.org). MIT License --- fork it, customize it, make it yours.

@@ -1,17 +1,31 @@
 project:
-  type: default
-  output-dir: .
+  type: website
+  output-dir: ../docs
+
+website:
+  title: "The Clo-Author"
+  navbar:
+    left:
+      - text: "Quick Start"
+        href: index.qmd
+      - text: "User Guide"
+        href: user-guide.qmd
+      - text: "Architecture"
+        href: architecture.qmd
+    right:
+      - icon: github
+        href: https://github.com/hsantanna88/clo-author
+  page-footer:
+    center: "Built with [Quarto](https://quarto.org)"
 
 format:
   html:
+    theme:
+      - cosmo
+      - custom.scss
     toc: true
     toc-depth: 3
-    toc-location: left
-    number-sections: true
-    theme: cosmo
     code-copy: true
     code-overflow: wrap
-    highlight-style: github
     smooth-scroll: true
-    self-contained: true
     mainfont: "system-ui, -apple-system, sans-serif"
