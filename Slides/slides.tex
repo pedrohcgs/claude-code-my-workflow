@@ -1,0 +1,72 @@
+\documentclass[11pt,notes=hide,aspectratio=169,mathserif]{beamer}
+
+% PACKAGES
+\usepackage{graphics}  % Support for images/figures
+\usepackage{graphicx}  % Includes the \resizebox command
+\usepackage{url}	   % Includes \urldef and \url commands
+\usepackage{natbib}
+\usepackage{bibentry}  % Includes the \nobibliography command
+\usepackage{verbatim}  %Supports comments
+\usepackage{booktabs} %Supports \toprule, \bottomrule, etc in tables
+\usepackage{etoolbox}  %Supports toggle commands
+\usepackage{datetime}
+\usepackage{bm}	%Supports bold math \bm
+
+% PACKAGES (that should already be included by your LyX document settings)
+\usepackage{amsfonts}  % Lots of stuff, including \mathbb 
+\usepackage{amsmath}   % Standard math package
+\usepackage{amsthm}    % Includes the comment functions
+
+% CUSTOM DEFINITIONS
+\def\newblock{} %Get beamer to cooperate with BibTeX
+\linespread{1.2}
+
+% IDENTIFYING INFORMATION
+\title[Capital Share]{Capital and Labor Shares in Healthcare}
+\author[Gottlieb \& friends ]{Joshua D. Gottlieb (University of Chicago and NBER) \\ coauthors}
+\date{\monthname[\the\month] \the\year}
+
+% THEMATIC OPTIONS
+\setbeamercovered{transparent}
+\usetheme{metropolis}
+\usecolortheme{default}
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[frame number]{}
+
+% BACKUP SLIDE NUMBERING
+\usepackage{appendixnumberbeamer}
+
+%SETTINGS
+\newtoggle{shortertalk}
+\togglefalse{shortertalk}
+
+\begin{document}
+
+%---------------------------------------------------------------------
+\begin{frame}[plain]
+\titlepage
+\note{
+	\begin{itemize}
+	\end{itemize}
+}
+\end{frame}
+%---------------------------------------------------------------------
+\input{sections/intro.tex}
+%---------------------------------------------------------------------
+
+%---------------------------------------------------------------------
+\begin{frame}[plain]
+\begin{center}{\LARGE Thank you}\end{center}
+\end{frame}
+%---------------------------------------------------------------------
+
+
+%\beginbackup
+\appendix
+%\input{sections/appendix.tex}
+
+\bibliographystyle{aer}
+\nobibliography{../Bibliography_base}
+
+
+\end{document}

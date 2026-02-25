@@ -17,8 +17,6 @@ When you modify a Beamer `.tex` file, you MUST also apply the equivalent change 
 <!-- Customize this table for your lectures -->
 | Lecture | Beamer | Quarto |
 |---------|--------|--------|
-| 1 | `Slides/Lecture1_Topic.tex` | `Quarto/Lecture1_Topic.qmd` |
-| 2 | `Slides/Lecture2_Topic.tex` | `Quarto/Lecture2_Topic.qmd` |
 <!-- Add rows as you create lectures -->
 
 ## Workflow (Every Time)
@@ -33,13 +31,15 @@ When you modify a Beamer `.tex` file, you MUST also apply the equivalent change 
 
 | Beamer | Quarto Equivalent |
 | ------ | ----------------- |
-| `\muted{text}` | `[text]{style="color: #525252;"}` |
-| `\key{text}` | `[**text**]{.emorygold}` |
-| `\textcolor{positive}{text}` | `[text]{.positive}` |
-| `\textcolor{negative}{text}` | `[text]{.negative}` |
+| `\begin{block}{Title}` | `::: {.keybox}\n**Title**` |
+| `\begin{alertblock}{Title}` | `::: {.highlightbox}\n**Title**` |
+| `\begin{exampleblock}{Title}` | `::: {.methodbox}\n**Title**` |
+| `\textbf{text}` | `**text**` |
+| `\emph{text}` | `*text*` |
 | `\item text` | `- text` |
-| `\begin{highlightbox}` | `::: {.highlightbox}` |
-| `\begin{methodbox}` | `::: {.methodbox}` |
+| `\bm{x}` | `$\boldsymbol{x}$` |
+| `\cite{key}` | `@key` |
+| `\bibentry{key}` | `@key` (full reference via CSL) |
 | `$formula$` | `$formula$` (same) |
 
 ## When NOT to Sync

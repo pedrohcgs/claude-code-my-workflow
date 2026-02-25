@@ -1,24 +1,24 @@
 /*-- scss:defaults --*/
 
-// Colors — Emory Navy & Gold
-$navy: #012169;
-$navy-light: #1a3a7a;
-$gold: #B9975B;
-$gold-pale: #faf6ef;
+// Colors — UChicago Maroon & Gray
+$maroon: #800000;
+$maroon-light: #993333;
+$gray-accent: #767676;
+$gray-pale: #f5f3f0;
 $text: #222;
 $text-muted: #6b7280;
 
 $body-bg: #fff;
 $body-color: $text;
-$link-color: $navy;
-$link-hover-color: $gold;
-$headings-color: $navy;
+$link-color: $maroon;
+$link-hover-color: $gray-accent;
+$headings-color: $maroon;
 
 // Bootstrap variable that controls inline code color
-$code-color: #8b6914;
+$code-color: #6b3a2a;
 
 // Bootstrap variable that controls inline code background
-$code-bg: rgba(185, 151, 91, 0.08);
+$code-bg: rgba(128, 0, 0, 0.06);
 
 /*-- scss:rules --*/
 
@@ -58,26 +58,26 @@ body {
     content: 'Work in progress — I keep updating this as I learn new things.';
     font-weight: 700;
     display: block;
-    background: #fffbf0;
-    border: 1px solid #e8dcc8;
+    background: #fff8f0;
+    border: 1px solid #e0c8b8;
     padding: 0.7em 1.1em;
     margin-bottom: 1.5em;
     font-size: 0.9em;
-    color: #6b5a30;
+    color: #5a3020;
   }
 }
 
 // ── Title ──
 .quarto-title {
   padding-bottom: 1.2em;
-  border-bottom: 2px solid $gold;
+  border-bottom: 2px solid $gray-accent;
   margin-bottom: 1.5em;
 }
 
 .quarto-title .title {
   font-size: 2.2em;
   font-weight: 700;
-  color: $navy;
+  color: $maroon;
 }
 
 .quarto-title .subtitle {
@@ -97,21 +97,21 @@ h1, .h1 {
 h2, .h2 {
   font-size: 1.3em;
   margin-top: 2em;
-  color: $navy;
+  color: $maroon;
 }
 
 h3, .h3 {
   font-size: 1.1em;
   margin-top: 1.5em;
-  color: $navy-light;
+  color: $maroon-light;
 }
 
 // ── TOC ──
 #TOC {
   .active {
     font-weight: 600;
-    color: $navy !important;
-    border-left: 2px solid $gold;
+    color: $maroon !important;
+    border-left: 2px solid $gray-accent;
     padding-left: 0.5em;
   }
 
@@ -122,7 +122,7 @@ h3, .h3 {
     display: block;
     padding: 0.75em 0;
 
-    &:hover { color: $navy; }
+    &:hover { color: $maroon; }
   }
 }
 
@@ -138,8 +138,8 @@ blockquote code,
 #quarto-content code:not(pre code) {
   font-size: 0.87em !important;
   padding: 0.15em 0.4em !important;
-  background-color: rgba(185, 151, 91, 0.08) !important;
-  color: #8b6914 !important;
+  background-color: rgba(128, 0, 0, 0.06) !important;
+  color: #6b3a2a !important;
   border-radius: 3px !important;
 }
 
@@ -167,7 +167,7 @@ pre:not(.sourceCode) {
   border: 1px solid #ddd;
 
   thead {
-    background: $navy;
+    background: $maroon;
     color: #fff;
 
     th {
@@ -181,7 +181,7 @@ pre:not(.sourceCode) {
   tbody {
     tr {
       &:nth-child(even) { background: #f9f9f9; }
-      &:hover { background: $gold-pale; }
+      &:hover { background: $gray-pale; }
 
       td {
         padding: 0.6em 0.9em;
@@ -198,8 +198,8 @@ pre:not(.sourceCode) {
 }
 
 .callout-tip {
-  border-left: 3px solid $gold;
-  background: $gold-pale;
+  border-left: 3px solid $gray-accent;
+  background: $gray-pale;
 }
 
 .callout-important {
@@ -213,21 +213,21 @@ pre:not(.sourceCode) {
 }
 
 .callout-note {
-  border-left: 3px solid $navy;
-  background: #f0f4ff;
+  border-left: 3px solid $maroon;
+  background: #fdf5f5;
 }
 
 // ── Blockquotes ──
 blockquote {
-  border-left: 3px solid $gold;
+  border-left: 3px solid $gray-accent;
   padding: 0.8em 1.2em;
   margin: 1.2em 0;
-  background: $gold-pale;
+  background: $gray-pale;
   font-style: italic;
   color: #555;
 
   strong {
-    color: $navy;
+    color: $maroon;
     font-style: normal;
   }
 }
@@ -243,12 +243,12 @@ hr {
 // ── Links ──
 #quarto-content a {
   text-decoration: underline;
-  text-decoration-color: rgba($navy, 0.2);
+  text-decoration-color: rgba($maroon, 0.2);
   text-underline-offset: 2px;
 
   &:hover {
-    text-decoration-color: $gold;
-    color: $gold;
+    text-decoration-color: $gray-accent;
+    color: $gray-accent;
   }
 }
 

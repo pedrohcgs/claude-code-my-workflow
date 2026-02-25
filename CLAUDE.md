@@ -1,10 +1,5 @@
 # CLAUDE.MD -- Academic Project Development with Claude Code
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
 **Project:** Capital and Labor Shares in Healthcare
 **Institution:** University of Chicago
 **Branch:** main
@@ -24,16 +19,16 @@
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
+capital-labor-healthcare/
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
+├── analysis/                    # Stata task-based DAG (code/inputs/outputs per task)
 ├── Bibliography_base.bib        # Centralized bibliography
 ├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
+├── Slides/                      # Beamer .tex files (preamble inline, metropolis theme)
 ├── Quarto/                      # RevealJS .qmd files + theme
 ├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
+├── scripts/                     # Utility scripts
 ├── quality_reports/             # Plans, session logs, merge reports
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates
@@ -46,10 +41,13 @@
 
 ```bash
 # LaTeX (3-pass, XeLaTeX only)
-cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-BIBINPUTS=..:$BIBINPUTS bibtex file
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
+cd Slides && xelatex -interaction=nonstopmode slides.tex
+BIBINPUTS=..:$BIBINPUTS bibtex slides
+xelatex -interaction=nonstopmode slides.tex
+xelatex -interaction=nonstopmode slides.tex
+
+# Stata (run a task)
+cd analysis/task_name && stata-mp -b do code/main.do
 
 # Deploy Quarto to GitHub Pages
 ./scripts/sync_to_docs.sh LectureN
@@ -92,36 +90,32 @@ python scripts/quality_score.py Quarto/file.qmd
 | `/research-ideation [topic]` | Research questions + strategies |
 | `/interview-me [topic]` | Interactive research interview |
 | `/review-paper [file]` | Manuscript review |
-| `/data-analysis [dataset]` | End-to-end R analysis |
+| `/data-analysis [dataset]` | End-to-end Stata analysis |
 
 ---
 
-<!-- CUSTOMIZE: Replace the example entries below with your own
-     Beamer environments and Quarto CSS classes. These are examples
-     from the original project — delete them and add yours. -->
+## Beamer Environments (Metropolis Theme)
 
-## Beamer Custom Environments
+| Environment | Effect | Use Case |
+|-------------|--------|----------|
+| `block{Title}` | Standard titled block | General emphasis, definitions |
+| `alertblock{Title}` | Alert-colored block | Key results, warnings |
+| `exampleblock{Title}` | Example-colored block | Examples, illustrations |
+| `frame[plain]` | No header/footer | Title slides, full-page figures |
 
-| Environment       | Effect        | Use Case       |
-|-------------------|---------------|----------------|
-| `[your-env]`      | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `keybox` | Gold background box | Key points |
-| `highlightbox` | Gold left-accent box | Highlights |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions |
--->
+*Using standard metropolis theme. No custom box environments.*
 
 ## Quarto CSS Classes
 
-| Class              | Effect        | Use Case       |
-|--------------------|---------------|----------------|
-| `[.your-class]`    | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `.smaller` | 85% font | Dense content slides |
-| `.positive` | Green bold | Good annotations |
--->
+| Class | Effect | Use Case |
+|-------|--------|----------|
+| `.smaller` | 85% font | Dense data slides |
+| `.uchicago-maroon` | Maroon text | Institutional emphasis |
+| `.uchicago-phoenix` | Phoenix yellow text | Highlight accents |
+| `.hi` | Bold maroon | Key terms inline |
+| `.positive` | Green bold | Positive results/effects |
+| `.negative` | Red bold | Negative results/concerns |
+| `.compact` | Tight spacing | Content-heavy slides |
 
 ---
 
@@ -129,5 +123,4 @@ python scripts/quality_score.py Quarto/file.qmd
 
 | Lecture | Beamer | Quarto | Key Content |
 |---------|--------|--------|-------------|
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
-| 2: [Topic] | `Lecture02_Topic.tex` | -- | [Brief description] |
+| Main | `Slides/slides.tex` | -- | Metropolis theme; sections via `\input{sections/*.tex}` |

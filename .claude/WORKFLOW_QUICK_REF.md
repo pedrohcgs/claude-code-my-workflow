@@ -48,26 +48,23 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Path convention:** Stata tasks use relative paths within task directories; symlinks connect tasks
+- **Seed convention:** `set seed YYYYMMDD` at top of master .do files for stochastic operations
+- **Figure standards:** White background, 300 DPI PNG export from Stata; `graph export` with explicit dimensions
+- **Color palette:** UChicago Maroon (#800000), Dark Gray (#767676), Phoenix Yellow (#FFA319)
+- **Tolerance thresholds:** 1e-6 for point estimates, 1e-4 for standard errors
+- **Data vintage:** Always document BEA/NIPA vintage date; CMS claims data year range; BLS reference quarter
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** Publication-quality figures; consistent maroon/gray palette; Beamer-compatible dimensions
+**Reporting:** Detailed by default (thorough explanations with reasoning)
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Replication:** Strict -- flag near-misses with tolerance note
 
 ---
 
@@ -76,7 +73,7 @@ Repeat
 For experimental work, use the **Fast-Track** workflow:
 - Work in `explorations/` folder
 - 60/100 quality threshold (vs. 80/100 for production)
-- No plan needed — just a research value check (2 min)
+- No plan needed -- just a research value check (2 min)
 - See `.claude/rules/exploration-fast-track.md`
 
 ---

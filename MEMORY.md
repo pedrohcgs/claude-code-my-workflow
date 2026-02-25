@@ -70,3 +70,17 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:meta] Dogfooding principles must be enforced: plan-first, spec-then-plan, quality gates, session logs → we follow our own guide.
 
 [LEARN:meta] Template development work (building infrastructure, docs) doesn't create session logs in quality_reports/ → those are for user work (slides, analysis), not meta-work. Keeps template clean for users who fork.
+
+## Project Domain: Capital and Labor Shares in Healthcare
+
+[LEARN:domain] Factor shares must use value added (VA) as denominator, not revenue. Revenue includes intermediate inputs; using it inflates both shares.
+
+[LEARN:domain] Compensation of employees (CE) includes supplements (employer health insurance, retirement contributions). Using wages alone understates healthcare labor share by ~25%.
+
+[LEARN:domain] Gross operating surplus in nonprofits does NOT represent profit — it reflects depreciation, retained earnings for capital replacement. Interpretation differs fundamentally from manufacturing.
+
+[LEARN:domain] Mixed income (proprietors' income) straddles labor and capital. Healthcare has many physician partnerships — must adjust for self-employment income.
+
+[LEARN:stata] Stata task DAG: each task has code/, inputs/, outputs/. inputs/ contains ONLY symlinks to another task's outputs/. main.do is always the entry point.
+
+[LEARN:data] Always document BEA data vintage (release date) and NAICS revision year. BEA revises NIPA tables; using mixed vintages produces inconsistent factor shares.
