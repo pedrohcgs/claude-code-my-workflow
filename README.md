@@ -1,5 +1,7 @@
 # The Clo-Author: Your Econ AI Research Assistant for Claude Code
 
+> **Work in progress.** This is an experiment born out of my discovery of [Pedro's tool](https://github.com/pedrohcgs/claude-code-my-workflow). This repo is a packaging of my own interpretation of that, tailored to pure research. It is evolving as I learn, and I share it in case others find it useful and would like to build upon. Expect rough edges.
+
 An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service applied econometrics research assistant — from literature review to journal submission.
 
 **Live guide:** [hsantanna.org/clo-author](https://hsantanna.org/clo-author/)
