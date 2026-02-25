@@ -5,8 +5,8 @@
      Keep this file under ~150 lines — Claude loads it every session.
      See the guide at docs/workflow-guide.html for full documentation. -->
 
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
+**Project:** Capital Share in Health
+**Institution:** University of Chicago
 **Branch:** main
 
 ---
