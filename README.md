@@ -1,11 +1,11 @@
 # The Clo-Author: Your Econ AI Research Assistant for Claude Code
 
-> **Work in progress.** This is an experiment born out of my discovery of [Pedro's tool](https://github.com/pedrohcgs/claude-code-my-workflow). This repo is a packaging of my own interpretation of that, tailored to pure research. It is evolving as I learn, and I share it in case others find it useful and would like to build upon. Expect rough edges.
+> **Work in progress.** This is an experiment born out of my discovery of [Pedro's tool](https://github.com/pedrohcgs/claude-code-my-workflow). This repo is a packaging of my own interpretation of that, tailored to pure research. It is evolving as I learn, and I share it in case others find it useful and would like to build upon it. Expect rough edges.
 
 An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) workflow that turns your terminal into a full-service applied econometrics research assistant — from literature review to journal submission.
 
 **Live guide:** [hsantanna.org/clo-author](https://hsantanna.org/clo-author/)
-**Built on:** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow)
+<br>**Built on:** [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow)
 
 ---
 
@@ -54,7 +54,8 @@ Instead of one general-purpose reviewer, focused agents each check one dimension
 | **TikZ Reviewer** | Diagram quality |
 | **Pedagogy Reviewer** | Teaching quality (for lecture slides) |
 | **Beamer Translator** | Beamer-to-Quarto conversion |
-| **Quarto Critic/Fixer** | Adversarial QA for slide translation |
+| **Quarto Critic** | Adversarial QA comparing output against benchmark |
+| **Quarto Fixer** | Implements fixes from the critic agent |
 
 ### 26 Slash Commands
 
@@ -145,9 +146,9 @@ Optional: [Quarto](https://quarto.org) (web slides), pdf2svg (TikZ to SVG).
 1. **Fill in `CLAUDE.md`** — replace `[BRACKETED PLACEHOLDERS]` with your project details
 2. **Customize the domain reviewer** (`.claude/agents/domain-reviewer.md`) with review lenses for your field
 3. **Add field-specific R conventions** to `.claude/rules/r-code-conventions.md`
-4. **Set up the knowledge base** (`.claude/rules/knowledge-base-template.md`) with your notation and methods
+4. **Configure your notation and methods** in `CLAUDE.md` and the domain reviewer
 
-The Clo-Author is designed for applied econometrics but the infrastructure (contractor mode, quality gates, multi-agent review) works for any quantitative research field.
+The Clo-Author is designed for applied econometrics, but the infrastructure (contractor mode, quality gates, multi-agent review) works for any quantitative research field.
 
 ---
 
@@ -156,6 +157,8 @@ The Clo-Author is designed for applied econometrics but the infrastructure (cont
 This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to applied econometrics research publication.
 
 The core infrastructure (contractor mode, quality gates, context survival, session logging) comes from the original template. The econometrics-specific agents, paper drafting skills, and submission workflow are new.
+
+Maintained by [Hugo Sant'Anna](https://hsantanna.org).
 
 ---
 
