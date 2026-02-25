@@ -5,7 +5,7 @@
      Keep this file under ~150 lines — Claude loads it every session.
      See the guide at docs/workflow-guide.html for full documentation. -->
 
-**Project:** Capital Share in Health
+**Project:** Capital and Labor Shares in Healthcare
 **Institution:** University of Chicago
 **Branch:** main
 
