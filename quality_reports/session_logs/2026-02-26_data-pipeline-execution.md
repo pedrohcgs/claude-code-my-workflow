@@ -107,3 +107,44 @@ Healthcare subsectors lack Gollin adjustments (NIPA prop income not at 3-digit d
 - [ ] Employment/wage shares need total economy by ownership (QCEW total is own_code=0 only)
 - [ ] Consider adding `download_bea_nipa_supplements` for CFC data (net specification)
 - [ ] Get NIPA prop income at 3-digit NAICS for healthcare subsector Gollin adjustments
+
+
+---
+
+## Methodology Slides Created (session continuation)
+
+Created 16 Beamer methodology frames in `Slides/sections/methods.tex`:
+
+### Structure (5 blocks)
+1. **Motivation & Roadmap** (2 frames): section divider + roadmap
+2. **National Accounts** (3 frames): VA decomposition, raw factor shares, data sources
+3. **Mixed Income & Gollin** (5 frames): the problem, proportional allocation, bounding methods, quantitative impact table, sensitivity range figure
+4. **Sensitivity** (3 frames): nonprofit adjustment, gross vs net, robustness table
+5. **Key Results** (3 frames): cross-industry bar chart, healthcare subsectors time series, summary
+
+### Files created/modified
+- `Slides/sections/methods.tex` — 16 methodology frames (NEW)
+- `Slides/sections/intro.tex` — minimal placeholder (NEW)
+- `Slides/slides.tex` — added `\input{sections/methods.tex}`
+- `Slides/aer.bst` — downloaded from CTAN (not installed system-wide)
+
+### Review fixes applied
+- Removed time subscript from `\forall i, t` (notation consistency)
+- Converted "Intuition" block to plain italic (box fatigue)
+- Replaced stacked blocks with bold headers in bounding methods frame
+- Increased robustness table from `\scriptsize` to `\footnotesize` (legibility)
+- Fixed sentence fragments, caption font consistency, comment mismatches
+- Added "(abstracting from taxes)" note to nonprofit example
+
+### Compilation
+- 20 pages, 0 errors, 0 unresolved citations
+- Minor vbox overflows only (2-6pt on content frames; 15pt on pre-existing title page)
+
+### Remaining notes from reviewers
+- Consider adding citation for 75% nonprofit hospital statistic (AHA source)
+- Consider adding `[standout]` transition frames at major conceptual pivots
+- Intro.tex is a placeholder; needs expansion with citations
+
+---
+**Context compaction (auto) at 14:22**
+Check git log and quality_reports/plans/ for current state.
