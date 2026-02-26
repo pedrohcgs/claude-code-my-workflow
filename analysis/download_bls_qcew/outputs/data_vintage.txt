@@ -1,0 +1,8 @@
+Data Source: BLS Quarterly Census of Employment and Wages (QCEW)
+Download Timestamp: 2026-02-26T11:03:58-06:00
+URL Pattern: https://data.bls.gov/cew/data/files/{YEAR}/csv/{YEAR}_annual_singlefile.zip
+Years Attempted: 1997 to 2024
+Downloaded: 28
+Skipped (already existed): 0
+Failed: 0
+Scope: National level (filtered in Stata)

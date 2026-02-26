@@ -1,0 +1,217 @@
+series_code,year,value,industry_label,naics_code
+N1854C,1998,14184.0,Construction,23
+N1854C,1999,16176.0,Construction,23
+N1854C,2000,11985.0,Construction,23
+N1854C,2001,10274.0,Construction,23
+N1854C,2002,10089.0,Construction,23
+N1854C,2003,10549.0,Construction,23
+N1854C,2004,10293.0,Construction,23
+N1854C,2005,12600.0,Construction,23
+N1854C,2006,15974.0,Construction,23
+N1854C,2007,18081.0,Construction,23
+N1854C,2008,18867.0,Construction,23
+N1854C,2009,18337.0,Construction,23
+N1854C,2010,13780.0,Construction,23
+N1854C,2011,13274.0,Construction,23
+N1854C,2012,13068.0,Construction,23
+N1854C,2013,24922.0,Construction,23
+N1854C,2014,20415.0,Construction,23
+N1854C,2015,14920.0,Construction,23
+N1854C,2016,12413.0,Construction,23
+N1854C,2017,12255.0,Construction,23
+N1854C,2018,14495.0,Construction,23
+N1854C,2019,15922.0,Construction,23
+N1854C,2020,14793.0,Construction,23
+N1854C,2021,13822.0,Construction,23
+N1854C,2022,15144.0,Construction,23
+N1854C,2023,13441.0,Construction,23
+N1854C,2024,4882.0,Construction,23
+N1855C,1998,35831.0,Manufacturing,31-33
+N1855C,1999,38830.0,Manufacturing,31-33
+N1855C,2000,58357.0,Manufacturing,31-33
+N1855C,2001,67579.0,Manufacturing,31-33
+N1855C,2002,57048.0,Manufacturing,31-33
+N1855C,2003,43379.0,Manufacturing,31-33
+N1855C,2004,41310.0,Manufacturing,31-33
+N1855C,2005,47522.0,Manufacturing,31-33
+N1855C,2006,49600.0,Manufacturing,31-33
+N1855C,2007,83636.0,Manufacturing,31-33
+N1855C,2008,117974.0,Manufacturing,31-33
+N1855C,2009,102436.0,Manufacturing,31-33
+N1855C,2010,103245.0,Manufacturing,31-33
+N1855C,2011,99407.0,Manufacturing,31-33
+N1855C,2012,97614.0,Manufacturing,31-33
+N1855C,2013,81203.0,Manufacturing,31-33
+N1855C,2014,85452.0,Manufacturing,31-33
+N1855C,2015,97463.0,Manufacturing,31-33
+N1855C,2016,116039.0,Manufacturing,31-33
+N1855C,2017,122734.0,Manufacturing,31-33
+N1855C,2018,125569.0,Manufacturing,31-33
+N1855C,2019,112302.0,Manufacturing,31-33
+N1855C,2020,105213.0,Manufacturing,31-33
+N1855C,2021,112556.0,Manufacturing,31-33
+N1855C,2022,102606.0,Manufacturing,31-33
+N1855C,2023,75051.0,Manufacturing,31-33
+N1855C,2024,76319.0,Manufacturing,31-33
+N1859C,1998,16487.0,Retail trade,44-45
+N1859C,1999,15372.0,Retail trade,44-45
+N1859C,2000,20229.0,Retail trade,44-45
+N1859C,2001,18309.0,Retail trade,44-45
+N1859C,2002,14798.0,Retail trade,44-45
+N1859C,2003,15562.0,Retail trade,44-45
+N1859C,2004,13974.0,Retail trade,44-45
+N1859C,2005,18719.0,Retail trade,44-45
+N1859C,2006,23400.0,Retail trade,44-45
+N1859C,2007,26391.0,Retail trade,44-45
+N1859C,2008,26137.0,Retail trade,44-45
+N1859C,2009,22630.0,Retail trade,44-45
+N1859C,2010,21829.0,Retail trade,44-45
+N1859C,2011,21462.0,Retail trade,44-45
+N1859C,2012,22907.0,Retail trade,44-45
+N1859C,2013,25110.0,Retail trade,44-45
+N1859C,2014,26255.0,Retail trade,44-45
+N1859C,2015,25960.0,Retail trade,44-45
+N1859C,2016,29298.0,Retail trade,44-45
+N1859C,2017,33979.0,Retail trade,44-45
+N1859C,2018,33839.0,Retail trade,44-45
+N1859C,2019,37316.0,Retail trade,44-45
+N1859C,2020,32589.0,Retail trade,44-45
+N1859C,2021,32582.0,Retail trade,44-45
+N1859C,2022,26283.0,Retail trade,44-45
+N1859C,2023,14400.0,Retail trade,44-45
+N1859C,2024,13553.0,Retail trade,44-45
+N1861C,1998,16761.0,Information,51
+N1861C,1999,18204.0,Information,51
+N1861C,2000,25711.0,Information,51
+N1861C,2001,38068.0,Information,51
+N1861C,2002,35698.0,Information,51
+N1861C,2003,30110.0,Information,51
+N1861C,2004,28497.0,Information,51
+N1861C,2005,30119.0,Information,51
+N1861C,2006,27604.0,Information,51
+N1861C,2007,34019.0,Information,51
+N1861C,2008,44289.0,Information,51
+N1861C,2009,42250.0,Information,51
+N1861C,2010,42038.0,Information,51
+N1861C,2011,39843.0,Information,51
+N1861C,2012,44121.0,Information,51
+N1861C,2013,37620.0,Information,51
+N1861C,2014,40713.0,Information,51
+N1861C,2015,47089.0,Information,51
+N1861C,2016,46595.0,Information,51
+N1861C,2017,48829.0,Information,51
+N1861C,2018,40782.0,Information,51
+N1861C,2019,50747.0,Information,51
+N1861C,2020,47872.0,Information,51
+N1861C,2021,41272.0,Information,51
+N1861C,2022,24573.0,Information,51
+N1861C,2023,20217.0,Information,51
+N1861C,2024,8885.0,Information,51
+N1863C,1998,-20560.0,Finance and insurance,52
+N1863C,1999,-54111.0,Finance and insurance,52
+N1863C,2000,-43776.0,Finance and insurance,52
+N1863C,2001,-46192.0,Finance and insurance,52
+N1863C,2002,-96605.0,Finance and insurance,52
+N1863C,2003,-95417.0,Finance and insurance,52
+N1863C,2004,-115986.0,Finance and insurance,52
+N1863C,2005,-92356.0,Finance and insurance,52
+N1863C,2006,-72108.0,Finance and insurance,52
+N1863C,2007,-87272.0,Finance and insurance,52
+N1863C,2008,-119999.0,Finance and insurance,52
+N1863C,2009,-145599.0,Finance and insurance,52
+N1863C,2010,-204878.0,Finance and insurance,52
+N1863C,2011,-201677.0,Finance and insurance,52
+N1863C,2012,-158877.0,Finance and insurance,52
+N1863C,2013,-179185.0,Finance and insurance,52
+N1863C,2014,-158120.0,Finance and insurance,52
+N1863C,2015,-124252.0,Finance and insurance,52
+N1863C,2016,-157679.0,Finance and insurance,52
+N1863C,2017,-156707.0,Finance and insurance,52
+N1863C,2018,-143631.0,Finance and insurance,52
+N1863C,2019,-166013.0,Finance and insurance,52
+N1863C,2020,-186215.0,Finance and insurance,52
+N1863C,2021,-237669.0,Finance and insurance,52
+N1863C,2022,-269364.0,Finance and insurance,52
+N1863C,2023,-272288.0,Finance and insurance,52
+N1863C,2024,-342281.0,Finance and insurance,52
+N1866C,1998,-1467.0,"Professional, scientific, and technical services",54
+N1866C,1999,-1609.0,"Professional, scientific, and technical services",54
+N1866C,2000,-887.0,"Professional, scientific, and technical services",54
+N1866C,2001,1457.0,"Professional, scientific, and technical services",54
+N1866C,2002,3006.0,"Professional, scientific, and technical services",54
+N1866C,2003,3745.0,"Professional, scientific, and technical services",54
+N1866C,2004,3708.0,"Professional, scientific, and technical services",54
+N1866C,2005,3431.0,"Professional, scientific, and technical services",54
+N1866C,2006,2784.0,"Professional, scientific, and technical services",54
+N1866C,2007,5416.0,"Professional, scientific, and technical services",54
+N1866C,2008,9669.0,"Professional, scientific, and technical services",54
+N1866C,2009,10369.0,"Professional, scientific, and technical services",54
+N1866C,2010,10269.0,"Professional, scientific, and technical services",54
+N1866C,2011,10688.0,"Professional, scientific, and technical services",54
+N1866C,2012,11653.0,"Professional, scientific, and technical services",54
+N1866C,2013,9484.0,"Professional, scientific, and technical services",54
+N1866C,2014,9941.0,"Professional, scientific, and technical services",54
+N1866C,2015,13693.0,"Professional, scientific, and technical services",54
+N1866C,2016,15180.0,"Professional, scientific, and technical services",54
+N1866C,2017,16017.0,"Professional, scientific, and technical services",54
+N1866C,2018,12364.0,"Professional, scientific, and technical services",54
+N1866C,2019,13377.0,"Professional, scientific, and technical services",54
+N1866C,2020,11978.0,"Professional, scientific, and technical services",54
+N1866C,2021,10156.0,"Professional, scientific, and technical services",54
+N1866C,2022,12012.0,"Professional, scientific, and technical services",54
+N1866C,2023,7152.0,"Professional, scientific, and technical services",54
+N1866C,2024,8802.0,"Professional, scientific, and technical services",54
+N1869C,1998,4534.0,Educ/health/social assistance,61-62
+N1869C,1999,4246.0,Educ/health/social assistance,61-62
+N1869C,2000,5677.0,Educ/health/social assistance,61-62
+N1869C,2001,6918.0,Educ/health/social assistance,61-62
+N1869C,2002,6506.0,Educ/health/social assistance,61-62
+N1869C,2003,6053.0,Educ/health/social assistance,61-62
+N1869C,2004,6433.0,Educ/health/social assistance,61-62
+N1869C,2005,6788.0,Educ/health/social assistance,61-62
+N1869C,2006,8303.0,Educ/health/social assistance,61-62
+N1869C,2007,11074.0,Educ/health/social assistance,61-62
+N1869C,2008,14415.0,Educ/health/social assistance,61-62
+N1869C,2009,13444.0,Educ/health/social assistance,61-62
+N1869C,2010,13379.0,Educ/health/social assistance,61-62
+N1869C,2011,13504.0,Educ/health/social assistance,61-62
+N1869C,2012,12442.0,Educ/health/social assistance,61-62
+N1869C,2013,10725.0,Educ/health/social assistance,61-62
+N1869C,2014,12114.0,Educ/health/social assistance,61-62
+N1869C,2015,13034.0,Educ/health/social assistance,61-62
+N1869C,2016,13487.0,Educ/health/social assistance,61-62
+N1869C,2017,12796.0,Educ/health/social assistance,61-62
+N1869C,2018,12324.0,Educ/health/social assistance,61-62
+N1869C,2019,14370.0,Educ/health/social assistance,61-62
+N1869C,2020,12228.0,Educ/health/social assistance,61-62
+N1869C,2021,9752.0,Educ/health/social assistance,61-62
+N1869C,2022,8177.0,Educ/health/social assistance,61-62
+N1869C,2023,5980.0,Educ/health/social assistance,61-62
+N1869C,2024,5859.0,Educ/health/social assistance,61-62
+A1850C,1998,502980.0,Domestic industries,total
+A1850C,1999,509688.0,Domestic industries,total
+A1850C,2000,591194.0,Domestic industries,total
+A1850C,2001,612243.0,Domestic industries,total
+A1850C,2002,537236.0,Domestic industries,total
+A1850C,2003,504122.0,Domestic industries,total
+A1850C,2004,441906.0,Domestic industries,total
+A1850C,2005,554689.0,Domestic industries,total
+A1850C,2006,681646.0,Domestic industries,total
+A1850C,2007,790714.0,Domestic industries,total
+A1850C,2008,825849.0,Domestic industries,total
+A1850C,2009,688031.0,Domestic industries,total
+A1850C,2010,590831.0,Domestic industries,total
+A1850C,2011,552734.0,Domestic industries,total
+A1850C,2012,587248.0,Domestic industries,total
+A1850C,2013,531286.0,Domestic industries,total
+A1850C,2014,564360.0,Domestic industries,total
+A1850C,2015,643376.0,Domestic industries,total
+A1850C,2016,651127.0,Domestic industries,total
+A1850C,2017,703705.0,Domestic industries,total
+A1850C,2018,737040.0,Domestic industries,total
+A1850C,2019,734567.0,Domestic industries,total
+A1850C,2020,734786.0,Domestic industries,total
+A1850C,2021,675076.0,Domestic industries,total
+A1850C,2022,654310.0,Domestic industries,total
+A1850C,2023,613841.0,Domestic industries,total
+A1850C,2024,579219.0,Domestic industries,total

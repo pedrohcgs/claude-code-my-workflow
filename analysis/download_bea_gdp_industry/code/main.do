@@ -1,11 +1,15 @@
 * ============================================================
 * Download BEA GDP-by-Industry Data
 * Project: Capital and Labor Shares in Healthcare
-* Purpose: Call Python API helper, import CSVs, save as .dta
+* Purpose: Import BEA data via API (primary) or NIPA bulk (fallback),
+*          save as .dta files for downstream analysis
 * Inputs:  inputs/bea_api_key.txt (user provides)
-* Outputs: outputs/bea_va_components_raw.dta
-*          outputs/bea_chain_indexes_raw.dta
-*          outputs/data_vintage.txt
+* Outputs: outputs/bea_va_panel.dta       (API: VA components by industry)
+*          outputs/nipa_comp.dta           (NIPA fallback: compensation)
+*          outputs/nipa_natl_income.dta    (NIPA fallback: national income)
+*          outputs/nipa_prop_income.dta    (NIPA fallback: prop income)
+*          outputs/nipa_self_employed.dta  (NIPA fallback: self-employed)
+*          outputs/nipa_fte_employees.dta  (NIPA fallback: FTE employees)
 * ============================================================
 
 version 18
@@ -18,120 +22,198 @@ log using "outputs/download_bea_gdp_industry.log", replace
 * --- 0. Setup ---
 local task_root = c(pwd)
 
-* --- 1. Check for API key ---
+* --- 1. Try BEA API first ---
+display "Attempting BEA API download..."
 capture confirm file "inputs/bea_api_key.txt"
-if _rc != 0 {
-    display as error "ERROR: BEA API key not found at inputs/bea_api_key.txt"
-    display as error "Sign up for a free key at: https://apps.bea.gov/api/signup/"
-    display as error "Save the key (plain text, one line) to inputs/bea_api_key.txt"
-    log close
-    error 601
+if _rc == 0 {
+    * Always re-run API fetch if key exists (may have been activated)
+    shell python3 code/fetch_bea_api.py
 }
 
-* --- 2. Run Python API helper ---
-* Check if CSVs already exist (skip download if so)
+* --- 2. Preprocess API data if available ---
 capture confirm file "outputs/bea_va_components.csv"
-local need_download = _rc != 0
-
-if `need_download' {
-    display "Running Python BEA API helper..."
-    shell python3 code/fetch_bea_api.py
-
-    * Verify download succeeded
-    capture confirm file "outputs/bea_va_components.csv"
-    if _rc != 0 {
-        display as error "ERROR: Python API helper did not produce bea_va_components.csv"
-        display as error "Check outputs/ for error logs. Try manual download (see code/README_manual.md)"
-        log close
-        error 601
+local api_success = 0
+if _rc == 0 {
+    * Check that the CSV has actual data (not just headers)
+    quietly import delimited using "outputs/bea_va_components.csv", clear
+    if _N > 100 {
+        local api_success = 1
+        clear
+        * Run preprocessing to create clean panel
+        display "Preprocessing API data..."
+        shell python3 code/preprocess_bea_api.py
+    }
+    else {
+        display "API CSV has too few rows (_N = " _N "). Falling back to NIPA."
+        clear
     }
 }
-else {
-    display "CSVs already exist in outputs/. Skipping download."
-    display "Delete outputs/*.csv to force re-download."
-}
 
-* --- 3. Import VA components ---
-display _n "Importing VA components..."
-import delimited using "outputs/bea_va_components.csv", clear varnames(1) stringcols(_all)
-
-* Standardize variable names (BEA API uses varying capitalization)
-capture rename tableid table_id
-capture rename sourcetableid source_table_id
-capture rename industryid industry_id
-capture rename industrydescription industry_desc
-capture rename datavalue data_value
-capture rename year year_str
-
-* Clean data values: remove commas, handle suppressed values
-capture gen str data_value_clean = subinstr(data_value, ",", "", .)
-capture destring data_value_clean, gen(value) force
-capture destring year_str, gen(year) force
-capture destring year, replace force
-
-* Label variables
-capture label variable table_id "BEA table ID"
-capture label variable industry_id "NAICS industry code"
-capture label variable industry_desc "Industry description"
-capture label variable value "Data value (millions of current dollars)"
-capture label variable year "Year"
-
-* Document what we have
-display _n "=== VA Components Summary ==="
-display "Observations: " _N
-capture tab source_table_id, missing
-capture tab year if !missing(year), missing
-capture tab industry_id if strpos(industry_id, "62") > 0
-
-compress
-save "outputs/bea_va_components_raw.dta", replace
-
-* --- 4. Import chain-type quantity indexes ---
-capture confirm file "outputs/bea_chain_indexes.csv"
+* --- 3. Import BEA VA panel (from API) ---
+capture confirm file "outputs/bea_va_panel.csv"
 if _rc == 0 {
-    display _n "Importing chain-type quantity indexes..."
-    import delimited using "outputs/bea_chain_indexes.csv", clear varnames(1) stringcols(_all)
+    display _n "=== Importing BEA GDP-by-Industry Panel ==="
+    import delimited using "outputs/bea_va_panel.csv", clear varnames(1) ///
+        stringcols(1 3)
 
-    * Same standardization
-    capture rename tableid table_id
-    capture rename industryid industry_id
-    capture rename industrydescription industry_desc
-    capture rename datavalue data_value
+    * Convert value_added etc from billions to millions for consistency with NIPA
+    foreach var in value_added comp_employees gos topi {
+        replace `var' = `var' * 1000
+        label variable `var' "`var' (millions of current $)"
+    }
+    label variable value_added "Value added (millions of current $)"
+    label variable comp_employees "Compensation of employees (millions of current $)"
+    label variable gos "Gross operating surplus (millions of current $)"
+    label variable topi "Taxes on production & imports less subsidies (millions $)"
+    label variable naics_code "NAICS industry code"
+    label variable year "Year"
+    label variable industry_label "Industry description"
 
-    capture gen str data_value_clean = subinstr(data_value, ",", "", .)
-    capture destring data_value_clean, gen(value) force
-    capture destring year, replace force
+    * Compute labor share directly from VA components
+    gen labor_share_va = comp_employees / value_added if value_added > 0
+    gen capital_share_va = gos / value_added if value_added > 0
+    gen topi_share_va = topi / value_added if value_added > 0
+    label variable labor_share_va "Labor share (CE/VA)"
+    label variable capital_share_va "Capital share (GOS/VA)"
+    label variable topi_share_va "Tax share (TOPI/VA)"
 
-    capture label variable industry_id "NAICS industry code"
-    capture label variable value "Chain-type quantity index (2017=100)"
-    capture label variable year "Year"
+    * Verify: shares should sum to ~1
+    gen share_sum = labor_share_va + capital_share_va + topi_share_va
+    summarize share_sum
+    assert abs(share_sum - 1) < 0.005 if !missing(share_sum)
+    drop share_sum
 
-    display _n "=== Chain Indexes Summary ==="
-    display "Observations: " _N
+    * Add industry_group for downstream compatibility
+    gen str20 industry_group = ""
+    replace industry_group = "construction"       if naics_code == "23"
+    replace industry_group = "manufacturing"       if naics_code == "31-33"
+    replace industry_group = "retail"              if naics_code == "44-45"
+    replace industry_group = "information"         if naics_code == "51"
+    replace industry_group = "finance"             if naics_code == "52"
+    replace industry_group = "professional"        if naics_code == "54"
+    replace industry_group = "education"           if naics_code == "61"
+    replace industry_group = "educ_health"         if naics_code == "61-62"
+    replace industry_group = "healthcare_total"    if naics_code == "62"
+    replace industry_group = "ambulatory"          if naics_code == "621"
+    replace industry_group = "hospitals"           if naics_code == "622"
+    replace industry_group = "nursing"             if naics_code == "623"
+    replace industry_group = "social_assistance"   if naics_code == "624"
+    replace industry_group = "private_industries"  if naics_code == "private"
+    replace industry_group = "total_economy"       if naics_code == "total"
+    label variable industry_group "Industry group label"
 
+    * Validation
+    display _n "=== BEA VA Panel Validation ==="
+    isid naics_code year
+    tab naics_code, missing
+    summarize year
+    summarize labor_share_va capital_share_va
+
+    * Healthcare summary
+    display _n "Healthcare labor shares (CE/VA):"
+    list naics_code year labor_share_va capital_share_va ///
+        if inlist(naics_code, "62", "621", "622", "623") & year >= 2020, ///
+        noobs sepby(naics_code)
+
+    label data "BEA GDP-by-Industry VA components panel"
     compress
-    save "outputs/bea_chain_indexes_raw.dta", replace
+    save "outputs/bea_va_panel.dta", replace
+    display "Saved: bea_va_panel.dta (" _N " observations)"
 }
 else {
-    display "No chain index CSV found. Skipping."
+    display as error "BEA VA panel not available."
 }
 
-* --- 5. Verification ---
-display _n "=== Verification ==="
-use "outputs/bea_va_components_raw.dta", clear
-display "VA components: " _N " observations"
+* --- 4. NIPA bulk fallback (always run for supplementary data) ---
+* The NIPA tables provide proprietors' income, self-employment, and FTE data
+* that the GDP-by-Industry dataset does not include.
 
-* Check healthcare industries present
-count if strpos(industry_id, "62") > 0
-local n_healthcare = r(N)
-display "Healthcare-related rows: `n_healthcare'"
-assert `n_healthcare' > 0
+display _n "=== NIPA Supplementary Data ==="
 
-* Check year range
-quietly summarize year
-display "Year range: " r(min) " to " r(max)
-assert r(min) <= 2000
-assert r(max) >= 2020
+* Download NIPA bulk data if not present
+capture confirm file "outputs/NipaDataA.txt"
+if _rc != 0 {
+    display "Downloading NipaDataA.txt from BEA..."
+    shell curl -sS -o "outputs/NipaDataA.txt" "https://apps.bea.gov/national/Release/TXT/NipaDataA.txt"
+}
+capture confirm file "outputs/SeriesRegister.txt"
+if _rc != 0 {
+    display "Downloading SeriesRegister.txt..."
+    shell curl -sS -o "outputs/SeriesRegister.txt" "https://apps.bea.gov/national/Release/TXT/SeriesRegister.txt"
+}
+
+* Run NIPA extraction (produces compensation, NI, prop income, self-employed, FTE)
+capture confirm file "outputs/nipa_comp.csv"
+if _rc != 0 {
+    display "Extracting supplementary data from NIPA bulk file..."
+    shell python3 code/extract_nipa_bulk.py
+}
+
+* Import NIPA supplementary datasets
+foreach dataset in nipa_comp nipa_natl_income nipa_prop_income nipa_self_employed nipa_fte_employees {
+    capture confirm file "outputs/`dataset'.csv"
+    if _rc == 0 {
+        import delimited using "outputs/`dataset'.csv", clear varnames(1) stringcols(1 4 5)
+
+        * Rename value column based on dataset
+        if "`dataset'" == "nipa_comp" {
+            rename value comp_employees
+            label variable comp_employees "Compensation of employees (millions, NIPA)"
+        }
+        else if "`dataset'" == "nipa_natl_income" {
+            rename value natl_income
+            label variable natl_income "National income (millions, NIPA)"
+        }
+        else if "`dataset'" == "nipa_prop_income" {
+            rename value prop_income
+            label variable prop_income "Nonfarm proprietors' income (millions, NIPA)"
+        }
+        else if "`dataset'" == "nipa_self_employed" {
+            rename value n_self_employed
+            label variable n_self_employed "Nonfarm self-employed (thousands, NIPA)"
+        }
+        else if "`dataset'" == "nipa_fte_employees" {
+            rename value fte_employees
+            label variable fte_employees "Full-time equivalent employees (thousands, NIPA)"
+        }
+
+        compress
+        save "outputs/`dataset'.dta", replace
+        display "  `dataset': " _N " observations"
+    }
+    else {
+        display "  `dataset'.csv: not found (skipping)"
+    }
+}
+
+* --- 5. Final verification ---
+display _n "=== Final Verification ==="
+
+* BEA VA panel
+capture confirm file "outputs/bea_va_panel.dta"
+if _rc == 0 {
+    quietly use "outputs/bea_va_panel.dta", clear
+    quietly count if inlist(naics_code, "62", "621", "622", "623")
+    display "  bea_va_panel.dta: " _N " obs, " r(N) " healthcare"
+    display "  STATUS: GDP-by-Industry VA data AVAILABLE"
+}
+else {
+    display as error "  bea_va_panel.dta: MISSING"
+    display as error "  STATUS: Using NIPA fallback only (limited factor shares)"
+}
+
+* NIPA supplementary
+foreach dataset in nipa_prop_income nipa_self_employed nipa_fte_employees {
+    capture confirm file "outputs/`dataset'.dta"
+    if _rc == 0 {
+        quietly use "outputs/`dataset'.dta", clear
+        quietly count if naics_code == "62"
+        display "  `dataset': " _N " obs, " r(N) " healthcare"
+    }
+    else {
+        display "  `dataset': MISSING"
+    }
+}
 
 display _n "Download and import complete."
 log close

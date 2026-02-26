@@ -1,0 +1,421 @@
+naics_code,year,industry_label,value_added,comp_employees,gos,topi
+23,1997,Construction,339.6,228.6,106.7,4.2
+23,1998,Construction,379.8,253.0,122.0,4.8
+23,1999,Construction,417.7,278.2,134.3,5.2
+23,2000,Construction,461.2,307.7,148.0,5.6
+23,2001,Construction,486.4,325.4,155.3,5.7
+23,2002,Construction,493.5,327.1,160.4,6.1
+23,2003,Construction,525.2,335.8,183.1,6.3
+23,2004,Construction,584.6,358.0,219.5,7.2
+23,2005,Construction,651.6,387.5,256.1,8.0
+23,2006,Construction,697.1,421.3,267.5,8.2
+23,2007,Construction,715.7,440.0,267.5,8.3
+23,2008,Construction,649.3,433.9,207.5,7.8
+23,2009,Construction,565.4,368.4,189.8,7.3
+23,2010,Construction,525.7,343.8,174.8,7.2
+23,2011,Construction,525.6,347.3,171.1,7.2
+23,2012,Construction,554.9,365.9,181.6,7.5
+23,2013,Construction,594.7,387.8,199.0,7.9
+23,2014,Construction,649.9,422.4,219.2,8.4
+23,2015,Construction,715.3,458.5,247.9,8.9
+23,2016,Construction,776.8,485.9,281.4,9.5
+23,2017,Construction,840.2,520.4,309.7,10.1
+23,2018,Construction,889.1,558.3,320.1,10.7
+23,2019,Construction,953.0,598.4,343.2,11.3
+23,2020,Construction,958.7,597.8,415.3,-54.4
+23,2021,Construction,1012.1,636.9,400.8,-25.6
+23,2022,Construction,1112.4,694.3,404.5,13.6
+23,2023,Construction,1224.6,745.0,465.4,14.1
+23,2024,Construction,1305.4,799.3,491.2,14.9
+31-33,1997,Manufacturing,1382.9,789.0,552.8,41.1
+31-33,1998,Manufacturing,1430.6,834.4,553.7,42.4
+31-33,1999,Manufacturing,1489.6,870.2,575.6,43.8
+31-33,2000,Manufacturing,1549.8,918.0,584.9,46.9
+31-33,2001,Manufacturing,1473.5,881.9,542.6,49.1
+31-33,2002,Manufacturing,1468.3,846.5,570.3,51.5
+31-33,2003,Manufacturing,1524.0,847.0,623.5,53.5
+31-33,2004,Manufacturing,1607.8,873.7,678.1,56.1
+31-33,2005,Manufacturing,1692.5,895.5,737.7,59.3
+31-33,2006,Manufacturing,1793.5,924.0,808.3,61.3
+31-33,2007,Manufacturing,1845.8,943.6,838.2,63.9
+31-33,2008,Manufacturing,1799.6,931.9,802.7,65.0
+31-33,2009,Manufacturing,1695.8,835.2,785.9,74.8
+31-33,2010,Manufacturing,1788.3,847.2,865.5,75.7
+31-33,2011,Manufacturing,1863.1,882.4,902.4,78.3
+31-33,2012,Manufacturing,1921.3,917.0,925.7,78.6
+31-33,2013,Manufacturing,1970.5,931.8,955.3,83.4
+31-33,2014,Manufacturing,2009.7,973.0,953.2,83.4
+31-33,2015,Manufacturing,2071.1,1006.4,979.9,84.8
+31-33,2016,Manufacturing,2035.2,1013.1,937.7,84.4
+31-33,2017,Manufacturing,2109.7,1053.4,968.1,88.2
+31-33,2018,Manufacturing,2261.8,1101.2,1070.6,90.0
+31-33,2019,Manufacturing,2268.8,1129.2,1047.6,92.0
+31-33,2020,Manufacturing,2156.8,1114.2,1009.7,32.9
+31-33,2021,Manufacturing,2416.3,1177.6,1185.1,53.6
+31-33,2022,Manufacturing,2668.2,1254.2,1313.0,101.0
+31-33,2023,Manufacturing,2816.5,1306.6,1407.3,102.6
+31-33,2024,Manufacturing,2880.7,1359.1,1415.6,106.0
+44-45,1997,Retail trade,579.9,339.0,134.7,106.2
+44-45,1998,Retail trade,626.9,362.7,152.1,112.0
+44-45,1999,Retail trade,652.8,380.6,152.4,119.8
+44-45,2000,Retail trade,685.4,405.7,152.9,126.8
+44-45,2001,Retail trade,709.4,416.7,159.0,133.7
+44-45,2002,Retail trade,732.6,428.5,167.7,136.4
+44-45,2003,Retail trade,769.5,444.8,180.0,144.7
+44-45,2004,Retail trade,795.5,459.4,180.8,155.3
+44-45,2005,Retail trade,840.6,477.7,194.6,168.2
+44-45,2006,Retail trade,869.8,492.2,198.7,178.9
+44-45,2007,Retail trade,869.4,506.4,182.1,180.9
+44-45,2008,Retail trade,851.4,500.9,172.0,178.4
+44-45,2009,Retail trade,832.3,474.3,192.3,165.8
+44-45,2010,Retail trade,863.5,478.9,206.4,178.2
+44-45,2011,Retail trade,883.6,495.7,201.0,187.0
+44-45,2012,Retail trade,923.4,510.1,218.8,194.4
+44-45,2013,Retail trade,979.7,526.7,248.3,204.7
+44-45,2014,Retail trade,1018.2,545.5,259.1,213.7
+44-45,2015,Retail trade,1081.2,573.6,291.4,216.1
+44-45,2016,Retail trade,1133.2,587.7,323.3,222.3
+44-45,2017,Retail trade,1178.9,606.9,339.6,232.4
+44-45,2018,Retail trade,1223.6,628.2,353.3,242.1
+44-45,2019,Retail trade,1277.6,651.9,370.0,255.7
+44-45,2020,Retail trade,1335.2,669.2,455.3,210.7
+44-45,2021,Retail trade,1537.4,748.0,537.9,251.5
+44-45,2022,Retail trade,1647.8,786.8,536.8,324.3
+44-45,2023,Retail trade,1779.6,822.8,631.2,325.6
+44-45,2024,Retail trade,1849.0,846.1,664.7,338.2
+51,1997,Information,394.1,169.0,194.1,31.0
+51,1998,Information,434.6,189.5,212.1,33.0
+51,1999,Information,485.3,219.6,229.5,36.1
+51,2000,Information,471.2,246.0,186.3,38.9
+51,2001,Information,502.3,247.2,211.7,43.3
+51,2002,Information,550.5,228.4,278.0,44.1
+51,2003,Information,564.8,230.5,289.5,44.8
+51,2004,Information,620.3,238.0,335.8,46.5
+51,2005,Information,642.0,241.5,352.1,48.4
+51,2006,Information,651.9,248.8,354.6,48.6
+51,2007,Information,707.5,260.5,399.0,48.0
+51,2008,Information,743.8,257.8,441.4,44.6
+51,2009,Information,721.4,251.5,426.0,43.9
+51,2010,Information,754.9,248.6,462.0,44.3
+51,2011,Information,763.0,260.1,457.8,45.1
+51,2012,Information,762.7,271.6,445.9,45.3
+51,2013,Information,835.5,286.5,502.2,46.8
+51,2014,Information,848.8,304.4,495.5,48.9
+51,2015,Information,913.1,318.7,539.3,55.2
+51,2016,Information,974.9,329.0,589.7,56.1
+51,2017,Information,1010.0,348.8,602.7,58.6
+51,2018,Information,1041.5,376.8,602.4,62.3
+51,2019,Information,1142.6,400.2,678.8,63.7
+51,2020,Information,1181.8,425.7,702.4,53.7
+51,2021,Information,1312.6,508.6,747.0,57.0
+51,2022,Information,1383.5,517.1,798.3,68.1
+51,2023,Information,1491.3,541.1,880.6,69.6
+51,2024,Information,1592.7,593.2,933.6,65.9
+52,1997,Finance and insurance,577.2,314.9,235.3,27.0
+52,1998,Finance and insurance,637.9,350.4,259.7,27.8
+52,1999,Finance and insurance,674.4,375.5,269.5,29.3
+52,2000,Finance and insurance,744.4,411.9,302.3,30.2
+52,2001,Finance and insurance,800.3,445.3,326.6,28.5
+52,2002,Finance and insurance,809.1,443.3,335.1,30.6
+52,2003,Finance and insurance,843.2,459.8,350.8,32.6
+52,2004,Finance and insurance,873.2,497.7,339.4,36.1
+52,2005,Finance and insurance,977.5,534.6,404.3,38.6
+52,2006,Finance and insurance,1048.3,579.2,429.0,40.1
+52,2007,Finance and insurance,1029.6,617.4,369.9,42.2
+52,2008,Finance and insurance,871.3,612.1,215.6,43.5
+52,2009,Finance and insurance,967.0,548.0,375.4,43.6
+52,2010,Finance and insurance,993.2,573.3,376.0,43.9
+52,2011,Finance and insurance,1022.5,606.5,371.0,45.0
+52,2012,Finance and insurance,1169.4,630.1,494.2,45.2
+52,2013,Finance and insurance,1153.5,641.3,464.8,47.4
+52,2014,Finance and insurance,1295.7,681.1,558.3,56.3
+52,2015,Finance and insurance,1390.6,715.7,613.1,61.8
+52,2016,Finance and insurance,1474.9,734.1,675.9,64.8
+52,2017,Finance and insurance,1508.0,787.6,664.0,56.3
+52,2018,Finance and insurance,1574.8,819.1,682.4,73.3
+52,2019,Finance and insurance,1652.3,851.6,738.5,62.1
+52,2020,Finance and insurance,1718.8,912.3,740.2,66.3
+52,2021,Finance and insurance,1862.4,990.6,811.0,60.7
+52,2022,Finance and insurance,1982.6,1020.7,888.9,73.0
+52,2023,Finance and insurance,2075.7,1059.7,938.8,77.2
+52,2024,Finance and insurance,2229.2,1115.4,1030.3,83.5
+54,1997,"Professional, scientific, and technical services",499.7,326.9,162.5,10.3
+54,1998,"Professional, scientific, and technical services",543.1,367.1,163.8,12.2
+54,1999,"Professional, scientific, and technical services",596.1,404.2,178.3,13.6
+54,2000,"Professional, scientific, and technical services",651.7,462.6,174.6,14.5
+54,2001,"Professional, scientific, and technical services",686.7,477.3,193.8,15.6
+54,2002,"Professional, scientific, and technical services",714.7,469.2,227.6,17.9
+54,2003,"Professional, scientific, and technical services",741.3,478.0,238.9,24.4
+54,2004,"Professional, scientific, and technical services",792.3,506.7,255.8,29.9
+54,2005,"Professional, scientific, and technical services",852.1,553.6,260.9,37.6
+54,2006,"Professional, scientific, and technical services",917.0,607.4,272.8,36.8
+54,2007,"Professional, scientific, and technical services",985.4,655.0,295.3,35.0
+54,2008,"Professional, scientific, and technical services",1082.8,693.5,359.2,30.1
+54,2009,"Professional, scientific, and technical services",1030.9,669.4,338.9,22.5
+54,2010,"Professional, scientific, and technical services",1065.1,682.7,358.8,23.6
+54,2011,"Professional, scientific, and technical services",1127.2,727.1,375.0,25.1
+54,2012,"Professional, scientific, and technical services",1191.8,776.7,387.9,27.2
+54,2013,"Professional, scientific, and technical services",1211.7,801.5,379.9,30.4
+54,2014,"Professional, scientific, and technical services",1269.5,848.9,388.0,32.6
+54,2015,"Professional, scientific, and technical services",1349.7,909.4,405.5,34.8
+54,2016,"Professional, scientific, and technical services",1396.5,939.1,420.8,36.7
+54,2017,"Professional, scientific, and technical services",1460.6,990.5,432.0,38.1
+54,2018,"Professional, scientific, and technical services",1562.1,1059.7,461.9,40.5
+54,2019,"Professional, scientific, and technical services",1653.1,1130.5,479.9,42.8
+54,2020,"Professional, scientific, and technical services",1673.8,1178.4,517.4,-21.9
+54,2021,"Professional, scientific, and technical services",1885.2,1313.0,551.7,20.5
+54,2022,"Professional, scientific, and technical services",2057.5,1431.5,565.3,60.6
+54,2023,"Professional, scientific, and technical services",2220.6,1516.5,647.2,56.8
+54,2024,"Professional, scientific, and technical services",2355.1,1606.3,689.4,59.4
+61,1997,Educational services,77.1,59.2,14.6,3.3
+61,1998,Educational services,79.9,64.4,12.0,3.6
+61,1999,Educational services,87.7,69.5,14.3,3.9
+61,2000,Educational services,95.2,74.4,16.5,4.3
+61,2001,Educational services,101.7,79.6,18.2,3.9
+61,2002,Educational services,106.5,88.7,13.5,4.3
+61,2003,Educational services,116.8,94.3,17.9,4.6
+61,2004,Educational services,129.0,101.9,22.2,5.0
+61,2005,Educational services,133.2,105.9,21.9,5.4
+61,2006,Educational services,142.9,113.1,23.9,5.9
+61,2007,Educational services,151.5,120.9,24.3,6.3
+61,2008,Educational services,167.8,129.4,31.5,6.8
+61,2009,Educational services,188.2,139.9,40.7,7.6
+61,2010,Educational services,199.0,145.5,45.7,7.7
+61,2011,Educational services,206.3,152.8,45.7,7.9
+61,2012,Educational services,214.2,161.4,44.9,7.9
+61,2013,Educational services,217.0,165.2,43.7,8.1
+61,2014,Educational services,224.8,174.9,41.9,8.0
+61,2015,Educational services,231.3,180.4,42.6,8.3
+61,2016,Educational services,243.2,190.5,43.9,8.8
+61,2017,Educational services,245.6,192.4,43.9,9.2
+61,2018,Educational services,257.2,202.3,45.3,9.7
+61,2019,Educational services,270.3,213.5,46.5,10.3
+61,2020,Educational services,255.6,215.5,34.5,5.6
+61,2021,Educational services,269.9,227.9,37.8,4.2
+61,2022,Educational services,296.1,243.4,40.8,11.8
+61,2023,Educational services,316.4,255.7,48.3,12.5
+61,2024,Educational services,334.8,268.0,53.4,13.4
+61-62,1997,"Educational services, health care, and social assistance",590.6,474.5,102.8,13.2
+61-62,1998,"Educational services, health care, and social assistance",615.8,500.6,100.9,14.3
+61-62,1999,"Educational services, health care, and social assistance",654.1,530.3,108.6,15.2
+61-62,2000,"Educational services, health care, and social assistance",695.4,563.3,115.9,16.2
+61-62,2001,"Educational services, health care, and social assistance",749.8,604.5,127.4,17.9
+61-62,2002,"Educational services, health care, and social assistance",807.0,654.8,132.7,19.5
+61-62,2003,"Educational services, health care, and social assistance",862.7,700.9,141.1,20.6
+61-62,2004,"Educational services, health care, and social assistance",927.2,752.3,152.2,22.8
+61-62,2005,"Educational services, health care, and social assistance",970.2,793.4,151.4,25.4
+61-62,2006,"Educational services, health care, and social assistance",1035.3,846.3,162.0,27.0
+61-62,2007,"Educational services, health care, and social assistance",1088.0,895.9,163.0,29.1
+61-62,2008,"Educational services, health care, and social assistance",1185.0,954.0,200.9,30.1
+61-62,2009,"Educational services, health care, and social assistance",1267.0,1002.3,232.8,31.9
+61-62,2010,"Educational services, health care, and social assistance",1311.3,1034.0,244.9,32.3
+61-62,2011,"Educational services, health care, and social assistance",1356.2,1074.8,253.0,28.5
+61-62,2012,"Educational services, health care, and social assistance",1409.3,1125.0,252.7,31.6
+61-62,2013,"Educational services, health care, and social assistance",1450.0,1162.5,255.3,32.2
+61-62,2014,"Educational services, health care, and social assistance",1495.0,1203.1,259.4,32.5
+61-62,2015,"Educational services, health care, and social assistance",1574.9,1265.6,274.1,35.2
+61-62,2016,"Educational services, health care, and social assistance",1657.0,1327.0,291.8,38.1
+61-62,2017,"Educational services, health care, and social assistance",1716.9,1379.5,296.3,41.1
+61-62,2018,"Educational services, health care, and social assistance",1792.0,1449.7,298.7,43.6
+61-62,2019,"Educational services, health care, and social assistance",1884.2,1521.6,316.4,46.2
+61-62,2020,"Educational services, health care, and social assistance",1870.7,1577.6,346.7,-53.6
+61-62,2021,"Educational services, health care, and social assistance",2004.1,1666.1,376.9,-38.9
+61-62,2022,"Educational services, health care, and social assistance",2159.1,1785.4,338.8,34.9
+61-62,2023,"Educational services, health care, and social assistance",2360.1,1906.6,406.3,47.3
+61-62,2024,"Educational services, health care, and social assistance",2544.2,2039.4,447.4,57.3
+62,1997,Health care and social assistance,513.5,415.3,88.2,10.0
+62,1998,Health care and social assistance,535.8,436.2,88.9,10.7
+62,1999,Health care and social assistance,566.4,460.8,94.3,11.3
+62,2000,Health care and social assistance,600.1,488.8,99.4,12.0
+62,2001,Health care and social assistance,648.1,524.9,109.3,14.0
+62,2002,Health care and social assistance,700.5,566.1,119.3,15.2
+62,2003,Health care and social assistance,746.0,606.6,123.3,16.1
+62,2004,Health care and social assistance,798.2,650.4,130.0,17.7
+62,2005,Health care and social assistance,837.0,687.5,129.5,20.0
+62,2006,Health care and social assistance,892.4,733.2,138.1,21.2
+62,2007,Health care and social assistance,936.5,775.1,138.6,22.8
+62,2008,Health care and social assistance,1017.2,824.6,169.3,23.3
+62,2009,Health care and social assistance,1078.8,862.4,192.0,24.4
+62,2010,Health care and social assistance,1112.3,888.5,199.2,24.6
+62,2011,Health care and social assistance,1149.9,922.0,207.3,20.7
+62,2012,Health care and social assistance,1195.1,963.6,207.8,23.7
+62,2013,Health care and social assistance,1233.0,997.3,211.7,24.1
+62,2014,Health care and social assistance,1270.2,1028.3,217.4,24.5
+62,2015,Health care and social assistance,1343.6,1085.1,231.5,26.9
+62,2016,Health care and social assistance,1413.8,1136.5,247.9,29.3
+62,2017,Health care and social assistance,1471.3,1187.1,252.3,31.9
+62,2018,Health care and social assistance,1534.7,1247.4,253.4,33.9
+62,2019,Health care and social assistance,1613.9,1308.1,269.9,35.9
+62,2020,Health care and social assistance,1615.1,1362.1,312.2,-59.2
+62,2021,Health care and social assistance,1734.2,1438.2,339.1,-43.1
+62,2022,Health care and social assistance,1863.0,1542.0,298.0,23.1
+62,2023,Health care and social assistance,2043.7,1650.8,358.0,34.8
+62,2024,Health care and social assistance,2209.4,1771.4,394.0,43.9
+621,1997,Ambulatory health care services,250.9,189.5,56.8,4.6
+621,1998,Ambulatory health care services,258.6,197.2,56.5,4.8
+621,1999,Ambulatory health care services,271.3,206.1,60.0,5.1
+621,2000,Ambulatory health care services,288.3,218.9,64.0,5.4
+621,2001,Ambulatory health care services,310.9,234.9,71.3,4.8
+621,2002,Ambulatory health care services,334.1,251.8,77.2,5.1
+621,2003,Ambulatory health care services,350.5,267.4,77.8,5.2
+621,2004,Ambulatory health care services,375.1,288.7,80.4,6.0
+621,2005,Ambulatory health care services,396.9,306.0,84.3,6.6
+621,2006,Ambulatory health care services,423.1,327.5,88.9,6.8
+621,2007,Ambulatory health care services,442.5,346.4,88.9,7.1
+621,2008,Ambulatory health care services,481.1,366.9,106.9,7.3
+621,2009,Ambulatory health care services,507.2,381.5,118.1,7.6
+621,2010,Ambulatory health care services,532.0,399.0,125.3,7.8
+621,2011,Ambulatory health care services,555.8,416.3,131.7,7.8
+621,2012,Ambulatory health care services,574.6,435.7,131.0,7.9
+621,2013,Ambulatory health care services,594.1,453.3,132.8,8.1
+621,2014,Ambulatory health care services,610.9,469.2,133.4,8.2
+621,2015,Ambulatory health care services,642.8,494.9,139.4,8.5
+621,2016,Ambulatory health care services,680.4,519.5,151.9,9.1
+621,2017,Ambulatory health care services,709.7,545.2,154.9,9.6
+621,2018,Ambulatory health care services,739.6,576.3,153.4,10.0
+621,2019,Ambulatory health care services,783.4,607.0,165.9,10.6
+621,2020,Ambulatory health care services,762.6,620.5,197.6,-55.6
+621,2021,Ambulatory health care services,848.4,677.1,209.9,-38.6
+621,2022,Ambulatory health care services,907.2,719.0,182.8,5.4
+621,2023,Ambulatory health care services,1004.5,766.8,225.7,12.0
+621,2024,Ambulatory health care services,1079.0,816.4,249.2,13.3
+622,1997,Hospitals,165.2,140.6,21.3,3.3
+622,1998,Hospitals,173.1,148.2,21.3,3.6
+622,1999,Hospitals,182.3,156.0,22.4,3.8
+622,2000,Hospitals,190.1,163.5,22.6,4.0
+622,2001,Hospitals,206.9,177.1,23.7,6.1
+622,2002,Hospitals,225.9,191.9,27.4,6.6
+622,2003,Hospitals,244.8,208.4,29.3,7.1
+622,2004,Hospitals,265.2,223.8,33.5,7.8
+622,2005,Hospitals,274.9,236.7,29.4,8.8
+622,2006,Hospitals,294.7,253.5,31.8,9.4
+622,2007,Hospitals,310.7,267.8,32.7,10.2
+622,2008,Hospitals,339.9,286.3,43.2,10.4
+622,2009,Hospitals,367.4,302.5,53.9,11.0
+622,2010,Hospitals,369.9,303.9,55.3,10.7
+622,2011,Hospitals,382.3,318.0,57.7,6.6
+622,2012,Hospitals,398.5,329.8,59.6,9.0
+622,2013,Hospitals,407.7,338.0,60.7,9.0
+622,2014,Hospitals,419.7,345.4,65.1,9.2
+622,2015,Hospitals,449.1,366.4,71.8,11.0
+622,2016,Hospitals,468.2,380.9,74.9,12.5
+622,2017,Hospitals,486.2,396.3,76.1,13.8
+622,2018,Hospitals,505.4,411.9,78.4,15.1
+622,2019,Hospitals,525.0,427.5,81.4,16.0
+622,2020,Hospitals,538.4,445.4,88.3,4.7
+622,2021,Hospitals,566.4,461.2,94.4,10.8
+622,2022,Hospitals,596.2,492.8,88.1,15.3
+622,2023,Hospitals,643.0,523.7,100.0,19.2
+622,2024,Hospitals,691.5,561.6,108.8,21.1
+623,1997,Nursing and residential care facilities,57.9,53.3,3.3,1.4
+623,1998,Nursing and residential care facilities,61.1,56.2,3.4,1.5
+623,1999,Nursing and residential care facilities,64.9,59.8,3.5,1.6
+623,2000,Nursing and residential care facilities,69.1,64.1,3.4,1.6
+623,2001,Nursing and residential care facilities,74.5,68.7,3.5,2.2
+623,2002,Nursing and residential care facilities,80.8,74.4,4.0,2.4
+623,2003,Nursing and residential care facilities,85.6,78.7,4.2,2.7
+623,2004,Nursing and residential care facilities,90.2,82.9,4.5,2.8
+623,2005,Nursing and residential care facilities,92.8,85.4,4.0,3.4
+623,2006,Nursing and residential care facilities,97.7,90.1,3.9,3.7
+623,2007,Nursing and residential care facilities,102.5,94.8,3.6,4.0
+623,2008,Nursing and residential care facilities,110.5,101.0,5.4,4.2
+623,2009,Nursing and residential care facilities,116.4,105.0,7.2,4.3
+623,2010,Nursing and residential care facilities,120.7,109.2,6.8,4.6
+623,2011,Nursing and residential care facilities,123.2,111.2,7.3,4.7
+623,2012,Nursing and residential care facilities,126.0,113.1,7.7,5.1
+623,2013,Nursing and residential care facilities,129.2,116.0,7.9,5.3
+623,2014,Nursing and residential care facilities,132.8,119.0,8.5,5.3
+623,2015,Nursing and residential care facilities,138.2,123.5,9.2,5.6
+623,2016,Nursing and residential care facilities,143.8,128.6,9.3,5.8
+623,2017,Nursing and residential care facilities,147.4,131.5,9.4,6.4
+623,2018,Nursing and residential care facilities,153.6,137.4,9.6,6.6
+623,2019,Nursing and residential care facilities,158.6,142.0,9.7,6.9
+623,2020,Nursing and residential care facilities,164.6,156.8,10.8,-3.1
+623,2021,Nursing and residential care facilities,163.2,151.5,11.1,0.6
+623,2022,Nursing and residential care facilities,180.4,162.3,10.5,7.6
+623,2023,Nursing and residential care facilities,196.8,175.3,12.8,8.7
+623,2024,Nursing and residential care facilities,212.3,188.7,14.1,9.5
+624,1997,Social assistance,39.5,31.9,6.9,0.7
+624,1998,Social assistance,43.0,34.6,7.7,0.8
+624,1999,Social assistance,47.9,38.8,8.3,0.8
+624,2000,Social assistance,52.6,42.4,9.3,0.9
+624,2001,Social assistance,55.8,44.1,10.8,0.9
+624,2002,Social assistance,59.7,48.1,10.6,1.0
+624,2003,Social assistance,65.1,52.0,12.0,1.0
+624,2004,Social assistance,67.7,55.0,11.6,1.1
+624,2005,Social assistance,72.4,59.5,11.8,1.2
+624,2006,Social assistance,76.9,62.1,13.5,1.3
+624,2007,Social assistance,80.8,66.1,13.3,1.4
+624,2008,Social assistance,85.7,70.3,13.9,1.4
+624,2009,Social assistance,87.7,73.4,12.8,1.5
+624,2010,Social assistance,89.7,76.4,11.8,1.6
+624,2011,Social assistance,88.7,76.5,10.6,1.6
+624,2012,Social assistance,96.0,84.9,9.5,1.6
+624,2013,Social assistance,101.9,90.0,10.2,1.7
+624,2014,Social assistance,106.8,94.7,10.4,1.8
+624,2015,Social assistance,113.4,100.4,11.2,1.8
+624,2016,Social assistance,121.3,107.5,11.9,1.9
+624,2017,Social assistance,128.2,114.1,12.0,2.1
+624,2018,Social assistance,136.1,121.8,12.0,2.2
+624,2019,Social assistance,146.9,131.7,12.8,2.4
+624,2020,Social assistance,149.5,139.4,15.4,-5.3
+624,2021,Social assistance,156.1,148.4,23.8,-16.1
+624,2022,Social assistance,179.2,167.9,16.6,-5.2
+624,2023,Social assistance,199.4,185.0,19.4,-5.1
+624,2024,Social assistance,226.6,204.8,21.8,0.0
+private,1997,Private industries,7432.0,3823.5,3016.9,591.6
+private,1998,Private industries,7871.5,4146.9,3109.6,615.0
+private,1999,Private industries,8378.8,4429.1,3309.3,640.4
+private,2000,Private industries,8927.9,4811.3,3442.4,674.2
+private,2001,Private industries,9189.0,4934.3,3573.1,681.6
+private,2002,Private industries,9454.7,4958.0,3763.4,733.3
+private,2003,Private industries,9904.1,5106.6,4025.3,772.2
+private,2004,Private industries,10585.6,5406.3,4341.1,838.2
+private,2005,Private industries,11327.8,5694.4,4735.0,898.5
+private,2006,Private industries,12022.5,6047.1,5012.3,963.1
+private,2007,Private industries,12585.9,6369.8,5215.2,1000.9
+private,2008,Private industries,12786.8,6475.5,5293.7,1017.6
+private,2009,Private industries,12431.5,6126.3,5314.2,991.0
+private,2010,Private industries,12939.5,6241.3,5670.1,1028.1
+private,2011,Private industries,13461.1,6532.0,5862.7,1066.4
+private,2012,Private industries,14092.7,6871.6,6120.5,1100.6
+private,2013,Private industries,14665.5,7095.3,6419.6,1150.7
+private,2014,Private industries,15332.5,7468.7,6659.0,1204.8
+private,2015,Private industries,15951.0,7863.2,6847.0,1240.8
+private,2016,Private industries,16413.1,8089.7,7050.1,1273.3
+private,2017,Private industries,17156.3,8499.5,7327.4,1329.4
+private,2018,Private industries,18097.8,8952.8,7724.3,1420.6
+private,2019,Private industries,18909.8,9386.3,8035.2,1488.3
+private,2020,Private industries,18664.0,9462.5,8332.7,868.7
+private,2021,Private industries,20917.7,10361.2,9434.1,1122.5
+private,2022,Private industries,23128.9,11189.5,10172.9,1766.5
+private,2023,Private industries,24712.8,11806.1,11101.0,1805.7
+private,2024,Private industries,26001.7,12463.7,11632.1,1905.9
+total,1997,Gross domestic product,8577.6,4713.2,3286.5,577.8
+total,1998,Gross domestic product,9062.8,5075.7,3384.0,603.1
+total,1999,Gross domestic product,9631.2,5409.9,3592.9,628.4
+total,2000,Gross domestic product,10251.0,5854.6,3733.6,662.7
+total,2001,Gross domestic product,10581.9,6046.3,3866.6,669.0
+total,2002,Gross domestic product,10929.1,6143.4,4067.1,718.6
+total,2003,Gross domestic product,11456.5,6362.3,4337.6,756.6
+total,2004,Gross domestic product,12217.2,6729.3,4666.2,821.7
+total,2005,Gross domestic product,13039.2,7077.7,5080.0,881.5
+total,2006,Gross domestic product,13815.6,7491.3,5378.8,945.6
+total,2007,Gross domestic product,14474.2,7889.4,5602.6,982.2
+total,2008,Gross domestic product,14769.9,8068.7,5704.0,997.2
+total,2009,Gross domestic product,14478.1,7767.2,5742.4,968.5
+total,2010,Gross domestic product,15049.0,7933.0,6108.7,1007.3
+total,2011,Gross domestic product,15599.7,8234.0,6322.0,1043.7
+total,2012,Gross domestic product,16254.0,8575.4,6600.5,1078.1
+total,2013,Gross domestic product,16880.7,8843.6,6910.9,1126.1
+total,2014,Gross domestic product,17608.1,9259.7,7168.9,1179.6
+total,2015,Gross domestic product,18295.0,9709.5,7369.2,1216.3
+total,2016,Gross domestic product,18804.9,9977.1,7580.4,1247.4
+total,2017,Gross domestic product,19612.1,10435.0,7873.0,1304.1
+total,2018,Gross domestic product,20656.5,10967.7,8295.1,1393.8
+total,2019,Gross domestic product,21540.0,11458.5,8620.8,1460.7
+total,2020,Gross domestic product,21375.3,11605.7,8946.8,822.8
+total,2021,Gross domestic product,23725.6,12569.6,10082.1,1074.0
+total,2022,Gross domestic product,26054.6,13462.2,10885.9,1706.5
+total,2023,Gross domestic product,27811.5,14228.4,11824.4,1758.8
+total,2024,Gross domestic product,29298.0,15049.1,12388.4,1860.4

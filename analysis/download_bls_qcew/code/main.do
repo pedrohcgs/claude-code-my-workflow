@@ -21,7 +21,8 @@ local start_year = 1997
 local end_year = 2024
 
 * --- 1. Download raw CSVs ---
-capture confirm file "outputs/raw/`start_year'_annual_singlefile.csv"
+* Check for files (BLS uses dot separator: YYYY.annual.singlefile.csv)
+capture confirm file "outputs/raw/`start_year'.annual.singlefile.csv"
 local need_download = _rc != 0
 
 if `need_download' {
@@ -42,12 +43,16 @@ tempfile master
 save `master', emptyok
 
 forvalues y = `start_year'/`end_year' {
-    local csv_file = "outputs/raw/`y'_annual_singlefile.csv"
+    * BLS uses dot separator: YYYY.annual.singlefile.csv
+    local csv_file = "outputs/raw/`y'.annual.singlefile.csv"
     capture confirm file "`csv_file'"
     if _rc == 0 {
         display "  Importing `y'..."
         quietly {
             import delimited using "`csv_file'", clear varnames(1) stringcols(_all)
+
+            * Strip quotes from area_fips (BLS CSVs are quoted)
+            replace area_fips = subinstr(area_fips, `"""', "", .)
 
             * Filter to national level immediately to save memory
             keep if area_fips == "US000"
@@ -72,6 +77,14 @@ display _n "Total national-level observations: " _N
 
 * --- 3. Clean and standardize ---
 display _n "Cleaning variables..."
+
+* Strip quotes from string variables (BLS CSVs quote everything)
+foreach var of varlist _all {
+    capture confirm string variable `var'
+    if _rc == 0 {
+        quietly replace `var' = subinstr(`var', `"""', "", .)
+    }
+}
 
 * Destring numeric variables
 foreach var in own_code agglvl_code size_code year qtr disclosure_code ///

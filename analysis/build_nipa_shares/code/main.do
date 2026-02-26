@@ -1,12 +1,15 @@
 * ============================================================
-* Build NIPA Industry-Year Panel
+* Build Industry-Year Panel with Factor Shares
 * Project: Capital and Labor Shares in Healthcare
-* Purpose: Clean BEA GDP-by-Industry data and NIPA supplements
-*          into a consistent industry-year panel of VA components
-* Inputs:  inputs/bea_gdp_industry/bea_va_components_raw.dta
-*          inputs/bea_gdp_industry/bea_chain_indexes_raw.dta
-*          inputs/bea_nipa_supplements/proprietors_income_by_industry_raw.dta
-*          inputs/bea_nipa_supplements/cfc_by_industry_raw.dta
+* Purpose: Create a comprehensive industry-year panel using:
+*          (1) BEA GDP-by-Industry VA components (primary)
+*          (2) NIPA supplementary data (prop income, self-employment)
+* Inputs:  inputs/bea_gdp_industry/bea_va_panel.dta     (VA, CE, GOS, TOPI)
+*          inputs/bea_gdp_industry/nipa_prop_income.dta  (proprietors' income)
+*          inputs/bea_gdp_industry/nipa_self_employed.dta
+*          inputs/bea_gdp_industry/nipa_fte_employees.dta
+*          inputs/bea_gdp_industry/nipa_natl_income.dta  (fallback)
+*          inputs/bea_gdp_industry/nipa_comp.dta         (fallback)
 * Outputs: outputs/nipa_industry_year_panel.dta
 *          outputs/naics_concordance.dta
 * ============================================================
@@ -24,22 +27,23 @@ local maroon    "128 0 0"
 local dark_gray "118 118 118"
 local phoenix   "255 163 25"
 
-* --- 1. Define target industries ---
-* We create a concordance of NAICS codes we want to track
+* --- 1. Define target industries (concordance) ---
 clear
 input str10 naics_code str40 industry_group str60 industry_label
-"62"    "healthcare_total"   "Health care and social assistance"
-"621"   "ambulatory"         "Ambulatory health care services"
-"622"   "hospitals"          "Hospitals"
-"623"   "nursing"            "Nursing and residential care"
-"31-33" "manufacturing"      "Manufacturing"
-"52"    "finance"            "Finance and insurance"
-"44-45" "retail"             "Retail trade"
-"54"    "professional"       "Professional, scientific, and technical"
-"61"    "education"          "Educational services"
-"51"    "information"        "Information"
-"23"    "construction"       "Construction"
-""      "total_economy"      "All industries"
+"23"      "construction"       "Construction"
+"31-33"   "manufacturing"      "Manufacturing"
+"44-45"   "retail"             "Retail trade"
+"51"      "information"        "Information"
+"52"      "finance"            "Finance and insurance"
+"54"      "professional"       "Professional, scientific, and technical"
+"61"      "education"          "Educational services"
+"62"      "healthcare_total"   "Health care and social assistance"
+"621"     "ambulatory"         "Ambulatory health care services"
+"622"     "hospitals"          "Hospitals"
+"623"     "nursing"            "Nursing and residential care"
+"61-62"   "educ_health"        "Educational services, health care, and social assistance"
+"private" "private_industries" "Private industries"
+"total"   "total_economy"      "Domestic industries"
 end
 
 label variable naics_code "NAICS industry code"
@@ -47,164 +51,251 @@ label variable industry_group "Industry group label"
 label variable industry_label "Full industry description"
 compress
 save "outputs/naics_concordance.dta", replace
-local n_industries = _N
-display "Target industries: `n_industries'"
+display "Target industries: " _N
 
-* --- 2. Load and clean VA components ---
-display _n "Loading VA components..."
-use "inputs/bea_gdp_industry/bea_va_components_raw.dta", clear
+* --- 2. Check for BEA VA panel (primary data source) ---
+capture confirm file "inputs/bea_gdp_industry/bea_va_panel.dta"
+local has_api_data = (_rc == 0)
 
-describe, short
-display "Raw observations: " _N
+if `has_api_data' {
+    display _n "=== Using BEA GDP-by-Industry VA data (primary) ==="
 
-* The BEA GDP-by-Industry data has different tables for different VA components.
-* We need to identify which table/line corresponds to:
-*   - Value added
-*   - Compensation of employees (CE)
-*   - Gross operating surplus (GOS)
-*   - Taxes on production less subsidies (TPLS)
-*
-* Strategy: The data should have industry_id and a variable identifying the
-* component type (table_id or similar). We reshape from long to wide.
+    * --- 3A. Load VA panel ---
+    use "inputs/bea_gdp_industry/bea_va_panel.dta", clear
+    display "BEA VA panel: " _N " observations"
+    tab naics_code, missing
 
-* Examine structure
-tab source_table_id if !missing(source_table_id), missing
-tab table_id if !missing(table_id), missing
+    * Keep core variables
+    keep naics_code year industry_group industry_label ///
+        value_added comp_employees gos topi ///
+        labor_share_va capital_share_va topi_share_va
 
-* List unique industry IDs to understand BEA's coding
-display _n "Sample industry IDs:"
-quietly levelsof industry_id, local(inds)
-foreach i in `inds' {
-    quietly count if industry_id == "`i'"
-    if r(N) > 0 {
-        quietly levelsof industry_desc if industry_id == "`i'", local(d) clean
-        display "  `i': `d'"
+    * Rename for downstream compatibility
+    * labor_share_va is the proper CE/VA measure
+    rename labor_share_va labor_share_raw
+    rename capital_share_va capital_share_raw
+    label variable labor_share_raw "Labor share, raw (CE/VA)"
+    label variable capital_share_raw "Capital share, raw (GOS/VA)"
+
+    tempfile panel
+    save `panel'
+
+    * --- 4A. Merge NIPA supplementary data ---
+    * Proprietors' income (for Gollin adjustments)
+    display _n "Merging NIPA proprietors' income..."
+    capture {
+        use "inputs/bea_gdp_industry/nipa_prop_income.dta", clear
+        keep naics_code year prop_income
+        isid naics_code year
+        merge 1:1 naics_code year using `panel'
+        tab _merge
+        drop _merge
+        save `panel', replace
     }
-}
+    if _rc != 0 {
+        display "  Proprietors' income not available."
+        use `panel', clear
+        gen prop_income = .
+        save `panel', replace
+    }
 
-* --- 3. Identify VA component types ---
-* BEA GDP-by-Industry Table 1 = Value Added
-* BEA GDP-by-Industry Table 5 = Components of Value Added
-*   (or similar -- exact numbering depends on API version)
-*
-* Within Table 5, components are identified by a line number or
-* similar identifier. We need to parse the data to identify:
-*   - Compensation of employees
-*   - Gross operating surplus
-*   - Taxes on production less subsidies
+    * Self-employed counts
+    display _n "Merging NIPA self-employed..."
+    capture {
+        use "inputs/bea_gdp_industry/nipa_self_employed.dta", clear
+        keep naics_code year n_self_employed
+        isid naics_code year
+        merge 1:1 naics_code year using `panel'
+        tab _merge
+        drop _merge
+        save `panel', replace
+    }
+    if _rc != 0 {
+        display "  Self-employed data not available."
+        use `panel', clear
+        gen n_self_employed = .
+        save `panel', replace
+    }
 
-* Check for component identification
-capture tab table_id, missing
+    * FTE employees
+    display _n "Merging NIPA FTE employees..."
+    capture {
+        use "inputs/bea_gdp_industry/nipa_fte_employees.dta", clear
+        keep naics_code year fte_employees
+        isid naics_code year
+        merge 1:1 naics_code year using `panel'
+        tab _merge
+        drop _merge
+        save `panel', replace
+    }
+    if _rc != 0 {
+        display "  FTE employees data not available."
+        use `panel', clear
+        gen fte_employees = .
+        save `panel', replace
+    }
 
-* Create a component type variable based on available identifiers
-* This may need adjustment based on actual API response format
-gen str component = ""
+    * National income (for reference / comparison)
+    display _n "Merging NIPA national income..."
+    capture {
+        use "inputs/bea_gdp_industry/nipa_natl_income.dta", clear
+        keep naics_code year natl_income
+        isid naics_code year
+        merge 1:1 naics_code year using `panel'
+        tab _merge
+        drop _merge
+        save `panel', replace
+    }
+    if _rc != 0 {
+        display "  National income data not available."
+        use `panel', clear
+        gen natl_income = .
+        save `panel', replace
+    }
 
-* Try to identify from description or table structure
-* (BEA data typically has line descriptions or IndustrYClassID)
-capture {
-    * If the data has different source_table_ids for different components:
-    * Table 1 = VA levels, Table 5 = VA components, Table 6 = VA component shares
-    replace component = "va_level" if source_table_id == "1"
-    replace component = "va_components" if source_table_id == "5"
-    replace component = "va_shares" if source_table_id == "6"
-}
-
-* --- 4. Reshape to industry-year panel ---
-* The exact reshape depends on BEA's data structure.
-* Key goal: one row per industry-year with columns for VA, CE, GOS, TPLS
-
-* For now, keep the data in a flexible long format that downstream tasks
-* can work with. The critical step is consistent industry coding.
-
-* Map BEA industry codes to our target NAICS codes
-gen str10 naics_code = ""
-replace naics_code = "62"    if strpos(lower(industry_desc), "health care") > 0 & strlen(industry_id) <= 3
-replace naics_code = "621"   if strpos(lower(industry_desc), "ambulatory") > 0
-replace naics_code = "622"   if strpos(lower(industry_desc), "hospital") > 0
-replace naics_code = "623"   if strpos(lower(industry_desc), "nursing") > 0
-replace naics_code = "31-33" if strpos(lower(industry_desc), "manufacturing") > 0 & strlen(industry_id) <= 5
-replace naics_code = "52"    if strpos(lower(industry_desc), "finance and insurance") > 0
-replace naics_code = "44-45" if strpos(lower(industry_desc), "retail") > 0
-replace naics_code = "54"    if strpos(lower(industry_desc), "professional") > 0 & strpos(lower(industry_desc), "scientific") > 0
-replace naics_code = "61"    if strpos(lower(industry_desc), "educational") > 0
-replace naics_code = "51"    if strpos(lower(industry_desc), "information") > 0 & strlen(industry_id) <= 3
-replace naics_code = "23"    if strpos(lower(industry_desc), "construction") > 0 & strlen(industry_id) <= 3
-
-* Total economy (GDP = all industries)
-replace naics_code = "total" if strpos(lower(industry_desc), "all industries") > 0 ///
-    | strpos(lower(industry_desc), "gross domestic product") > 0
-
-* Keep only target industries
-keep if naics_code != ""
-
-display _n "After filtering to target industries:"
-tab naics_code, missing
-
-* --- 5. Merge with NAICS concordance ---
-merge m:1 naics_code using "outputs/naics_concordance.dta", keep(master match)
-tab _merge
-drop _merge
-
-* --- 6. Attempt to merge supplementary NIPA data ---
-* Proprietors' income
-capture confirm file "inputs/bea_nipa_supplements/proprietors_income_by_industry_raw.dta"
-if _rc == 0 {
-    display _n "Proprietors' income data available for merge."
-    * The merge will happen in compute_factor_shares since the NIPA
-    * supplementary tables use different industry classifications.
-    * Flag availability here.
-    gen byte has_prop_income_data = 1
+    use `panel', clear
 }
 else {
-    display "Proprietors' income data not yet available."
-    gen byte has_prop_income_data = 0
+    * --- FALLBACK: Use NIPA data only (limited) ---
+    display _n "=== BEA VA panel not available. Using NIPA fallback ==="
+    display "WARNING: Factor shares limited to industries with national income data."
+
+    * Load compensation
+    use "inputs/bea_gdp_industry/nipa_comp.dta", clear
+    keep naics_code year comp_employees
+    isid naics_code year
+    tempfile panel
+    save `panel'
+
+    * Merge national income
+    use "inputs/bea_gdp_industry/nipa_natl_income.dta", clear
+    keep naics_code year natl_income
+    isid naics_code year
+    merge 1:1 naics_code year using `panel'
+    drop _merge
+    save `panel', replace
+
+    * Merge prop income
+    capture {
+        use "inputs/bea_gdp_industry/nipa_prop_income.dta", clear
+        keep naics_code year prop_income
+        isid naics_code year
+        merge 1:1 naics_code year using `panel'
+        drop _merge
+        save `panel', replace
+    }
+
+    * Merge self-employed
+    capture {
+        use "inputs/bea_gdp_industry/nipa_self_employed.dta", clear
+        keep naics_code year n_self_employed
+        isid naics_code year
+        merge 1:1 naics_code year using `panel'
+        drop _merge
+        save `panel', replace
+    }
+
+    * Merge FTE employees
+    capture {
+        use "inputs/bea_gdp_industry/nipa_fte_employees.dta", clear
+        keep naics_code year fte_employees
+        isid naics_code year
+        merge 1:1 naics_code year using `panel'
+        drop _merge
+        save `panel', replace
+    }
+
+    use `panel', clear
+
+    * Merge concordance
+    merge m:1 naics_code using "outputs/naics_concordance.dta", keep(master match)
+    drop _merge
+
+    * Compute NIPA-based shares
+    gen labor_share_raw = comp_employees / natl_income if natl_income > 0
+    gen capital_share_raw = .
+    gen value_added = .
+    gen gos = .
+    gen topi = .
+    gen topi_share_va = .
+    label variable labor_share_raw "Labor share, raw (CE/NI, NIPA fallback)"
 }
 
-* CFC data
-capture confirm file "inputs/bea_nipa_supplements/cfc_by_industry_raw.dta"
-if _rc == 0 {
-    display "CFC data available for merge."
-    gen byte has_cfc_data = 1
-}
-else {
-    display "CFC data not yet available."
-    gen byte has_cfc_data = 0
-}
+* --- 5. Compute derived measures ---
+display _n "Computing derived measures..."
 
-* --- 7. Validate accounting identity ---
-* If we have VA, CE, GOS, TPLS as separate variables, check:
-* VA = CE + GOS + TPLS (within rounding)
-* This check depends on the actual data structure after reshape.
-* For now, document what variables we have.
+* Average compensation per FTE employee (thousands)
+capture gen comp_per_fte = comp_employees / fte_employees if fte_employees > 0
+label variable comp_per_fte "Comp. per FTE employee (thousands of $)"
 
-display _n "=== Variables in final dataset ==="
-describe, short
-display _n "=== Year range ==="
-summarize year
+* Proprietors' income share of VA (if available)
+capture gen prop_share_va = prop_income / value_added if value_added > 0
+capture label variable prop_share_va "Proprietors' income / VA"
 
-* --- 8. Save ---
-label data "BEA GDP-by-Industry panel, target NAICS industries"
-compress
-save "outputs/nipa_industry_year_panel.dta", replace
+* For backward compatibility: also compute CE/NI if NI available
+capture gen labor_share_ni = comp_employees / natl_income if natl_income > 0
+capture label variable labor_share_ni "Labor share (CE / national income, reference)"
 
-* --- 9. Verification ---
-display _n "=== Verification ==="
-display "Observations: " _N
+capture gen prop_share_ni = prop_income / natl_income if natl_income > 0
+capture label variable prop_share_ni "Proprietors' income / national income"
 
-* Check all target industries present
-levelsof naics_code, local(present)
-display "Industries present: `present'"
+capture gen capital_share_ni = 1 - labor_share_ni - prop_share_ni ///
+    if !missing(labor_share_ni) & !missing(prop_share_ni)
+capture label variable capital_share_ni "Residual capital share (NI-based)"
+
+* --- 6. Validate ---
+display _n "=== Validation ==="
 
 * Check year range
 summarize year
-assert r(min) <= 2000
-assert r(max) >= 2020
+local min_year = r(min)
+local max_year = r(max)
+display "Year range: `min_year' to `max_year'"
 
-* Check healthcare specifically
+* Check healthcare data
 count if naics_code == "62"
-assert r(N) > 0
-display "Healthcare total (NAICS 62) observations: " r(N)
+local n_hc = r(N)
+display "Healthcare (62) observations: `n_hc'"
+assert `n_hc' > 0
 
-display _n "Build complete."
+* Check labor share is plausible
+display _n "Healthcare labor share (CE/VA):"
+summarize labor_share_raw if naics_code == "62"
+if r(N) > 0 {
+    display "  Mean: " %5.3f r(mean) "  Min: " %5.3f r(min) "  Max: " %5.3f r(max)
+}
+
+* Display recent data
+display _n "Healthcare (NAICS 62) recent data:"
+list naics_code year comp_employees value_added labor_share_raw ///
+    if naics_code == "62" & year >= 2018, noobs
+
+* All industry averages
+display _n "Average labor share by industry (CE/VA):"
+tabstat labor_share_raw, by(industry_group) stat(mean sd N) format(%5.3f)
+
+* --- 7. Save ---
+order naics_code year industry_group industry_label ///
+    value_added comp_employees gos topi ///
+    labor_share_raw capital_share_raw topi_share_va ///
+    prop_income prop_share_va ///
+    natl_income labor_share_ni prop_share_ni capital_share_ni ///
+    fte_employees n_self_employed comp_per_fte
+
+label data "NIPA industry-year panel, target NAICS industries"
+compress
+save "outputs/nipa_industry_year_panel.dta", replace
+
+display _n "Panel built: " _N " observations"
+
+if `has_api_data' {
+    display "Data source: BEA GDP-by-Industry API (CE/VA labor shares)"
+    count if !missing(labor_share_raw)
+    display "Industries with factor shares: " r(N) " obs"
+}
+else {
+    display "Data source: NIPA bulk tables (CE/NI fallback)"
+    display "WARNING: Limited factor share coverage without API data."
+}
+
 log close

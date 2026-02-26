@@ -2,7 +2,7 @@
 * Compute Factor Shares
 * Project: Capital and Labor Shares in Healthcare
 * Purpose: Compute raw and Gollin-adjusted capital/labor shares
-*          from BEA VA components panel
+*          from industry-year panel
 * Inputs:  inputs/nipa_shares/nipa_industry_year_panel.dta
 * Outputs: outputs/factor_shares_raw.dta
 *          outputs/factor_shares_adjusted.dta
@@ -23,213 +23,180 @@ local dark_gray "118 118 118"
 local phoenix   "255 163 25"
 
 * --- 1. Load clean panel ---
-display "Loading NIPA industry-year panel..."
+display "Loading industry-year panel..."
 use "inputs/nipa_shares/nipa_industry_year_panel.dta", clear
 display "Observations: " _N
 tab naics_code, missing
 
-* --- 2. Compute raw factor shares ---
-* The BEA data should have VA components. Depending on the data structure
-* from build_nipa_shares, we may have these as:
-*   - Separate variables (comp_employees, gos, taxes_less_subs, value_added)
-*   - Long format with a component identifier
-*
-* We need to reshape to wide if in long format.
-
-* Check what variables we have
 describe, short
-display _n "Available variables:"
-describe
 
-* If data is in long format with 'value' and some component identifier,
-* reshape to wide. Otherwise, proceed with existing columns.
-capture confirm variable component
-if _rc == 0 {
-    * Data is in long format — reshape
-    display "Data appears to be in long format. Reshaping to wide..."
+* --- 2. Raw factor shares ---
+* The panel already has labor_share_raw (CE/VA) from build_nipa_shares.
+* If built from API data: labor_share_raw = CE / Value Added (preferred)
+* If built from NIPA fallback: labor_share_raw = CE / National Income
 
-    * Keep only the components we need
-    keep if inlist(component, "va_level", "va_components")
+display _n "=== Raw Factor Shares ==="
 
-    * Create a numeric component ID for reshape
-    * (This section may need adjustment based on actual data structure)
+* Check which denominator was used
+capture confirm variable value_added
+local has_va = (_rc == 0)
 
-    * For now, save the long-format data and flag for manual review
-    display as error "NOTE: Data reshape required. Review data structure."
+if `has_va' {
+    quietly count if !missing(value_added) & value_added > 0
+    if r(N) > 0 {
+        display "Denominator: Value Added (GDP-by-Industry)"
+    }
+    else {
+        display "Denominator: National Income (NIPA fallback)"
+    }
+}
+else {
+    display "Denominator: National Income (NIPA fallback)"
 }
 
-* If we have the value variable from the raw BEA import, we need to
-* distinguish between VA, CE, GOS components. The source_table_id
-* or table_id should identify these.
-*
-* Table 1 = Value Added levels
-* Table 5 = Components of Value Added (CE, GOS, Taxes - Subsidies)
+label variable labor_share_raw "Labor share, raw (CE/VA)"
+label variable capital_share_raw "Capital share, raw (GOS/VA)"
 
-* Attempt to create component variables from the raw data
-capture {
-    * Separate VA level (from Table 1)
-    gen value_added = value if source_table_id == "1"
-
-    * Components from Table 5 will have line descriptions
-    * identifying CE, GOS, Taxes
-    * This is a heuristic that may need refinement
-    gen comp_employees = value if source_table_id == "5" & ///
-        (strpos(lower(industry_desc), "compensation") > 0 | ///
-         strpos(lower(line_desc), "compensation") > 0)
-    gen gos = value if source_table_id == "5" & ///
-        (strpos(lower(industry_desc), "gross operating surplus") > 0 | ///
-         strpos(lower(line_desc), "gross operating") > 0)
-    gen taxes_less_subs = value if source_table_id == "5" & ///
-        (strpos(lower(industry_desc), "taxes on production") > 0 | ///
-         strpos(lower(line_desc), "taxes") > 0)
-}
-
-* Collapse to one row per industry-year with all components
-* (BEA may report components as separate rows)
-capture {
-    collapse (firstnm) value_added comp_employees gos taxes_less_subs ///
-        industry_group industry_label, by(naics_code year)
-}
-
-* --- 3. Raw factor shares ---
-display _n "Computing raw factor shares..."
-
-* Generate shares
-capture gen labor_share_raw = comp_employees / value_added
-capture gen capital_share_raw = gos / value_added
-capture gen tax_share = taxes_less_subs / value_added
-
-* Verify shares sum to approximately 1
-capture gen share_sum = labor_share_raw + capital_share_raw + tax_share
-capture summarize share_sum
-capture assert abs(share_sum - 1) < 0.01 if !missing(share_sum)
-
-display _n "=== Raw Factor Shares (means) ==="
-capture tabstat labor_share_raw capital_share_raw tax_share, ///
-    by(naics_code) stat(mean sd min max N) format(%9.3f)
-
-* Label
-capture label variable labor_share_raw "Labor share, raw (CE/VA)"
-capture label variable capital_share_raw "Capital share, raw (GOS/VA)"
-capture label variable tax_share "Tax wedge ((Taxes-Subsidies)/VA)"
-capture label variable value_added "Value added (millions, current $)"
-capture label variable comp_employees "Compensation of employees (millions, current $)"
-capture label variable gos "Gross operating surplus (millions, current $)"
+* Display shares by industry
+display _n "Raw labor shares by industry:"
+tabstat labor_share_raw, by(industry_group) stat(mean sd min max N) format(%5.3f)
 
 * Save raw shares
 compress
 save "outputs/factor_shares_raw.dta", replace
 
-* --- 4. Gollin (2002) mixed income adjustments ---
-display _n "Attempting mixed income adjustments..."
+* --- 3. Gollin (2002) mixed income adjustments ---
+display _n "=== Gollin (2002) Adjustments ==="
 
-* The Gollin (2002) adjustment requires:
-*   - Proprietors' income by industry
-*   - Number of self-employed (for imputed wage method)
+* The Gollin adjustments address the treatment of proprietors' (mixed) income.
+* In healthcare, this is significant for ambulatory care (physician practices).
 *
-* Check if supplementary data made it through build_nipa_shares
-capture confirm variable has_prop_income_data
-if _rc == 0 {
-    count if has_prop_income_data == 1
-    local has_prop = r(N) > 0
-}
-else {
-    local has_prop = 0
-}
+* We use VA as the denominator when available, otherwise NI.
+* VA = CE + GOS + TOPI
+* NI ≈ VA - CFC (consumption of fixed capital)
+*
+* For Gollin, we need:
+*   Corporate capital income = VA - CE - PropInc - TOPI (if VA available)
+*   or = NI - CE - PropInc (if only NI available)
 
-if `has_prop' {
-    display "Proprietors' income data available. Computing adjustments..."
+* Determine best denominator for each observation
+gen denom = value_added if `has_va' & !missing(value_added) & value_added > 0
+capture replace denom = natl_income if missing(denom) & !missing(natl_income) & natl_income > 0
+label variable denom "Denominator (VA or NI)"
 
-    * Adjustment 1: Proportional allocation
-    * Allocate proprietors' income in same CE/(CE+GOS_corp) ratio
-    * labor_share_adj1 = (CE + PropInc * CE/(CE+GOS_corp)) / VA
-    * where GOS_corp = GOS - PropInc
-    capture {
-        gen gos_corporate = gos - prop_income
-        gen ce_share_of_corporate = comp_employees / (comp_employees + gos_corporate)
-        gen labor_share_gollin_prop = ///
-            (comp_employees + prop_income * ce_share_of_corporate) / value_added
-        gen capital_share_gollin_prop = 1 - labor_share_gollin_prop - tax_share
-    }
+* Taxes share to exclude from capital income calculation when using VA
+gen topi_adj = topi if `has_va' & !missing(topi)
+replace topi_adj = 0 if missing(topi_adj)
 
-    * Adjustment 2: All proprietors' income as labor
-    capture {
-        gen labor_share_gollin_alllabor = ///
-            (comp_employees + prop_income) / value_added
-        gen capital_share_gollin_alllabor = 1 - labor_share_gollin_alllabor - tax_share
-    }
+* Method 1: Proportional allocation
+* Allocate proprietors' income in same CE/(CE+CapitalIncome) ratio
+* CapitalIncome = denom - CE - PropInc - TOPI
+* Corporate labor share = CE / (CE + CapitalIncome) = CE / (denom - PropInc - TOPI)
+* Adjusted CE = CE + PropInc * CE/(denom - PropInc - TOPI)
+* Adjusted labor share = Adjusted CE / denom
 
-    * Adjustment 3: Imputed wage (requires self-employment counts)
-    * labor_share_adj3 = (CE + n_proprietors * avg_employee_wage) / VA
-    capture {
-        gen avg_employee_wage = comp_employees / employment_count  // if available
-        gen labor_share_gollin_imputed = ///
-            (comp_employees + n_proprietors * avg_employee_wage) / value_added
-        gen capital_share_gollin_imputed = 1 - labor_share_gollin_imputed - tax_share
-    }
-}
-else {
-    display "Proprietors' income data not yet available."
-    display "Creating placeholder adjusted shares = raw shares."
-    display "Run download_bea_nipa_supplements, rebuild, and rerun."
+gen labor_share_gollin_prop = .
+replace labor_share_gollin_prop = ///
+    (comp_employees + prop_income * (comp_employees / (denom - prop_income - topi_adj))) / denom ///
+    if !missing(comp_employees) & !missing(prop_income) & !missing(denom) ///
+    & (denom - prop_income - topi_adj) > 0
+label variable labor_share_gollin_prop "Labor share, Gollin proportional adj."
 
-    gen labor_share_gollin_prop = labor_share_raw
-    gen capital_share_gollin_prop = capital_share_raw
-    gen labor_share_gollin_alllabor = labor_share_raw
-    gen capital_share_gollin_alllabor = capital_share_raw
+* Method 2: All proprietors' income as labor
+gen labor_share_gollin_alllabor = .
+replace labor_share_gollin_alllabor = ///
+    (comp_employees + prop_income) / denom ///
+    if !missing(comp_employees) & !missing(prop_income) & !missing(denom) ///
+    & denom > 0
+label variable labor_share_gollin_alllabor "Labor share, all prop. income as labor"
 
-    * Label as placeholders
-    label variable labor_share_gollin_prop "Labor share, Gollin prop. adj. (PLACEHOLDER)"
-    label variable capital_share_gollin_prop "Capital share, Gollin prop. adj. (PLACEHOLDER)"
-    label variable labor_share_gollin_alllabor "Labor share, all prop. income as labor (PLACEHOLDER)"
-    label variable capital_share_gollin_alllabor "Capital share, all prop. income as labor (PLACEHOLDER)"
-}
+* Method 3: Imputed wage (proprietors earn avg employee wage)
+gen labor_share_gollin_imputed = .
+replace labor_share_gollin_imputed = ///
+    (comp_employees + n_self_employed * comp_per_fte) / denom ///
+    if !missing(comp_employees) & !missing(n_self_employed) & !missing(comp_per_fte) ///
+    & !missing(denom) & denom > 0
+label variable labor_share_gollin_imputed "Labor share, imputed wage for proprietors"
+
+* Capital shares (residual after Gollin adjustment)
+* After Gollin, prop income is fully allocated between labor and capital.
+* Capital share = 1 - adjusted labor share (minus tax share if using VA).
+gen capital_share_gollin_prop = 1 - labor_share_gollin_prop ///
+    if !missing(labor_share_gollin_prop)
+gen capital_share_gollin_alllabor = 1 - labor_share_gollin_alllabor ///
+    if !missing(labor_share_gollin_alllabor)
+
+label variable capital_share_gollin_prop "Capital share, Gollin proportional"
+label variable capital_share_gollin_alllabor "Capital share, after Gollin all-labor"
+
+drop denom topi_adj
+
+* Display adjusted shares
+display _n "Adjusted labor shares by industry (Gollin proportional):"
+tabstat labor_share_gollin_prop, by(industry_group) stat(mean sd N) format(%5.3f)
+
+display _n "Adjusted labor shares by industry (all prop. income as labor):"
+tabstat labor_share_gollin_alllabor, by(industry_group) stat(mean sd N) format(%5.3f)
 
 * Save adjusted shares
 compress
 save "outputs/factor_shares_adjusted.dta", replace
 
-* --- 5. Summary statistics by industry group ---
-display _n "=== Adjusted Factor Shares (means) ==="
-capture tabstat labor_share_raw labor_share_gollin_prop labor_share_gollin_alllabor, ///
-    by(naics_code) stat(mean sd N) format(%9.3f)
+* --- 4. Summary statistics by industry ---
+display _n "=== Summary Statistics ==="
 
-* Create summary dataset
-capture {
+preserve
+    keep if !missing(labor_share_raw)
+
     collapse (mean) labor_share_raw capital_share_raw ///
         labor_share_gollin_prop capital_share_gollin_prop ///
-        labor_share_gollin_alllabor capital_share_gollin_alllabor ///
+        labor_share_gollin_alllabor labor_share_gollin_imputed ///
         (sd) sd_labor_raw=labor_share_raw sd_capital_raw=capital_share_raw ///
         (count) n_years=labor_share_raw, ///
         by(naics_code industry_group industry_label)
 
     label data "Factor share summary statistics by industry"
+
+    display _n "Summary table:"
+    list naics_code industry_group labor_share_raw labor_share_gollin_prop ///
+        labor_share_gollin_alllabor n_years, noobs
+
     compress
     save "outputs/factor_shares_summary.dta", replace
+restore
+
+* --- 5. Industries without data ---
+display _n "=== Data Coverage ==="
+count if !missing(labor_share_raw)
+display "Industries with raw factor shares: " r(N) " obs"
+
+count if !missing(labor_share_gollin_prop)
+display "Industries with Gollin proportional: " r(N) " obs"
+
+count if missing(labor_share_raw) & !missing(comp_employees)
+if r(N) > 0 {
+    display _n "Industries with compensation only (need VA denominator):"
+    preserve
+        keep if missing(labor_share_raw) & !missing(comp_employees)
+        collapse (mean) comp_employees, by(naics_code industry_group)
+        list naics_code industry_group comp_employees, noobs
+    restore
+}
+else {
+    display "All industries have factor shares."
 }
 
 * --- 6. Verification ---
 display _n "=== Verification ==="
-use "outputs/factor_shares_adjusted.dta", clear
-display "Observations: " _N
+display "Total observations: " _N
 
-* Healthcare labor share should be in plausible range (~0.5-0.7)
-summarize labor_share_raw if naics_code == "62"
-if r(N) > 0 {
-    display "Healthcare labor share (raw): mean=" %5.3f r(mean) ///
-        " min=" %5.3f r(min) " max=" %5.3f r(max)
-    * Warn if outside expected range but don't assert (data may be structured differently)
-    if r(mean) < 0.3 | r(mean) > 0.9 {
-        display as error "WARNING: Healthcare labor share outside expected 0.3-0.9 range"
-        display as error "Check data structure and component identification."
-    }
-}
+* Shares should be in [0, 1] where available
+summarize labor_share_raw capital_share_raw
+count if labor_share_raw < 0 | labor_share_raw > 1 & !missing(labor_share_raw)
+display "Out-of-range labor shares: " r(N)
 
-* Total economy labor share should be ~0.55-0.65
-summarize labor_share_raw if naics_code == "total"
-if r(N) > 0 {
-    display "Total economy labor share (raw): mean=" %5.3f r(mean)
-}
+* Gollin shares should also be reasonable
+summarize labor_share_gollin_prop labor_share_gollin_alllabor
 
 display _n "Factor share computation complete."
 log close

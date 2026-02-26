@@ -1,0 +1,325 @@
+series_code,year,value,industry_label,naics_code
+N4012C,1998,253007.0,Construction,23
+N4012C,1999,278246.0,Construction,23
+N4012C,2000,307654.0,Construction,23
+N4012C,2001,325444.0,Construction,23
+N4012C,2002,327111.0,Construction,23
+N4012C,2003,335793.0,Construction,23
+N4012C,2004,357958.0,Construction,23
+N4012C,2005,387531.0,Construction,23
+N4012C,2006,421295.0,Construction,23
+N4012C,2007,439998.0,Construction,23
+N4012C,2008,433948.0,Construction,23
+N4012C,2009,368352.0,Construction,23
+N4012C,2010,343763.0,Construction,23
+N4012C,2011,347303.0,Construction,23
+N4012C,2012,365908.0,Construction,23
+N4012C,2013,387823.0,Construction,23
+N4012C,2014,422384.0,Construction,23
+N4012C,2015,458477.0,Construction,23
+N4012C,2016,485888.0,Construction,23
+N4012C,2017,520422.0,Construction,23
+N4012C,2018,558275.0,Construction,23
+N4012C,2019,598437.0,Construction,23
+N4012C,2020,597775.0,Construction,23
+N4012C,2021,636908.0,Construction,23
+N4012C,2022,694310.0,Construction,23
+N4012C,2023,744986.0,Construction,23
+N4012C,2024,799308.0,Construction,23
+N4013C,1998,834443.0,Manufacturing,31-33
+N4013C,1999,870204.0,Manufacturing,31-33
+N4013C,2000,918025.0,Manufacturing,31-33
+N4013C,2001,881895.0,Manufacturing,31-33
+N4013C,2002,846528.0,Manufacturing,31-33
+N4013C,2003,846989.0,Manufacturing,31-33
+N4013C,2004,873695.0,Manufacturing,31-33
+N4013C,2005,895469.0,Manufacturing,31-33
+N4013C,2006,923977.0,Manufacturing,31-33
+N4013C,2007,943645.0,Manufacturing,31-33
+N4013C,2008,931892.0,Manufacturing,31-33
+N4013C,2009,835178.0,Manufacturing,31-33
+N4013C,2010,847169.0,Manufacturing,31-33
+N4013C,2011,882357.0,Manufacturing,31-33
+N4013C,2012,916945.0,Manufacturing,31-33
+N4013C,2013,931827.0,Manufacturing,31-33
+N4013C,2014,973018.0,Manufacturing,31-33
+N4013C,2015,1006425.0,Manufacturing,31-33
+N4013C,2016,1013141.0,Manufacturing,31-33
+N4013C,2017,1053399.0,Manufacturing,31-33
+N4013C,2018,1101197.0,Manufacturing,31-33
+N4013C,2019,1129240.0,Manufacturing,31-33
+N4013C,2020,1114185.0,Manufacturing,31-33
+N4013C,2021,1177634.0,Manufacturing,31-33
+N4013C,2022,1254194.0,Manufacturing,31-33
+N4013C,2023,1306605.0,Manufacturing,31-33
+N4013C,2024,1359135.0,Manufacturing,31-33
+N4040C,1998,362715.0,Retail trade,44-45
+N4040C,1999,380569.0,Retail trade,44-45
+N4040C,2000,405728.0,Retail trade,44-45
+N4040C,2001,416660.0,Retail trade,44-45
+N4040C,2002,428467.0,Retail trade,44-45
+N4040C,2003,444839.0,Retail trade,44-45
+N4040C,2004,459351.0,Retail trade,44-45
+N4040C,2005,477741.0,Retail trade,44-45
+N4040C,2006,492172.0,Retail trade,44-45
+N4040C,2007,506389.0,Retail trade,44-45
+N4040C,2008,500927.0,Retail trade,44-45
+N4040C,2009,474257.0,Retail trade,44-45
+N4040C,2010,478915.0,Retail trade,44-45
+N4040C,2011,495664.0,Retail trade,44-45
+N4040C,2012,510117.0,Retail trade,44-45
+N4040C,2013,526663.0,Retail trade,44-45
+N4040C,2014,545470.0,Retail trade,44-45
+N4040C,2015,573627.0,Retail trade,44-45
+N4040C,2016,587666.0,Retail trade,44-45
+N4040C,2017,606868.0,Retail trade,44-45
+N4040C,2018,628161.0,Retail trade,44-45
+N4040C,2019,651874.0,Retail trade,44-45
+N4040C,2020,669240.0,Retail trade,44-45
+N4040C,2021,747994.0,Retail trade,44-45
+N4040C,2022,786793.0,Retail trade,44-45
+N4040C,2023,822820.0,Retail trade,44-45
+N4040C,2024,846090.0,Retail trade,44-45
+N4054C,1998,189515.0,Information,51
+N4054C,1999,219617.0,Information,51
+N4054C,2000,245982.0,Information,51
+N4054C,2001,247207.0,Information,51
+N4054C,2002,228422.0,Information,51
+N4054C,2003,230520.0,Information,51
+N4054C,2004,238018.0,Information,51
+N4054C,2005,241485.0,Information,51
+N4054C,2006,248790.0,Information,51
+N4054C,2007,260485.0,Information,51
+N4054C,2008,257826.0,Information,51
+N4054C,2009,251503.0,Information,51
+N4054C,2010,248567.0,Information,51
+N4054C,2011,260147.0,Information,51
+N4054C,2012,271577.0,Information,51
+N4054C,2013,286473.0,Information,51
+N4054C,2014,304390.0,Information,51
+N4054C,2015,318675.0,Information,51
+N4054C,2016,329035.0,Information,51
+N4054C,2017,348773.0,Information,51
+N4054C,2018,376835.0,Information,51
+N4054C,2019,400177.0,Information,51
+N4054C,2020,425668.0,Information,51
+N4054C,2021,508571.0,Information,51
+N4054C,2022,517075.0,Information,51
+N4054C,2023,541130.0,Information,51
+N4054C,2024,593157.0,Information,51
+N4059C,1998,350353.0,Finance and insurance,52
+N4059C,1999,375539.0,Finance and insurance,52
+N4059C,2000,411892.0,Finance and insurance,52
+N4059C,2001,445265.0,Finance and insurance,52
+N4059C,2002,443298.0,Finance and insurance,52
+N4059C,2003,459762.0,Finance and insurance,52
+N4059C,2004,497689.0,Finance and insurance,52
+N4059C,2005,534590.0,Finance and insurance,52
+N4059C,2006,579181.0,Finance and insurance,52
+N4059C,2007,617429.0,Finance and insurance,52
+N4059C,2008,612139.0,Finance and insurance,52
+N4059C,2009,547984.0,Finance and insurance,52
+N4059C,2010,573340.0,Finance and insurance,52
+N4059C,2011,606487.0,Finance and insurance,52
+N4059C,2012,630088.0,Finance and insurance,52
+N4059C,2013,641324.0,Finance and insurance,52
+N4059C,2014,681085.0,Finance and insurance,52
+N4059C,2015,715705.0,Finance and insurance,52
+N4059C,2016,734148.0,Finance and insurance,52
+N4059C,2017,787648.0,Finance and insurance,52
+N4059C,2018,819121.0,Finance and insurance,52
+N4059C,2019,851646.0,Finance and insurance,52
+N4059C,2020,912345.0,Finance and insurance,52
+N4059C,2021,990615.0,Finance and insurance,52
+N4059C,2022,1020695.0,Finance and insurance,52
+N4059C,2023,1059695.0,Finance and insurance,52
+N4059C,2024,1115372.0,Finance and insurance,52
+N4067C,1998,367110.0,"Professional, scientific, and technical services",54
+N4067C,1999,404222.0,"Professional, scientific, and technical services",54
+N4067C,2000,462628.0,"Professional, scientific, and technical services",54
+N4067C,2001,477262.0,"Professional, scientific, and technical services",54
+N4067C,2002,469179.0,"Professional, scientific, and technical services",54
+N4067C,2003,478029.0,"Professional, scientific, and technical services",54
+N4067C,2004,506659.0,"Professional, scientific, and technical services",54
+N4067C,2005,553603.0,"Professional, scientific, and technical services",54
+N4067C,2006,607406.0,"Professional, scientific, and technical services",54
+N4067C,2007,655006.0,"Professional, scientific, and technical services",54
+N4067C,2008,693503.0,"Professional, scientific, and technical services",54
+N4067C,2009,669449.0,"Professional, scientific, and technical services",54
+N4067C,2010,682715.0,"Professional, scientific, and technical services",54
+N4067C,2011,727061.0,"Professional, scientific, and technical services",54
+N4067C,2012,776655.0,"Professional, scientific, and technical services",54
+N4067C,2013,801492.0,"Professional, scientific, and technical services",54
+N4067C,2014,848948.0,"Professional, scientific, and technical services",54
+N4067C,2015,909431.0,"Professional, scientific, and technical services",54
+N4067C,2016,939078.0,"Professional, scientific, and technical services",54
+N4067C,2017,990544.0,"Professional, scientific, and technical services",54
+N4067C,2018,1059704.0,"Professional, scientific, and technical services",54
+N4067C,2019,1130464.0,"Professional, scientific, and technical services",54
+N4067C,2020,1178401.0,"Professional, scientific, and technical services",54
+N4067C,2021,1313039.0,"Professional, scientific, and technical services",54
+N4067C,2022,1431540.0,"Professional, scientific, and technical services",54
+N4067C,2023,1516540.0,"Professional, scientific, and technical services",54
+N4067C,2024,1606279.0,"Professional, scientific, and technical services",54
+N4075C,1998,64357.0,Educational services,61
+N4075C,1999,69479.0,Educational services,61
+N4075C,2000,74443.0,Educational services,61
+N4075C,2001,79624.0,Educational services,61
+N4075C,2002,88687.0,Educational services,61
+N4075C,2003,94309.0,Educational services,61
+N4075C,2004,101863.0,Educational services,61
+N4075C,2005,105884.0,Educational services,61
+N4075C,2006,113118.0,Educational services,61
+N4075C,2007,120870.0,Educational services,61
+N4075C,2008,129386.0,Educational services,61
+N4075C,2009,139900.0,Educational services,61
+N4075C,2010,145542.0,Educational services,61
+N4075C,2011,152774.0,Educational services,61
+N4075C,2012,161398.0,Educational services,61
+N4075C,2013,165202.0,Educational services,61
+N4075C,2014,174871.0,Educational services,61
+N4075C,2015,180447.0,Educational services,61
+N4075C,2016,190531.0,Educational services,61
+N4075C,2017,192422.0,Educational services,61
+N4075C,2018,202256.0,Educational services,61
+N4075C,2019,213500.0,Educational services,61
+N4075C,2020,215500.0,Educational services,61
+N4075C,2021,227852.0,Educational services,61
+N4075C,2022,243439.0,Educational services,61
+N4075C,2023,255707.0,Educational services,61
+N4075C,2024,268002.0,Educational services,61
+N4076C,1998,436213.0,Health care and social assistance,62
+N4076C,1999,460800.0,Health care and social assistance,62
+N4076C,2000,488822.0,Health care and social assistance,62
+N4076C,2001,524878.0,Health care and social assistance,62
+N4076C,2002,566084.0,Health care and social assistance,62
+N4076C,2003,606639.0,Health care and social assistance,62
+N4076C,2004,650430.0,Health care and social assistance,62
+N4076C,2005,687536.0,Health care and social assistance,62
+N4076C,2006,733177.0,Health care and social assistance,62
+N4076C,2007,775071.0,Health care and social assistance,62
+N4076C,2008,824574.0,Health care and social assistance,62
+N4076C,2009,862407.0,Health care and social assistance,62
+N4076C,2010,888494.0,Health care and social assistance,62
+N4076C,2011,921976.0,Health care and social assistance,62
+N4076C,2012,963585.0,Health care and social assistance,62
+N4076C,2013,997276.0,Health care and social assistance,62
+N4076C,2014,1028260.0,Health care and social assistance,62
+N4076C,2015,1085134.0,Health care and social assistance,62
+N4076C,2016,1136513.0,Health care and social assistance,62
+N4076C,2017,1187110.0,Health care and social assistance,62
+N4076C,2018,1247413.0,Health care and social assistance,62
+N4076C,2019,1308111.0,Health care and social assistance,62
+N4076C,2020,1362130.0,Health care and social assistance,62
+N4076C,2021,1438239.0,Health care and social assistance,62
+N4076C,2022,1541973.0,Health care and social assistance,62
+N4076C,2023,1650846.0,Health care and social assistance,62
+N4076C,2024,1771438.0,Health care and social assistance,62
+N4077C,1998,197234.0,Ambulatory health care services,621
+N4077C,1999,206125.0,Ambulatory health care services,621
+N4077C,2000,218869.0,Ambulatory health care services,621
+N4077C,2001,234869.0,Ambulatory health care services,621
+N4077C,2002,251753.0,Ambulatory health care services,621
+N4077C,2003,267448.0,Ambulatory health care services,621
+N4077C,2004,288706.0,Ambulatory health care services,621
+N4077C,2005,306027.0,Ambulatory health care services,621
+N4077C,2006,327481.0,Ambulatory health care services,621
+N4077C,2007,346413.0,Ambulatory health care services,621
+N4077C,2008,366906.0,Ambulatory health care services,621
+N4077C,2009,381524.0,Ambulatory health care services,621
+N4077C,2010,398978.0,Ambulatory health care services,621
+N4077C,2011,416262.0,Ambulatory health care services,621
+N4077C,2012,435740.0,Ambulatory health care services,621
+N4077C,2013,453291.0,Ambulatory health care services,621
+N4077C,2014,469249.0,Ambulatory health care services,621
+N4077C,2015,494895.0,Ambulatory health care services,621
+N4077C,2016,519488.0,Ambulatory health care services,621
+N4077C,2017,545209.0,Ambulatory health care services,621
+N4077C,2018,576264.0,Ambulatory health care services,621
+N4077C,2019,606955.0,Ambulatory health care services,621
+N4077C,2020,620544.0,Ambulatory health care services,621
+N4077C,2021,677123.0,Ambulatory health care services,621
+N4077C,2022,718986.0,Ambulatory health care services,621
+N4077C,2023,766768.0,Ambulatory health care services,621
+N4077C,2024,816417.0,Ambulatory health care services,621
+N4078C,1998,148214.0,Hospitals,622
+N4078C,1999,156041.0,Hospitals,622
+N4078C,2000,163450.0,Hospitals,622
+N4078C,2001,177124.0,Hospitals,622
+N4078C,2002,191861.0,Hospitals,622
+N4078C,2003,208421.0,Hospitals,622
+N4078C,2004,223822.0,Hospitals,622
+N4078C,2005,236682.0,Hospitals,622
+N4078C,2006,253468.0,Hospitals,622
+N4078C,2007,267770.0,Hospitals,622
+N4078C,2008,286333.0,Hospitals,622
+N4078C,2009,302491.0,Hospitals,622
+N4078C,2010,303903.0,Hospitals,622
+N4078C,2011,318014.0,Hospitals,622
+N4078C,2012,329834.0,Hospitals,622
+N4078C,2013,338011.0,Hospitals,622
+N4078C,2014,345371.0,Hospitals,622
+N4078C,2015,366378.0,Hospitals,622
+N4078C,2016,380869.0,Hospitals,622
+N4078C,2017,396274.0,Hospitals,622
+N4078C,2018,411911.0,Hospitals,622
+N4078C,2019,427517.0,Hospitals,622
+N4078C,2020,445390.0,Hospitals,622
+N4078C,2021,461204.0,Hospitals,622
+N4078C,2022,492771.0,Hospitals,622
+N4078C,2023,523741.0,Hospitals,622
+N4078C,2024,561566.0,Hospitals,622
+N4079C,1998,56163.0,Nursing and residential care facilities,623
+N4079C,1999,59818.0,Nursing and residential care facilities,623
+N4079C,2000,64107.0,Nursing and residential care facilities,623
+N4079C,2001,68743.0,Nursing and residential care facilities,623
+N4079C,2002,74368.0,Nursing and residential care facilities,623
+N4079C,2003,78728.0,Nursing and residential care facilities,623
+N4079C,2004,82855.0,Nursing and residential care facilities,623
+N4079C,2005,85377.0,Nursing and residential care facilities,623
+N4079C,2006,90138.0,Nursing and residential care facilities,623
+N4079C,2007,94809.0,Nursing and residential care facilities,623
+N4079C,2008,100993.0,Nursing and residential care facilities,623
+N4079C,2009,104993.0,Nursing and residential care facilities,623
+N4079C,2010,109232.0,Nursing and residential care facilities,623
+N4079C,2011,111190.0,Nursing and residential care facilities,623
+N4079C,2012,113072.0,Nursing and residential care facilities,623
+N4079C,2013,115991.0,Nursing and residential care facilities,623
+N4079C,2014,118991.0,Nursing and residential care facilities,623
+N4079C,2015,123477.0,Nursing and residential care facilities,623
+N4079C,2016,128648.0,Nursing and residential care facilities,623
+N4079C,2017,131540.0,Nursing and residential care facilities,623
+N4079C,2018,137396.0,Nursing and residential care facilities,623
+N4079C,2019,141950.0,Nursing and residential care facilities,623
+N4079C,2020,156800.0,Nursing and residential care facilities,623
+N4079C,2021,151516.0,Nursing and residential care facilities,623
+N4079C,2022,162308.0,Nursing and residential care facilities,623
+N4079C,2023,175332.0,Nursing and residential care facilities,623
+N4079C,2024,188682.0,Nursing and residential care facilities,623
+A4003C,1998,4146921.0,Private industries,private
+A4003C,1999,4429104.0,Private industries,private
+A4003C,2000,4811250.0,Private industries,private
+A4003C,2001,4934293.0,Private industries,private
+A4003C,2002,4957991.0,Private industries,private
+A4003C,2003,5106611.0,Private industries,private
+A4003C,2004,5406291.0,Private industries,private
+A4003C,2005,5694360.0,Private industries,private
+A4003C,2006,6047079.0,Private industries,private
+A4003C,2007,6369769.0,Private industries,private
+A4003C,2008,6475493.0,Private industries,private
+A4003C,2009,6126325.0,Private industries,private
+A4003C,2010,6241287.0,Private industries,private
+A4003C,2011,6531987.0,Private industries,private
+A4003C,2012,6871565.0,Private industries,private
+A4003C,2013,7095280.0,Private industries,private
+A4003C,2014,7468702.0,Private industries,private
+A4003C,2015,7863213.0,Private industries,private
+A4003C,2016,8089697.0,Private industries,private
+A4003C,2017,8499494.0,Private industries,private
+A4003C,2018,8952809.0,Private industries,private
+A4003C,2019,9386295.0,Private industries,private
+A4003C,2020,9462543.0,Private industries,private
+A4003C,2021,10361170.0,Private industries,private
+A4003C,2022,11189501.0,Private industries,private
+A4003C,2023,11806097.0,Private industries,private
+A4003C,2024,12463662.0,Private industries,private

@@ -1,0 +1,186 @@
+series_code,year,value,industry_label,naics_code
+N1706C,1998,5678.0,Construction,23
+N1706C,1999,6168.0,Construction,23
+N1706C,2000,7023.0,Construction,23
+N1706C,2001,7428.0,Construction,23
+N1706C,2002,8248.0,Construction,23
+N1706C,2003,9524.0,Construction,23
+N1706C,2004,10239.0,Construction,23
+N1706C,2005,9620.0,Construction,23
+N1706C,2006,10223.0,Construction,23
+N1706C,2007,10584.0,Construction,23
+N1706C,2008,10779.0,Construction,23
+N1706C,2009,8533.0,Construction,23
+N1706C,2010,7880.0,Construction,23
+N1706C,2011,8242.0,Construction,23
+N1706C,2012,7843.0,Construction,23
+N1706C,2013,8174.0,Construction,23
+N1706C,2014,9233.0,Construction,23
+N1706C,2015,10874.0,Construction,23
+N1706C,2016,11717.0,Construction,23
+N1706C,2017,12801.0,Construction,23
+N1706C,2018,15608.0,Construction,23
+N1706C,2019,17005.0,Construction,23
+N1706C,2020,19946.0,Construction,23
+N1706C,2021,22457.0,Construction,23
+N1706C,2022,26685.0,Construction,23
+N1706C,2023,18066.0,Construction,23
+N1706C,2024,19931.0,Construction,23
+N1707C,1998,12560.0,Manufacturing,31-33
+N1707C,1999,14915.0,Manufacturing,31-33
+N1707C,2000,17293.0,Manufacturing,31-33
+N1707C,2001,19707.0,Manufacturing,31-33
+N1707C,2002,23018.0,Manufacturing,31-33
+N1707C,2003,24215.0,Manufacturing,31-33
+N1707C,2004,25416.0,Manufacturing,31-33
+N1707C,2005,23589.0,Manufacturing,31-33
+N1707C,2006,25153.0,Manufacturing,31-33
+N1707C,2007,27667.0,Manufacturing,31-33
+N1707C,2008,42929.0,Manufacturing,31-33
+N1707C,2009,38652.0,Manufacturing,31-33
+N1707C,2010,36303.0,Manufacturing,31-33
+N1707C,2011,43894.0,Manufacturing,31-33
+N1707C,2012,41918.0,Manufacturing,31-33
+N1707C,2013,40496.0,Manufacturing,31-33
+N1707C,2014,42732.0,Manufacturing,31-33
+N1707C,2015,44681.0,Manufacturing,31-33
+N1707C,2016,47591.0,Manufacturing,31-33
+N1707C,2017,56950.0,Manufacturing,31-33
+N1707C,2018,58077.0,Manufacturing,31-33
+N1707C,2019,57254.0,Manufacturing,31-33
+N1707C,2020,67890.0,Manufacturing,31-33
+N1707C,2021,62333.0,Manufacturing,31-33
+N1707C,2022,81875.0,Manufacturing,31-33
+N1707C,2023,77280.0,Manufacturing,31-33
+N1707C,2024,81528.0,Manufacturing,31-33
+N1711C,1998,4974.0,Retail trade,44-45
+N1711C,1999,5638.0,Retail trade,44-45
+N1711C,2000,5826.0,Retail trade,44-45
+N1711C,2001,6450.0,Retail trade,44-45
+N1711C,2002,7588.0,Retail trade,44-45
+N1711C,2003,7659.0,Retail trade,44-45
+N1711C,2004,7603.0,Retail trade,44-45
+N1711C,2005,6711.0,Retail trade,44-45
+N1711C,2006,6674.0,Retail trade,44-45
+N1711C,2007,7112.0,Retail trade,44-45
+N1711C,2008,8394.0,Retail trade,44-45
+N1711C,2009,7947.0,Retail trade,44-45
+N1711C,2010,8024.0,Retail trade,44-45
+N1711C,2011,9160.0,Retail trade,44-45
+N1711C,2012,8189.0,Retail trade,44-45
+N1711C,2013,8525.0,Retail trade,44-45
+N1711C,2014,9549.0,Retail trade,44-45
+N1711C,2015,10004.0,Retail trade,44-45
+N1711C,2016,10268.0,Retail trade,44-45
+N1711C,2017,11800.0,Retail trade,44-45
+N1711C,2018,12653.0,Retail trade,44-45
+N1711C,2019,12286.0,Retail trade,44-45
+N1711C,2020,16579.0,Retail trade,44-45
+N1711C,2021,16426.0,Retail trade,44-45
+N1711C,2022,16447.0,Retail trade,44-45
+N1711C,2023,10456.0,Retail trade,44-45
+N1711C,2024,10731.0,Retail trade,44-45
+N1713C,1998,17628.0,Information,51
+N1713C,1999,21336.0,Information,51
+N1713C,2000,23694.0,Information,51
+N1713C,2001,33241.0,Information,51
+N1713C,2002,39265.0,Information,51
+N1713C,2003,37592.0,Information,51
+N1713C,2004,39063.0,Information,51
+N1713C,2005,32683.0,Information,51
+N1713C,2006,34783.0,Information,51
+N1713C,2007,34449.0,Information,51
+N1713C,2008,42118.0,Information,51
+N1713C,2009,43662.0,Information,51
+N1713C,2010,46367.0,Information,51
+N1713C,2011,52985.0,Information,51
+N1713C,2012,41054.0,Information,51
+N1713C,2013,43378.0,Information,51
+N1713C,2014,44502.0,Information,51
+N1713C,2015,45470.0,Information,51
+N1713C,2016,49194.0,Information,51
+N1713C,2017,53223.0,Information,51
+N1713C,2018,60648.0,Information,51
+N1713C,2019,64821.0,Information,51
+N1713C,2020,66396.0,Information,51
+N1713C,2021,61721.0,Information,51
+N1713C,2022,56097.0,Information,51
+N1713C,2023,50953.0,Information,51
+N1713C,2024,57286.0,Information,51
+N1715C,1998,3677.0,Finance and insurance,52
+N1715C,1999,3144.0,Finance and insurance,52
+N1715C,2000,3596.0,Finance and insurance,52
+N1715C,2001,4757.0,Finance and insurance,52
+N1715C,2002,5632.0,Finance and insurance,52
+N1715C,2003,6875.0,Finance and insurance,52
+N1715C,2004,6819.0,Finance and insurance,52
+N1715C,2005,5637.0,Finance and insurance,52
+N1715C,2006,6313.0,Finance and insurance,52
+N1715C,2007,11505.0,Finance and insurance,52
+N1715C,2008,13512.0,Finance and insurance,52
+N1715C,2009,9881.0,Finance and insurance,52
+N1715C,2010,10961.0,Finance and insurance,52
+N1715C,2011,11997.0,Finance and insurance,52
+N1715C,2012,11687.0,Finance and insurance,52
+N1715C,2013,13723.0,Finance and insurance,52
+N1715C,2014,13049.0,Finance and insurance,52
+N1715C,2015,12821.0,Finance and insurance,52
+N1715C,2016,14780.0,Finance and insurance,52
+N1715C,2017,17340.0,Finance and insurance,52
+N1715C,2018,20480.0,Finance and insurance,52
+N1715C,2019,22795.0,Finance and insurance,52
+N1715C,2020,23900.0,Finance and insurance,52
+N1715C,2021,28253.0,Finance and insurance,52
+N1715C,2022,31421.0,Finance and insurance,52
+N1715C,2023,27971.0,Finance and insurance,52
+N1715C,2024,34347.0,Finance and insurance,52
+N1718C,1998,7064.0,"Professional, scientific, and technical services",54
+N1718C,1999,7803.0,"Professional, scientific, and technical services",54
+N1718C,2000,8271.0,"Professional, scientific, and technical services",54
+N1718C,2001,9438.0,"Professional, scientific, and technical services",54
+N1718C,2002,9978.0,"Professional, scientific, and technical services",54
+N1718C,2003,11007.0,"Professional, scientific, and technical services",54
+N1718C,2004,11169.0,"Professional, scientific, and technical services",54
+N1718C,2005,10068.0,"Professional, scientific, and technical services",54
+N1718C,2006,11116.0,"Professional, scientific, and technical services",54
+N1718C,2007,12171.0,"Professional, scientific, and technical services",54
+N1718C,2008,13805.0,"Professional, scientific, and technical services",54
+N1718C,2009,13327.0,"Professional, scientific, and technical services",54
+N1718C,2010,13699.0,"Professional, scientific, and technical services",54
+N1718C,2011,14500.0,"Professional, scientific, and technical services",54
+N1718C,2012,14800.0,"Professional, scientific, and technical services",54
+N1718C,2013,15089.0,"Professional, scientific, and technical services",54
+N1718C,2014,15297.0,"Professional, scientific, and technical services",54
+N1718C,2015,16185.0,"Professional, scientific, and technical services",54
+N1718C,2016,16428.0,"Professional, scientific, and technical services",54
+N1718C,2017,18997.0,"Professional, scientific, and technical services",54
+N1718C,2018,21477.0,"Professional, scientific, and technical services",54
+N1718C,2019,22786.0,"Professional, scientific, and technical services",54
+N1718C,2020,23591.0,"Professional, scientific, and technical services",54
+N1718C,2021,28074.0,"Professional, scientific, and technical services",54
+N1718C,2022,32068.0,"Professional, scientific, and technical services",54
+N1722C,1998,4385.0,Health care and social assistance,62
+N1722C,1999,4736.0,Health care and social assistance,62
+N1722C,2000,5217.0,Health care and social assistance,62
+N1722C,2001,5895.0,Health care and social assistance,62
+N1722C,2002,7036.0,Health care and social assistance,62
+N1722C,2003,8243.0,Health care and social assistance,62
+N1722C,2004,8448.0,Health care and social assistance,62
+N1722C,2005,7289.0,Health care and social assistance,62
+N1722C,2006,7572.0,Health care and social assistance,62
+N1722C,2007,8658.0,Health care and social assistance,62
+N1722C,2008,10607.0,Health care and social assistance,62
+N1722C,2009,10316.0,Health care and social assistance,62
+N1722C,2010,11015.0,Health care and social assistance,62
+N1722C,2011,11346.0,Health care and social assistance,62
+N1722C,2012,9645.0,Health care and social assistance,62
+N1722C,2013,9686.0,Health care and social assistance,62
+N1722C,2014,10178.0,Health care and social assistance,62
+N1722C,2015,11175.0,Health care and social assistance,62
+N1722C,2016,12026.0,Health care and social assistance,62
+N1722C,2017,13037.0,Health care and social assistance,62
+N1722C,2018,14512.0,Health care and social assistance,62
+N1722C,2019,16650.0,Health care and social assistance,62
+N1722C,2020,17881.0,Health care and social assistance,62
+N1722C,2021,18593.0,Health care and social assistance,62
+N1722C,2022,21963.0,Health care and social assistance,62

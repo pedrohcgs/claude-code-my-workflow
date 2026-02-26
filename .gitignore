@@ -53,3 +53,12 @@ Thumbs.db
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
+
+# BEA API key (sensitive)
+bea_api_key.txt
+
+# Stata artifacts
+*.smcl
+
+# Large raw data downloads (regenerable)
+analysis/download_bls_qcew/outputs/raw/

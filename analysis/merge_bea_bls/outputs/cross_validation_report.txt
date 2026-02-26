@@ -1,0 +1,24 @@
+Cross-Validation Report: BEA CE vs BLS QCEW Wages
+=======================================================
+Date: 26 Feb 2026
+
+Merge Results:
+  BEA only: 112
+  BLS only: 0
+  Matched:  308
+
+Expected: CE/Wages ~ 1.25-1.35 (supplements ~25%)
+Outlier threshold: ratio < 1.1 or > 1.5
+
+CE/Wage Ratio by Industry (matched obs, private ownership):
+  23: mean=1.246 sd=0.015 N=28
+  31-33: mean=1.262 sd=0.019 N=28
+  44-45: mean=1.241 sd=0.020 N=28
+  51: mean=1.207 sd=0.034 N=28
+  52: mean=1.230 sd=0.041 N=28
+  54: mean=1.179 sd=0.019 N=28
+  61: mean=1.364 sd=0.025 N=28
+  62: mean=1.250 sd=0.013 N=28
+  621: mean=1.234 sd=0.013 N=28
+  622: mean=1.246 sd=0.016 N=28
+  623: mean=1.266 sd=0.025 N=28

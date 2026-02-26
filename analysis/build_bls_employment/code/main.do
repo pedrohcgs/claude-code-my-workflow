@@ -32,8 +32,12 @@ display "Raw observations: " _N
 *   agglvl_code = 10 (total, all industries, national, by ownership)
 * Some industry codes like "31-33" are supersectors
 
-* Keep relevant aggregation levels
-keep if inlist(agglvl_code, 10, 14, 15, 16) | inlist(agglvl_code, 11, 12, 13)
+* Keep relevant aggregation levels:
+*   agglvl_code 10 = total, all industries, national, by ownership
+*   agglvl_code 14 = NAICS sector (2-digit), national, by ownership
+*   agglvl_code 15 = NAICS subsector (3-digit), national, by ownership
+* Exclude supersector levels (11-13, 16) to avoid duplicates
+keep if inlist(agglvl_code, 10, 14, 15)
 
 display "After aggregation level filter: " _N
 
@@ -41,22 +45,22 @@ display "After aggregation level filter: " _N
 gen str10 naics_code = ""
 
 * Healthcare
-replace naics_code = "62"    if industry_code == "62"
-replace naics_code = "621"   if industry_code == "621"
-replace naics_code = "622"   if industry_code == "622"
-replace naics_code = "623"   if industry_code == "623"
+replace naics_code = "62"    if industry_code == "62"   & agglvl_code == 14
+replace naics_code = "621"   if industry_code == "621"  & agglvl_code == 15
+replace naics_code = "622"   if industry_code == "622"  & agglvl_code == 15
+replace naics_code = "623"   if industry_code == "623"  & agglvl_code == 15
 
-* Comparison industries
-replace naics_code = "31-33" if inlist(industry_code, "31-33", "1013")
-replace naics_code = "52"    if industry_code == "52"
-replace naics_code = "44-45" if inlist(industry_code, "44-45", "1024")
-replace naics_code = "54"    if industry_code == "54"
-replace naics_code = "61"    if industry_code == "61"
-replace naics_code = "51"    if industry_code == "51"
-replace naics_code = "23"    if industry_code == "23"
+* Comparison industries (all 2-digit NAICS sectors)
+replace naics_code = "31-33" if industry_code == "31-33" & agglvl_code == 14
+replace naics_code = "52"    if industry_code == "52"    & agglvl_code == 14
+replace naics_code = "44-45" if industry_code == "44-45" & agglvl_code == 14
+replace naics_code = "54"    if industry_code == "54"    & agglvl_code == 14
+replace naics_code = "61"    if industry_code == "61"    & agglvl_code == 14
+replace naics_code = "51"    if industry_code == "51"    & agglvl_code == 14
+replace naics_code = "23"    if industry_code == "23"    & agglvl_code == 14
 
 * Total economy
-replace naics_code = "total" if industry_code == "10" | industry_code == "10-99"
+replace naics_code = "total" if industry_code == "10"    & agglvl_code == 10
 
 * Keep only target industries
 keep if naics_code != ""
@@ -74,17 +78,21 @@ gen wage_bill_millions = total_annual_wages / 1000000
 label variable wage_bill_millions "Total annual wages (millions of dollars)"
 
 * Employment share of total economy
-* (Will compute after confirming total economy is present)
-bysort year own_code: egen total_empl = total(annual_avg_emplvl) ///
-    if naics_code == "total"
-bysort year own_code (total_empl): replace total_empl = total_empl[_N]
+* Extract total economy employment into a year x own_code lookup
+preserve
+    keep if naics_code == "total"
+    keep year own_code annual_avg_emplvl total_annual_wages
+    rename annual_avg_emplvl total_empl
+    rename total_annual_wages total_wages
+    tempfile totals
+    save `totals'
+restore
+
+merge m:1 year own_code using `totals', keep(master match) nogenerate
+
 gen empl_share = annual_avg_emplvl / total_empl if total_empl > 0
 label variable empl_share "Employment share of total economy"
 
-* Wage share of total economy
-bysort year own_code: egen total_wages = total(total_annual_wages) ///
-    if naics_code == "total"
-bysort year own_code (total_wages): replace total_wages = total_wages[_N]
 gen wage_share = total_annual_wages / total_wages if total_wages > 0
 label variable wage_share "Wage share of total economy"
 

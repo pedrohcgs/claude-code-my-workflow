@@ -126,7 +126,7 @@ capture file close report
 file open report using "outputs/cross_validation_report.txt", write replace
 
 file write report "Cross-Validation Report: BEA CE vs BLS QCEW Wages" _n
-file write report "=" * 55 _n
+file write report "=======================================================" _n
 file write report "Date: $S_DATE" _n _n
 
 file write report "Merge Results:" _n

@@ -1,0 +1,163 @@
+series_code,year,value,industry_label,naics_code
+N5007C,1998,384580.0,Construction,23
+N5007C,1999,432483.0,Construction,23
+N5007C,2000,475114.0,Construction,23
+N5007C,2001,508969.0,Construction,23
+N5007C,2002,513439.0,Construction,23
+N5007C,2003,530218.0,Construction,23
+N5007C,2004,582498.0,Construction,23
+N5007C,2005,651404.0,Construction,23
+N5007C,2006,704887.0,Construction,23
+N5007C,2007,677882.0,Construction,23
+N5007C,2008,609066.0,Construction,23
+N5007C,2009,534103.0,Construction,23
+N5007C,2010,534287.0,Construction,23
+N5007C,2011,546022.0,Construction,23
+N5007C,2012,591545.0,Construction,23
+N5007C,2013,624570.0,Construction,23
+N5007C,2014,678322.0,Construction,23
+N5007C,2015,736242.0,Construction,23
+N5007C,2016,780375.0,Construction,23
+N5007C,2017,833059.0,Construction,23
+N5007C,2018,872722.0,Construction,23
+N5007C,2019,933605.0,Construction,23
+N5007C,2020,928356.0,Construction,23
+N5007C,2021,984695.0,Construction,23
+N5007C,2022,1103578.0,Construction,23
+N5007C,2023,1180110.0,Construction,23
+N5007C,2024,1268395.0,Construction,23
+N5008C,1998,1136382.0,Manufacturing,31-33
+N5008C,1999,1175754.0,Manufacturing,31-33
+N5008C,2000,1235582.0,Manufacturing,31-33
+N5008C,2001,1113646.0,Manufacturing,31-33
+N5008C,2002,1073610.0,Manufacturing,31-33
+N5008C,2003,1106838.0,Manufacturing,31-33
+N5008C,2004,1201577.0,Manufacturing,31-33
+N5008C,2005,1336732.0,Manufacturing,31-33
+N5008C,2006,1439268.0,Manufacturing,31-33
+N5008C,2007,1456744.0,Manufacturing,31-33
+N5008C,2008,1385850.0,Manufacturing,31-33
+N5008C,2009,1211900.0,Manufacturing,31-33
+N5008C,2010,1349113.0,Manufacturing,31-33
+N5008C,2011,1404553.0,Manufacturing,31-33
+N5008C,2012,1552844.0,Manufacturing,31-33
+N5008C,2013,1595459.0,Manufacturing,31-33
+N5008C,2014,1649727.0,Manufacturing,31-33
+N5008C,2015,1691115.0,Manufacturing,31-33
+N5008C,2016,1582642.0,Manufacturing,31-33
+N5008C,2017,1610260.0,Manufacturing,31-33
+N5008C,2018,1735551.0,Manufacturing,31-33
+N5008C,2019,1739946.0,Manufacturing,31-33
+N5008C,2020,1648383.0,Manufacturing,31-33
+N5008C,2021,1909148.0,Manufacturing,31-33
+N5008C,2022,2191043.0,Manufacturing,31-33
+N5008C,2023,2305350.0,Manufacturing,31-33
+N5008C,2024,2347601.0,Manufacturing,31-33
+N5012C,1998,611090.0,Retail trade,44-45
+N5012C,1999,626189.0,Retail trade,44-45
+N5012C,2000,666733.0,Retail trade,44-45
+N5012C,2001,698000.0,Retail trade,44-45
+N5012C,2002,723699.0,Retail trade,44-45
+N5012C,2003,757125.0,Retail trade,44-45
+N5012C,2004,788068.0,Retail trade,44-45
+N5012C,2005,857703.0,Retail trade,44-45
+N5012C,2006,904863.0,Retail trade,44-45
+N5012C,2007,894400.0,Retail trade,44-45
+N5012C,2008,826920.0,Retail trade,44-45
+N5012C,2009,823845.0,Retail trade,44-45
+N5012C,2010,863712.0,Retail trade,44-45
+N5012C,2011,890758.0,Retail trade,44-45
+N5012C,2012,960674.0,Retail trade,44-45
+N5012C,2013,986712.0,Retail trade,44-45
+N5012C,2014,1022973.0,Retail trade,44-45
+N5012C,2015,1066747.0,Retail trade,44-45
+N5012C,2016,1093814.0,Retail trade,44-45
+N5012C,2017,1102263.0,Retail trade,44-45
+N5012C,2018,1130713.0,Retail trade,44-45
+N5012C,2019,1174783.0,Retail trade,44-45
+N5012C,2020,1253621.0,Retail trade,44-45
+N5012C,2021,1432055.0,Retail trade,44-45
+N5012C,2022,1520965.0,Retail trade,44-45
+N5012C,2023,1635926.0,Retail trade,44-45
+N5012C,2024,1714694.0,Retail trade,44-45
+N5014C,1998,280303.0,Information,51
+N5014C,1999,310301.0,Information,51
+N5014C,2000,304045.0,Information,51
+N5014C,2001,310891.0,Information,51
+N5014C,2002,322699.0,Information,51
+N5014C,2003,344892.0,Information,51
+N5014C,2004,386965.0,Information,51
+N5014C,2005,439954.0,Information,51
+N5014C,2006,455166.0,Information,51
+N5014C,2007,486791.0,Information,51
+N5014C,2008,470931.0,Information,51
+N5014C,2009,448099.0,Information,51
+N5014C,2010,459083.0,Information,51
+N5014C,2011,457091.0,Information,51
+N5014C,2012,509490.0,Information,51
+N5014C,2013,555672.0,Information,51
+N5014C,2014,565716.0,Information,51
+N5014C,2015,599861.0,Information,51
+N5014C,2016,635483.0,Information,51
+N5014C,2017,637823.0,Information,51
+N5014C,2018,635600.0,Information,51
+N5014C,2019,690977.0,Information,51
+N5014C,2020,674049.0,Information,51
+N5014C,2021,790309.0,Information,51
+N5014C,2022,823673.0,Information,51
+N5014C,2023,907627.0,Information,51
+N5014C,2024,1006964.0,Information,51
+N5017C,1998,605724.0,Educ/health/social assistance,61-62
+N5017C,1999,645307.0,Educ/health/social assistance,61-62
+N5017C,2000,688190.0,Educ/health/social assistance,61-62
+N5017C,2001,750637.0,Educ/health/social assistance,61-62
+N5017C,2002,819961.0,Educ/health/social assistance,61-62
+N5017C,2003,869386.0,Educ/health/social assistance,61-62
+N5017C,2004,932744.0,Educ/health/social assistance,61-62
+N5017C,2005,987466.0,Educ/health/social assistance,61-62
+N5017C,2006,1053547.0,Educ/health/social assistance,61-62
+N5017C,2007,1112926.0,Educ/health/social assistance,61-62
+N5017C,2008,1184436.0,Educ/health/social assistance,61-62
+N5017C,2009,1251303.0,Educ/health/social assistance,61-62
+N5017C,2010,1303594.0,Educ/health/social assistance,61-62
+N5017C,2011,1346995.0,Educ/health/social assistance,61-62
+N5017C,2012,1403515.0,Educ/health/social assistance,61-62
+N5017C,2013,1436616.0,Educ/health/social assistance,61-62
+N5017C,2014,1481170.0,Educ/health/social assistance,61-62
+N5017C,2015,1554696.0,Educ/health/social assistance,61-62
+N5017C,2016,1630134.0,Educ/health/social assistance,61-62
+N5017C,2017,1682761.0,Educ/health/social assistance,61-62
+N5017C,2018,1750129.0,Educ/health/social assistance,61-62
+N5017C,2019,1835597.0,Educ/health/social assistance,61-62
+N5017C,2020,1852795.0,Educ/health/social assistance,61-62
+N5017C,2021,1997035.0,Educ/health/social assistance,61-62
+N5017C,2022,2126961.0,Educ/health/social assistance,61-62
+N5017C,2023,2302672.0,Educ/health/social assistance,61-62
+N5017C,2024,2481198.0,Educ/health/social assistance,61-62
+A736RC,1998,6794496.0,Private industries,private
+A736RC,1999,7176189.0,Private industries,private
+A736RC,2000,7700754.0,Private industries,private
+A736RC,2001,7870886.0,Private industries,private
+A736RC,2002,7989096.0,Private industries,private
+A736RC,2003,8337870.0,Private industries,private
+A736RC,2004,8963090.0,Private industries,private
+A736RC,2005,9858785.0,Private industries,private
+A736RC,2006,10597490.0,Private industries,private
+A736RC,2007,10840429.0,Private industries,private
+A736RC,2008,10603976.0,Private industries,private
+A736RC,2009,10279635.0,Private industries,private
+A736RC,2010,10866894.0,Private industries,private
+A736RC,2011,11251335.0,Private industries,private
+A736RC,2012,12167837.0,Private industries,private
+A736RC,2013,12502419.0,Private industries,private
+A736RC,2014,13135281.0,Private industries,private
+A736RC,2015,13568661.0,Private industries,private
+A736RC,2016,13763622.0,Private industries,private
+A736RC,2017,14230629.0,Private industries,private
+A736RC,2018,14864964.0,Private industries,private
+A736RC,2019,15532341.0,Private industries,private
+A736RC,2020,15252232.0,Private industries,private
+A736RC,2021,17294191.0,Private industries,private
+A736RC,2022,19222700.0,Private industries,private
+A736RC,2023,20601972.0,Private industries,private
+A736RC,2024,21816096.0,Private industries,private

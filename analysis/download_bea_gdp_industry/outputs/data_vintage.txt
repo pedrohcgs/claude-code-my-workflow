@@ -1,0 +1,9 @@
+Data Source: BEA GDP-by-Industry (GDPbyIndustry)
+Download Timestamp: 2026-02-26T14:04:43.656274
+API Endpoint: https://apps.bea.gov/api/data
+Tables Fetched: 5, 6, 1 (VA components), 8 (chain indexes)
+VA Component Rows: 16688
+Chain Index Rows: 2800
+Industry Filter: ALL (filtered downstream in Stata)
+Frequency: Annual
+Years: ALL available
