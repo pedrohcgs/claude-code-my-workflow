@@ -1,6 +1,6 @@
 ---
 name: respond-to-referee
-description: Structure point-by-point responses to referee reports for academic economics papers. Classifies comments, tracks required analyses, drafts diplomatic language, and maintains a revision tracker. Use when user has received referee reports or asks to "respond to referees", "write response letter", or "draft revision".
+description: Structure point-by-point referee responses using the revision-protocol routing. Classifies comments (NEW ANALYSIS / CLARIFICATION / DISAGREE / MINOR), dispatches appropriate agents, and tracks revisions. Use when asked to "respond to referees" or "draft revision".
 disable-model-invocation: true
 argument-hint: "[referee-report file path] [paper file path (optional)]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Task"]
@@ -8,37 +8,36 @@ allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Task"]
 
 # Respond to Referee
 
-Structure a point-by-point response to referee reports with classification, tracking, and diplomatic drafting.
+Structure a point-by-point response to referee reports with classification, agent routing per `revision-protocol.md`, and diplomatic drafting.
 
 **Input:** `$ARGUMENTS` — path to referee report file(s). Optionally followed by paper path.
 
 ---
 
-## Step 1: Parse Inputs
+## Workflow
+
+### Step 1: Parse Inputs
 
 1. Read referee report(s) from `$ARGUMENTS`
-   - Check `master_supporting_docs/` for reports if path not explicit
-   - Support multiple referee reports (Referee 1, Referee 2, Editor)
-2. Read the paper (`Paper/main.tex` or specified path) if available
-3. Read existing R scripts to know what analyses are already done
+   - Check `master_supporting_docs/` if path not explicit
+   - Support multiple reports (Referee 1, Referee 2, Editor)
+2. Read the paper (`Paper/main.tex` or specified path)
+3. Read `.claude/rules/revision-protocol.md` for routing rules
+4. Read existing scripts to know what analyses already exist
 
----
+### Step 2: Classify Every Comment
 
-## Step 2: Classify Every Comment
+Per `revision-protocol.md`, assign each referee point:
 
-For each referee point, assign a classification:
+| Class | Routing | Action |
+|-------|---------|--------|
+| **NEW ANALYSIS** | → Coder agent | Flag for user, create analysis task |
+| **CLARIFICATION** | → Writer agent | Draft rewritten section |
+| **REWRITE** | → Writer agent | Draft structural revision |
+| **DISAGREE** | → User (mandatory) | Draft diplomatic pushback, flag for review |
+| **MINOR** | → Writer agent | Draft fix directly |
 
-| Class | Meaning | Action Required |
-|-------|---------|-----------------|
-| **NEW ANALYSIS** | Requires running new regressions, collecting data, or substantive new content | HIGH priority — flag for user |
-| **CLARIFICATION** | Paper already has the answer; needs better exposition | MEDIUM — draft rewrite |
-| **REWRITE** | Structural reorganization or significant text revision | MEDIUM — draft new text |
-| **DISAGREE** | Referee may be wrong; requires careful diplomatic pushback | HIGH — flag for user review |
-| **MINOR** | Typo fix, small wording change, formatting | LOW — draft fix directly |
-
----
-
-## Step 3: Build Tracking Document
+### Step 3: Build Tracking Document
 
 Save to `quality_reports/referee_response_tracker.md`:
 
@@ -57,25 +56,35 @@ Save to `quality_reports/referee_response_tracker.md`:
 ## Action Items (Priority Order)
 
 ### HIGH: New Analysis Required
-| # | Ref | Point | What's Needed | R Script | Status |
-|---|-----|-------|---------------|----------|--------|
-| 1 | R1.3 | [Brief] | [Description] | [script if exists] | TODO |
+| # | Ref | Point | Agent | Status |
+|---|-----|-------|-------|--------|
+| 1 | R1.3 | [Brief] | Coder | TODO |
 
 ### MEDIUM: Clarification / Rewriting
-| # | Ref | Point | Current Location | Change Needed |
-|---|-----|-------|-----------------|---------------|
-| 1 | R1.1 | [Brief] | Section X, p. Y | [Description] |
+| # | Ref | Point | Agent | Status |
+|---|-----|-------|-------|--------|
+| 1 | R1.1 | [Brief] | Writer | TODO |
+
+### FLAGGED: Disagreements (require user review)
+| # | Ref | Point | Draft Response |
+|---|-----|-------|---------------|
+| 1 | R2.5 | [Brief] | [Draft] |
 
 ### LOW: Minor Edits
 - [ ] R1.7: Fix typo on p. 12
-- [ ] R2.4: Update Table 3 note
 ```
 
----
+### Step 4: Dispatch Agents for CLARIFICATION/REWRITE
 
-## Step 4: Draft Response Letter
+For comments classified as CLARIFICATION or REWRITE:
+- Dispatch Writer agent with specific instructions for each point
+- Writer drafts revised text matching the user's voice
 
-Structure the response letter:
+For NEW ANALYSIS:
+- Do NOT dispatch Coder automatically — flag for user approval first
+- Create concrete task descriptions for each required analysis
+
+### Step 5: Draft Response Letter
 
 ```latex
 \documentclass[12pt]{article}
@@ -93,8 +102,7 @@ Structure the response letter:
 Dear Editor,
 
 We thank the editor and referees for their careful and constructive comments.
-We have revised the manuscript to address all points raised. Below we provide
-a detailed point-by-point response.
+We have revised the manuscript to address all points raised.
 
 \bigskip
 
@@ -102,76 +110,47 @@ a detailed point-by-point response.
 \begin{enumerate}
 \item [Major change 1 — addresses R1.3, R2.1]
 \item [Major change 2 — addresses R1.5]
-\item [Major change 3 — addresses Editor comment]
 \end{enumerate}
 
 \newpage
-
 \section*{Response to Referee 1}
 
 \subsection*{Comment 1.1}
-\textit{[Exact quote or faithful paraphrase of referee comment]}
+\textit{[Exact quote of referee comment]}
 
 \medskip
-
 \textcolor{response}{%
 \textbf{Response:} [Draft response]
 
-\textbf{Paper change:} [Specific location — Section X, page Y, paragraph Z]
+\textbf{Paper change:} [Section X, page Y]
 }
-
-% [Repeat for each comment]
 
 \end{document}
 ```
 
----
-
-## Step 5: Diplomatic Disagreement Protocol
+### Step 6: Diplomatic Disagreement Protocol
 
 When classification is **DISAGREE**:
+1. Open with acknowledgment
+2. Provide specific evidence (theorem, data, published result)
+3. Offer partial concession where possible
+4. **Never say:** "The referee is wrong/misunderstood"
+5. **Instead say:** "We respectfully note...", "Upon reflection, we believe..."
+6. **FLAG prominently** for user review
 
-1. **Open with acknowledgment:**
-   "We appreciate Referee [N]'s insightful concern regarding..."
+### Step 7: Save Outputs
 
-2. **Provide specific evidence** for the disagreement:
-   - Cite a theorem, equation number, or published result
-   - Reference specific data or estimation output
-   - Point to the relevant section of the paper
-
-3. **Offer a partial concession** where possible:
-   - "To address this concern, we have added a footnote on p. X discussing..."
-   - "We now include an additional robustness check in Appendix Table A.X that..."
-   - "We have expanded the discussion in Section Y to clarify..."
-
-4. **Never say:**
-   - "The referee is wrong"
-   - "The referee misunderstood"
-   - "This is incorrect"
-
-5. **Instead say:**
-   - "We respectfully note that..."
-   - "Upon reflection, we believe the current approach is appropriate because..."
-   - "We appreciate this suggestion and have considered it carefully. We maintain... because..."
-
-6. **FLAG to user:** "This is a DISAGREE classification — please review carefully before sending."
-
----
-
-## Step 6: Save Outputs
-
-1. **Tracking document:** `quality_reports/referee_response_tracker.md`
-2. **Response letter draft:** `quality_reports/referee_response_[journal]_[date].tex`
-3. **Update paper todo:** If NEW ANALYSIS items exist, list them as concrete tasks
+1. **Tracker:** `quality_reports/referee_response_tracker.md`
+2. **Response letter:** `quality_reports/referee_response_[journal]_[date].tex`
+3. **Revised sections:** `Paper/sections/` (only for CLARIFICATION/REWRITE items)
 
 ---
 
 ## Principles
 
-- **The response letter is the user's voice, not Claude's.** Match their academic tone.
-- **Never fabricate empirical results** for NEW ANALYSIS items. Mark them as "TBD: [description of needed analysis]."
-- **Flag all DISAGREE items prominently** — these need human judgment.
-- **Be concise in responses.** Referees appreciate brevity. Don't over-explain.
-- **Track everything.** Every referee comment must appear in both the tracker and the response letter.
-- **Acknowledge legitimate criticism graciously.** A revision that takes feedback seriously is more likely to succeed.
-- **Prioritize the editor's comments.** The editor's letter often signals which referee concerns are most important.
+- **The response letter is the user's voice.** Match their academic tone.
+- **Never fabricate results.** Mark NEW ANALYSIS items as TBD.
+- **Flag all DISAGREE items.** These need human judgment.
+- **Prioritize editor's comments.** The editor signals which concerns matter most.
+- **Track everything.** Every referee comment appears in both tracker and response letter.
+- **Route per protocol.** Follow `revision-protocol.md` for agent dispatch.

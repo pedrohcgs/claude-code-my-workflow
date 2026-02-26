@@ -1,6 +1,6 @@
 ---
 name: data-analysis
-description: End-to-end R data analysis workflow from exploration through regression to publication-ready tables and figures
+description: End-to-end data analysis dispatching the Coder agent for implementation and Debugger agent for code review. Supports R, Stata, Python, and Julia. Produces scripts, tables, figures, and results summary.
 disable-model-invocation: true
 argument-hint: "[dataset path or description of analysis goal]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
@@ -8,84 +8,75 @@ allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 
 # Data Analysis Workflow
 
-Run an end-to-end data analysis in R: load, explore, analyze, and produce publication-ready output.
+Run an end-to-end data analysis by dispatching the **Coder** (implementer) and **Debugger** (code critic).
 
-**Input:** `$ARGUMENTS` — a dataset path (e.g., `data/county_panel.csv`) or a description of the analysis goal (e.g., "regress wages on education with state fixed effects using CPS data").
-
----
-
-## Constraints
-
-- **Follow R code conventions** in `.claude/rules/r-code-conventions.md`
-- **Save all scripts** to `scripts/R/` with descriptive names
-- **Save all outputs** (figures, tables, RDS) to `output/`
-- **Use `saveRDS()`** for every computed object — Quarto slides may need them
-- **Use project theme** for all figures (check for custom theme in `.claude/rules/`)
-- **Run r-reviewer** on the generated script before presenting results
+**Input:** `$ARGUMENTS` — a dataset path (e.g., `Data/cleaned/panel.csv`) or a description of the analysis goal.
 
 ---
 
-## Workflow Phases
+## Workflow
 
-### Phase 1: Setup and Data Loading
+### Step 1: Context Gathering
 
-1. Read `.claude/rules/r-code-conventions.md` for project standards
-2. Create R script with proper header (title, author, purpose, inputs, outputs)
-3. Load required packages at top (`library()`, never `require()`)
-4. Set seed once at top: `set.seed(42)`
-5. Load and inspect the dataset
+1. Read `.claude/rules/domain-profile.md` for field conventions
+2. Read any strategy memo in `quality_reports/` (if analysis implements a pre-specified design)
+3. Check `CLAUDE.md` for language preference (R/Stata/Python/Julia)
+4. Scan existing scripts in `scripts/R/` (or `scripts/stata/`, etc.) for project patterns
 
-### Phase 2: Exploratory Data Analysis
+### Step 2: Launch Coder Agent
 
-Generate diagnostic outputs:
-- **Summary statistics:** `summary()`, missingness rates, variable types
-- **Distributions:** Histograms for key continuous variables
-- **Relationships:** Scatter plots, correlation matrices
-- **Time patterns:** If panel data, plot trends over time
-- **Group comparisons:** If treatment/control, compare pre-treatment means
-
-Save all diagnostic figures to `output/diagnostics/`.
-
-### Phase 3: Main Analysis
-
-Based on the research question:
-- **Regression analysis:** Use `fixest` for panel data, `lm`/`glm` for cross-section
-- **Standard errors:** Cluster at the appropriate level (document why)
-- **Multiple specifications:** Start simple, progressively add controls
-- **Effect sizes:** Report standardized effects alongside raw coefficients
-
-### Phase 4: Publication-Ready Output
-
-**Tables:**
-- Use `modelsummary` for regression tables (preferred) or `stargazer`
-- Include all standard elements: coefficients, SEs, significance stars, N, R-squared
-- Export as `.tex` for LaTeX inclusion and `.html` for quick viewing
-
-**Figures:**
-- Use `ggplot2` with project theme
-- Set `bg = "transparent"` for Beamer compatibility
-- Include proper axis labels (sentence case, units)
-- Export with explicit dimensions: `ggsave(width = X, height = Y)`
-- Save as both `.pdf` and `.png`
-
-### Phase 5: Save and Review
-
-1. `saveRDS()` for all key objects (regression results, summary tables, processed data)
-2. Create `output/` subdirectories as needed with `dir.create(..., recursive = TRUE)`
-3. Run the r-reviewer agent on the generated script:
+Delegate to the `coder` agent via Task tool:
 
 ```
-Delegate to the r-reviewer agent:
-"Review the script at scripts/R/[script_name].R"
+Prompt: Implement analysis for "[goal]" using data at "[path]".
+Follow 4 stages:
+  Stage 0: Data cleaning (if raw data provided)
+  Stage 1: Main specification (from strategy memo or user description)
+  Stage 2: Robustness checks
+  Stage 3: Publication-ready output (tables to Tables/, figures to Figures/)
+Produce results_summary.md with all estimates, SEs, and key statistics.
+Save scripts to scripts/R/ (or appropriate language directory).
 ```
 
-4. Address any Critical or High issues from the review.
+The Coder follows these principles:
+- **Script structure:** Header, setup, data loading, analysis, output, export
+- **Packages:** `fixest` for panel data, `modelsummary` for tables, `ggplot2` for figures
+- **Standard errors:** Cluster at appropriate level (match treatment assignment)
+- **Output:** `.tex` tables for LaTeX, `.pdf`/`.png` figures, `.rds` for intermediate objects
+- **No hardcoded paths.** All paths relative to repository root.
+
+### Step 3: Launch Debugger Agent (Code Critic)
+
+After Coder returns, delegate to the `debugger` agent:
+
+```
+Prompt: Review the script(s) at scripts/R/[script_name].R.
+Run all 12 check categories:
+  Strategic (1-3): code-strategy alignment, sanity checks, robustness sufficiency
+  Code Quality (4-12): structure, console hygiene, reproducibility, functions,
+    figure quality, RDS pattern, comments, error handling, polish
+If strategy memo exists, cross-reference code against stated design.
+Save report to quality_reports/[script]_code_review.md
+```
+
+### Step 4: Fix Issues
+
+If Debugger finds Critical or Major issues:
+1. Re-dispatch Coder with specific fixes (max 3 rounds per `three-strikes.md`)
+2. Re-run Debugger to verify fixes
+
+### Step 5: Present Results
+
+Show the user:
+1. **Results summary** — key estimates with SEs and interpretation
+2. **Scripts created** — paths and descriptions
+3. **Output files** — tables in `Tables/`, figures in `Figures/`
+4. **Code review score** — from Debugger
+5. **Any TODO items** — missing data, additional specifications needed
 
 ---
 
-## Script Structure
-
-Follow this template:
+## Script Structure Template
 
 ```r
 # ============================================================
@@ -103,30 +94,27 @@ library(modelsummary)
 
 set.seed(42)
 
-dir.create("output/analysis", recursive = TRUE, showWarnings = FALSE)
+dir.create("Tables", recursive = TRUE, showWarnings = FALSE)
+dir.create("Figures", recursive = TRUE, showWarnings = FALSE)
 
 # 1. Data Loading ----
-# [Load and clean data]
 
 # 2. Exploratory Analysis ----
-# [Summary stats, diagnostic plots]
 
 # 3. Main Analysis ----
-# [Regressions, estimation]
 
 # 4. Tables and Figures ----
-# [Publication-ready output]
 
 # 5. Export ----
-# [saveRDS for all objects, ggsave for all figures]
 ```
 
 ---
 
-## Important
+## Principles
 
 - **Reproduce, don't guess.** If the user specifies a regression, run exactly that.
-- **Show your work.** Print summary statistics before jumping to regression.
-- **Check for issues.** Look for multicollinearity, outliers, perfect prediction.
-- **Use relative paths.** All paths relative to repository root.
-- **No hardcoded values.** Use variables for sample restrictions, date ranges, etc.
+- **Show your work.** Print summary statistics before jumping to regressions.
+- **Strategy alignment.** If a strategy memo exists, the code MUST implement it faithfully.
+- **Worker-critic pairing.** Coder creates, Debugger critiques. Never skip the review.
+- **saveRDS everything.** Every computed object gets saved for downstream use.
+- **Publication-ready output.** Tables and figures should be directly includable in the paper.

@@ -75,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f58846fd744234689b98dee20f811e2d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-57343d9539c23345295db01b17fbed38.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -218,18 +218,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>Specialized agents</td>
-<td>12</td>
-<td>Econometrician, Proofreader, R-Reviewer, Replication Auditor</td>
+<td>15</td>
+<td>Econometrician, Writer, Coder, Referee, Strategist</td>
 </tr>
 <tr class="even">
 <td>Slash commands</td>
-<td>26</td>
-<td><code>/econometrics-check</code>, <code>/paper-excellence</code>, <code>/data-analysis</code></td>
+<td>29</td>
+<td><code>/econometrics-check</code>, <code>/paper-excellence</code>, <code>/new-project</code></td>
 </tr>
 <tr class="odd">
 <td>Auto-loading rules</td>
-<td>17</td>
-<td>Quality gates, verification protocol, R code conventions</td>
+<td>21</td>
+<td>Quality gates, scoring protocol, adversarial pairing</td>
 </tr>
 <tr class="even">
 <td>Hooks</td>
@@ -265,15 +265,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Once setup is done, just describe what you need:</p>
 <ul>
 <li>“Review my paper and check the econometrics” — runs <code>/paper-excellence</code> with parallel agents</li>
-<li><code>/econometrics-check Paper/main.tex</code> — sequential 4-phase causal inference audit</li>
-<li><code>/data-analysis Data/cleaned/survey.csv</code> — end-to-end R analysis with publication-ready output</li>
-<li>“Prepare my replication package for AEA deposit” — runs <code>/audit-replication</code> + <code>/data-deposit</code></li>
+<li><code>/econometrics-check Paper/main.tex</code> — 4-phase causal inference audit</li>
+<li><code>/data-analysis Data/cleaned/survey.csv</code> — end-to-end analysis with publication-ready output</li>
+<li><code>/new-project health insurance</code> — full pipeline from idea to paper</li>
 </ul>
 </section>
 </section>
 <section id="what-happens-behind-the-scenes" class="level2">
 <h2 class="anchored" data-anchor-id="what-happens-behind-the-scenes">What Happens Behind the Scenes</h2>
-<p>You talk, Claude orchestrates. The 12 agents, 26 skills, and 17 rules exist so you don’t have to think about them. Claude selects the right tools, runs review agents in parallel, applies fixes in priority order, and scores against quality gates (80/90/95) — all autonomously after you approve the plan.</p>
+<p>You talk, Claude orchestrates. The 15 agents work in <strong>worker-critic pairs</strong> — every creator has a paired critic who can’t edit files, only review. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can’t agree after 3 rounds.</p>
 <p>For the full picture, see the <a href="./user-guide.html">User Guide</a> (what you can do) and <a href="./architecture.html">Architecture Reference</a> (how the system works).</p>
 </section>
 <section id="day-1-checklist" class="level2">
@@ -307,12 +307,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Folder structure</strong> (adjust to your layout)</li>
 <li><strong>Current project state</strong> (your papers and analyses)</li>
 </ol>
-<p><strong>Create your knowledge base</strong> — Open <code>.claude/rules/knowledge-base-template.md</code> and fill in:</p>
+<p><strong>Fill in the domain profile</strong> — Run <code>/interview-me</code> or manually edit <code>.claude/rules/domain-profile.md</code>:</p>
 <ol type="1">
-<li><strong>Notation registry</strong> — every symbol you use, where it’s introduced, and anti-patterns</li>
-<li><strong>Applications database</strong> — datasets, papers, and R packages you reference</li>
+<li><strong>Your field</strong> and adjacent subfields</li>
+<li><strong>Target journals</strong> ranked by tier</li>
+<li><strong>Common data sources</strong> and identification strategies</li>
+<li><strong>Field conventions</strong> and seminal references</li>
 </ol>
-<p><strong>Configure permissions</strong> — Review <code>.claude/settings.json</code>. The template includes permissions for git, LaTeX, R, and utility scripts. Add any additional tools you use.</p>
+<p><strong>Configure permissions</strong> — Review <code>.claude/settings.json</code>. The template includes permissions for git, LaTeX, R, and utility scripts.</p>
 <p><strong>Test it:</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/compile-latex</span> main</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/proofread</span> Paper/main.tex</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -353,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>Optional: <a href="https://quarto.org">Quarto</a> (web slides), pdf2svg (TikZ to SVG).</p>
+<p>Optional: Stata, Python, Julia (multi-language analysis), <a href="https://quarto.org">Quarto</a> (web slides).</p>
 </section>
 <section id="origin" class="level2">
 <h2 class="anchored" data-anchor-id="origin">Origin</h2>

@@ -2,36 +2,79 @@
 
 **After a plan is approved, the orchestrator takes over autonomously.**
 
-## The Loop
+## The Dependency-Driven Loop
 
 ```
 Plan approved → orchestrator activates
   │
-  Step 1: IMPLEMENT — Execute plan steps
+  Step 1: IDENTIFY — Check dependency graph, determine which phases can activate
   │
-  Step 2: VERIFY — Compile, render, check outputs
-  │         If verification fails → fix → re-verify
+  Step 2: DISPATCH — Launch worker agents (parallel when independent)
+  │         Each worker paired with its critic (see adversarial-pairing.md)
   │
-  Step 3: REVIEW — Run review agents (by file type)
+  Step 3: REVIEW — Critic evaluates worker output, produces score
+  │         If score < 80 → worker fixes → critic re-reviews (max 3 rounds)
+  │         If 3 rounds fail → ESCALATE (see three-strikes.md)
   │
-  Step 4: FIX — Apply fixes (critical → major → minor)
+  Step 4: VERIFY — Compile, render, run code, check outputs
+  │         If verification fails → fix → re-verify (max 2 attempts)
   │
-  Step 5: RE-VERIFY — Confirm fixes are clean
-  │
-  Step 6: SCORE — Apply quality-gates rubric
+  Step 5: SCORE — Aggregate scores across components (see scoring-protocol.md)
   │
   └── Score >= threshold?
         YES → Present summary to user
-        NO  → Loop back to Step 3 (max 5 rounds)
-              After max rounds → present with remaining issues
+        NO  → Identify blocking components, loop back to Step 2
+              After max 5 overall rounds → present with remaining issues
 ```
+
+## Agent Dispatch Rules
+
+The Orchestrator selects agents based on what the task requires:
+
+| Task Involves | Agents Dispatched |
+|--------------|-------------------|
+| Literature/references | Librarian + Editor |
+| Data sourcing | Explorer + Surveyor |
+| Identification strategy | Strategist + Econometrician |
+| R/Stata/Python scripts | Coder + Debugger |
+| Paper manuscript | Writer + Proofreader |
+| Peer review | Editor → Referee 1 + Referee 2 |
+| Beamer talks | Storyteller + Discussant |
+| Replication package | Verifier (submission mode) |
+| Compilation only | Verifier (standard mode) |
+
+## Parallel Dispatch
+
+Independent phases run concurrently:
+- Literature and Data discovery run in parallel
+- Code and Paper execution run in parallel (after Strategy)
+- Presentation can run parallel with Peer Review
 
 ## Limits
 
-- **Main loop:** max 5 review-fix rounds
-- **Critic-fixer sub-loop:** max 5 rounds
+- **Worker-critic pairs:** max 3 rounds (then escalate)
+- **Overall loop:** max 5 rounds
 - **Verification retries:** max 2 attempts
 - Never loop indefinitely
+
+## Simplified Mode (R Scripts / Explorations)
+
+For standalone R scripts, simulations, and explorations — use the simplified loop:
+
+```
+Plan approved → implement → run code → check outputs → score → done
+```
+
+No multi-agent reviews. Just: write, test, verify quality >= 80.
+
+### Verification Checklist (Simplified)
+
+- [ ] Script runs without errors
+- [ ] All packages loaded at top
+- [ ] No hardcoded absolute paths
+- [ ] `set.seed()` once at top if stochastic
+- [ ] Output files created at expected paths
+- [ ] Quality score >= 80
 
 ## "Just Do It" Mode
 

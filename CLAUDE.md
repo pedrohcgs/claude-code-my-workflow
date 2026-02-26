@@ -16,7 +16,8 @@
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
 - **Verify after** -- compile and confirm output at the end of every task
 - **Single source of truth** -- Paper `main.tex` is authoritative; talks and supplements derive from it
-- **Quality gates** -- nothing ships below 80/100 (paper); talks scored as auxiliary
+- **Quality gates** -- weighted aggregate score; nothing ships below 80/100; see `scoring-protocol.md`
+- **Worker-critic pairs** -- every creator has a paired critic; critics never edit files
 - **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to MEMORY.md
 
 ---
@@ -45,8 +46,8 @@
 ├── Supplementary/               # Online appendix and supplements
 ├── Replication/                 # Replication package for deposit
 ├── Preambles/header.tex         # LaTeX headers / shared preamble
-├── scripts/                     # Utility scripts + R code
-├── quality_reports/             # Plans, session logs, merge reports
+├── scripts/                     # Analysis code (R, Stata, Python, Julia)
+├── quality_reports/             # Plans, session logs, reviews, scores
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates
 └── master_supporting_docs/      # Reference papers and data docs
@@ -65,10 +66,6 @@ TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode main.tex
 
 # Talk compilation
 cd Talks && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode talk.tex
-
-# Quality score
-python scripts/quality_score.py Paper/main.tex
-python scripts/quality_score.py scripts/R/analysis.R
 ```
 
 ---
@@ -77,10 +74,12 @@ python scripts/quality_score.py scripts/R/analysis.R
 
 | Score | Gate | Applies To |
 |-------|------|------------|
-| 80 | Commit | Paper, R scripts (blocking) |
-| 90 | PR | Paper, R scripts (blocking) |
-| 95 | Excellence | Aspirational |
+| 80 | Commit | Weighted aggregate (blocking) |
+| 90 | PR | Weighted aggregate (blocking) |
+| 95 | Submission | Aggregate + all components >= 80 |
 | -- | Advisory | Talks (reported, non-blocking) |
+
+See `scoring-protocol.md` for weighted aggregation formula.
 
 ---
 
@@ -88,27 +87,35 @@ python scripts/quality_score.py scripts/R/analysis.R
 
 | Command | What It Does |
 |---------|-------------|
+| `/new-project [topic]` | Full pipeline: idea → paper (orchestrated) |
+| `/interview-me [topic]` | Interactive research interview → spec + domain profile |
+| `/lit-review [topic]` | Librarian + Editor: literature search + synthesis |
+| `/find-data [question]` | Explorer + Surveyor: data discovery + assessment |
+| `/identify [question]` | Strategist + Econometrician: design identification strategy |
+| `/data-analysis [dataset]` | Coder + Debugger: end-to-end analysis |
+| `/draft-paper [section]` | Writer: draft paper sections + humanizer pass |
+| `/econometrics-check [file]` | Econometrician: 4-phase causal inference audit |
+| `/review-r [file]` | Debugger: code quality review (standalone) |
+| `/proofread [file]` | Proofreader: 6-category manuscript review |
+| `/paper-excellence [file]` | Multi-agent parallel review + weighted score |
+| `/review-paper [file]` | 2 Referees + Editor: simulated peer review |
+| `/respond-to-referee [report]` | Revision routing per revision-protocol |
+| `/target-journal [paper]` | Editor: journal targeting + submission strategy |
+| `/submit [journal]` | Final gate: score >= 95, all components >= 80 |
+| `/create-talk [format]` | Storyteller + Discussant: Beamer talk from paper |
+| `/pre-analysis-plan [spec]` | Strategist: draft PAP (AEA/OSF/EGAP) |
+| `/audit-replication [dir]` | Verifier: 10-check submission audit |
+| `/data-deposit` | Coder + Verifier: AEA replication package |
+| `/humanizer [file]` | Strip 24 AI writing patterns |
+| `/journal` | Research journal timeline |
 | `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/proofread [file]` | Grammar/typo/overflow review |
-| `/visual-audit [file]` | Layout audit |
-| `/review-r [file]` | R code quality review |
 | `/validate-bib` | Cross-reference citations |
 | `/commit [msg]` | Stage, commit, PR, merge |
-| `/econometrics-check [file]` | Causal inference design audit |
-| `/draft-paper [section]` | Draft paper sections |
-| `/respond-to-referee [report]` | Point-by-point referee response |
-| `/lit-review [topic]` | Literature search + synthesis |
 | `/research-ideation [topic]` | Research questions + strategies |
-| `/interview-me [topic]` | Interactive research interview |
-| `/review-paper [file]` | Manuscript review |
-| `/data-analysis [dataset]` | End-to-end R analysis |
-| `/pre-analysis-plan [spec]` | Draft PAP (AEA/OSF/EGAP) |
-| `/data-deposit` | AEA Data Editor compliance |
-| `/audit-replication [dir]` | Validate replication package |
-| `/target-journal [paper]` | Journal targeting + submission strategy |
-| `/create-talk [format]` | Generate Beamer talk from paper |
-| `/paper-excellence [file]` | Combined multi-agent paper review |
-| `/devils-advocate [file]` | Challenge presentation design |
+| `/visual-audit [file]` | Slide layout audit |
+| `/learn` | Extract session discoveries into skills |
+| `/context-status` | Session health + context usage |
+| `/deploy` | Quarto render + GitHub Pages sync |
 
 ---
 

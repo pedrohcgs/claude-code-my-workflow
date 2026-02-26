@@ -11,9 +11,9 @@ An open-source [Claude Code](https://docs.anthropic.com/en/docs/claude-code) wor
 
 | Component | Count | Examples |
 |-----------|-------|---------|
-| Specialized agents | 12 | Econometrician, Proofreader, R-Reviewer, Replication Auditor |
-| Slash commands | 26 | `/econometrics-check`, `/paper-excellence`, `/data-analysis` |
-| Auto-loading rules | 17 | Quality gates, verification protocol, R code conventions |
+| Specialized agents | 15 | Econometrician, Writer, Coder, Referee, Strategist |
+| Slash commands | 29 | `/econometrics-check`, `/paper-excellence`, `/new-project` |
+| Auto-loading rules | 21 | Quality gates, scoring protocol, adversarial pairing |
 | Hooks | 7 | Session log reminder, context survival, file protection |
 
 You describe a task in plain English. Claude plans the approach, implements it, runs specialized review agents, fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.
@@ -50,13 +50,13 @@ Claude reads the configuration, fills in your project details, and enters contra
 Once setup is done, just describe what you need:
 
 - "Review my paper and check the econometrics" --- runs `/paper-excellence` with parallel agents
-- `/econometrics-check Paper/main.tex` --- sequential 4-phase causal inference audit
-- `/data-analysis Data/cleaned/survey.csv` --- end-to-end R analysis with publication-ready output
-- "Prepare my replication package for AEA deposit" --- runs `/audit-replication` + `/data-deposit`
+- `/econometrics-check Paper/main.tex` --- 4-phase causal inference audit
+- `/data-analysis Data/cleaned/survey.csv` --- end-to-end analysis with publication-ready output
+- `/new-project health insurance` --- full pipeline from idea to paper
 
 ## What Happens Behind the Scenes
 
-You talk, Claude orchestrates. The 12 agents, 26 skills, and 17 rules exist so you don't have to think about them. Claude selects the right tools, runs review agents in parallel, applies fixes in priority order, and scores against quality gates (80/90/95) --- all autonomously after you approve the plan.
+You talk, Claude orchestrates. The 15 agents work in **worker-critic pairs** --- every creator has a paired critic who can't edit files, only review. The orchestrator dispatches agents based on a dependency graph, enforces quality gates (80/90/95), and routes escalations when critics and creators can't agree after 3 rounds.
 
 For the full picture, see the [User Guide](user-guide.qmd) (what you can do) and [Architecture Reference](architecture.qmd) (how the system works).
 
@@ -83,12 +83,14 @@ If you prefer to configure things yourself instead of letting Claude handle it:
 2. **Folder structure** (adjust to your layout)
 3. **Current project state** (your papers and analyses)
 
-**Create your knowledge base** --- Open `.claude/rules/knowledge-base-template.md` and fill in:
+**Fill in the domain profile** --- Run `/interview-me` or manually edit `.claude/rules/domain-profile.md`:
 
-1. **Notation registry** --- every symbol you use, where it's introduced, and anti-patterns
-2. **Applications database** --- datasets, papers, and R packages you reference
+1. **Your field** and adjacent subfields
+2. **Target journals** ranked by tier
+3. **Common data sources** and identification strategies
+4. **Field conventions** and seminal references
 
-**Configure permissions** --- Review `.claude/settings.json`. The template includes permissions for git, LaTeX, R, and utility scripts. Add any additional tools you use.
+**Configure permissions** --- Review `.claude/settings.json`. The template includes permissions for git, LaTeX, R, and utility scripts.
 
 **Test it:**
 
@@ -107,7 +109,7 @@ If you prefer to configure things yourself instead of letting Claude handle it:
 | R | Analysis & figures | [r-project.org](https://www.r-project.org/) |
 | [gh CLI](https://cli.github.com/) | GitHub integration | `brew install gh` (macOS) |
 
-Optional: [Quarto](https://quarto.org) (web slides), pdf2svg (TikZ to SVG).
+Optional: Stata, Python, Julia (multi-language analysis), [Quarto](https://quarto.org) (web slides).
 
 ## Origin
 

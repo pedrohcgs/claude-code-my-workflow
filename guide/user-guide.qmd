@@ -10,63 +10,81 @@ You describe what you want in plain English. Claude handles the rest.
 | You Do | Happens Automatically |
 |--------|----------------------|
 | Describe what you want | Claude selects and runs the right skills |
-| Approve plans | Orchestrator coordinates agents |
-| Review final output | Hooks fire on events (edit, save, compact) |
-| Say "commit" when ready | Rules load based on files you touch |
+| Approve plans | Orchestrator coordinates agents via dependency graph |
+| Review final output | Worker-critic pairs ensure quality |
+| Say "commit" when ready | Quality gates enforce score thresholds |
 
-For complex or ambiguous tasks, Claude may ask 3--5 clarifying questions to create a **requirements specification** before planning. This catches ambiguity early and reduces rework. Each requirement is tagged MUST/SHOULD/MAY, and each aspect is marked CLEAR/ASSUMED/BLOCKED.
+For complex or ambiguous tasks, Claude may ask 3--5 clarifying questions to create a **requirements specification** before planning. Each requirement is tagged MUST/SHOULD/MAY, and each aspect is marked CLEAR/ASSUMED/BLOCKED.
 
 ---
 
 # Research Workflow
 
-A typical research project flows through these stages:
+A typical research project flows through these phases, driven by dependencies (not forced sequence):
 
 ```
-/research-ideation → /interview-me → /lit-review → /data-analysis
-    → /econometrics-check → /draft-paper → /review-paper
-    → /paper-excellence → /target-journal → submission
+Phase 1: Discovery
+  /interview-me → Research Spec + Domain Profile
+  /lit-review → Literature Synthesis (Librarian + Editor)
+
+Phase 2: Strategy
+  /find-data → Data Assessment (Explorer + Surveyor)
+  /identify → Strategy Memo (Strategist + Econometrician)
+
+Phase 3: Execution
+  /data-analysis → Scripts + Output (Coder + Debugger)
+  /draft-paper → Paper Sections (Writer + Humanizer)
+
+Phase 4: Peer Review
+  /paper-excellence → Weighted Score (4 agents parallel)
+  /review-paper → 2 Referees + Editor
+
+Phase 5: Submission
+  /target-journal → Journal Recommendations
+  /submit → Final Gate (score >= 95)
 ```
 
-You can enter at any stage. Each skill produces structured output and saves reports to `quality_reports/`.
+You can enter at any stage. Use `/new-project` for the full pipeline. Each skill produces structured output and saves reports to `quality_reports/`.
 
 ## Writing Your Paper
 
 ### `/draft-paper [section]`
 
-Drafts paper sections with proper economics structure:
+Dispatches the **Writer** agent. Drafts paper sections with proper economics structure:
 
 - **Introduction**: contribution paragraph within first 2 pages, effect sizes stated, clear identification preview
 - **Empirical Strategy**: per-design template (DiD, IV, RDD, etc.) with assumption discussion
 - **Results**: proper table/figure references, statistical vs economic significance
 - **Notation protocol**: $Y_{it}$, $D_{it}$, $ATT(g,t)$ --- consistent throughout
 
-Anti-hedging rules enforced: no "interestingly", no "it is worth noting", no "arguably".
+Anti-hedging rules enforced. **Humanizer pass** automatically strips 24 AI writing patterns.
 
 ### `/review-paper [file]`
 
-Simulates a top-journal referee. Reviews structure, writing quality, and manuscript completeness. Complements `/econometrics-check` (which focuses exclusively on causal validity).
+Dispatches 2 **Referee** agents (blind, parallel) and the **Editor** agent. Simulates peer review with independent reports and editorial decision (Accept/Minor/Major/Reject).
 
 ### `/respond-to-referee [report]`
 
-Classifies each referee comment into:
+Classifies each referee comment per `revision-protocol.md`:
 
-- **NEW ANALYSIS** --- requires new estimation or data work
-- **CLARIFICATION** --- text revision sufficient
-- **DISAGREE** --- diplomatic pushback needed (flagged for your review)
-- **MINOR** --- typos, formatting
+| Class | Routing | Action |
+|-------|---------|--------|
+| **NEW ANALYSIS** | → Coder | Flag for user, create analysis task |
+| **CLARIFICATION** | → Writer | Draft revised text |
+| **DISAGREE** | → User | Draft diplomatic pushback (flagged for review) |
+| **MINOR** | → Writer | Draft fix directly |
 
-Produces a point-by-point response letter with diplomatic disagreement protocol.
+Produces point-by-point response letter with diplomatic disagreement protocol.
 
 ## Running Analysis
 
 ### `/data-analysis [dataset]`
 
-End-to-end R analysis: explore data, run regressions, produce publication-ready output. Generates R scripts (saved to `scripts/R/`) and runs the r-reviewer agent automatically.
+Dispatches the **Coder** (implementer) and **Debugger** (code critic). End-to-end analysis: data cleaning, main specification, robustness checks, publication-ready output. Supports R, Stata, Python, and Julia.
 
 ### `/econometrics-check [file]`
 
-The centerpiece agent. Validates causal inference through **4 sequential phases** with early stopping:
+The centerpiece agent. Dispatches the **Econometrician** for **4 sequential phases** with early stopping:
 
 | Phase | What It Does |
 |-------|-------------|
@@ -75,38 +93,54 @@ The centerpiece agent. Validates causal inference through **4 sequential phases*
 | **3. Inference** | SE clustering, few-clusters correction, multiple testing, code-theory alignment with package-specific checks. |
 | **4. Polish** | Robustness (Oster bounds, placebos, alternative specs), assumption stress test, citation fidelity. Only runs if Phases 2--3 pass. |
 
-**Package-flexible:** Recommends best practices (Callaway-Sant'Anna for staggered DiD, `fixest` for panels, `rdrobust` for RDD) but accepts and validates alternative packages without flagging them as errors.
+**Package-flexible:** Recommends best practices but accepts and validates alternative packages.
+
+### `/find-data [question]`
+
+Dispatches the **Explorer** (data finder) and **Surveyor** (data critic). Searches public, administrative, survey, and novel data sources. Scores feasibility (A/B/C/D) and measurement quality.
+
+### `/identify [question]`
+
+Dispatches the **Strategist** (proposer) and **Econometrician** (critic). Produces strategy memo, pseudo-code, robustness plan, and falsification tests.
 
 ## Preparing for Submission
 
 ### `/pre-analysis-plan [spec]`
 
-Drafts a pre-analysis plan in AEA/OSF/EGAP format. Use before data collection or analysis begins.
+Dispatches the **Strategist** in PAP mode. Drafts in AEA/OSF/EGAP format with outcomes, subgroups, multiple testing corrections, and power calculations.
 
 ### `/audit-replication [dir]`
 
-Validates your replication package against the AEA Data Editor standard:
+Dispatches the **Verifier** in submission mode (all 10 checks):
 
-1. Package inventory --- all scripts, data files, documentation present
-2. Dependency verification --- R package versions recorded
-3. Data provenance --- sources documented, access instructions for restricted data
-4. Execution verification --- runs scripts, checks for errors
-5. Output cross-reference --- every table/figure traced to a script
-6. README completeness --- AEA-format README with numbered script descriptions
+1. LaTeX compilation
+2. Script execution
+3. File integrity
+4. Output freshness
+5. Package inventory
+6. Dependency verification
+7. Data provenance
+8. End-to-end execution
+9. Output cross-reference
+10. README completeness (AEA format)
 
 ### `/data-deposit`
 
-AEA Data Editor compliance check. Run before journal submission.
+Dispatches **Coder** (assembly) and **Verifier** (validation). Generates AEA-format README, master script, numbered script order, and deposit checklist.
 
 ### `/target-journal [paper]`
 
-Given your paper (or abstract), produces a ranked journal list with fit rationale, formatting requirements, submission checklist, and strategic notes (editor preferences, desk rejection risk).
+Dispatches the **Editor** in journal-selection mode. Produces ranked journal list using domain-profile tiers, formatting requirements, and submission strategy.
+
+### `/submit [journal]`
+
+Final submission gate. Requires aggregate score >= 95 with all components >= 80. Generates cover letter draft and submission checklist.
 
 ## Giving a Talk
 
 ### `/create-talk [format]`
 
-Generates Beamer `.tex` talks derived from your paper in 4 formats:
+Dispatches the **Storyteller** (creator) and **Discussant** (critic). Generates Beamer `.tex` talks derived from your paper in 4 formats:
 
 | Format | Slides | Duration | Content |
 |--------|--------|----------|---------|
@@ -115,34 +149,35 @@ Generates Beamer `.tex` talks derived from your paper in 4 formats:
 | Short | 10--15 | 15 min | Question, method, key result, implication |
 | Lightning | 3--5 | 5 min | Hook, result, so-what |
 
-For details on Beamer environments and multi-agent slide review, see the [Architecture Reference](architecture.qmd#additional-workflows-slides-lectures).
+Talk scores are **advisory** (non-blocking).
 
 ---
 
 # Quality Gates
 
-Every file gets a quality score from 0 to 100. The orchestrator manages this automatically --- you just see the result.
+Every file gets a quality score from 0 to 100, computed as a **weighted aggregate** across components. The orchestrator manages this automatically.
 
 | Score | Gate | Applies To |
 |-------|------|------------|
-| **95+** | Excellence | Aspirational --- ready for top-5 |
-| **90+** | PR | Paper, R scripts (blocking) |
-| **80+** | Commit | Paper, R scripts (blocking) |
+| **95+** | Submission | Aggregate + all components >= 80 |
+| **90+** | PR | Weighted aggregate (blocking) |
+| **80+** | Commit | Weighted aggregate (blocking) |
 | **< 80** | Blocked | Must fix before committing |
 | -- | Advisory | Talks (reported, non-blocking) |
 
-### How Scores Are Calculated
+### Weighted Aggregate Formula
 
-Points are deducted for issues:
+| Component | Weight | Agent |
+|-----------|--------|-------|
+| Literature | 10% | Librarian + Editor |
+| Data | 10% | Explorer + Surveyor |
+| Identification | 25% | Econometrician |
+| Code | 15% | Debugger |
+| Paper | 25% | Proofreader |
+| Polish | 10% | Proofreader (writing subscore) |
+| Replication | 5% | Verifier |
 
-| Issue | Deduction | Why Critical |
-|-------|-----------|-------------|
-| Equation overflow | -20 | Math cut off = unusable |
-| Broken citation | -15 | Academic integrity |
-| Equation typo | -10 | Teaches wrong content |
-| Text overflow | -5 | Content cut off |
-| Label overlap | -5 | Diagram illegible |
-| Notation inconsistency | -3 | Student confusion |
+Missing components are renormalized. See `scoring-protocol.md` for details.
 
 ---
 
@@ -150,7 +185,7 @@ Points are deducted for issues:
 
 The `explorations/` folder provides a structured sandbox for experimental work.
 
-**The problem:** Without structure, experimental code scatters across the repository. After a week of exploration, nobody remembers which version was the good one.
+**The problem:** Without structure, experimental code scatters across the repository.
 
 **The solution:** All experimental work goes into `explorations/` first:
 
@@ -173,8 +208,6 @@ explorations/
 | "Am I testing an idea?" | YES | Fast-Track (60/100 quality) |
 | "Does this improve the project?" | NO | Don't build it |
 
-Fast-track explorations skip formal planning. A 2-minute **research value check** gates the work. The **kill switch** is explicit: archive with a one-paragraph explanation and move on. No guilt, no sunk cost.
-
 ---
 
 # Self-Improvement
@@ -189,46 +222,31 @@ Every correction gets tagged for future reference in MEMORY.md:
 - [LEARN:r-code] Package X: ALWAYS include intercept in design matrix
 ```
 
-These tags persist across sessions. When Claude encounters a similar situation, it checks memory first.
-
 ## Skill Extraction: /learn
 
-For discoveries that deserve more than a one-line tag, use `/learn` to create a full skill. The `/learn` skill guides you through: evaluate (was this non-obvious?) → check existing skills → create skill → quality gate.
+For discoveries that deserve more than a one-line tag, use `/learn` to create a full skill.
 
 | Situation | Use |
 |-----------|-----|
 | One-liner fix | `[LEARN:category]` tag in MEMORY.md |
 | Multi-step workflow | `/learn` to create full skill |
 | Error + root cause + solution | `/learn` if reusable, `[LEARN]` if not |
-| Package quirk | `/learn` if affects multiple projects |
 
 ---
 
 # Customizing for Your Domain
 
-## Domain Reviewer
+## Domain Profile
 
-The template includes `domain-reviewer.md` --- a skeleton for building a substance reviewer specific to your field. It uses a **5-lens framework**:
+The domain profile (`.claude/rules/domain-profile.md`) calibrates all agents to your field. Fill it in manually or use `/interview-me` to populate it interactively:
 
-| Lens | What It Checks | Example (Economics) | Example (Physics) |
-|------|---------------|--------------------|--------------------|
-| **Assumption Audit** | Are stated assumptions sufficient? | Is overlap required for ATT? | Is the adiabatic approximation valid here? |
-| **Derivation Check** | Does the math check out? | Do decomposition terms sum? | Do the units balance? |
-| **Citation Fidelity** | Do slides match cited papers? | Is the theorem from the right paper? | Is the experimental setup correctly described? |
-| **Code-Theory Alignment** | Does code implement the formula? | R script matches the slide equation? | Simulation parameters match theory? |
-| **Logic Chain** | Does the reasoning flow? | Can a PhD student follow backwards? | Are prerequisites established? |
-
-To customize, open `.claude/agents/domain-reviewer.md` and fill in your domain's checks for each lens.
-
-## Knowledge Base
-
-The knowledge base (`.claude/rules/knowledge-base-template.md`) provides skeleton tables for:
-
-- **Notation registry** --- every symbol, where it's introduced, and anti-patterns
-- **Applications database** --- datasets, papers, and R packages you reference
-- **Validated design principles** --- what works for your audience
-
-Fill them in as you develop your project --- you don't need everything upfront.
+- **Field & adjacent subfields** --- inferred from your topic
+- **Target journals** --- ranked by tier
+- **Common data sources** --- datasets typical for your area
+- **Common identification strategies** --- designs used in your literature
+- **Field conventions** --- estimation quirks, clustering norms
+- **Seminal references** --- papers every referee expects you to cite
+- **Referee concerns** --- the "gotcha" questions referees always ask
 
 ## Creating Custom Skills {#sec-create-skills}
 
@@ -243,65 +261,65 @@ allowed-tools: ["Read", "Write", "Edit", "Bash", "Task"]
 ---
 ```
 
-The `description` field determines when Claude loads your skill. Use specific trigger phrases users would actually say.
-
 **Quick start:** Copy `templates/skill-template.md` to `.claude/skills/your-skill-name/SKILL.md` and customize.
 
 ---
 
 # All Skills Reference
 
-## Research & Ideation
+## Research Pipeline
 
-| Skill | What It Does |
-|-------|-------------|
-| `/lit-review [topic]` | Literature search (top-5, NBER, field journals, SSRN/RePEc) + synthesis |
-| `/research-ideation [topic]` | Research questions from descriptive to causal |
-| `/interview-me [topic]` | Interactive Q&A to formalize a vague idea into a concrete specification |
+| Skill | Agents | What It Does |
+|-------|--------|-------------|
+| `/new-project [topic]` | All (orchestrated) | Full pipeline: idea → paper |
+| `/interview-me [topic]` | — | Interactive Q&A → research spec + domain profile |
+| `/lit-review [topic]` | Librarian + Editor | Literature search + synthesis |
+| `/find-data [question]` | Explorer + Surveyor | Data discovery + quality assessment |
+| `/identify [question]` | Strategist + Econometrician | Design identification strategy |
+| `/research-ideation [topic]` | — | Research questions + strategies |
 
-## Writing
+## Analysis & Code
 
-| Skill | What It Does |
-|-------|-------------|
-| `/draft-paper [section]` | Paper sections with proper econ structure |
-| `/proofread [file]` | Grammar, typos, writing quality |
-| `/compile-latex [file]` | 3-pass XeLaTeX + BibTeX |
+| Skill | Agents | What It Does |
+|-------|--------|-------------|
+| `/data-analysis [dataset]` | Coder + Debugger | End-to-end analysis |
+| `/econometrics-check [file]` | Econometrician | 4-phase causal inference audit |
+| `/review-r [file]` | Debugger | Code quality review (standalone) |
 
-## Econometrics
+## Writing & Polish
 
-| Skill | What It Does |
-|-------|-------------|
-| `/econometrics-check [file]` | Sequential 4-phase causal design audit |
-| `/data-analysis [dataset]` | End-to-end R analysis with publication-ready output |
-| `/review-r [file]` | R code quality + econometric correctness |
+| Skill | Agents | What It Does |
+|-------|--------|-------------|
+| `/draft-paper [section]` | Writer | Paper sections + humanizer pass |
+| `/proofread [file]` | Proofreader | 6-category manuscript review |
+| `/humanizer [file]` | — | Strip 24 AI writing patterns |
+| `/compile-latex [file]` | — | 3-pass XeLaTeX + BibTeX |
+
+## Quality & Review
+
+| Skill | Agents | What It Does |
+|-------|--------|-------------|
+| `/paper-excellence [file]` | 4 parallel | Multi-agent review + weighted score |
+| `/review-paper [file]` | 2 Referees + Editor | Simulated peer review |
+| `/validate-bib` | — | Cross-reference citations |
 
 ## Submission & Deposit
 
-| Skill | What It Does |
-|-------|-------------|
-| `/target-journal [paper]` | Journal targeting + submission strategy |
-| `/respond-to-referee [report]` | Point-by-point referee response |
-| `/data-deposit` | AEA Data Editor compliance check |
-| `/audit-replication [dir]` | Validate replication package |
-| `/pre-analysis-plan [spec]` | Draft PAP (AEA/OSF/EGAP format) |
-
-## Quality Control
-
-| Skill | What It Does |
-|-------|-------------|
-| `/paper-excellence [file]` | Multi-agent paper review (parallel agents + scoring) |
-| `/review-paper [file]` | Top-journal referee simulation |
-| `/validate-bib` | Cross-reference citations |
+| Skill | Agents | What It Does |
+|-------|--------|-------------|
+| `/target-journal [paper]` | Editor | Journal targeting + strategy |
+| `/respond-to-referee [report]` | Writer + routing | Point-by-point response |
+| `/data-deposit` | Coder + Verifier | AEA replication package |
+| `/audit-replication [dir]` | Verifier | 10-check submission audit |
+| `/pre-analysis-plan [spec]` | Strategist | Draft PAP (AEA/OSF/EGAP) |
+| `/submit [journal]` | Verifier + scoring | Final gate (score >= 95) |
 
 ## Presentations
 
-| Skill | What It Does |
-|-------|-------------|
-| `/create-talk [format]` | Generate Beamer talk from paper (4 formats) |
-| `/visual-audit [file]` | Slide layout audit |
-| `/devils-advocate [file]` | Challenge presentation design |
-| `/slide-excellence [file]` | Combined multi-agent slide review |
-| `/create-lecture [topic]` | Full lecture creation workflow |
+| Skill | Agents | What It Does |
+|-------|--------|-------------|
+| `/create-talk [format]` | Storyteller + Discussant | Beamer talk (4 formats) |
+| `/visual-audit [file]` | — | Slide layout audit |
 
 ## Infrastructure
 
@@ -311,6 +329,7 @@ The `description` field determines when Claude loads your skill. Use specific tr
 | `/learn` | Extract session discoveries into persistent skills |
 | `/context-status` | Show session health and context usage |
 | `/deploy` | Build and deploy to GitHub Pages |
+| `/journal` | Research journal timeline |
 
 ---
 
@@ -353,13 +372,5 @@ The `description` field determines when Claude loads your skill. Use specific tr
 **Symptom:** Score stuck below 80, can't commit.
 
 1. Run `/paper-excellence` to get detailed issue breakdown
-2. Fix critical issues first (they cost -10 to -20 points each)
-3. Ask Claude: "What are the remaining critical issues?"
-
-### Skills Not Auto-Invoked
-
-**Symptom:** Claude doesn't use skills when you describe a task.
-
-1. Be explicit in your request: "Review my paper for econometric validity"
-2. Check skill has auto-invocation enabled (no `disable-model-invocation: true`)
-3. Skill descriptions help Claude know when to use them --- check they're clear
+2. Fix critical issues first (they cost the most points)
+3. Check per-component scores --- one weak component can drag down the aggregate

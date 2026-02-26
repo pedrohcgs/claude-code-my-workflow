@@ -1,87 +1,106 @@
 # Workflow Quick Reference
 
-**Model:** Contractor (you direct, Claude orchestrates)
+**Model:** Contractor (you direct, Claude orchestrates via dependency graph)
 
 ---
 
-## The Research Loop
+## The Research Pipeline
 
 ```
-Your instruction
+/interview-me → Research Spec + Domain Profile
     ↓
-[PLAN] (if multi-file or unclear) → Show plan → Your approval
+/lit-review → Literature Synthesis (Librarian + Editor)
     ↓
-[EXECUTE] Implement, verify, done
+/find-data → Data Assessment (Explorer + Surveyor)
     ↓
-[REPORT] Summary + what's ready
+/identify → Strategy Memo (Strategist + Econometrician)
     ↓
-Repeat
+/data-analysis → Scripts + Output (Coder + Debugger)
+    ↓
+/draft-paper → Paper Sections (Writer + Humanizer)
+    ↓
+/paper-excellence → Weighted Score (4 agents parallel)
+    ↓
+/review-paper → Peer Review (2 Referees + Editor)
+    ↓
+/submit → Final Gate (score >= 95, all components >= 80)
 ```
+
+Enter at any stage. Use `/new-project` for the full pipeline.
 
 ---
 
 ## Key Skills by Research Stage
 
 ### Ideation & Literature
-| Command | What It Does |
-|---------|-------------|
-| `/lit-review [topic]` | Literature search + synthesis |
-| `/research-ideation [topic]` | Research questions + strategies |
-| `/interview-me [topic]` | Interactive research interview |
+| Command | Agents | What It Does |
+|---------|--------|-------------|
+| `/interview-me [topic]` | — | Interactive Q&A → research spec + domain profile |
+| `/lit-review [topic]` | Librarian + Editor | Literature search + synthesis |
+| `/research-ideation [topic]` | — | Research questions + strategies |
 
-### Writing & Drafting
-| Command | What It Does |
-|---------|-------------|
-| `/draft-paper [section]` | Draft paper sections (intro, results, etc.) |
-| `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/proofread [file]` | Grammar/typo/writing review |
+### Data & Strategy
+| Command | Agents | What It Does |
+|---------|--------|-------------|
+| `/find-data [question]` | Explorer + Surveyor | Data discovery + quality assessment |
+| `/identify [question]` | Strategist + Econometrician | Design identification strategy |
+| `/pre-analysis-plan [spec]` | Strategist | Draft PAP (AEA/OSF/EGAP) |
 
-### Econometrics & Analysis
-| Command | What It Does |
-|---------|-------------|
-| `/econometrics-check [file]` | Causal inference design audit |
-| `/data-analysis [dataset]` | End-to-end R analysis |
-| `/review-r [file]` | R code quality review |
-| `/validate-bib` | Cross-reference citations |
+### Analysis & Writing
+| Command | Agents | What It Does |
+|---------|--------|-------------|
+| `/data-analysis [dataset]` | Coder + Debugger | End-to-end analysis + code review |
+| `/draft-paper [section]` | Writer | Paper sections + humanizer pass |
+| `/compile-latex [file]` | — | 3-pass XeLaTeX + bibtex |
 
 ### Quality & Review
-| Command | What It Does |
-|---------|-------------|
-| `/paper-excellence [file]` | Multi-agent paper review (primary score) |
-| `/review-paper [file]` | Manuscript review (referee simulation) |
-| `/visual-audit [file]` | Layout audit |
+| Command | Agents | What It Does |
+|---------|--------|-------------|
+| `/econometrics-check [file]` | Econometrician | 4-phase causal inference audit |
+| `/review-r [file]` | Debugger | Code quality review (standalone) |
+| `/proofread [file]` | Proofreader | 6-category manuscript review |
+| `/paper-excellence [file]` | 4 parallel | Multi-agent review + weighted score |
+| `/review-paper [file]` | 2 Referees + Editor | Simulated peer review |
+| `/validate-bib` | — | Cross-reference citations |
 
 ### Submission & Deposit
-| Command | What It Does |
-|---------|-------------|
-| `/target-journal [paper]` | Journal targeting + strategy |
-| `/respond-to-referee [report]` | Point-by-point response |
-| `/data-deposit` | AEA Data Editor compliance |
-| `/audit-replication [dir]` | Validate replication package |
-| `/pre-analysis-plan [spec]` | Draft PAP (AEA/OSF/EGAP) |
+| Command | Agents | What It Does |
+|---------|--------|-------------|
+| `/target-journal [paper]` | Editor | Journal targeting + strategy |
+| `/respond-to-referee [report]` | Writer + routing | Point-by-point response |
+| `/data-deposit` | Coder + Verifier | AEA replication package |
+| `/audit-replication [dir]` | Verifier | 10-check submission audit |
+| `/submit [journal]` | Verifier + scoring | Final gate (score >= 95) |
 
 ### Presentations
-| Command | What It Does |
-|---------|-------------|
-| `/create-talk [format]` | Generate Beamer talk (job-market/seminar/short/lightning) |
-| `/devils-advocate [file]` | Challenge talk design |
+| Command | Agents | What It Does |
+|---------|--------|-------------|
+| `/create-talk [format]` | Storyteller + Discussant | Beamer talk (4 formats) |
+| `/visual-audit [file]` | — | Slide layout audit |
 
-### Workflow
+### Infrastructure
 | Command | What It Does |
 |---------|-------------|
 | `/commit [msg]` | Stage, commit, PR, merge |
-| `/context-status` | Check context usage + session health |
+| `/humanizer [file]` | Strip 24 AI writing patterns |
+| `/journal` | Research journal timeline |
+| `/context-status` | Session health + context usage |
+| `/learn` | Extract discoveries into skills |
+| `/deploy` | Build + deploy to GitHub Pages |
 
 ---
 
 ## Quality Gates
 
-| Score | Paper & R (blocking) | Talks (advisory) |
-|-------|---------------------|------------------|
-| >= 95 | Excellence | - |
-| >= 90 | Ready to submit | - |
-| >= 80 | Ready to commit | - |
-| < 80 | **Blocked** — fix issues | Reported only |
+| Score | Gate | What It Means |
+|-------|------|--------------|
+| >= 95 | Submission | Ready for top-5 (all components >= 80) |
+| >= 90 | PR | Ready to submit (minor polish recommended) |
+| >= 80 | Commit | Ready to commit (address major issues before submission) |
+| < 80 | **Blocked** | Must fix critical/major issues |
+| -- | Advisory | Talks: reported only, non-blocking |
+
+Weighted aggregate: Literature 10% + Data 10% + Identification 25% + Code 15% + Paper 25% + Polish 10% + Replication 5%
 
 ---
 
@@ -89,8 +108,8 @@ Repeat
 
 - **Design forks:** "Option A vs. Option B. Which?"
 - **Identification choice:** "CS DiD vs. Sun-Abraham for this setting?"
-- **Scope question:** "Also run robustness X while here?"
 - **Disagreement with referee:** "DISAGREE classification — please review"
+- **After 3 strikes:** "Coder and Debugger can't agree — your call"
 
 ## I Just Execute When
 

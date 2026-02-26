@@ -51,7 +51,27 @@ This is a **conversational** skill. Instead of producing a report immediately, y
 
 ## After the Interview
 
-Once you have enough information (typically 5-8 exchanges), produce a **Research Specification Document**:
+Once you have enough information (typically 5-8 exchanges), produce TWO outputs:
+
+### Output 1: Domain Profile
+
+If `.claude/rules/domain-profile.md` still contains placeholders, fill it in based on the interview. This calibrates all agents to the researcher's field:
+
+- **Field & adjacent subfields** — inferred from the topic
+- **Target journals** — ranked by tier for this field
+- **Common data sources** — datasets typical for this area
+- **Common identification strategies** — designs used in this literature
+- **Field conventions** — estimation quirks, outcome transformations, clustering norms
+- **Seminal references** — papers every referee will expect you to cite
+- **Field-specific referee concerns** — the "gotcha" questions referees always ask
+
+Save directly to `.claude/rules/domain-profile.md` (overwrite the template).
+
+If the domain profile is already filled (from a previous interview or manual entry), confirm with the user whether to update or keep the existing one.
+
+### Output 2: Research Specification Document
+
+Produce a **Research Specification Document**:
 
 ```markdown
 # Research Specification: [Title]

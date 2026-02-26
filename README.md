@@ -38,65 +38,43 @@ Claude reads the configuration, fills in your project details, and enters contra
 
 You describe a task. Claude plans the approach, implements it, runs specialized review agents, fixes issues, re-verifies, and scores against quality gates — all autonomously. You approve the plan and see a summary when the work meets quality standards.
 
-### 12 Specialized Agents
+### 15 Specialized Agents in Worker-Critic Pairs
 
-Instead of one general-purpose reviewer, focused agents each check one dimension:
+Every creator has a paired critic. Critics can't edit files; creators can't score themselves.
 
-| Agent | What It Checks |
-|-------|---------------|
-| **Econometrician** | Sequential 4-phase causal audit: claim → design validity → inference → polish |
-| **Proofreader** | Grammar, typos, consistency |
-| **R-Reviewer** | Code quality, reproducibility, domain correctness |
-| **Domain Reviewer** | Field-specific substance (customizable for your field) |
-| **Replication Auditor** | Replication package completeness |
-| **Verifier** | End-to-end compilation and output verification |
-| **Slide Auditor** | Visual layout for presentations |
-| **TikZ Reviewer** | Diagram quality |
-| **Pedagogy Reviewer** | Teaching quality (for lecture slides) |
-| **Beamer Translator** | Beamer-to-Quarto conversion |
-| **Quarto Critic** | Adversarial QA comparing output against benchmark |
-| **Quarto Fixer** | Implements fixes from the critic agent |
+| Phase | Worker (Creates) | Critic (Reviews) |
+|-------|-----------------|-----------------|
+| Discovery | Librarian | Editor |
+| Strategy | Strategist | Econometrician |
+| Execution | Coder | Debugger |
+| Paper | Writer | Proofreader |
+| Peer Review | Referee (x2) | Editor |
+| Presentation | Storyteller | Discussant |
+| Infrastructure | Orchestrator, Verifier | — |
 
-### 26 Slash Commands
+Additional standalone agents: **Explorer** (data finder), **Surveyor** (data critic).
 
-| Command | What It Does |
-|---------|-------------|
-| `/draft-paper [section]` | Draft paper sections with proper academic structure |
-| `/econometrics-check [file]` | Causal inference design audit (DiD, IV, RDD, SC, ES) |
-| `/paper-excellence [file]` | Multi-agent paper review (parallel agents + scoring) |
-| `/respond-to-referee [report]` | Point-by-point referee response |
-| `/lit-review [topic]` | Literature search + synthesis + gap identification |
-| `/research-ideation [topic]` | Research questions + empirical strategies |
-| `/interview-me [topic]` | Interactive research interview |
-| `/review-paper [file]` | Full manuscript review |
-| `/data-analysis [dataset]` | End-to-end R analysis with publication-ready output |
-| `/pre-analysis-plan [spec]` | Draft PAP (AEA/OSF/EGAP format) |
-| `/data-deposit` | AEA Data Editor compliance check |
-| `/audit-replication [dir]` | Validate replication package |
-| `/target-journal [paper]` | Journal targeting + submission strategy |
-| `/create-talk [format]` | Generate Beamer talk from paper |
-| `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/proofread [file]` | Grammar/typo review |
-| `/visual-audit [file]` | Layout audit |
-| `/review-r [file]` | R code quality review |
-| `/validate-bib` | Cross-reference citations |
-| `/commit [msg]` | Stage, commit, PR, merge |
-| `/devils-advocate [file]` | Challenge presentation design |
-| `/slide-excellence [file]` | Combined multi-agent slide review |
-| `/learn` | Extract session discoveries into persistent skills |
-| `/context-status` | Show session health and context usage |
-| `/deploy` | Render + sync to GitHub Pages |
-| `/create-lecture` | Full lecture creation workflow |
+### 29 Slash Commands
+
+| Category | Commands |
+|----------|----------|
+| **Pipeline** | `/new-project`, `/interview-me`, `/lit-review`, `/find-data`, `/identify` |
+| **Analysis** | `/data-analysis`, `/econometrics-check`, `/review-r` |
+| **Writing** | `/draft-paper`, `/proofread`, `/humanizer` |
+| **Review** | `/paper-excellence`, `/review-paper`, `/respond-to-referee` |
+| **Submission** | `/target-journal`, `/submit`, `/data-deposit`, `/audit-replication`, `/pre-analysis-plan` |
+| **Talks** | `/create-talk`, `/visual-audit` |
+| **Infrastructure** | `/compile-latex`, `/validate-bib`, `/commit`, `/learn`, `/context-status`, `/deploy`, `/journal`, `/research-ideation` |
 
 ### Quality Gates
 
-Every file gets a score (0–100). Scores below threshold block the action:
+Weighted aggregate scoring with per-component minimums:
 
 | Score | Gate | Applies To |
 |-------|------|------------|
-| 80 | Commit | Paper, R scripts (blocking) |
-| 90 | PR | Paper, R scripts (blocking) |
-| 95 | Excellence | Aspirational |
+| 80 | Commit | Weighted aggregate (blocking) |
+| 90 | PR | Weighted aggregate (blocking) |
+| 95 | Submission | Aggregate + all components >= 80 |
 | -- | Advisory | Talks (reported, non-blocking) |
 
 ### Context Survival
@@ -110,18 +88,19 @@ Plans, specifications, and session logs survive auto-compression and session bou
 ```
 your-project/
 ├── CLAUDE.md                    # Project configuration (fill in placeholders)
-├── .claude/                     # Rules, skills, agents, hooks
+├── .claude/                     # 15 agents, 29 skills, 21 rules, 7 hooks
 ├── Bibliography_base.bib        # Centralized bibliography
 ├── Paper/                       # Main LaTeX manuscript (source of truth)
 │   ├── main.tex
 │   └── sections/
 ├── Talks/                       # Derivative Beamer presentations
-├── Figures/                     # Generated figures (R output)
-├── Tables/                      # Generated tables (R output)
+├── Data/                        # Raw and cleaned datasets
+├── Figures/                     # Generated figures
+├── Tables/                      # Generated tables
 ├── Supplementary/               # Online appendix
 ├── Replication/                 # Replication package for deposit
-├── scripts/                     # R code + utility scripts
-├── quality_reports/             # Plans, session logs, merge reports
+├── scripts/                     # Analysis code (R, Stata, Python, Julia)
+├── quality_reports/             # Plans, session logs, reviews, scores
 ├── explorations/                # Research sandbox
 └── master_supporting_docs/      # Reference papers and data docs
 ```
@@ -137,18 +116,17 @@ your-project/
 | R | Analysis & figures | [r-project.org](https://www.r-project.org/) |
 | [gh CLI](https://cli.github.com/) | GitHub integration | `brew install gh` (macOS) |
 
-Optional: [Quarto](https://quarto.org) (web slides), pdf2svg (TikZ to SVG).
+Optional: Stata, Python, Julia (for multi-language analysis), [Quarto](https://quarto.org) (web slides).
 
 ---
 
 ## Adapting for Your Field
 
 1. **Fill in `CLAUDE.md`** — replace `[BRACKETED PLACEHOLDERS]` with your project details
-2. **Customize the domain reviewer** (`.claude/agents/domain-reviewer.md`) with review lenses for your field
-3. **Add field-specific R conventions** to `.claude/rules/r-code-conventions.md`
-4. **Configure your notation and methods** in `CLAUDE.md` and the domain reviewer
+2. **Fill in the domain profile** (`.claude/rules/domain-profile.md`) — your field's journals, data sources, identification strategies, conventions, and seminal references. Use `/interview-me` to populate it interactively.
+3. **Configure your language** — R is the default; Stata, Python, and Julia are also supported. Set your preference in CLAUDE.md.
 
-The Clo-Author is designed for applied econometrics, but the infrastructure (contractor mode, quality gates, multi-agent review) works for any quantitative research field.
+The Clo-Author is designed for applied econometrics, but the infrastructure (contractor mode, quality gates, adversarial review) works for any quantitative research field.
 
 ---
 
@@ -156,7 +134,7 @@ The Clo-Author is designed for applied econometrics, but the infrastructure (con
 
 This project is a fork of [Pedro Sant'Anna's claude-code-my-workflow](https://github.com/pedrohcgs/claude-code-my-workflow), which was built for Econ 730 at Emory University (6 lectures, 800+ slides). The Clo-Author reorients that infrastructure from lecture production to applied econometrics research publication.
 
-The core infrastructure (contractor mode, quality gates, context survival, session logging) comes from the original template. The econometrics-specific agents, paper drafting skills, and submission workflow are new.
+The core infrastructure (contractor mode, quality gates, context survival, session logging) comes from the original template. The adversarial worker-critic architecture, econometrics-specific agents, paper drafting skills, and submission workflow are new.
 
 Maintained by [Hugo Sant'Anna](https://hsantanna.org).
 

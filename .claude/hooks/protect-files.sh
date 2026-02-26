@@ -22,6 +22,9 @@ fi
 PROTECTED_PATTERNS=(
   "Bibliography_base.bib"
   "settings.json"
+  "strategy-memo-*.md"
+  "referee-report-*.md"
+  "quality-score-*.json"
 )
 
 BASENAME=$(basename "$FILE")

@@ -75,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f58846fd744234689b98dee20f811e2d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-57343d9539c23345295db01b17fbed38.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -202,6 +202,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#data-analysis-dataset" id="toc-data-analysis-dataset" class="nav-link" data-scroll-target="#data-analysis-dataset"><code>/data-analysis [dataset]</code></a></li>
   <li><a href="#econometrics-check-file" id="toc-econometrics-check-file" class="nav-link" data-scroll-target="#econometrics-check-file"><code>/econometrics-check [file]</code></a></li>
+  <li><a href="#find-data-question" id="toc-find-data-question" class="nav-link" data-scroll-target="#find-data-question"><code>/find-data [question]</code></a></li>
+  <li><a href="#identify-question" id="toc-identify-question" class="nav-link" data-scroll-target="#identify-question"><code>/identify [question]</code></a></li>
   </ul></li>
   <li><a href="#preparing-for-submission" id="toc-preparing-for-submission" class="nav-link" data-scroll-target="#preparing-for-submission">Preparing for Submission</a>
   <ul class="collapse">
@@ -209,6 +211,7 @@ window.Quarto = {
   <li><a href="#audit-replication-dir" id="toc-audit-replication-dir" class="nav-link" data-scroll-target="#audit-replication-dir"><code>/audit-replication [dir]</code></a></li>
   <li><a href="#data-deposit" id="toc-data-deposit" class="nav-link" data-scroll-target="#data-deposit"><code>/data-deposit</code></a></li>
   <li><a href="#target-journal-paper" id="toc-target-journal-paper" class="nav-link" data-scroll-target="#target-journal-paper"><code>/target-journal [paper]</code></a></li>
+  <li><a href="#submit-journal" id="toc-submit-journal" class="nav-link" data-scroll-target="#submit-journal"><code>/submit [journal]</code></a></li>
   </ul></li>
   <li><a href="#giving-a-talk" id="toc-giving-a-talk" class="nav-link" data-scroll-target="#giving-a-talk">Giving a Talk</a>
   <ul class="collapse">
@@ -217,7 +220,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#quality-gates" id="toc-quality-gates" class="nav-link" data-scroll-target="#quality-gates">Quality Gates</a>
   <ul class="collapse">
-  <li><a href="#how-scores-are-calculated" id="toc-how-scores-are-calculated" class="nav-link" data-scroll-target="#how-scores-are-calculated">How Scores Are Calculated</a></li>
+  <li><a href="#weighted-aggregate-formula" id="toc-weighted-aggregate-formula" class="nav-link" data-scroll-target="#weighted-aggregate-formula">Weighted Aggregate Formula</a></li>
   </ul></li>
   <li><a href="#sec-exploration" id="toc-sec-exploration" class="nav-link" data-scroll-target="#sec-exploration">Exploration Workflow</a>
   <ul class="collapse">
@@ -230,17 +233,16 @@ window.Quarto = {
   </ul></li>
   <li><a href="#customizing-for-your-domain" id="toc-customizing-for-your-domain" class="nav-link" data-scroll-target="#customizing-for-your-domain">Customizing for Your Domain</a>
   <ul class="collapse">
-  <li><a href="#domain-reviewer" id="toc-domain-reviewer" class="nav-link" data-scroll-target="#domain-reviewer">Domain Reviewer</a></li>
-  <li><a href="#knowledge-base" id="toc-knowledge-base" class="nav-link" data-scroll-target="#knowledge-base">Knowledge Base</a></li>
+  <li><a href="#domain-profile" id="toc-domain-profile" class="nav-link" data-scroll-target="#domain-profile">Domain Profile</a></li>
   <li><a href="#sec-create-skills" id="toc-sec-create-skills" class="nav-link" data-scroll-target="#sec-create-skills">Creating Custom Skills</a></li>
   </ul></li>
   <li><a href="#all-skills-reference" id="toc-all-skills-reference" class="nav-link" data-scroll-target="#all-skills-reference">All Skills Reference</a>
   <ul class="collapse">
-  <li><a href="#research-ideation" id="toc-research-ideation" class="nav-link" data-scroll-target="#research-ideation">Research &amp; Ideation</a></li>
-  <li><a href="#writing" id="toc-writing" class="nav-link" data-scroll-target="#writing">Writing</a></li>
-  <li><a href="#econometrics" id="toc-econometrics" class="nav-link" data-scroll-target="#econometrics">Econometrics</a></li>
+  <li><a href="#research-pipeline" id="toc-research-pipeline" class="nav-link" data-scroll-target="#research-pipeline">Research Pipeline</a></li>
+  <li><a href="#analysis-code" id="toc-analysis-code" class="nav-link" data-scroll-target="#analysis-code">Analysis &amp; Code</a></li>
+  <li><a href="#writing-polish" id="toc-writing-polish" class="nav-link" data-scroll-target="#writing-polish">Writing &amp; Polish</a></li>
+  <li><a href="#quality-review" id="toc-quality-review" class="nav-link" data-scroll-target="#quality-review">Quality &amp; Review</a></li>
   <li><a href="#submission-deposit" id="toc-submission-deposit" class="nav-link" data-scroll-target="#submission-deposit">Submission &amp; Deposit</a></li>
-  <li><a href="#quality-control" id="toc-quality-control" class="nav-link" data-scroll-target="#quality-control">Quality Control</a></li>
   <li><a href="#presentations" id="toc-presentations" class="nav-link" data-scroll-target="#presentations">Presentations</a></li>
   <li><a href="#infrastructure" id="toc-infrastructure" class="nav-link" data-scroll-target="#infrastructure">Infrastructure</a></li>
   </ul></li>
@@ -251,7 +253,6 @@ window.Quarto = {
   <li><a href="#claude-ignores-rules" id="toc-claude-ignores-rules" class="nav-link" data-scroll-target="#claude-ignores-rules">Claude Ignores Rules</a></li>
   <li><a href="#context-lost-after-compaction" id="toc-context-lost-after-compaction" class="nav-link" data-scroll-target="#context-lost-after-compaction">Context Lost After Compaction</a></li>
   <li><a href="#quality-score-too-low" id="toc-quality-score-too-low" class="nav-link" data-scroll-target="#quality-score-too-low">Quality Score Too Low</a></li>
-  <li><a href="#skills-not-auto-invoked" id="toc-skills-not-auto-invoked" class="nav-link" data-scroll-target="#skills-not-auto-invoked">Skills Not Auto-Invoked</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -296,66 +297,112 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td>Approve plans</td>
-<td>Orchestrator coordinates agents</td>
+<td>Orchestrator coordinates agents via dependency graph</td>
 </tr>
 <tr class="odd">
 <td>Review final output</td>
-<td>Hooks fire on events (edit, save, compact)</td>
+<td>Worker-critic pairs ensure quality</td>
 </tr>
 <tr class="even">
 <td>Say “commit” when ready</td>
-<td>Rules load based on files you touch</td>
+<td>Quality gates enforce score thresholds</td>
 </tr>
 </tbody>
 </table>
-<p>For complex or ambiguous tasks, Claude may ask 3–5 clarifying questions to create a <strong>requirements specification</strong> before planning. This catches ambiguity early and reduces rework. Each requirement is tagged MUST/SHOULD/MAY, and each aspect is marked CLEAR/ASSUMED/BLOCKED.</p>
+<p>For complex or ambiguous tasks, Claude may ask 3–5 clarifying questions to create a <strong>requirements specification</strong> before planning. Each requirement is tagged MUST/SHOULD/MAY, and each aspect is marked CLEAR/ASSUMED/BLOCKED.</p>
 <hr>
 </section>
 <section id="research-workflow" class="level1">
 <h1>Research Workflow</h1>
-<p>A typical research project flows through these stages:</p>
-<pre><code>/research-ideation → /interview-me → /lit-review → /data-analysis
-    → /econometrics-check → /draft-paper → /review-paper
-    → /paper-excellence → /target-journal → submission</code></pre>
-<p>You can enter at any stage. Each skill produces structured output and saves reports to <code>quality_reports/</code>.</p>
+<p>A typical research project flows through these phases, driven by dependencies (not forced sequence):</p>
+<pre><code>Phase 1: Discovery
+  /interview-me → Research Spec + Domain Profile
+  /lit-review → Literature Synthesis (Librarian + Editor)
+
+Phase 2: Strategy
+  /find-data → Data Assessment (Explorer + Surveyor)
+  /identify → Strategy Memo (Strategist + Econometrician)
+
+Phase 3: Execution
+  /data-analysis → Scripts + Output (Coder + Debugger)
+  /draft-paper → Paper Sections (Writer + Humanizer)
+
+Phase 4: Peer Review
+  /paper-excellence → Weighted Score (4 agents parallel)
+  /review-paper → 2 Referees + Editor
+
+Phase 5: Submission
+  /target-journal → Journal Recommendations
+  /submit → Final Gate (score &gt;= 95)</code></pre>
+<p>You can enter at any stage. Use <code>/new-project</code> for the full pipeline. Each skill produces structured output and saves reports to <code>quality_reports/</code>.</p>
 <section id="writing-your-paper" class="level2">
 <h2 class="anchored" data-anchor-id="writing-your-paper">Writing Your Paper</h2>
 <section id="draft-paper-section" class="level3">
 <h3 class="anchored" data-anchor-id="draft-paper-section"><code>/draft-paper [section]</code></h3>
-<p>Drafts paper sections with proper economics structure:</p>
+<p>Dispatches the <strong>Writer</strong> agent. Drafts paper sections with proper economics structure:</p>
 <ul>
 <li><strong>Introduction</strong>: contribution paragraph within first 2 pages, effect sizes stated, clear identification preview</li>
 <li><strong>Empirical Strategy</strong>: per-design template (DiD, IV, RDD, etc.) with assumption discussion</li>
 <li><strong>Results</strong>: proper table/figure references, statistical vs economic significance</li>
 <li><strong>Notation protocol</strong>: <span class="math inline">\(Y_{it}\)</span>, <span class="math inline">\(D_{it}\)</span>, <span class="math inline">\(ATT(g,t)\)</span> — consistent throughout</li>
 </ul>
-<p>Anti-hedging rules enforced: no “interestingly”, no “it is worth noting”, no “arguably”.</p>
+<p>Anti-hedging rules enforced. <strong>Humanizer pass</strong> automatically strips 24 AI writing patterns.</p>
 </section>
 <section id="review-paper-file" class="level3">
 <h3 class="anchored" data-anchor-id="review-paper-file"><code>/review-paper [file]</code></h3>
-<p>Simulates a top-journal referee. Reviews structure, writing quality, and manuscript completeness. Complements <code>/econometrics-check</code> (which focuses exclusively on causal validity).</p>
+<p>Dispatches 2 <strong>Referee</strong> agents (blind, parallel) and the <strong>Editor</strong> agent. Simulates peer review with independent reports and editorial decision (Accept/Minor/Major/Reject).</p>
 </section>
 <section id="respond-to-referee-report" class="level3">
 <h3 class="anchored" data-anchor-id="respond-to-referee-report"><code>/respond-to-referee [report]</code></h3>
-<p>Classifies each referee comment into:</p>
-<ul>
-<li><strong>NEW ANALYSIS</strong> — requires new estimation or data work</li>
-<li><strong>CLARIFICATION</strong> — text revision sufficient</li>
-<li><strong>DISAGREE</strong> — diplomatic pushback needed (flagged for your review)</li>
-<li><strong>MINOR</strong> — typos, formatting</li>
-</ul>
-<p>Produces a point-by-point response letter with diplomatic disagreement protocol.</p>
+<p>Classifies each referee comment per <code>revision-protocol.md</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 37%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Class</th>
+<th>Routing</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>NEW ANALYSIS</strong></td>
+<td>→ Coder</td>
+<td>Flag for user, create analysis task</td>
+</tr>
+<tr class="even">
+<td><strong>CLARIFICATION</strong></td>
+<td>→ Writer</td>
+<td>Draft revised text</td>
+</tr>
+<tr class="odd">
+<td><strong>DISAGREE</strong></td>
+<td>→ User</td>
+<td>Draft diplomatic pushback (flagged for review)</td>
+</tr>
+<tr class="even">
+<td><strong>MINOR</strong></td>
+<td>→ Writer</td>
+<td>Draft fix directly</td>
+</tr>
+</tbody>
+</table>
+<p>Produces point-by-point response letter with diplomatic disagreement protocol.</p>
 </section>
 </section>
 <section id="running-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="running-analysis">Running Analysis</h2>
 <section id="data-analysis-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="data-analysis-dataset"><code>/data-analysis [dataset]</code></h3>
-<p>End-to-end R analysis: explore data, run regressions, produce publication-ready output. Generates R scripts (saved to <code>scripts/R/</code>) and runs the r-reviewer agent automatically.</p>
+<p>Dispatches the <strong>Coder</strong> (implementer) and <strong>Debugger</strong> (code critic). End-to-end analysis: data cleaning, main specification, robustness checks, publication-ready output. Supports R, Stata, Python, and Julia.</p>
 </section>
 <section id="econometrics-check-file" class="level3">
 <h3 class="anchored" data-anchor-id="econometrics-check-file"><code>/econometrics-check [file]</code></h3>
-<p>The centerpiece agent. Validates causal inference through <strong>4 sequential phases</strong> with early stopping:</p>
+<p>The centerpiece agent. Dispatches the <strong>Econometrician</strong> for <strong>4 sequential phases</strong> with early stopping:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 35%">
@@ -386,41 +433,57 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p><strong>Package-flexible:</strong> Recommends best practices (Callaway-Sant’Anna for staggered DiD, <code>fixest</code> for panels, <code>rdrobust</code> for RDD) but accepts and validates alternative packages without flagging them as errors.</p>
+<p><strong>Package-flexible:</strong> Recommends best practices but accepts and validates alternative packages.</p>
+</section>
+<section id="find-data-question" class="level3">
+<h3 class="anchored" data-anchor-id="find-data-question"><code>/find-data [question]</code></h3>
+<p>Dispatches the <strong>Explorer</strong> (data finder) and <strong>Surveyor</strong> (data critic). Searches public, administrative, survey, and novel data sources. Scores feasibility (A/B/C/D) and measurement quality.</p>
+</section>
+<section id="identify-question" class="level3">
+<h3 class="anchored" data-anchor-id="identify-question"><code>/identify [question]</code></h3>
+<p>Dispatches the <strong>Strategist</strong> (proposer) and <strong>Econometrician</strong> (critic). Produces strategy memo, pseudo-code, robustness plan, and falsification tests.</p>
 </section>
 </section>
 <section id="preparing-for-submission" class="level2">
 <h2 class="anchored" data-anchor-id="preparing-for-submission">Preparing for Submission</h2>
 <section id="pre-analysis-plan-spec" class="level3">
 <h3 class="anchored" data-anchor-id="pre-analysis-plan-spec"><code>/pre-analysis-plan [spec]</code></h3>
-<p>Drafts a pre-analysis plan in AEA/OSF/EGAP format. Use before data collection or analysis begins.</p>
+<p>Dispatches the <strong>Strategist</strong> in PAP mode. Drafts in AEA/OSF/EGAP format with outcomes, subgroups, multiple testing corrections, and power calculations.</p>
 </section>
 <section id="audit-replication-dir" class="level3">
 <h3 class="anchored" data-anchor-id="audit-replication-dir"><code>/audit-replication [dir]</code></h3>
-<p>Validates your replication package against the AEA Data Editor standard:</p>
+<p>Dispatches the <strong>Verifier</strong> in submission mode (all 10 checks):</p>
 <ol type="1">
-<li>Package inventory — all scripts, data files, documentation present</li>
-<li>Dependency verification — R package versions recorded</li>
-<li>Data provenance — sources documented, access instructions for restricted data</li>
-<li>Execution verification — runs scripts, checks for errors</li>
-<li>Output cross-reference — every table/figure traced to a script</li>
-<li>README completeness — AEA-format README with numbered script descriptions</li>
+<li>LaTeX compilation</li>
+<li>Script execution</li>
+<li>File integrity</li>
+<li>Output freshness</li>
+<li>Package inventory</li>
+<li>Dependency verification</li>
+<li>Data provenance</li>
+<li>End-to-end execution</li>
+<li>Output cross-reference</li>
+<li>README completeness (AEA format)</li>
 </ol>
 </section>
 <section id="data-deposit" class="level3">
 <h3 class="anchored" data-anchor-id="data-deposit"><code>/data-deposit</code></h3>
-<p>AEA Data Editor compliance check. Run before journal submission.</p>
+<p>Dispatches <strong>Coder</strong> (assembly) and <strong>Verifier</strong> (validation). Generates AEA-format README, master script, numbered script order, and deposit checklist.</p>
 </section>
 <section id="target-journal-paper" class="level3">
 <h3 class="anchored" data-anchor-id="target-journal-paper"><code>/target-journal [paper]</code></h3>
-<p>Given your paper (or abstract), produces a ranked journal list with fit rationale, formatting requirements, submission checklist, and strategic notes (editor preferences, desk rejection risk).</p>
+<p>Dispatches the <strong>Editor</strong> in journal-selection mode. Produces ranked journal list using domain-profile tiers, formatting requirements, and submission strategy.</p>
+</section>
+<section id="submit-journal" class="level3">
+<h3 class="anchored" data-anchor-id="submit-journal"><code>/submit [journal]</code></h3>
+<p>Final submission gate. Requires aggregate score &gt;= 95 with all components &gt;= 80. Generates cover letter draft and submission checklist.</p>
 </section>
 </section>
 <section id="giving-a-talk" class="level2">
 <h2 class="anchored" data-anchor-id="giving-a-talk">Giving a Talk</h2>
 <section id="create-talk-format" class="level3">
 <h3 class="anchored" data-anchor-id="create-talk-format"><code>/create-talk [format]</code></h3>
-<p>Generates Beamer <code>.tex</code> talks derived from your paper in 4 formats:</p>
+<p>Dispatches the <strong>Storyteller</strong> (creator) and <strong>Discussant</strong> (critic). Generates Beamer <code>.tex</code> talks derived from your paper in 4 formats:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 22%">
@@ -463,14 +526,14 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>For details on Beamer environments and multi-agent slide review, see the <a href="./architecture.html#additional-workflows-slides-lectures">Architecture Reference</a>.</p>
+<p>Talk scores are <strong>advisory</strong> (non-blocking).</p>
 <hr>
 </section>
 </section>
 </section>
 <section id="quality-gates" class="level1">
 <h1>Quality Gates</h1>
-<p>Every file gets a quality score from 0 to 100. The orchestrator manages this automatically — you just see the result.</p>
+<p>Every file gets a quality score from 0 to 100, computed as a <strong>weighted aggregate</strong> across components. The orchestrator manages this automatically.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -482,18 +545,18 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td><strong>95+</strong></td>
-<td>Excellence</td>
-<td>Aspirational — ready for top-5</td>
+<td>Submission</td>
+<td>Aggregate + all components &gt;= 80</td>
 </tr>
 <tr class="even">
 <td><strong>90+</strong></td>
 <td>PR</td>
-<td>Paper, R scripts (blocking)</td>
+<td>Weighted aggregate (blocking)</td>
 </tr>
 <tr class="odd">
 <td><strong>80+</strong></td>
 <td>Commit</td>
-<td>Paper, R scripts (blocking)</td>
+<td>Weighted aggregate (blocking)</td>
 </tr>
 <tr class="even">
 <td><strong>&lt; 80</strong></td>
@@ -507,57 +570,62 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<section id="how-scores-are-calculated" class="level3">
-<h3 class="anchored" data-anchor-id="how-scores-are-calculated">How Scores Are Calculated</h3>
-<p>Points are deducted for issues:</p>
+<section id="weighted-aggregate-formula" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-aggregate-formula">Weighted Aggregate Formula</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Issue</th>
-<th>Deduction</th>
-<th>Why Critical</th>
+<th>Component</th>
+<th>Weight</th>
+<th>Agent</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Equation overflow</td>
-<td>-20</td>
-<td>Math cut off = unusable</td>
+<td>Literature</td>
+<td>10%</td>
+<td>Librarian + Editor</td>
 </tr>
 <tr class="even">
-<td>Broken citation</td>
-<td>-15</td>
-<td>Academic integrity</td>
+<td>Data</td>
+<td>10%</td>
+<td>Explorer + Surveyor</td>
 </tr>
 <tr class="odd">
-<td>Equation typo</td>
-<td>-10</td>
-<td>Teaches wrong content</td>
+<td>Identification</td>
+<td>25%</td>
+<td>Econometrician</td>
 </tr>
 <tr class="even">
-<td>Text overflow</td>
-<td>-5</td>
-<td>Content cut off</td>
+<td>Code</td>
+<td>15%</td>
+<td>Debugger</td>
 </tr>
 <tr class="odd">
-<td>Label overlap</td>
-<td>-5</td>
-<td>Diagram illegible</td>
+<td>Paper</td>
+<td>25%</td>
+<td>Proofreader</td>
 </tr>
 <tr class="even">
-<td>Notation inconsistency</td>
-<td>-3</td>
-<td>Student confusion</td>
+<td>Polish</td>
+<td>10%</td>
+<td>Proofreader (writing subscore)</td>
+</tr>
+<tr class="odd">
+<td>Replication</td>
+<td>5%</td>
+<td>Verifier</td>
 </tr>
 </tbody>
 </table>
+<p>Missing components are renormalized. See <code>scoring-protocol.md</code> for details.</p>
 <hr>
 </section>
 </section>
 <section id="sec-exploration" class="level1">
 <h1>Exploration Workflow</h1>
 <p>The <code>explorations/</code> folder provides a structured sandbox for experimental work.</p>
-<p><strong>The problem:</strong> Without structure, experimental code scatters across the repository. After a week of exploration, nobody remembers which version was the good one.</p>
+<p><strong>The problem:</strong> Without structure, experimental code scatters across the repository.</p>
 <p><strong>The solution:</strong> All experimental work goes into <code>explorations/</code> first:</p>
 <pre><code>explorations/
 ├── [active-project]/
@@ -595,7 +663,6 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>Fast-track explorations skip formal planning. A 2-minute <strong>research value check</strong> gates the work. The <strong>kill switch</strong> is explicit: archive with a one-paragraph explanation and move on. No guilt, no sunk cost.</p>
 <hr>
 </section>
 </section>
@@ -607,11 +674,10 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:notation</span><span class="co">]</span> T_t = 1{t=2} is deterministic -&gt; use T_i in {1,2}</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X: ALWAYS include intercept in design matrix</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>These tags persist across sessions. When Claude encounters a similar situation, it checks memory first.</p>
 </section>
 <section id="skill-extraction-learn" class="level2">
 <h2 class="anchored" data-anchor-id="skill-extraction-learn">Skill Extraction: /learn</h2>
-<p>For discoveries that deserve more than a one-line tag, use <code>/learn</code> to create a full skill. The <code>/learn</code> skill guides you through: evaluate (was this non-obvious?) → check existing skills → create skill → quality gate.</p>
+<p>For discoveries that deserve more than a one-line tag, use <code>/learn</code> to create a full skill.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 68%">
@@ -636,10 +702,6 @@ window.Quarto = {
 <td>Error + root cause + solution</td>
 <td><code>/learn</code> if reusable, <code>[LEARN]</code> if not</td>
 </tr>
-<tr class="even">
-<td>Package quirk</td>
-<td><code>/learn</code> if affects multiple projects</td>
-</tr>
 </tbody>
 </table>
 <hr>
@@ -647,68 +709,18 @@ window.Quarto = {
 </section>
 <section id="customizing-for-your-domain" class="level1">
 <h1>Customizing for Your Domain</h1>
-<section id="domain-reviewer" class="level2">
-<h2 class="anchored" data-anchor-id="domain-reviewer">Domain Reviewer</h2>
-<p>The template includes <code>domain-reviewer.md</code> — a skeleton for building a substance reviewer specific to your field. It uses a <strong>5-lens framework</strong>:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 9%">
-<col style="width: 24%">
-<col style="width: 32%">
-<col style="width: 32%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Lens</th>
-<th>What It Checks</th>
-<th>Example (Economics)</th>
-<th>Example (Physics)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Assumption Audit</strong></td>
-<td>Are stated assumptions sufficient?</td>
-<td>Is overlap required for ATT?</td>
-<td>Is the adiabatic approximation valid here?</td>
-</tr>
-<tr class="even">
-<td><strong>Derivation Check</strong></td>
-<td>Does the math check out?</td>
-<td>Do decomposition terms sum?</td>
-<td>Do the units balance?</td>
-</tr>
-<tr class="odd">
-<td><strong>Citation Fidelity</strong></td>
-<td>Do slides match cited papers?</td>
-<td>Is the theorem from the right paper?</td>
-<td>Is the experimental setup correctly described?</td>
-</tr>
-<tr class="even">
-<td><strong>Code-Theory Alignment</strong></td>
-<td>Does code implement the formula?</td>
-<td>R script matches the slide equation?</td>
-<td>Simulation parameters match theory?</td>
-</tr>
-<tr class="odd">
-<td><strong>Logic Chain</strong></td>
-<td>Does the reasoning flow?</td>
-<td>Can a PhD student follow backwards?</td>
-<td>Are prerequisites established?</td>
-</tr>
-</tbody>
-</table>
-<p>To customize, open <code>.claude/agents/domain-reviewer.md</code> and fill in your domain’s checks for each lens.</p>
-</section>
-<section id="knowledge-base" class="level2">
-<h2 class="anchored" data-anchor-id="knowledge-base">Knowledge Base</h2>
-<p>The knowledge base (<code>.claude/rules/knowledge-base-template.md</code>) provides skeleton tables for:</p>
+<section id="domain-profile" class="level2">
+<h2 class="anchored" data-anchor-id="domain-profile">Domain Profile</h2>
+<p>The domain profile (<code>.claude/rules/domain-profile.md</code>) calibrates all agents to your field. Fill it in manually or use <code>/interview-me</code> to populate it interactively:</p>
 <ul>
-<li><strong>Notation registry</strong> — every symbol, where it’s introduced, and anti-patterns</li>
-<li><strong>Applications database</strong> — datasets, papers, and R packages you reference</li>
-<li><strong>Validated design principles</strong> — what works for your audience</li>
+<li><strong>Field &amp; adjacent subfields</strong> — inferred from your topic</li>
+<li><strong>Target journals</strong> — ranked by tier</li>
+<li><strong>Common data sources</strong> — datasets typical for your area</li>
+<li><strong>Common identification strategies</strong> — designs used in your literature</li>
+<li><strong>Field conventions</strong> — estimation quirks, clustering norms</li>
+<li><strong>Seminal references</strong> — papers every referee expects you to cite</li>
+<li><strong>Referee concerns</strong> — the “gotcha” questions referees always ask</li>
 </ul>
-<p>Fill them in as you develop your project — you don’t need everything upfront.</p>
 </section>
 <section id="sec-create-skills" class="level2">
 <h2 class="anchored" data-anchor-id="sec-create-skills">Creating Custom Skills</h2>
@@ -719,92 +731,159 @@ window.Quarto = {
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">argument-hint</span><span class="kw">:</span><span class="at"> </span><span class="st">"[brief hint for user]"</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">allowed-tools</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"Read"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Write"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Edit"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Bash"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Task"</span><span class="kw">]</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>description</code> field determines when Claude loads your skill. Use specific trigger phrases users would actually say.</p>
 <p><strong>Quick start:</strong> Copy <code>templates/skill-template.md</code> to <code>.claude/skills/your-skill-name/SKILL.md</code> and customize.</p>
 <hr>
 </section>
 </section>
 <section id="all-skills-reference" class="level1">
 <h1>All Skills Reference</h1>
-<section id="research-ideation" class="level2">
-<h2 class="anchored" data-anchor-id="research-ideation">Research &amp; Ideation</h2>
+<section id="research-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="research-pipeline">Research Pipeline</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 35%">
-<col style="width: 65%">
+<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 46%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Skill</th>
+<th>Agents</th>
 <th>What It Does</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td><code>/new-project [topic]</code></td>
+<td>All (orchestrated)</td>
+<td>Full pipeline: idea → paper</td>
+</tr>
+<tr class="even">
+<td><code>/interview-me [topic]</code></td>
+<td>—</td>
+<td>Interactive Q&amp;A → research spec + domain profile</td>
+</tr>
+<tr class="odd">
 <td><code>/lit-review [topic]</code></td>
-<td>Literature search (top-5, NBER, field journals, SSRN/RePEc) + synthesis</td>
+<td>Librarian + Editor</td>
+<td>Literature search + synthesis</td>
+</tr>
+<tr class="even">
+<td><code>/find-data [question]</code></td>
+<td>Explorer + Surveyor</td>
+<td>Data discovery + quality assessment</td>
+</tr>
+<tr class="odd">
+<td><code>/identify [question]</code></td>
+<td>Strategist + Econometrician</td>
+<td>Design identification strategy</td>
 </tr>
 <tr class="even">
 <td><code>/research-ideation [topic]</code></td>
-<td>Research questions from descriptive to causal</td>
-</tr>
-<tr class="odd">
-<td><code>/interview-me [topic]</code></td>
-<td>Interactive Q&amp;A to formalize a vague idea into a concrete specification</td>
+<td>—</td>
+<td>Research questions + strategies</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="writing" class="level2">
-<h2 class="anchored" data-anchor-id="writing">Writing</h2>
+<section id="analysis-code" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-code">Analysis &amp; Code</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Skill</th>
+<th>Agents</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/data-analysis [dataset]</code></td>
+<td>Coder + Debugger</td>
+<td>End-to-end analysis</td>
+</tr>
+<tr class="even">
+<td><code>/econometrics-check [file]</code></td>
+<td>Econometrician</td>
+<td>4-phase causal inference audit</td>
+</tr>
+<tr class="odd">
+<td><code>/review-r [file]</code></td>
+<td>Debugger</td>
+<td>Code quality review (standalone)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="writing-polish" class="level2">
+<h2 class="anchored" data-anchor-id="writing-polish">Writing &amp; Polish</h2>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Skill</th>
+<th>Agents</th>
 <th>What It Does</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>/draft-paper [section]</code></td>
-<td>Paper sections with proper econ structure</td>
+<td>Writer</td>
+<td>Paper sections + humanizer pass</td>
 </tr>
 <tr class="even">
 <td><code>/proofread [file]</code></td>
-<td>Grammar, typos, writing quality</td>
+<td>Proofreader</td>
+<td>6-category manuscript review</td>
 </tr>
 <tr class="odd">
+<td><code>/humanizer [file]</code></td>
+<td>—</td>
+<td>Strip 24 AI writing patterns</td>
+</tr>
+<tr class="even">
 <td><code>/compile-latex [file]</code></td>
+<td>—</td>
 <td>3-pass XeLaTeX + BibTeX</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="econometrics" class="level2">
-<h2 class="anchored" data-anchor-id="econometrics">Econometrics</h2>
+<section id="quality-review" class="level2">
+<h2 class="anchored" data-anchor-id="quality-review">Quality &amp; Review</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 35%">
-<col style="width: 65%">
+<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 46%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Skill</th>
+<th>Agents</th>
 <th>What It Does</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>/econometrics-check [file]</code></td>
-<td>Sequential 4-phase causal design audit</td>
+<td><code>/paper-excellence [file]</code></td>
+<td>4 parallel</td>
+<td>Multi-agent review + weighted score</td>
 </tr>
 <tr class="even">
-<td><code>/data-analysis [dataset]</code></td>
-<td>End-to-end R analysis with publication-ready output</td>
+<td><code>/review-paper [file]</code></td>
+<td>2 Referees + Editor</td>
+<td>Simulated peer review</td>
 </tr>
 <tr class="odd">
-<td><code>/review-r [file]</code></td>
-<td>R code quality + econometric correctness</td>
+<td><code>/validate-bib</code></td>
+<td>—</td>
+<td>Cross-reference citations</td>
 </tr>
 </tbody>
 </table>
@@ -812,61 +891,48 @@ window.Quarto = {
 <section id="submission-deposit" class="level2">
 <h2 class="anchored" data-anchor-id="submission-deposit">Submission &amp; Deposit</h2>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 46%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Skill</th>
+<th>Agents</th>
 <th>What It Does</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>/target-journal [paper]</code></td>
-<td>Journal targeting + submission strategy</td>
+<td>Editor</td>
+<td>Journal targeting + strategy</td>
 </tr>
 <tr class="even">
 <td><code>/respond-to-referee [report]</code></td>
-<td>Point-by-point referee response</td>
+<td>Writer + routing</td>
+<td>Point-by-point response</td>
 </tr>
 <tr class="odd">
 <td><code>/data-deposit</code></td>
-<td>AEA Data Editor compliance check</td>
+<td>Coder + Verifier</td>
+<td>AEA replication package</td>
 </tr>
 <tr class="even">
 <td><code>/audit-replication [dir]</code></td>
-<td>Validate replication package</td>
+<td>Verifier</td>
+<td>10-check submission audit</td>
 </tr>
 <tr class="odd">
 <td><code>/pre-analysis-plan [spec]</code></td>
-<td>Draft PAP (AEA/OSF/EGAP format)</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="quality-control" class="level2">
-<h2 class="anchored" data-anchor-id="quality-control">Quality Control</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 35%">
-<col style="width: 65%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Skill</th>
-<th>What It Does</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>/paper-excellence [file]</code></td>
-<td>Multi-agent paper review (parallel agents + scoring)</td>
+<td>Strategist</td>
+<td>Draft PAP (AEA/OSF/EGAP)</td>
 </tr>
 <tr class="even">
-<td><code>/review-paper [file]</code></td>
-<td>Top-journal referee simulation</td>
-</tr>
-<tr class="odd">
-<td><code>/validate-bib</code></td>
-<td>Cross-reference citations</td>
+<td><code>/submit [journal]</code></td>
+<td>Verifier + scoring</td>
+<td>Final gate (score &gt;= 95)</td>
 </tr>
 </tbody>
 </table>
@@ -875,35 +941,27 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="presentations">Presentations</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 35%">
-<col style="width: 65%">
+<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 46%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Skill</th>
+<th>Agents</th>
 <th>What It Does</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>/create-talk [format]</code></td>
-<td>Generate Beamer talk from paper (4 formats)</td>
+<td>Storyteller + Discussant</td>
+<td>Beamer talk (4 formats)</td>
 </tr>
 <tr class="even">
 <td><code>/visual-audit [file]</code></td>
+<td>—</td>
 <td>Slide layout audit</td>
-</tr>
-<tr class="odd">
-<td><code>/devils-advocate [file]</code></td>
-<td>Challenge presentation design</td>
-</tr>
-<tr class="even">
-<td><code>/slide-excellence [file]</code></td>
-<td>Combined multi-agent slide review</td>
-</tr>
-<tr class="odd">
-<td><code>/create-lecture [topic]</code></td>
-<td>Full lecture creation workflow</td>
 </tr>
 </tbody>
 </table>
@@ -933,6 +991,10 @@ window.Quarto = {
 <tr class="even">
 <td><code>/deploy</code></td>
 <td>Build and deploy to GitHub Pages</td>
+</tr>
+<tr class="odd">
+<td><code>/journal</code></td>
+<td>Research journal timeline</td>
 </tr>
 </tbody>
 </table>
@@ -982,17 +1044,8 @@ window.Quarto = {
 <p><strong>Symptom:</strong> Score stuck below 80, can’t commit.</p>
 <ol type="1">
 <li>Run <code>/paper-excellence</code> to get detailed issue breakdown</li>
-<li>Fix critical issues first (they cost -10 to -20 points each)</li>
-<li>Ask Claude: “What are the remaining critical issues?”</li>
-</ol>
-</section>
-<section id="skills-not-auto-invoked" class="level3">
-<h3 class="anchored" data-anchor-id="skills-not-auto-invoked">Skills Not Auto-Invoked</h3>
-<p><strong>Symptom:</strong> Claude doesn’t use skills when you describe a task.</p>
-<ol type="1">
-<li>Be explicit in your request: “Review my paper for econometric validity”</li>
-<li>Check skill has auto-invocation enabled (no <code>disable-model-invocation: true</code>)</li>
-<li>Skill descriptions help Claude know when to use them — check they’re clear</li>
+<li>Fix critical issues first (they cost the most points)</li>
+<li>Check per-component scores — one weak component can drag down the aggregate</li>
 </ol>
 
 

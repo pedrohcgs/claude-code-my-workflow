@@ -1,6 +1,6 @@
 ---
 name: audit-replication
-description: Validate replication package end-to-end for AEA Data Editor compliance. Runs master script, cross-references tables and figures against paper, verifies README completeness, flags missing dependencies. Use before data deposit or when asked to "audit the replication package", "check replication", or "prepare for data editor".
+description: Validate replication package by dispatching the Verifier agent in submission mode (checks 1-10). Runs master script, cross-references tables and figures against paper, verifies README completeness for AEA Data Editor compliance. Use before data deposit or journal submission.
 disable-model-invocation: true
 argument-hint: "[replication package directory OR 'here' for current project]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Bash", "Task"]
@@ -8,7 +8,7 @@ allowed-tools: ["Read", "Grep", "Glob", "Write", "Bash", "Task"]
 
 # Audit Replication Package
 
-Run end-to-end validation of a replication package against AEA Data Editor standards.
+Run end-to-end validation by dispatching the **Verifier** agent in **submission mode** (all 10 checks).
 
 **Input:** `$ARGUMENTS` — directory containing the replication package. Use `here` or no argument for the current project.
 
@@ -19,43 +19,76 @@ Run end-to-end validation of a replication package against AEA Data Editor stand
 ### Step 1: Locate Package
 
 - If `$ARGUMENTS` is a directory path: use it
-- If `$ARGUMENTS` is `here` or empty: use `Replication/` if it exists, otherwise use project root
-- Verify the directory exists and contains R scripts
+- If `$ARGUMENTS` is `here` or empty: use `Replication/` if it exists, otherwise project root
+- Verify the directory exists and contains scripts
 
-### Step 2: Launch Replication Auditor
+### Step 2: Launch Verifier Agent (Submission Mode)
 
-Delegate to the `replication-auditor` agent:
+Delegate to the `verifier` agent via Task tool:
 
 ```
 Prompt: Audit the replication package at [directory].
-Paper location: Paper/main.tex (if exists)
-Run all 6 checks in the replication audit protocol.
+Mode: Submission (all 10 checks).
+Paper location: Paper/main.tex (if exists).
+
+Standard Checks (1-4):
+  1. LaTeX compilation
+  2. Script execution
+  3. File integrity
+  4. Output freshness
+
+Submission Checks (5-10):
+  5. Package inventory (scripts numbered, master script exists)
+  6. Dependency verification (renv.lock, sessionInfo, package versions)
+  7. Data provenance (sources documented, no hardcoded paths)
+  8. Execution verification (run master script end-to-end)
+  9. Output cross-reference (every table/figure traced to script)
+  10. README completeness (AEA format)
+
+Save report to quality_reports/replication_audit_[date].md
 ```
 
 ### Step 3: Handle Failures
 
-If execution errors are found (Check 4):
-1. Display the specific error with file and line number
-2. Suggest a concrete fix
+If execution errors are found (Check 8):
+1. Display specific error with file and line number
+2. Suggest concrete fix
 3. Ask user if they want to fix and re-audit (max 3 iterations)
 
 ### Step 4: Present Results
 
-Show:
-1. **Overall PASS/FAIL** with X/6 checks passed
-2. **Blocking issues** — must fix before deposit
-3. **Priority fix list** — ordered by importance
-4. **Positive findings** — what's already good
+```markdown
+# Replication Audit Report
+**Date:** [YYYY-MM-DD]
+**Mode:** Submission
 
-### Step 5: Save Report
+## Check Results
+| # | Check | Status | Details |
+|---|-------|--------|---------|
+| 1 | LaTeX compilation | PASS/FAIL | |
+| 2 | Script execution | PASS/FAIL | |
+| 3 | File integrity | PASS/FAIL | |
+| 4 | Output freshness | PASS/FAIL | |
+| 5 | Package inventory | PASS/FAIL | |
+| 6 | Dependencies | PASS/FAIL | |
+| 7 | Data provenance | PASS/FAIL | |
+| 8 | End-to-end execution | PASS/FAIL | |
+| 9 | Output cross-reference | PASS/FAIL | |
+| 10 | README completeness | PASS/FAIL | |
 
-Save to `quality_reports/replication_audit_[date].md`
+## Summary
+- Checks passed: N / 10
+- **Overall: PASS / FAIL**
+- Blocking issues: [list]
+- Positive findings: [list]
+```
 
 ---
 
 ## Principles
 
-- **This skill runs code.** It needs Bash access to execute R scripts for Check 4.
-- **Be patient with runtime.** Some replication packages take 30+ minutes. Set appropriate timeouts.
-- **Don't modify the package** during the audit. Only read and run.
-- **Specific > vague.** "Script 03_robustness.R fails at line 47 with error: object 'treatment_var' not found" beats "execution failed."
+- **This skill runs code.** It needs Bash access to execute scripts for Check 8.
+- **Be patient with runtime.** Set appropriate timeouts for long-running packages.
+- **Don't modify the package during audit.** Read and run only.
+- **Specific errors.** "Script 03_robustness.R fails at line 47: object 'treatment_var' not found" beats "execution failed."
+- **AEA Data Editor standards.** The target is full compliance — README format, documented versions, data provenance.

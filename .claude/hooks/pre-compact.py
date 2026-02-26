@@ -148,6 +148,14 @@ def format_compaction_message(plan_info: dict | None, decisions: list[str]) -> s
     lines.append(f"\n{YELLOW}⚡ Context compaction starting{NC}")
     lines.append("")
 
+    # Context survival checklist (merged from pre-compact.sh)
+    lines.append(f"{CYAN}Context Survival Checklist:{NC}")
+    lines.append("  [ ] MEMORY.md updated with [LEARN] entries")
+    lines.append("  [ ] Session log current (last 10 minutes)")
+    lines.append("  [ ] Active plan saved to quality_reports/plans/")
+    lines.append("  [ ] Open questions documented")
+    lines.append("")
+
     if plan_info:
         lines.append(f"{GREEN}Current state saved:{NC}")
         lines.append(f"  Plan: {plan_info['plan_name']} ({plan_info['status']})")

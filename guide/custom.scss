@@ -1,30 +1,28 @@
 /*-- scss:defaults --*/
 
-// Colors — Emory Navy & Gold
-$navy: #012169;
-$navy-light: #1a3a7a;
-$gold: #B9975B;
-$gold-pale: #faf6ef;
+// Colors — Neutral professional palette
+$primary: #2563eb;
+$primary-light: #3b82f6;
+$accent: #10b981;
+$accent-pale: #f0fdf4;
 $text: #222;
 $text-muted: #6b7280;
 
 $body-bg: #fff;
 $body-color: $text;
-$link-color: $navy;
-$link-hover-color: $gold;
-$headings-color: $navy;
+$link-color: $primary;
+$link-hover-color: $accent;
+$headings-color: $primary;
 
 // Bootstrap variable that controls inline code color
-$code-color: #8b6914;
+$code-color: #d946ef;
 
 // Bootstrap variable that controls inline code background
-$code-bg: rgba(185, 151, 91, 0.08);
+$code-bg: rgba(217, 70, 239, 0.06);
 
 /*-- scss:rules --*/
 
 // ── Widen the main content column ──
-// Quarto uses CSS Grid with hardcoded track sizes for page-columns.toc-left.
-// The default body-content track is calc(800px - 3em). Override to 1100px.
 body:not(.floating):not(.docked) .page-columns.toc-left {
   grid-template-columns:
     [screen-start] 1.5em
@@ -52,25 +50,25 @@ body {
 
 // ── Navbar ──
 .navbar {
-  border-bottom: 2px solid $gold;
+  border-bottom: 2px solid $accent;
 }
 
 .navbar-brand {
   font-weight: 700;
-  color: $navy !important;
+  color: $primary !important;
 }
 
 // ── Title ──
 .quarto-title {
   padding-bottom: 1.2em;
-  border-bottom: 2px solid $gold;
+  border-bottom: 2px solid $accent;
   margin-bottom: 1.5em;
 }
 
 .quarto-title .title {
   font-size: 2.2em;
   font-weight: 700;
-  color: $navy;
+  color: $primary;
 }
 
 .quarto-title .subtitle {
@@ -90,21 +88,21 @@ h1, .h1 {
 h2, .h2 {
   font-size: 1.3em;
   margin-top: 2em;
-  color: $navy;
+  color: $primary;
 }
 
 h3, .h3 {
   font-size: 1.1em;
   margin-top: 1.5em;
-  color: $navy-light;
+  color: $primary-light;
 }
 
 // ── TOC ──
 #TOC {
   .active {
     font-weight: 600;
-    color: $navy !important;
-    border-left: 2px solid $gold;
+    color: $primary !important;
+    border-left: 2px solid $accent;
     padding-left: 0.5em;
   }
 
@@ -115,7 +113,7 @@ h3, .h3 {
     display: block;
     padding: 0.75em 0;
 
-    &:hover { color: $navy; }
+    &:hover { color: $primary; }
   }
 }
 
@@ -131,8 +129,8 @@ blockquote code,
 #quarto-content code:not(pre code) {
   font-size: 0.87em !important;
   padding: 0.15em 0.4em !important;
-  background-color: rgba(185, 151, 91, 0.08) !important;
-  color: #8b6914 !important;
+  background-color: rgba(217, 70, 239, 0.06) !important;
+  color: #d946ef !important;
   border-radius: 3px !important;
 }
 
@@ -160,7 +158,7 @@ pre:not(.sourceCode) {
   border: 1px solid #ddd;
 
   thead {
-    background: $navy;
+    background: $primary;
     color: #fff;
 
     th {
@@ -174,7 +172,7 @@ pre:not(.sourceCode) {
   tbody {
     tr {
       &:nth-child(even) { background: #f9f9f9; }
-      &:hover { background: $gold-pale; }
+      &:hover { background: $accent-pale; }
 
       td {
         padding: 0.6em 0.9em;
@@ -191,8 +189,8 @@ pre:not(.sourceCode) {
 }
 
 .callout-tip {
-  border-left: 3px solid $gold;
-  background: $gold-pale;
+  border-left: 3px solid $accent;
+  background: $accent-pale;
 }
 
 .callout-important {
@@ -206,21 +204,21 @@ pre:not(.sourceCode) {
 }
 
 .callout-note {
-  border-left: 3px solid $navy;
-  background: #f0f4ff;
+  border-left: 3px solid $primary;
+  background: #eff6ff;
 }
 
 // ── Blockquotes ──
 blockquote {
-  border-left: 3px solid $gold;
+  border-left: 3px solid $accent;
   padding: 0.8em 1.2em;
   margin: 1.2em 0;
-  background: $gold-pale;
+  background: $accent-pale;
   font-style: italic;
   color: #555;
 
   strong {
-    color: $navy;
+    color: $primary;
     font-style: normal;
   }
 }
@@ -236,18 +234,17 @@ hr {
 // ── Links ──
 #quarto-content a {
   text-decoration: underline;
-  text-decoration-color: rgba($navy, 0.2);
+  text-decoration-color: rgba($primary, 0.2);
   text-underline-offset: 2px;
 
   &:hover {
-    text-decoration-color: $gold;
-    color: $gold;
+    text-decoration-color: $accent;
+    color: $accent;
   }
 }
 
 // ── Responsive: tablets and small screens ──
 @media (max-width: 991.98px) {
-  // Remove the custom grid override so Quarto's default responsive grid takes over
   body:not(.floating):not(.docked) .page-columns.toc-left {
     grid-template-columns: none !important;
     display: block !important;
@@ -269,7 +266,6 @@ hr {
     font-size: 1.15em;
   }
 
-  // Let tables scroll horizontally instead of overflowing
   .table-responsive,
   table {
     display: block;
@@ -277,7 +273,6 @@ hr {
     -webkit-overflow-scrolling: touch;
   }
 
-  // Pre blocks: ensure horizontal scroll
   pre {
     max-width: 100%;
     overflow-x: auto;
