@@ -1,0 +1,2801 @@
+TableID,Frequency,Year,Quarter,Industry,IndustrYDescription,DataValue,NoteRef
+20,A,1997,1997,11,"Agriculture, forestry, fishing, and hunting",149.2,20
+20,A,1997,1997,111CA,Farms,131.2,20
+20,A,1997,1997,113FF,"Forestry, fishing, and related activities",18.0,20
+20,A,1997,1997,21,Mining,82.2,20
+20,A,1997,1997,211,Oil and gas extraction,43.7,20
+20,A,1997,1997,212,"Mining, except oil and gas",29.9,20
+20,A,1997,1997,213,Support activities for mining,8.6,20
+20,A,1997,1997,22,Utilities,90.6,20
+20,A,1997,1997,23,Construction,369.5,20
+20,A,1997,1997,311FT,Food and beverage and tobacco products,396.6,20
+20,A,1997,1997,313TT,Textile mills and textile product mills,61.7,20
+20,A,1997,1997,315AL,Apparel and leather and allied products,62.0,20
+20,A,1997,1997,31G,Manufacturing,2514.9,20
+20,A,1997,1997,31ND,Nondurable goods,1149.1,20
+20,A,1997,1997,321,Wood products,61.8,20
+20,A,1997,1997,322,Paper products,93.9,20
+20,A,1997,1997,323,Printing and related support activities,60.9,20
+20,A,1997,1997,324,Petroleum and coal products,128.3,20
+20,A,1997,1997,325,Chemical products,244.2,20
+20,A,1997,1997,326,Plastics and rubber products,101.4,20
+20,A,1997,1997,327,Nonmetallic mineral products,46.1,20
+20,A,1997,1997,331,Primary metals,120.2,20
+20,A,1997,1997,332,Fabricated metal products,133.7,20
+20,A,1997,1997,333,Machinery,166.9,20
+20,A,1997,1997,334,Computer and electronic products,265.8,20
+20,A,1997,1997,335,"Electrical equipment, appliances, and components",64.4,20
+20,A,1997,1997,3361MV,"Motor vehicles, bodies and trailers, and parts",319.9,20
+20,A,1997,1997,3364OT,Other transportation equipment,93.1,20
+20,A,1997,1997,337,Furniture and related products,35.6,20
+20,A,1997,1997,339,Miscellaneous manufacturing,58.4,20
+20,A,1997,1997,33DG,Durable goods,1365.8,20
+20,A,1997,1997,42,Wholesale trade,219.6,20
+20,A,1997,1997,441,Motor vehicle and parts dealers,56.2,20
+20,A,1997,1997,445,Food and beverage stores,38.5,20
+20,A,1997,1997,44RT,Retail trade,277.4,20
+20,A,1997,1997,452,General merchandise stores,36.7,20
+20,A,1997,1997,481,Air transportation,59.4,20
+20,A,1997,1997,482,Rail transportation,18.2,20
+20,A,1997,1997,483,Water transportation,17.9,20
+20,A,1997,1997,484,Truck transportation,84.9,20
+20,A,1997,1997,485,Transit and ground passenger transportation,9.1,20
+20,A,1997,1997,486,Pipeline transportation,17.3,20
+20,A,1997,1997,487OS,Other transportation and support activities,29.6,20
+20,A,1997,1997,48TW,Transportation and warehousing,241.7,20
+20,A,1997,1997,493,Warehousing and storage,5.4,20
+20,A,1997,1997,4A0,Other retail,145.9,20
+20,A,1997,1997,51,Information,336.5,20
+20,A,1997,1997,511,"Publishing industries, except internet (includes software)",95.2,20
+20,A,1997,1997,512,Motion picture and sound recording industries,49.2,20
+20,A,1997,1997,513,Broadcasting and telecommunications,177.9,20
+20,A,1997,1997,514,"Data processing, internet publishing, and other information services",14.2,20
+20,A,1997,1997,52,Finance and insurance,428.7,20
+20,A,1997,1997,521CI,"Federal Reserve banks, credit intermediation, and related activities",160.7,20
+20,A,1997,1997,523,"Securities, commodity contracts, and investments",84.7,20
+20,A,1997,1997,524,Insurance carriers and related activities,134.4,20
+20,A,1997,1997,525,"Funds, trusts, and other financial vehicles",49.0,20
+20,A,1997,1997,53,Real estate and rental and leasing,370.8,20
+20,A,1997,1997,531,Real estate,326.9,20
+20,A,1997,1997,532RL,Rental and leasing services and lessors of intangible assets,43.9,20
+20,A,1997,1997,54,"Professional, scientific, and technical services",300.1,20
+20,A,1997,1997,5411,Legal services,51.6,20
+20,A,1997,1997,5412OP,"Miscellaneous professional, scientific, and technical services",200.1,20
+20,A,1997,1997,5415,Computer systems design and related services,48.4,20
+20,A,1997,1997,55,Management of companies and enterprises,69.7,20
+20,A,1997,1997,56,Administrative and waste management services,135.5,20
+20,A,1997,1997,561,Administrative and support services,115.4,20
+20,A,1997,1997,562,Waste management and remediation services,20.1,20
+20,A,1997,1997,6,"Educational services, health care, and social assistance",338.7,20
+20,A,1997,1997,61,Educational services,36.0,20
+20,A,1997,1997,62,Health care and social assistance,302.6,20
+20,A,1997,1997,621,Ambulatory health care services,137.1,20
+20,A,1997,1997,622,Hospitals,106.1,20
+20,A,1997,1997,623,Nursing and residential care facilities,37.3,20
+20,A,1997,1997,624,Social assistance,22.1,20
+20,A,1997,1997,7,"Arts, entertainment, recreation, accommodation, and food services",249.1,20
+20,A,1997,1997,71,"Arts, entertainment, and recreation",47.3,20
+20,A,1997,1997,711AS,"Performing arts, spectator sports, museums, and related activities",22.2,20
+20,A,1997,1997,713,"Amusements, gambling, and recreation industries",25.1,20
+20,A,1997,1997,72,Accommodation and food services,201.9,20
+20,A,1997,1997,721,Accommodation,45.8,20
+20,A,1997,1997,722,Food services and drinking places,156.1,20
+20,A,1997,1997,81,"Other services, except government",121.8,20
+20,A,1997,1997,FIRE,"Finance, insurance, real estate, rental, and leasing",799.5,20
+20,A,1997,1997,G,Government,520.2,20
+20,A,1997,1997,GF,Federal,151.4,20
+20,A,1997,1997,GFE,Government enterprises,19.7,20
+20,A,1997,1997,GFG,General government,131.6,20
+20,A,1997,1997,GFGD,National defense,93.0,20
+20,A,1997,1997,GFGN,Nondefense,38.6,20
+20,A,1997,1997,GSL,State and local,368.8,20
+20,A,1997,1997,GSLE,Government enterprises,64.7,20
+20,A,1997,1997,GSLG,General government,304.2,20
+20,A,1997,1997,HS,Housing,88.0,20
+20,A,1997,1997,ICT,Information-communications-technology-producing industries<sup>3</sup>,487.2,20;20.3.A
+20,A,1997,1997,II,All industries,6816.1,20
+20,A,1997,1997,ORE,Other real estate,238.9,20
+20,A,1997,1997,PGOOD,Private goods-producing industries<sup>1</sup>,3115.8,20;20.1.A
+20,A,1997,1997,PROF,Professional and business services,505.2,20
+20,A,1997,1997,PSERV,Private services-producing industries<sup>2</sup>,3180.0,20;20.2.A
+20,A,1997,1997,PVT,Private industries,6295.9,20
+20,A,1998,1998,11,"Agriculture, forestry, fishing, and hunting",149.0,20
+20,A,1998,1998,111CA,Farms,127.8,20
+20,A,1998,1998,113FF,"Forestry, fishing, and related activities",21.2,20
+20,A,1998,1998,21,Mining,70.2,20
+20,A,1998,1998,211,Oil and gas extraction,33.9,20
+20,A,1998,1998,212,"Mining, except oil and gas",26.5,20
+20,A,1998,1998,213,Support activities for mining,9.8,20
+20,A,1998,1998,22,Utilities,104.2,20
+20,A,1998,1998,23,Construction,399.8,20
+20,A,1998,1998,311FT,Food and beverage and tobacco products,400.1,20
+20,A,1998,1998,313TT,Textile mills and textile product mills,59.6,20
+20,A,1998,1998,315AL,Apparel and leather and allied products,55.6,20
+20,A,1998,1998,31G,Manufacturing,2532.7,20
+20,A,1998,1998,31ND,Nondurable goods,1103.8,20
+20,A,1998,1998,321,Wood products,64.3,20
+20,A,1998,1998,322,Paper products,97.3,20
+20,A,1998,1998,323,Printing and related support activities,61.4,20
+20,A,1998,1998,324,Petroleum and coal products,86.5,20
+20,A,1998,1998,325,Chemical products,241.4,20
+20,A,1998,1998,326,Plastics and rubber products,101.8,20
+20,A,1998,1998,327,Nonmetallic mineral products,50.8,20
+20,A,1998,1998,331,Primary metals,117.7,20
+20,A,1998,1998,332,Fabricated metal products,142.8,20
+20,A,1998,1998,333,Machinery,163.7,20
+20,A,1998,1998,334,Computer and electronic products,273.0,20
+20,A,1998,1998,335,"Electrical equipment, appliances, and components",74.0,20
+20,A,1998,1998,3361MV,"Motor vehicles, bodies and trailers, and parts",325.8,20
+20,A,1998,1998,3364OT,Other transportation equipment,117.2,20
+20,A,1998,1998,337,Furniture and related products,38.8,20
+20,A,1998,1998,339,Miscellaneous manufacturing,60.9,20
+20,A,1998,1998,33DG,Durable goods,1428.9,20
+20,A,1998,1998,42,Wholesale trade,209.3,20
+20,A,1998,1998,441,Motor vehicle and parts dealers,50.9,20
+20,A,1998,1998,445,Food and beverage stores,35.3,20
+20,A,1998,1998,44RT,Retail trade,264.9,20
+20,A,1998,1998,452,General merchandise stores,36.9,20
+20,A,1998,1998,481,Air transportation,60.2,20
+20,A,1998,1998,482,Rail transportation,15.9,20
+20,A,1998,1998,483,Water transportation,18.0,20
+20,A,1998,1998,484,Truck transportation,88.4,20
+20,A,1998,1998,485,Transit and ground passenger transportation,10.3,20
+20,A,1998,1998,486,Pipeline transportation,14.3,20
+20,A,1998,1998,487OS,Other transportation and support activities,35.8,20
+20,A,1998,1998,48TW,Transportation and warehousing,247.0,20
+20,A,1998,1998,493,Warehousing and storage,3.9,20
+20,A,1998,1998,4A0,Other retail,141.8,20
+20,A,1998,1998,51,Information,373.9,20
+20,A,1998,1998,511,"Publishing industries, except internet (includes software)",107.7,20
+20,A,1998,1998,512,Motion picture and sound recording industries,47.9,20
+20,A,1998,1998,513,Broadcasting and telecommunications,204.9,20
+20,A,1998,1998,514,"Data processing, internet publishing, and other information services",13.3,20
+20,A,1998,1998,52,Finance and insurance,475.1,20
+20,A,1998,1998,521CI,"Federal Reserve banks, credit intermediation, and related activities",163.0,20
+20,A,1998,1998,523,"Securities, commodity contracts, and investments",122.8,20
+20,A,1998,1998,524,Insurance carriers and related activities,137.1,20
+20,A,1998,1998,525,"Funds, trusts, and other financial vehicles",52.3,20
+20,A,1998,1998,53,Real estate and rental and leasing,425.4,20
+20,A,1998,1998,531,Real estate,367.9,20
+20,A,1998,1998,532RL,Rental and leasing services and lessors of intangible assets,57.4,20
+20,A,1998,1998,54,"Professional, scientific, and technical services",346.5,20
+20,A,1998,1998,5411,Legal services,56.4,20
+20,A,1998,1998,5412OP,"Miscellaneous professional, scientific, and technical services",225.5,20
+20,A,1998,1998,5415,Computer systems design and related services,64.6,20
+20,A,1998,1998,55,Management of companies and enterprises,82.6,20
+20,A,1998,1998,56,Administrative and waste management services,167.2,20
+20,A,1998,1998,561,Administrative and support services,143.5,20
+20,A,1998,1998,562,Waste management and remediation services,23.7,20
+20,A,1998,1998,6,"Educational services, health care, and social assistance",371.9,20
+20,A,1998,1998,61,Educational services,41.8,20
+20,A,1998,1998,62,Health care and social assistance,330.1,20
+20,A,1998,1998,621,Ambulatory health care services,149.2,20
+20,A,1998,1998,622,Hospitals,116.7,20
+20,A,1998,1998,623,Nursing and residential care facilities,40.9,20
+20,A,1998,1998,624,Social assistance,23.3,20
+20,A,1998,1998,7,"Arts, entertainment, recreation, accommodation, and food services",260.2,20
+20,A,1998,1998,71,"Arts, entertainment, and recreation",50.7,20
+20,A,1998,1998,711AS,"Performing arts, spectator sports, museums, and related activities",24.0,20
+20,A,1998,1998,713,"Amusements, gambling, and recreation industries",26.7,20
+20,A,1998,1998,72,Accommodation and food services,209.5,20
+20,A,1998,1998,721,Accommodation,48.1,20
+20,A,1998,1998,722,Food services and drinking places,161.4,20
+20,A,1998,1998,81,"Other services, except government",135.4,20
+20,A,1998,1998,FIRE,"Finance, insurance, real estate, rental, and leasing",900.5,20
+20,A,1998,1998,G,Government,539.0,20
+20,A,1998,1998,GF,Federal,146.2,20
+20,A,1998,1998,GFE,Government enterprises,18.5,20
+20,A,1998,1998,GFG,General government,127.7,20
+20,A,1998,1998,GFGD,National defense,90.5,20
+20,A,1998,1998,GFGN,Nondefense,37.2,20
+20,A,1998,1998,GSL,State and local,392.8,20
+20,A,1998,1998,GSLE,Government enterprises,66.1,20
+20,A,1998,1998,GSLG,General government,326.7,20
+20,A,1998,1998,HS,Housing,99.1,20
+20,A,1998,1998,ICT,Information-communications-technology-producing industries<sup>3</sup>,541.8,20;20.3.A
+20,A,1998,1998,II,All industries,7154.2,20
+20,A,1998,1998,ORE,Other real estate,268.8,20
+20,A,1998,1998,PGOOD,Private goods-producing industries<sup>1</sup>,3151.7,20;20.1.A
+20,A,1998,1998,PROF,Professional and business services,596.3,20
+20,A,1998,1998,PSERV,Private services-producing industries<sup>2</sup>,3463.5,20;20.2.A
+20,A,1998,1998,PVT,Private industries,6615.2,20
+20,A,1999,1999,11,"Agriculture, forestry, fishing, and hunting",152.0,20
+20,A,1999,1999,111CA,Farms,128.3,20
+20,A,1999,1999,113FF,"Forestry, fishing, and related activities",23.7,20
+20,A,1999,1999,21,Mining,71.5,20
+20,A,1999,1999,211,Oil and gas extraction,41.4,20
+20,A,1999,1999,212,"Mining, except oil and gas",23.7,20
+20,A,1999,1999,213,Support activities for mining,6.4,20
+20,A,1999,1999,22,Utilities,134.8,20
+20,A,1999,1999,23,Construction,423.9,20
+20,A,1999,1999,311FT,Food and beverage and tobacco products,376.2,20
+20,A,1999,1999,313TT,Textile mills and textile product mills,58.1,20
+20,A,1999,1999,315AL,Apparel and leather and allied products,53.6,20
+20,A,1999,1999,31G,Manufacturing,2592.6,20
+20,A,1999,1999,31ND,Nondurable goods,1109.1,20
+20,A,1999,1999,321,Wood products,68.7,20
+20,A,1999,1999,322,Paper products,96.2,20
+20,A,1999,1999,323,Printing and related support activities,61.7,20
+20,A,1999,1999,324,Petroleum and coal products,115.2,20
+20,A,1999,1999,325,Chemical products,241.7,20
+20,A,1999,1999,326,Plastics and rubber products,106.5,20
+20,A,1999,1999,327,Nonmetallic mineral products,52.5,20
+20,A,1999,1999,331,Primary metals,110.5,20
+20,A,1999,1999,332,Fabricated metal products,141.1,20
+20,A,1999,1999,333,Machinery,164.8,20
+20,A,1999,1999,334,Computer and electronic products,300.0,20
+20,A,1999,1999,335,"Electrical equipment, appliances, and components",72.2,20
+20,A,1999,1999,3361MV,"Motor vehicles, bodies and trailers, and parts",370.6,20
+20,A,1999,1999,3364OT,Other transportation equipment,106.6,20
+20,A,1999,1999,337,Furniture and related products,39.2,20
+20,A,1999,1999,339,Miscellaneous manufacturing,57.4,20
+20,A,1999,1999,33DG,Durable goods,1483.5,20
+20,A,1999,1999,42,Wholesale trade,242.8,20
+20,A,1999,1999,441,Motor vehicle and parts dealers,61.1,20
+20,A,1999,1999,445,Food and beverage stores,40.7,20
+20,A,1999,1999,44RT,Retail trade,300.9,20
+20,A,1999,1999,452,General merchandise stores,42.6,20
+20,A,1999,1999,481,Air transportation,62.9,20
+20,A,1999,1999,482,Rail transportation,16.1,20
+20,A,1999,1999,483,Water transportation,19.0,20
+20,A,1999,1999,484,Truck transportation,93.4,20
+20,A,1999,1999,485,Transit and ground passenger transportation,8.6,20
+20,A,1999,1999,486,Pipeline transportation,13.7,20
+20,A,1999,1999,487OS,Other transportation and support activities,48.0,20
+20,A,1999,1999,48TW,Transportation and warehousing,268.2,20
+20,A,1999,1999,493,Warehousing and storage,6.5,20
+20,A,1999,1999,4A0,Other retail,156.5,20
+20,A,1999,1999,51,Information,428.3,20
+20,A,1999,1999,511,"Publishing industries, except internet (includes software)",101.7,20
+20,A,1999,1999,512,Motion picture and sound recording industries,44.6,20
+20,A,1999,1999,513,Broadcasting and telecommunications,249.6,20
+20,A,1999,1999,514,"Data processing, internet publishing, and other information services",32.3,20
+20,A,1999,1999,52,Finance and insurance,560.2,20
+20,A,1999,1999,521CI,"Federal Reserve banks, credit intermediation, and related activities",174.9,20
+20,A,1999,1999,523,"Securities, commodity contracts, and investments",171.9,20
+20,A,1999,1999,524,Insurance carriers and related activities,155.8,20
+20,A,1999,1999,525,"Funds, trusts, and other financial vehicles",57.6,20
+20,A,1999,1999,53,Real estate and rental and leasing,438.1,20
+20,A,1999,1999,531,Real estate,377.1,20
+20,A,1999,1999,532RL,Rental and leasing services and lessors of intangible assets,61.0,20
+20,A,1999,1999,54,"Professional, scientific, and technical services",381.5,20
+20,A,1999,1999,5411,Legal services,60.1,20
+20,A,1999,1999,5412OP,"Miscellaneous professional, scientific, and technical services",238.2,20
+20,A,1999,1999,5415,Computer systems design and related services,83.2,20
+20,A,1999,1999,55,Management of companies and enterprises,91.7,20
+20,A,1999,1999,56,Administrative and waste management services,183.3,20
+20,A,1999,1999,561,Administrative and support services,157.6,20
+20,A,1999,1999,562,Waste management and remediation services,25.7,20
+20,A,1999,1999,6,"Educational services, health care, and social assistance",384.3,20
+20,A,1999,1999,61,Educational services,42.1,20
+20,A,1999,1999,62,Health care and social assistance,342.2,20
+20,A,1999,1999,621,Ambulatory health care services,154.4,20
+20,A,1999,1999,622,Hospitals,121.0,20
+20,A,1999,1999,623,Nursing and residential care facilities,40.9,20
+20,A,1999,1999,624,Social assistance,25.9,20
+20,A,1999,1999,7,"Arts, entertainment, recreation, accommodation, and food services",264.3,20
+20,A,1999,1999,71,"Arts, entertainment, and recreation",52.1,20
+20,A,1999,1999,711AS,"Performing arts, spectator sports, museums, and related activities",24.7,20
+20,A,1999,1999,713,"Amusements, gambling, and recreation industries",27.4,20
+20,A,1999,1999,72,Accommodation and food services,212.2,20
+20,A,1999,1999,721,Accommodation,49.6,20
+20,A,1999,1999,722,Food services and drinking places,162.5,20
+20,A,1999,1999,81,"Other services, except government",141.3,20
+20,A,1999,1999,FIRE,"Finance, insurance, real estate, rental, and leasing",998.3,20
+20,A,1999,1999,G,Government,582.4,20
+20,A,1999,1999,GF,Federal,156.9,20
+20,A,1999,1999,GFE,Government enterprises,20.5,20
+20,A,1999,1999,GFG,General government,136.4,20
+20,A,1999,1999,GFGD,National defense,101.3,20
+20,A,1999,1999,GFGN,Nondefense,35.2,20
+20,A,1999,1999,GSL,State and local,425.5,20
+20,A,1999,1999,GSLE,Government enterprises,68.0,20
+20,A,1999,1999,GSLG,General government,357.5,20
+20,A,1999,1999,HS,Housing,102.5,20
+20,A,1999,1999,ICT,Information-communications-technology-producing industries<sup>3</sup>,643.0,20;20.3.A
+20,A,1999,1999,II,All industries,7642.2,20
+20,A,1999,1999,ORE,Other real estate,274.6,20
+20,A,1999,1999,PGOOD,Private goods-producing industries<sup>1</sup>,3240.0,20;20.1.A
+20,A,1999,1999,PROF,Professional and business services,656.5,20
+20,A,1999,1999,PSERV,Private services-producing industries<sup>2</sup>,3819.8,20;20.2.A
+20,A,1999,1999,PVT,Private industries,7059.8,20
+20,A,2000,2000,11,"Agriculture, forestry, fishing, and hunting",144.7,20
+20,A,2000,2000,111CA,Farms,127.7,20
+20,A,2000,2000,113FF,"Forestry, fishing, and related activities",17.0,20
+20,A,2000,2000,21,Mining,108.0,20
+20,A,2000,2000,211,Oil and gas extraction,74.8,20
+20,A,2000,2000,212,"Mining, except oil and gas",26.2,20
+20,A,2000,2000,213,Support activities for mining,7.1,20
+20,A,2000,2000,22,Utilities,193.2,20
+20,A,2000,2000,23,Construction,452.6,20
+20,A,2000,2000,311FT,Food and beverage and tobacco products,393.9,20
+20,A,2000,2000,313TT,Textile mills and textile product mills,57.1,20
+20,A,2000,2000,315AL,Apparel and leather and allied products,53.2,20
+20,A,2000,2000,31G,Manufacturing,2740.9,20
+20,A,2000,2000,31ND,Nondurable goods,1229.9,20
+20,A,2000,2000,321,Wood products,66.2,20
+20,A,2000,2000,322,Paper products,101.5,20
+20,A,2000,2000,323,Printing and related support activities,63.5,20
+20,A,2000,2000,324,Petroleum and coal products,180.3,20
+20,A,2000,2000,325,Chemical products,266.9,20
+20,A,2000,2000,326,Plastics and rubber products,113.5,20
+20,A,2000,2000,327,Nonmetallic mineral products,55.1,20
+20,A,2000,2000,331,Primary metals,108.7,20
+20,A,2000,2000,332,Fabricated metal products,147.8,20
+20,A,2000,2000,333,Machinery,181.5,20
+20,A,2000,2000,334,Computer and electronic products,323.4,20
+20,A,2000,2000,335,"Electrical equipment, appliances, and components",79.2,20
+20,A,2000,2000,3361MV,"Motor vehicles, bodies and trailers, and parts",346.4,20
+20,A,2000,2000,3364OT,Other transportation equipment,90.7,20
+20,A,2000,2000,337,Furniture and related products,42.4,20
+20,A,2000,2000,339,Miscellaneous manufacturing,69.5,20
+20,A,2000,2000,33DG,Durable goods,1511.0,20
+20,A,2000,2000,42,Wholesale trade,258.6,20
+20,A,2000,2000,441,Motor vehicle and parts dealers,56.8,20
+20,A,2000,2000,445,Food and beverage stores,40.1,20
+20,A,2000,2000,44RT,Retail trade,314.6,20
+20,A,2000,2000,452,General merchandise stores,41.6,20
+20,A,2000,2000,481,Air transportation,75.9,20
+20,A,2000,2000,482,Rail transportation,16.0,20
+20,A,2000,2000,483,Water transportation,19.1,20
+20,A,2000,2000,484,Truck transportation,100.5,20
+20,A,2000,2000,485,Transit and ground passenger transportation,7.6,20
+20,A,2000,2000,486,Pipeline transportation,13.9,20
+20,A,2000,2000,487OS,Other transportation and support activities,52.2,20
+20,A,2000,2000,48TW,Transportation and warehousing,292.3,20
+20,A,2000,2000,493,Warehousing and storage,7.2,20
+20,A,2000,2000,4A0,Other retail,176.2,20
+20,A,2000,2000,51,Information,537.3,20
+20,A,2000,2000,511,"Publishing industries, except internet (includes software)",146.8,20
+20,A,2000,2000,512,Motion picture and sound recording industries,61.2,20
+20,A,2000,2000,513,Broadcasting and telecommunications,286.2,20
+20,A,2000,2000,514,"Data processing, internet publishing, and other information services",43.2,20
+20,A,2000,2000,52,Finance and insurance,651.0,20
+20,A,2000,2000,521CI,"Federal Reserve banks, credit intermediation, and related activities",206.6,20
+20,A,2000,2000,523,"Securities, commodity contracts, and investments",223.8,20
+20,A,2000,2000,524,Insurance carriers and related activities,145.9,20
+20,A,2000,2000,525,"Funds, trusts, and other financial vehicles",74.7,20
+20,A,2000,2000,53,Real estate and rental and leasing,504.0,20
+20,A,2000,2000,531,Real estate,429.7,20
+20,A,2000,2000,532RL,Rental and leasing services and lessors of intangible assets,74.3,20
+20,A,2000,2000,54,"Professional, scientific, and technical services",422.2,20
+20,A,2000,2000,5411,Legal services,58.6,20
+20,A,2000,2000,5412OP,"Miscellaneous professional, scientific, and technical services",266.9,20
+20,A,2000,2000,5415,Computer systems design and related services,96.6,20
+20,A,2000,2000,55,Management of companies and enterprises,89.1,20
+20,A,2000,2000,56,Administrative and waste management services,193.8,20
+20,A,2000,2000,561,Administrative and support services,167.3,20
+20,A,2000,2000,562,Waste management and remediation services,26.6,20
+20,A,2000,2000,6,"Educational services, health care, and social assistance",414.7,20
+20,A,2000,2000,61,Educational services,46.4,20
+20,A,2000,2000,62,Health care and social assistance,368.3,20
+20,A,2000,2000,621,Ambulatory health care services,164.1,20
+20,A,2000,2000,622,Hospitals,130.3,20
+20,A,2000,2000,623,Nursing and residential care facilities,43.4,20
+20,A,2000,2000,624,Social assistance,30.5,20
+20,A,2000,2000,7,"Arts, entertainment, recreation, accommodation, and food services",283.7,20
+20,A,2000,2000,71,"Arts, entertainment, and recreation",52.5,20
+20,A,2000,2000,711AS,"Performing arts, spectator sports, museums, and related activities",26.6,20
+20,A,2000,2000,713,"Amusements, gambling, and recreation industries",25.9,20
+20,A,2000,2000,72,Accommodation and food services,231.2,20
+20,A,2000,2000,721,Accommodation,57.0,20
+20,A,2000,2000,722,Food services and drinking places,174.2,20
+20,A,2000,2000,81,"Other services, except government",146.0,20
+20,A,2000,2000,FIRE,"Finance, insurance, real estate, rental, and leasing",1155.0,20
+20,A,2000,2000,G,Government,628.0,20
+20,A,2000,2000,GF,Federal,164.3,20
+20,A,2000,2000,GFE,Government enterprises,20.7,20
+20,A,2000,2000,GFG,General government,143.6,20
+20,A,2000,2000,GFGD,National defense,104.0,20
+20,A,2000,2000,GFGN,Nondefense,39.6,20
+20,A,2000,2000,GSL,State and local,463.7,20
+20,A,2000,2000,GSLE,Government enterprises,71.4,20
+20,A,2000,2000,GSLG,General government,392.3,20
+20,A,2000,2000,HS,Housing,107.9,20
+20,A,2000,2000,ICT,Information-communications-technology-producing industries<sup>3</sup>,739.2,20;20.3.A
+20,A,2000,2000,II,All industries,8374.7,20
+20,A,2000,2000,ORE,Other real estate,321.8,20
+20,A,2000,2000,PGOOD,Private goods-producing industries<sup>1</sup>,3446.2,20;20.1.A
+20,A,2000,2000,PROF,Professional and business services,705.1,20
+20,A,2000,2000,PSERV,Private services-producing industries<sup>2</sup>,4300.5,20;20.2.A
+20,A,2000,2000,PVT,Private industries,7746.7,20
+20,A,2001,2001,11,"Agriculture, forestry, fishing, and hunting",150.6,20
+20,A,2001,2001,111CA,Farms,133.3,20
+20,A,2001,2001,113FF,"Forestry, fishing, and related activities",17.3,20
+20,A,2001,2001,21,Mining,102.7,20
+20,A,2001,2001,211,Oil and gas extraction,66.2,20
+20,A,2001,2001,212,"Mining, except oil and gas",27.0,20
+20,A,2001,2001,213,Support activities for mining,9.5,20
+20,A,2001,2001,22,Utilities,265.2,20
+20,A,2001,2001,23,Construction,470.4,20
+20,A,2001,2001,311FT,Food and beverage and tobacco products,402.2,20
+20,A,2001,2001,313TT,Textile mills and textile product mills,51.8,20
+20,A,2001,2001,315AL,Apparel and leather and allied products,39.3,20
+20,A,2001,2001,31G,Manufacturing,2575.9,20
+20,A,2001,2001,31ND,Nondurable goods,1165.7,20
+20,A,2001,2001,321,Wood products,60.3,20
+20,A,2001,2001,322,Paper products,101.5,20
+20,A,2001,2001,323,Printing and related support activities,61.4,20
+20,A,2001,2001,324,Petroleum and coal products,149.7,20
+20,A,2001,2001,325,Chemical products,253.0,20
+20,A,2001,2001,326,Plastics and rubber products,106.9,20
+20,A,2001,2001,327,Nonmetallic mineral products,53.1,20
+20,A,2001,2001,331,Primary metals,96.7,20
+20,A,2001,2001,332,Fabricated metal products,141.6,20
+20,A,2001,2001,333,Machinery,159.5,20
+20,A,2001,2001,334,Computer and electronic products,289.3,20
+20,A,2001,2001,335,"Electrical equipment, appliances, and components",66.0,20
+20,A,2001,2001,3361MV,"Motor vehicles, bodies and trailers, and parts",335.9,20
+20,A,2001,2001,3364OT,Other transportation equipment,104.5,20
+20,A,2001,2001,337,Furniture and related products,41.9,20
+20,A,2001,2001,339,Miscellaneous manufacturing,61.4,20
+20,A,2001,2001,33DG,Durable goods,1410.2,20
+20,A,2001,2001,42,Wholesale trade,247.6,20
+20,A,2001,2001,441,Motor vehicle and parts dealers,43.9,20
+20,A,2001,2001,445,Food and beverage stores,43.5,20
+20,A,2001,2001,44RT,Retail trade,282.9,20
+20,A,2001,2001,452,General merchandise stores,39.4,20
+20,A,2001,2001,481,Air transportation,69.1,20
+20,A,2001,2001,482,Rail transportation,16.5,20
+20,A,2001,2001,483,Water transportation,18.6,20
+20,A,2001,2001,484,Truck transportation,102.1,20
+20,A,2001,2001,485,Transit and ground passenger transportation,7.8,20
+20,A,2001,2001,486,Pipeline transportation,6.6,20
+20,A,2001,2001,487OS,Other transportation and support activities,52.4,20
+20,A,2001,2001,48TW,Transportation and warehousing,283.7,20
+20,A,2001,2001,493,Warehousing and storage,10.5,20
+20,A,2001,2001,4A0,Other retail,156.0,20
+20,A,2001,2001,51,Information,536.9,20
+20,A,2001,2001,511,"Publishing industries, except internet (includes software)",150.5,20
+20,A,2001,2001,512,Motion picture and sound recording industries,56.7,20
+20,A,2001,2001,513,Broadcasting and telecommunications,299.8,20
+20,A,2001,2001,514,"Data processing, internet publishing, and other information services",29.9,20
+20,A,2001,2001,52,Finance and insurance,581.0,20
+20,A,2001,2001,521CI,"Federal Reserve banks, credit intermediation, and related activities",212.6,20
+20,A,2001,2001,523,"Securities, commodity contracts, and investments",125.1,20
+20,A,2001,2001,524,Insurance carriers and related activities,177.6,20
+20,A,2001,2001,525,"Funds, trusts, and other financial vehicles",65.7,20
+20,A,2001,2001,53,Real estate and rental and leasing,503.7,20
+20,A,2001,2001,531,Real estate,442.1,20
+20,A,2001,2001,532RL,Rental and leasing services and lessors of intangible assets,61.6,20
+20,A,2001,2001,54,"Professional, scientific, and technical services",416.8,20
+20,A,2001,2001,5411,Legal services,60.1,20
+20,A,2001,2001,5412OP,"Miscellaneous professional, scientific, and technical services",269.7,20
+20,A,2001,2001,5415,Computer systems design and related services,87.1,20
+20,A,2001,2001,55,Management of companies and enterprises,86.0,20
+20,A,2001,2001,56,Administrative and waste management services,177.2,20
+20,A,2001,2001,561,Administrative and support services,152.3,20
+20,A,2001,2001,562,Waste management and remediation services,24.9,20
+20,A,2001,2001,6,"Educational services, health care, and social assistance",458.6,20
+20,A,2001,2001,61,Educational services,53.8,20
+20,A,2001,2001,62,Health care and social assistance,404.8,20
+20,A,2001,2001,621,Ambulatory health care services,181.5,20
+20,A,2001,2001,622,Hospitals,138.8,20
+20,A,2001,2001,623,Nursing and residential care facilities,46.7,20
+20,A,2001,2001,624,Social assistance,37.8,20
+20,A,2001,2001,7,"Arts, entertainment, recreation, accommodation, and food services",298.9,20
+20,A,2001,2001,71,"Arts, entertainment, and recreation",63.3,20
+20,A,2001,2001,711AS,"Performing arts, spectator sports, museums, and related activities",31.2,20
+20,A,2001,2001,713,"Amusements, gambling, and recreation industries",32.1,20
+20,A,2001,2001,72,Accommodation and food services,235.7,20
+20,A,2001,2001,721,Accommodation,54.6,20
+20,A,2001,2001,722,Food services and drinking places,181.0,20
+20,A,2001,2001,81,"Other services, except government",176.9,20
+20,A,2001,2001,FIRE,"Finance, insurance, real estate, rental, and leasing",1084.7,20
+20,A,2001,2001,G,Government,687.4,20
+20,A,2001,2001,GF,Federal,189.6,20
+20,A,2001,2001,GFE,Government enterprises,23.9,20
+20,A,2001,2001,GFG,General government,165.7,20
+20,A,2001,2001,GFGD,National defense,116.8,20
+20,A,2001,2001,GFGN,Nondefense,48.9,20
+20,A,2001,2001,GSL,State and local,497.8,20
+20,A,2001,2001,GSLE,Government enterprises,72.0,20
+20,A,2001,2001,GSLG,General government,425.8,20
+20,A,2001,2001,HS,Housing,113.6,20
+20,A,2001,2001,ICT,Information-communications-technology-producing industries<sup>3</sup>,707.7,20;20.3.A
+20,A,2001,2001,II,All industries,8302.6,20
+20,A,2001,2001,ORE,Other real estate,328.5,20
+20,A,2001,2001,PGOOD,Private goods-producing industries<sup>1</sup>,3299.6,20;20.1.A
+20,A,2001,2001,PROF,Professional and business services,680.0,20
+20,A,2001,2001,PSERV,Private services-producing industries<sup>2</sup>,4315.5,20;20.2.A
+20,A,2001,2001,PVT,Private industries,7615.1,20
+20,A,2002,2002,11,"Agriculture, forestry, fishing, and hunting",145.2,20
+20,A,2002,2002,111CA,Farms,127.3,20
+20,A,2002,2002,113FF,"Forestry, fishing, and related activities",17.9,20
+20,A,2002,2002,21,Mining,83.6,20
+20,A,2002,2002,211,Oil and gas extraction,46.8,20
+20,A,2002,2002,212,"Mining, except oil and gas",27.1,20
+20,A,2002,2002,213,Support activities for mining,9.6,20
+20,A,2002,2002,22,Utilities,147.6,20
+20,A,2002,2002,23,Construction,476.3,20
+20,A,2002,2002,311FT,Food and beverage and tobacco products,393.0,20
+20,A,2002,2002,313TT,Textile mills and textile product mills,51.4,20
+20,A,2002,2002,315AL,Apparel and leather and allied products,32.7,20
+20,A,2002,2002,31G,Manufacturing,2503.8,20
+20,A,2002,2002,31ND,Nondurable goods,1170.5,20
+20,A,2002,2002,321,Wood products,62.7,20
+20,A,2002,2002,322,Paper products,98.3,20
+20,A,2002,2002,323,Printing and related support activities,57.6,20
+20,A,2002,2002,324,Petroleum and coal products,163.5,20
+20,A,2002,2002,325,Chemical products,263.6,20
+20,A,2002,2002,326,Plastics and rubber products,110.4,20
+20,A,2002,2002,327,Nonmetallic mineral products,53.5,20
+20,A,2002,2002,331,Primary metals,97.5,20
+20,A,2002,2002,332,Fabricated metal products,140.7,20
+20,A,2002,2002,333,Machinery,147.9,20
+20,A,2002,2002,334,Computer and electronic products,217.3,20
+20,A,2002,2002,335,"Electrical equipment, appliances, and components",56.9,20
+20,A,2002,2002,3361MV,"Motor vehicles, bodies and trailers, and parts",343.7,20
+20,A,2002,2002,3364OT,Other transportation equipment,102.8,20
+20,A,2002,2002,337,Furniture and related products,44.4,20
+20,A,2002,2002,339,Miscellaneous manufacturing,65.8,20
+20,A,2002,2002,33DG,Durable goods,1333.3,20
+20,A,2002,2002,42,Wholesale trade,279.5,20
+20,A,2002,2002,441,Motor vehicle and parts dealers,61.8,20
+20,A,2002,2002,445,Food and beverage stores,42.8,20
+20,A,2002,2002,44RT,Retail trade,312.7,20
+20,A,2002,2002,452,General merchandise stores,36.9,20
+20,A,2002,2002,481,Air transportation,59.3,20
+20,A,2002,2002,482,Rail transportation,18.8,20
+20,A,2002,2002,483,Water transportation,18.8,20
+20,A,2002,2002,484,Truck transportation,106.0,20
+20,A,2002,2002,485,Transit and ground passenger transportation,7.9,20
+20,A,2002,2002,486,Pipeline transportation,12.1,20
+20,A,2002,2002,487OS,Other transportation and support activities,53.6,20
+20,A,2002,2002,48TW,Transportation and warehousing,289.7,20
+20,A,2002,2002,493,Warehousing and storage,13.1,20
+20,A,2002,2002,4A0,Other retail,171.2,20
+20,A,2002,2002,51,Information,495.7,20
+20,A,2002,2002,511,"Publishing industries, except internet (includes software)",131.6,20
+20,A,2002,2002,512,Motion picture and sound recording industries,52.4,20
+20,A,2002,2002,513,Broadcasting and telecommunications,295.6,20
+20,A,2002,2002,514,"Data processing, internet publishing, and other information services",16.1,20
+20,A,2002,2002,52,Finance and insurance,592.6,20
+20,A,2002,2002,521CI,"Federal Reserve banks, credit intermediation, and related activities",201.6,20
+20,A,2002,2002,523,"Securities, commodity contracts, and investments",123.8,20
+20,A,2002,2002,524,Insurance carriers and related activities,210.8,20
+20,A,2002,2002,525,"Funds, trusts, and other financial vehicles",56.4,20
+20,A,2002,2002,53,Real estate and rental and leasing,533.7,20
+20,A,2002,2002,531,Real estate,478.2,20
+20,A,2002,2002,532RL,Rental and leasing services and lessors of intangible assets,55.5,20
+20,A,2002,2002,54,"Professional, scientific, and technical services",407.9,20
+20,A,2002,2002,5411,Legal services,62.8,20
+20,A,2002,2002,5412OP,"Miscellaneous professional, scientific, and technical services",255.6,20
+20,A,2002,2002,5415,Computer systems design and related services,89.5,20
+20,A,2002,2002,55,Management of companies and enterprises,86.8,20
+20,A,2002,2002,56,Administrative and waste management services,167.7,20
+20,A,2002,2002,561,Administrative and support services,144.6,20
+20,A,2002,2002,562,Waste management and remediation services,23.1,20
+20,A,2002,2002,6,"Educational services, health care, and social assistance",500.0,20
+20,A,2002,2002,61,Educational services,59.7,20
+20,A,2002,2002,62,Health care and social assistance,440.3,20
+20,A,2002,2002,621,Ambulatory health care services,195.4,20
+20,A,2002,2002,622,Hospitals,156.5,20
+20,A,2002,2002,623,Nursing and residential care facilities,47.6,20
+20,A,2002,2002,624,Social assistance,40.8,20
+20,A,2002,2002,7,"Arts, entertainment, recreation, accommodation, and food services",306.9,20
+20,A,2002,2002,71,"Arts, entertainment, and recreation",63.5,20
+20,A,2002,2002,711AS,"Performing arts, spectator sports, museums, and related activities",34.0,20
+20,A,2002,2002,713,"Amusements, gambling, and recreation industries",29.4,20
+20,A,2002,2002,72,Accommodation and food services,243.4,20
+20,A,2002,2002,721,Accommodation,55.0,20
+20,A,2002,2002,722,Food services and drinking places,188.5,20
+20,A,2002,2002,81,"Other services, except government",173.3,20
+20,A,2002,2002,FIRE,"Finance, insurance, real estate, rental, and leasing",1126.3,20
+20,A,2002,2002,G,Government,741.6,20
+20,A,2002,2002,GF,Federal,217.5,20
+20,A,2002,2002,GFE,Government enterprises,23.0,20
+20,A,2002,2002,GFG,General government,194.5,20
+20,A,2002,2002,GFGD,National defense,134.9,20
+20,A,2002,2002,GFGN,Nondefense,59.7,20
+20,A,2002,2002,GSL,State and local,524.1,20
+20,A,2002,2002,GSLE,Government enterprises,79.2,20
+20,A,2002,2002,GSLG,General government,444.9,20
+20,A,2002,2002,HS,Housing,118.5,20
+20,A,2002,2002,ICT,Information-communications-technology-producing industries<sup>3</sup>,626.3,20;20.3.A
+20,A,2002,2002,II,All industries,8244.7,20
+20,A,2002,2002,ORE,Other real estate,359.7,20
+20,A,2002,2002,PGOOD,Private goods-producing industries<sup>1</sup>,3209.0,20;20.1.A
+20,A,2002,2002,PROF,Professional and business services,662.4,20
+20,A,2002,2002,PSERV,Private services-producing industries<sup>2</sup>,4294.1,20;20.2.A
+20,A,2002,2002,PVT,Private industries,7503.1,20
+20,A,2003,2003,11,"Agriculture, forestry, fishing, and hunting",154.0,20
+20,A,2003,2003,111CA,Farms,135.5,20
+20,A,2003,2003,113FF,"Forestry, fishing, and related activities",18.6,20
+20,A,2003,2003,21,Mining,114.0,20
+20,A,2003,2003,211,Oil and gas extraction,73.1,20
+20,A,2003,2003,212,"Mining, except oil and gas",28.2,20
+20,A,2003,2003,213,Support activities for mining,12.7,20
+20,A,2003,2003,22,Utilities,159.2,20
+20,A,2003,2003,23,Construction,514.2,20
+20,A,2003,2003,311FT,Food and beverage and tobacco products,420.7,20
+20,A,2003,2003,313TT,Textile mills and textile product mills,53.6,20
+20,A,2003,2003,315AL,Apparel and leather and allied products,29.4,20
+20,A,2003,2003,31G,Manufacturing,2526.9,20
+20,A,2003,2003,31ND,Nondurable goods,1214.0,20
+20,A,2003,2003,321,Wood products,63.5,20
+20,A,2003,2003,322,Paper products,97.7,20
+20,A,2003,2003,323,Printing and related support activities,53.3,20
+20,A,2003,2003,324,Petroleum and coal products,164.7,20
+20,A,2003,2003,325,Chemical products,281.0,20
+20,A,2003,2003,326,Plastics and rubber products,113.5,20
+20,A,2003,2003,327,Nonmetallic mineral products,54.6,20
+20,A,2003,2003,331,Primary metals,98.5,20
+20,A,2003,2003,332,Fabricated metal products,135.8,20
+20,A,2003,2003,333,Machinery,152.8,20
+20,A,2003,2003,334,Computer and electronic products,194.5,20
+20,A,2003,2003,335,"Electrical equipment, appliances, and components",52.2,20
+20,A,2003,2003,3361MV,"Motor vehicles, bodies and trailers, and parts",347.1,20
+20,A,2003,2003,3364OT,Other transportation equipment,99.5,20
+20,A,2003,2003,337,Furniture and related products,44.9,20
+20,A,2003,2003,339,Miscellaneous manufacturing,69.6,20
+20,A,2003,2003,33DG,Durable goods,1312.9,20
+20,A,2003,2003,42,Wholesale trade,288.5,20
+20,A,2003,2003,441,Motor vehicle and parts dealers,61.4,20
+20,A,2003,2003,445,Food and beverage stores,43.9,20
+20,A,2003,2003,44RT,Retail trade,338.5,20
+20,A,2003,2003,452,General merchandise stores,47.1,20
+20,A,2003,2003,481,Air transportation,67.4,20
+20,A,2003,2003,482,Rail transportation,18.0,20
+20,A,2003,2003,483,Water transportation,21.8,20
+20,A,2003,2003,484,Truck transportation,107.5,20
+20,A,2003,2003,485,Transit and ground passenger transportation,6.6,20
+20,A,2003,2003,486,Pipeline transportation,12.0,20
+20,A,2003,2003,487OS,Other transportation and support activities,56.8,20
+20,A,2003,2003,48TW,Transportation and warehousing,306.6,20
+20,A,2003,2003,493,Warehousing and storage,16.5,20
+20,A,2003,2003,4A0,Other retail,186.0,20
+20,A,2003,2003,51,Information,484.8,20
+20,A,2003,2003,511,"Publishing industries, except internet (includes software)",120.0,20
+20,A,2003,2003,512,Motion picture and sound recording industries,63.0,20
+20,A,2003,2003,513,Broadcasting and telecommunications,286.2,20
+20,A,2003,2003,514,"Data processing, internet publishing, and other information services",15.6,20
+20,A,2003,2003,52,Finance and insurance,656.2,20
+20,A,2003,2003,521CI,"Federal Reserve banks, credit intermediation, and related activities",215.5,20
+20,A,2003,2003,523,"Securities, commodity contracts, and investments",161.3,20
+20,A,2003,2003,524,Insurance carriers and related activities,226.3,20
+20,A,2003,2003,525,"Funds, trusts, and other financial vehicles",53.1,20
+20,A,2003,2003,53,Real estate and rental and leasing,609.8,20
+20,A,2003,2003,531,Real estate,533.4,20
+20,A,2003,2003,532RL,Rental and leasing services and lessors of intangible assets,76.5,20
+20,A,2003,2003,54,"Professional, scientific, and technical services",430.3,20
+20,A,2003,2003,5411,Legal services,73.7,20
+20,A,2003,2003,5412OP,"Miscellaneous professional, scientific, and technical services",274.6,20
+20,A,2003,2003,5415,Computer systems design and related services,82.0,20
+20,A,2003,2003,55,Management of companies and enterprises,95.0,20
+20,A,2003,2003,56,Administrative and waste management services,171.5,20
+20,A,2003,2003,561,Administrative and support services,146.5,20
+20,A,2003,2003,562,Waste management and remediation services,25.1,20
+20,A,2003,2003,6,"Educational services, health care, and social assistance",533.3,20
+20,A,2003,2003,61,Educational services,59.8,20
+20,A,2003,2003,62,Health care and social assistance,473.6,20
+20,A,2003,2003,621,Ambulatory health care services,216.3,20
+20,A,2003,2003,622,Hospitals,164.1,20
+20,A,2003,2003,623,Nursing and residential care facilities,51.8,20
+20,A,2003,2003,624,Social assistance,41.4,20
+20,A,2003,2003,7,"Arts, entertainment, recreation, accommodation, and food services",325.8,20
+20,A,2003,2003,71,"Arts, entertainment, and recreation",69.5,20
+20,A,2003,2003,711AS,"Performing arts, spectator sports, museums, and related activities",35.5,20
+20,A,2003,2003,713,"Amusements, gambling, and recreation industries",34.0,20
+20,A,2003,2003,72,Accommodation and food services,256.4,20
+20,A,2003,2003,721,Accommodation,57.1,20
+20,A,2003,2003,722,Food services and drinking places,199.3,20
+20,A,2003,2003,81,"Other services, except government",184.9,20
+20,A,2003,2003,FIRE,"Finance, insurance, real estate, rental, and leasing",1266.0,20
+20,A,2003,2003,G,Government,790.6,20
+20,A,2003,2003,GF,Federal,253.5,20
+20,A,2003,2003,GFE,Government enterprises,23.1,20
+20,A,2003,2003,GFG,General government,230.4,20
+20,A,2003,2003,GFGD,National defense,164.1,20
+20,A,2003,2003,GFGN,Nondefense,66.4,20
+20,A,2003,2003,GSL,State and local,537.1,20
+20,A,2003,2003,GSLE,Government enterprises,87.2,20
+20,A,2003,2003,GSLG,General government,449.9,20
+20,A,2003,2003,HS,Housing,128.7,20
+20,A,2003,2003,ICT,Information-communications-technology-producing industries<sup>3</sup>,584.7,20;20.3.A
+20,A,2003,2003,II,All industries,8684.2,20
+20,A,2003,2003,ORE,Other real estate,404.7,20
+20,A,2003,2003,PGOOD,Private goods-producing industries<sup>1</sup>,3309.1,20;20.1.A
+20,A,2003,2003,PROF,Professional and business services,696.9,20
+20,A,2003,2003,PSERV,Private services-producing industries<sup>2</sup>,4584.6,20;20.2.A
+20,A,2003,2003,PVT,Private industries,7893.6,20
+20,A,2004,2004,11,"Agriculture, forestry, fishing, and hunting",164.0,20
+20,A,2004,2004,111CA,Farms,142.3,20
+20,A,2004,2004,113FF,"Forestry, fishing, and related activities",21.8,20
+20,A,2004,2004,21,Mining,133.6,20
+20,A,2004,2004,211,Oil and gas extraction,78.1,20
+20,A,2004,2004,212,"Mining, except oil and gas",33.7,20
+20,A,2004,2004,213,Support activities for mining,21.8,20
+20,A,2004,2004,22,Utilities,152.7,20
+20,A,2004,2004,23,Construction,573.4,20
+20,A,2004,2004,311FT,Food and beverage and tobacco products,454.2,20
+20,A,2004,2004,313TT,Textile mills and textile product mills,51.6,20
+20,A,2004,2004,315AL,Apparel and leather and allied products,24.6,20
+20,A,2004,2004,31G,Manufacturing,2751.8,20
+20,A,2004,2004,31ND,Nondurable goods,1343.9,20
+20,A,2004,2004,321,Wood products,73.1,20
+20,A,2004,2004,322,Paper products,100.3,20
+20,A,2004,2004,323,Printing and related support activities,53.6,20
+20,A,2004,2004,324,Petroleum and coal products,220.8,20
+20,A,2004,2004,325,Chemical products,319.9,20
+20,A,2004,2004,326,Plastics and rubber products,119.1,20
+20,A,2004,2004,327,Nonmetallic mineral products,57.1,20
+20,A,2004,2004,331,Primary metals,126.9,20
+20,A,2004,2004,332,Fabricated metal products,145.5,20
+20,A,2004,2004,333,Machinery,161.6,20
+20,A,2004,2004,334,Computer and electronic products,196.7,20
+20,A,2004,2004,335,"Electrical equipment, appliances, and components",60.2,20
+20,A,2004,2004,3361MV,"Motor vehicles, bodies and trailers, and parts",368.3,20
+20,A,2004,2004,3364OT,Other transportation equipment,101.0,20
+20,A,2004,2004,337,Furniture and related products,47.4,20
+20,A,2004,2004,339,Miscellaneous manufacturing,70.0,20
+20,A,2004,2004,33DG,Durable goods,1407.9,20
+20,A,2004,2004,42,Wholesale trade,323.2,20
+20,A,2004,2004,441,Motor vehicle and parts dealers,64.5,20
+20,A,2004,2004,445,Food and beverage stores,50.9,20
+20,A,2004,2004,44RT,Retail trade,395.1,20
+20,A,2004,2004,452,General merchandise stores,58.2,20
+20,A,2004,2004,481,Air transportation,71.3,20
+20,A,2004,2004,482,Rail transportation,20.4,20
+20,A,2004,2004,483,Water transportation,26.4,20
+20,A,2004,2004,484,Truck transportation,121.9,20
+20,A,2004,2004,485,Transit and ground passenger transportation,10.3,20
+20,A,2004,2004,486,Pipeline transportation,12.4,20
+20,A,2004,2004,487OS,Other transportation and support activities,61.2,20
+20,A,2004,2004,48TW,Transportation and warehousing,340.0,20
+20,A,2004,2004,493,Warehousing and storage,16.1,20
+20,A,2004,2004,4A0,Other retail,221.4,20
+20,A,2004,2004,51,Information,465.3,20
+20,A,2004,2004,511,"Publishing industries, except internet (includes software)",123.4,20
+20,A,2004,2004,512,Motion picture and sound recording industries,56.2,20
+20,A,2004,2004,513,Broadcasting and telecommunications,274.4,20
+20,A,2004,2004,514,"Data processing, internet publishing, and other information services",11.2,20
+20,A,2004,2004,52,Finance and insurance,739.9,20
+20,A,2004,2004,521CI,"Federal Reserve banks, credit intermediation, and related activities",257.3,20
+20,A,2004,2004,523,"Securities, commodity contracts, and investments",184.8,20
+20,A,2004,2004,524,Insurance carriers and related activities,234.2,20
+20,A,2004,2004,525,"Funds, trusts, and other financial vehicles",63.6,20
+20,A,2004,2004,53,Real estate and rental and leasing,733.6,20
+20,A,2004,2004,531,Real estate,641.4,20
+20,A,2004,2004,532RL,Rental and leasing services and lessors of intangible assets,92.2,20
+20,A,2004,2004,54,"Professional, scientific, and technical services",455.2,20
+20,A,2004,2004,5411,Legal services,71.2,20
+20,A,2004,2004,5412OP,"Miscellaneous professional, scientific, and technical services",305.3,20
+20,A,2004,2004,5415,Computer systems design and related services,78.7,20
+20,A,2004,2004,55,Management of companies and enterprises,117.7,20
+20,A,2004,2004,56,Administrative and waste management services,186.4,20
+20,A,2004,2004,561,Administrative and support services,156.3,20
+20,A,2004,2004,562,Waste management and remediation services,30.1,20
+20,A,2004,2004,6,"Educational services, health care, and social assistance",555.7,20
+20,A,2004,2004,61,Educational services,56.3,20
+20,A,2004,2004,62,Health care and social assistance,499.4,20
+20,A,2004,2004,621,Ambulatory health care services,232.3,20
+20,A,2004,2004,622,Hospitals,170.4,20
+20,A,2004,2004,623,Nursing and residential care facilities,54.4,20
+20,A,2004,2004,624,Social assistance,42.4,20
+20,A,2004,2004,7,"Arts, entertainment, recreation, accommodation, and food services",346.1,20
+20,A,2004,2004,71,"Arts, entertainment, and recreation",74.1,20
+20,A,2004,2004,711AS,"Performing arts, spectator sports, museums, and related activities",36.1,20
+20,A,2004,2004,713,"Amusements, gambling, and recreation industries",38.0,20
+20,A,2004,2004,72,Accommodation and food services,272.0,20
+20,A,2004,2004,721,Accommodation,60.8,20
+20,A,2004,2004,722,Food services and drinking places,211.3,20
+20,A,2004,2004,81,"Other services, except government",190.3,20
+20,A,2004,2004,FIRE,"Finance, insurance, real estate, rental, and leasing",1473.5,20
+20,A,2004,2004,G,Government,847.9,20
+20,A,2004,2004,GF,Federal,280.8,20
+20,A,2004,2004,GFE,Government enterprises,21.8,20
+20,A,2004,2004,GFG,General government,259.0,20
+20,A,2004,2004,GFGD,National defense,185.4,20
+20,A,2004,2004,GFGN,Nondefense,73.6,20
+20,A,2004,2004,GSL,State and local,567.2,20
+20,A,2004,2004,GSLE,Government enterprises,96.0,20
+20,A,2004,2004,GSLG,General government,471.2,20
+20,A,2004,2004,HS,Housing,132.8,20
+20,A,2004,2004,ICT,Information-communications-technology-producing industries<sup>3</sup>,565.7,20;20.3.A
+20,A,2004,2004,II,All industries,9471.9,20
+20,A,2004,2004,ORE,Other real estate,508.6,20
+20,A,2004,2004,PGOOD,Private goods-producing industries<sup>1</sup>,3622.9,20;20.1.A
+20,A,2004,2004,PROF,Professional and business services,759.3,20
+20,A,2004,2004,PSERV,Private services-producing industries<sup>2</sup>,5001.1,20;20.2.A
+20,A,2004,2004,PVT,Private industries,8624.0,20
+20,A,2005,2005,11,"Agriculture, forestry, fishing, and hunting",170.0,20
+20,A,2005,2005,111CA,Farms,147.2,20
+20,A,2005,2005,113FF,"Forestry, fishing, and related activities",22.8,20
+20,A,2005,2005,21,Mining,169.1,20
+20,A,2005,2005,211,Oil and gas extraction,93.5,20
+20,A,2005,2005,212,"Mining, except oil and gas",41.4,20
+20,A,2005,2005,213,Support activities for mining,34.2,20
+20,A,2005,2005,22,Utilities,218.3,20
+20,A,2005,2005,23,Construction,635.5,20
+20,A,2005,2005,311FT,Food and beverage and tobacco products,482.4,20
+20,A,2005,2005,313TT,Textile mills and textile product mills,56.4,20
+20,A,2005,2005,315AL,Apparel and leather and allied products,26.4,20
+20,A,2005,2005,31G,Manufacturing,3112.5,20
+20,A,2005,2005,31ND,Nondurable goods,1572.2,20
+20,A,2005,2005,321,Wood products,79.8,20
+20,A,2005,2005,322,Paper products,108.4,20
+20,A,2005,2005,323,Printing and related support activities,54.5,20
+20,A,2005,2005,324,Petroleum and coal products,321.1,20
+20,A,2005,2005,325,Chemical products,387.8,20
+20,A,2005,2005,326,Plastics and rubber products,135.3,20
+20,A,2005,2005,327,Nonmetallic mineral products,64.4,20
+20,A,2005,2005,331,Primary metals,146.3,20
+20,A,2005,2005,332,Fabricated metal products,165.6,20
+20,A,2005,2005,333,Machinery,184.5,20
+20,A,2005,2005,334,Computer and electronic products,196.6,20
+20,A,2005,2005,335,"Electrical equipment, appliances, and components",65.4,20
+20,A,2005,2005,3361MV,"Motor vehicles, bodies and trailers, and parts",388.6,20
+20,A,2005,2005,3364OT,Other transportation equipment,116.3,20
+20,A,2005,2005,337,Furniture and related products,50.6,20
+20,A,2005,2005,339,Miscellaneous manufacturing,82.3,20
+20,A,2005,2005,33DG,Durable goods,1540.3,20
+20,A,2005,2005,42,Wholesale trade,354.9,20
+20,A,2005,2005,441,Motor vehicle and parts dealers,53.8,20
+20,A,2005,2005,445,Food and beverage stores,52.7,20
+20,A,2005,2005,44RT,Retail trade,399.2,20
+20,A,2005,2005,452,General merchandise stores,60.0,20
+20,A,2005,2005,481,Air transportation,80.1,20
+20,A,2005,2005,482,Rail transportation,23.5,20
+20,A,2005,2005,483,Water transportation,28.8,20
+20,A,2005,2005,484,Truck transportation,139.1,20
+20,A,2005,2005,485,Transit and ground passenger transportation,13.5,20
+20,A,2005,2005,486,Pipeline transportation,13.0,20
+20,A,2005,2005,487OS,Other transportation and support activities,63.5,20
+20,A,2005,2005,48TW,Transportation and warehousing,376.6,20
+20,A,2005,2005,493,Warehousing and storage,15.1,20
+20,A,2005,2005,4A0,Other retail,232.7,20
+20,A,2005,2005,51,Information,490.3,20
+20,A,2005,2005,511,"Publishing industries, except internet (includes software)",124.0,20
+20,A,2005,2005,512,Motion picture and sound recording industries,71.3,20
+20,A,2005,2005,513,Broadcasting and telecommunications,274.7,20
+20,A,2005,2005,514,"Data processing, internet publishing, and other information services",20.3,20
+20,A,2005,2005,52,Finance and insurance,773.3,20
+20,A,2005,2005,521CI,"Federal Reserve banks, credit intermediation, and related activities",260.9,20
+20,A,2005,2005,523,"Securities, commodity contracts, and investments",186.3,20
+20,A,2005,2005,524,Insurance carriers and related activities,257.5,20
+20,A,2005,2005,525,"Funds, trusts, and other financial vehicles",68.8,20
+20,A,2005,2005,53,Real estate and rental and leasing,861.2,20
+20,A,2005,2005,531,Real estate,753.9,20
+20,A,2005,2005,532RL,Rental and leasing services and lessors of intangible assets,107.4,20
+20,A,2005,2005,54,"Professional, scientific, and technical services",494.1,20
+20,A,2005,2005,5411,Legal services,75.0,20
+20,A,2005,2005,5412OP,"Miscellaneous professional, scientific, and technical services",336.1,20
+20,A,2005,2005,5415,Computer systems design and related services,82.9,20
+20,A,2005,2005,55,Management of companies and enterprises,140.7,20
+20,A,2005,2005,56,Administrative and waste management services,200.5,20
+20,A,2005,2005,561,Administrative and support services,167.3,20
+20,A,2005,2005,562,Waste management and remediation services,33.1,20
+20,A,2005,2005,6,"Educational services, health care, and social assistance",609.4,20
+20,A,2005,2005,61,Educational services,61.9,20
+20,A,2005,2005,62,Health care and social assistance,547.5,20
+20,A,2005,2005,621,Ambulatory health care services,246.1,20
+20,A,2005,2005,622,Hospitals,194.9,20
+20,A,2005,2005,623,Nursing and residential care facilities,62.0,20
+20,A,2005,2005,624,Social assistance,44.5,20
+20,A,2005,2005,7,"Arts, entertainment, recreation, accommodation, and food services",373.8,20
+20,A,2005,2005,71,"Arts, entertainment, and recreation",79.9,20
+20,A,2005,2005,711AS,"Performing arts, spectator sports, museums, and related activities",39.4,20
+20,A,2005,2005,713,"Amusements, gambling, and recreation industries",40.5,20
+20,A,2005,2005,72,Accommodation and food services,294.0,20
+20,A,2005,2005,721,Accommodation,68.5,20
+20,A,2005,2005,722,Food services and drinking places,225.5,20
+20,A,2005,2005,81,"Other services, except government",186.7,20
+20,A,2005,2005,FIRE,"Finance, insurance, real estate, rental, and leasing",1634.6,20
+20,A,2005,2005,G,Government,912.6,20
+20,A,2005,2005,GF,Federal,302.0,20
+20,A,2005,2005,GFE,Government enterprises,25.4,20
+20,A,2005,2005,GFG,General government,276.6,20
+20,A,2005,2005,GFGD,National defense,196.0,20
+20,A,2005,2005,GFGN,Nondefense,80.7,20
+20,A,2005,2005,GSL,State and local,610.6,20
+20,A,2005,2005,GSLE,Government enterprises,103.8,20
+20,A,2005,2005,GSLG,General government,506.7,20
+20,A,2005,2005,HS,Housing,144.3,20
+20,A,2005,2005,ICT,Information-communications-technology-producing industries<sup>3</sup>,579.4,20;20.3.A
+20,A,2005,2005,II,All industries,10478.7,20
+20,A,2005,2005,ORE,Other real estate,609.6,20
+20,A,2005,2005,PGOOD,Private goods-producing industries<sup>1</sup>,4087.1,20;20.1.A
+20,A,2005,2005,PROF,Professional and business services,835.3,20
+20,A,2005,2005,PSERV,Private services-producing industries<sup>2</sup>,5479.0,20;20.2.A
+20,A,2005,2005,PVT,Private industries,9566.1,20
+20,A,2006,2006,11,"Agriculture, forestry, fishing, and hunting",176.9,20
+20,A,2006,2006,111CA,Farms,158.0,20
+20,A,2006,2006,113FF,"Forestry, fishing, and related activities",18.9,20
+20,A,2006,2006,21,Mining,172.0,20
+20,A,2006,2006,211,Oil and gas extraction,78.7,20
+20,A,2006,2006,212,"Mining, except oil and gas",49.0,20
+20,A,2006,2006,213,Support activities for mining,44.3,20
+20,A,2006,2006,22,Utilities,195.3,20
+20,A,2006,2006,23,Construction,656.6,20
+20,A,2006,2006,311FT,Food and beverage and tobacco products,473.8,20
+20,A,2006,2006,313TT,Textile mills and textile product mills,51.6,20
+20,A,2006,2006,315AL,Apparel and leather and allied products,26.3,20
+20,A,2006,2006,31G,Manufacturing,3298.8,20
+20,A,2006,2006,31ND,Nondurable goods,1664.5,20
+20,A,2006,2006,321,Wood products,82.6,20
+20,A,2006,2006,322,Paper products,109.6,20
+20,A,2006,2006,323,Printing and related support activities,54.0,20
+20,A,2006,2006,324,Petroleum and coal products,396.9,20
+20,A,2006,2006,325,Chemical products,406.5,20
+20,A,2006,2006,326,Plastics and rubber products,145.8,20
+20,A,2006,2006,327,Nonmetallic mineral products,75.3,20
+20,A,2006,2006,331,Primary metals,170.4,20
+20,A,2006,2006,332,Fabricated metal products,189.9,20
+20,A,2006,2006,333,Machinery,201.8,20
+20,A,2006,2006,334,Computer and electronic products,201.9,20
+20,A,2006,2006,335,"Electrical equipment, appliances, and components",65.7,20
+20,A,2006,2006,3361MV,"Motor vehicles, bodies and trailers, and parts",391.1,20
+20,A,2006,2006,3364OT,Other transportation equipment,117.8,20
+20,A,2006,2006,337,Furniture and related products,51.8,20
+20,A,2006,2006,339,Miscellaneous manufacturing,85.9,20
+20,A,2006,2006,33DG,Durable goods,1634.3,20
+20,A,2006,2006,42,Wholesale trade,387.3,20
+20,A,2006,2006,441,Motor vehicle and parts dealers,54.2,20
+20,A,2006,2006,445,Food and beverage stores,59.1,20
+20,A,2006,2006,44RT,Retail trade,432.3,20
+20,A,2006,2006,452,General merchandise stores,62.6,20
+20,A,2006,2006,481,Air transportation,84.1,20
+20,A,2006,2006,482,Rail transportation,26.0,20
+20,A,2006,2006,483,Water transportation,29.2,20
+20,A,2006,2006,484,Truck transportation,147.3,20
+20,A,2006,2006,485,Transit and ground passenger transportation,16.5,20
+20,A,2006,2006,486,Pipeline transportation,13.5,20
+20,A,2006,2006,487OS,Other transportation and support activities,72.7,20
+20,A,2006,2006,48TW,Transportation and warehousing,409.9,20
+20,A,2006,2006,493,Warehousing and storage,20.7,20
+20,A,2006,2006,4A0,Other retail,256.3,20
+20,A,2006,2006,51,Information,532.2,20
+20,A,2006,2006,511,"Publishing industries, except internet (includes software)",147.2,20
+20,A,2006,2006,512,Motion picture and sound recording industries,69.0,20
+20,A,2006,2006,513,Broadcasting and telecommunications,293.9,20
+20,A,2006,2006,514,"Data processing, internet publishing, and other information services",22.1,20
+20,A,2006,2006,52,Finance and insurance,836.9,20
+20,A,2006,2006,521CI,"Federal Reserve banks, credit intermediation, and related activities",274.9,20
+20,A,2006,2006,523,"Securities, commodity contracts, and investments",219.8,20
+20,A,2006,2006,524,Insurance carriers and related activities,263.5,20
+20,A,2006,2006,525,"Funds, trusts, and other financial vehicles",78.7,20
+20,A,2006,2006,53,Real estate and rental and leasing,895.5,20
+20,A,2006,2006,531,Real estate,801.0,20
+20,A,2006,2006,532RL,Rental and leasing services and lessors of intangible assets,94.5,20
+20,A,2006,2006,54,"Professional, scientific, and technical services",514.9,20
+20,A,2006,2006,5411,Legal services,76.4,20
+20,A,2006,2006,5412OP,"Miscellaneous professional, scientific, and technical services",357.0,20
+20,A,2006,2006,5415,Computer systems design and related services,81.5,20
+20,A,2006,2006,55,Management of companies and enterprises,153.2,20
+20,A,2006,2006,56,Administrative and waste management services,223.8,20
+20,A,2006,2006,561,Administrative and support services,182.0,20
+20,A,2006,2006,562,Waste management and remediation services,41.8,20
+20,A,2006,2006,6,"Educational services, health care, and social assistance",640.0,20
+20,A,2006,2006,61,Educational services,70.6,20
+20,A,2006,2006,62,Health care and social assistance,569.4,20
+20,A,2006,2006,621,Ambulatory health care services,248.8,20
+20,A,2006,2006,622,Hospitals,207.5,20
+20,A,2006,2006,623,Nursing and residential care facilities,65.5,20
+20,A,2006,2006,624,Social assistance,47.5,20
+20,A,2006,2006,7,"Arts, entertainment, recreation, accommodation, and food services",400.9,20
+20,A,2006,2006,71,"Arts, entertainment, and recreation",92.3,20
+20,A,2006,2006,711AS,"Performing arts, spectator sports, museums, and related activities",43.0,20
+20,A,2006,2006,713,"Amusements, gambling, and recreation industries",49.3,20
+20,A,2006,2006,72,Accommodation and food services,308.7,20
+20,A,2006,2006,721,Accommodation,71.4,20
+20,A,2006,2006,722,Food services and drinking places,237.2,20
+20,A,2006,2006,81,"Other services, except government",198.4,20
+20,A,2006,2006,FIRE,"Finance, insurance, real estate, rental, and leasing",1732.5,20
+20,A,2006,2006,G,Government,984.9,20
+20,A,2006,2006,GF,Federal,325.7,20
+20,A,2006,2006,GFE,Government enterprises,30.0,20
+20,A,2006,2006,GFG,General government,295.7,20
+20,A,2006,2006,GFGD,National defense,207.5,20
+20,A,2006,2006,GFGN,Nondefense,88.2,20
+20,A,2006,2006,GSL,State and local,659.3,20
+20,A,2006,2006,GSLE,Government enterprises,117.6,20
+20,A,2006,2006,GSLG,General government,541.7,20
+20,A,2006,2006,HS,Housing,151.6,20
+20,A,2006,2006,ICT,Information-communications-technology-producing industries<sup>3</sup>,613.5,20;20.3.A
+20,A,2006,2006,II,All industries,11109.9,20
+20,A,2006,2006,ORE,Other real estate,649.4,20
+20,A,2006,2006,PGOOD,Private goods-producing industries<sup>1</sup>,4304.3,20;20.1.A
+20,A,2006,2006,PROF,Professional and business services,891.9,20
+20,A,2006,2006,PSERV,Private services-producing industries<sup>2</sup>,5820.7,20;20.2.A
+20,A,2006,2006,PVT,Private industries,10125.0,20
+20,A,2007,2007,11,"Agriculture, forestry, fishing, and hunting",203.1,20
+20,A,2007,2007,111CA,Farms,186.9,20
+20,A,2007,2007,113FF,"Forestry, fishing, and related activities",16.1,20
+20,A,2007,2007,21,Mining,162.2,20
+20,A,2007,2007,211,Oil and gas extraction,70.9,20
+20,A,2007,2007,212,"Mining, except oil and gas",46.5,20
+20,A,2007,2007,213,Support activities for mining,44.8,20
+20,A,2007,2007,22,Utilities,219.8,20
+20,A,2007,2007,23,Construction,623.2,20
+20,A,2007,2007,311FT,Food and beverage and tobacco products,526.3,20
+20,A,2007,2007,313TT,Textile mills and textile product mills,45.2,20
+20,A,2007,2007,315AL,Apparel and leather and allied products,18.0,20
+20,A,2007,2007,31G,Manufacturing,3559.6,20
+20,A,2007,2007,31ND,Nondurable goods,1819.2,20
+20,A,2007,2007,321,Wood products,73.8,20
+20,A,2007,2007,322,Paper products,118.5,20
+20,A,2007,2007,323,Printing and related support activities,55.8,20
+20,A,2007,2007,324,Petroleum and coal products,451.7,20
+20,A,2007,2007,325,Chemical products,460.8,20
+20,A,2007,2007,326,Plastics and rubber products,143.0,20
+20,A,2007,2007,327,Nonmetallic mineral products,78.2,20
+20,A,2007,2007,331,Primary metals,191.9,20
+20,A,2007,2007,332,Fabricated metal products,207.9,20
+20,A,2007,2007,333,Machinery,217.3,20
+20,A,2007,2007,334,Computer and electronic products,215.9,20
+20,A,2007,2007,335,"Electrical equipment, appliances, and components",76.0,20
+20,A,2007,2007,3361MV,"Motor vehicles, bodies and trailers, and parts",389.6,20
+20,A,2007,2007,3364OT,Other transportation equipment,149.4,20
+20,A,2007,2007,337,Furniture and related products,53.2,20
+20,A,2007,2007,339,Miscellaneous manufacturing,87.3,20
+20,A,2007,2007,33DG,Durable goods,1740.4,20
+20,A,2007,2007,42,Wholesale trade,414.8,20
+20,A,2007,2007,441,Motor vehicle and parts dealers,53.0,20
+20,A,2007,2007,445,Food and beverage stores,64.1,20
+20,A,2007,2007,44RT,Retail trade,464.7,20
+20,A,2007,2007,452,General merchandise stores,73.9,20
+20,A,2007,2007,481,Air transportation,87.5,20
+20,A,2007,2007,482,Rail transportation,28.3,20
+20,A,2007,2007,483,Water transportation,32.7,20
+20,A,2007,2007,484,Truck transportation,155.3,20
+20,A,2007,2007,485,Transit and ground passenger transportation,18.6,20
+20,A,2007,2007,486,Pipeline transportation,12.7,20
+20,A,2007,2007,487OS,Other transportation and support activities,88.5,20
+20,A,2007,2007,48TW,Transportation and warehousing,451.4,20
+20,A,2007,2007,493,Warehousing and storage,27.8,20
+20,A,2007,2007,4A0,Other retail,273.7,20
+20,A,2007,2007,51,Information,513.2,20
+20,A,2007,2007,511,"Publishing industries, except internet (includes software)",126.4,20
+20,A,2007,2007,512,Motion picture and sound recording industries,60.6,20
+20,A,2007,2007,513,Broadcasting and telecommunications,280.2,20
+20,A,2007,2007,514,"Data processing, internet publishing, and other information services",46.1,20
+20,A,2007,2007,52,Finance and insurance,995.6,20
+20,A,2007,2007,521CI,"Federal Reserve banks, credit intermediation, and related activities",310.6,20
+20,A,2007,2007,523,"Securities, commodity contracts, and investments",295.3,20
+20,A,2007,2007,524,Insurance carriers and related activities,285.8,20
+20,A,2007,2007,525,"Funds, trusts, and other financial vehicles",103.9,20
+20,A,2007,2007,53,Real estate and rental and leasing,825.3,20
+20,A,2007,2007,531,Real estate,719.4,20
+20,A,2007,2007,532RL,Rental and leasing services and lessors of intangible assets,105.9,20
+20,A,2007,2007,54,"Professional, scientific, and technical services",559.2,20
+20,A,2007,2007,5411,Legal services,72.9,20
+20,A,2007,2007,5412OP,"Miscellaneous professional, scientific, and technical services",396.5,20
+20,A,2007,2007,5415,Computer systems design and related services,89.8,20
+20,A,2007,2007,55,Management of companies and enterprises,182.4,20
+20,A,2007,2007,56,Administrative and waste management services,234.6,20
+20,A,2007,2007,561,Administrative and support services,193.6,20
+20,A,2007,2007,562,Waste management and remediation services,41.0,20
+20,A,2007,2007,6,"Educational services, health care, and social assistance",693.4,20
+20,A,2007,2007,61,Educational services,85.1,20
+20,A,2007,2007,62,Health care and social assistance,608.3,20
+20,A,2007,2007,621,Ambulatory health care services,265.6,20
+20,A,2007,2007,622,Hospitals,219.3,20
+20,A,2007,2007,623,Nursing and residential care facilities,70.2,20
+20,A,2007,2007,624,Social assistance,53.2,20
+20,A,2007,2007,7,"Arts, entertainment, recreation, accommodation, and food services",422.2,20
+20,A,2007,2007,71,"Arts, entertainment, and recreation",104.1,20
+20,A,2007,2007,711AS,"Performing arts, spectator sports, museums, and related activities",51.1,20
+20,A,2007,2007,713,"Amusements, gambling, and recreation industries",53.1,20
+20,A,2007,2007,72,Accommodation and food services,318.1,20
+20,A,2007,2007,721,Accommodation,68.3,20
+20,A,2007,2007,722,Food services and drinking places,249.8,20
+20,A,2007,2007,81,"Other services, except government",205.7,20
+20,A,2007,2007,FIRE,"Finance, insurance, real estate, rental, and leasing",1820.9,20
+20,A,2007,2007,G,Government,1045.7,20
+20,A,2007,2007,GF,Federal,338.8,20
+20,A,2007,2007,GFE,Government enterprises,33.4,20
+20,A,2007,2007,GFG,General government,305.4,20
+20,A,2007,2007,GFGD,National defense,218.9,20
+20,A,2007,2007,GFGN,Nondefense,86.5,20
+20,A,2007,2007,GSL,State and local,707.0,20
+20,A,2007,2007,GSLE,Government enterprises,129.4,20
+20,A,2007,2007,GSLG,General government,577.5,20
+20,A,2007,2007,HS,Housing,159.0,20
+20,A,2007,2007,ICT,Information-communications-technology-producing industries<sup>3</sup>,616.0,20;20.3.A
+20,A,2007,2007,II,All industries,11776.1,20
+20,A,2007,2007,ORE,Other real estate,560.4,20
+20,A,2007,2007,PGOOD,Private goods-producing industries<sup>1</sup>,4548.1,20;20.1.A
+20,A,2007,2007,PROF,Professional and business services,976.3,20
+20,A,2007,2007,PSERV,Private services-producing industries<sup>2</sup>,6182.2,20;20.2.A
+20,A,2007,2007,PVT,Private industries,10730.4,20
+20,A,2008,2008,11,"Agriculture, forestry, fishing, and hunting",226.1,20
+20,A,2008,2008,111CA,Farms,209.1,20
+20,A,2008,2008,113FF,"Forestry, fishing, and related activities",17.0,20
+20,A,2008,2008,21,Mining,222.1,20
+20,A,2008,2008,211,Oil and gas extraction,116.6,20
+20,A,2008,2008,212,"Mining, except oil and gas",54.8,20
+20,A,2008,2008,213,Support activities for mining,50.6,20
+20,A,2008,2008,22,Utilities,283.2,20
+20,A,2008,2008,23,Construction,626.5,20
+20,A,2008,2008,311FT,Food and beverage and tobacco products,579.4,20
+20,A,2008,2008,313TT,Textile mills and textile product mills,38.7,20
+20,A,2008,2008,315AL,Apparel and leather and allied products,15.1,20
+20,A,2008,2008,31G,Manufacturing,3693.4,20
+20,A,2008,2008,31ND,Nondurable goods,2004.8,20
+20,A,2008,2008,321,Wood products,63.2,20
+20,A,2008,2008,322,Paper products,126.0,20
+20,A,2008,2008,323,Printing and related support activities,54.0,20
+20,A,2008,2008,324,Petroleum and coal products,578.7,20
+20,A,2008,2008,325,Chemical products,470.1,20
+20,A,2008,2008,326,Plastics and rubber products,142.9,20
+20,A,2008,2008,327,Nonmetallic mineral products,69.7,20
+20,A,2008,2008,331,Primary metals,211.5,20
+20,A,2008,2008,332,Fabricated metal products,224.6,20
+20,A,2008,2008,333,Machinery,222.2,20
+20,A,2008,2008,334,Computer and electronic products,193.4,20
+20,A,2008,2008,335,"Electrical equipment, appliances, and components",71.4,20
+20,A,2008,2008,3361MV,"Motor vehicles, bodies and trailers, and parts",334.7,20
+20,A,2008,2008,3364OT,Other transportation equipment,154.7,20
+20,A,2008,2008,337,Furniture and related products,49.1,20
+20,A,2008,2008,339,Miscellaneous manufacturing,94.1,20
+20,A,2008,2008,33DG,Durable goods,1688.7,20
+20,A,2008,2008,42,Wholesale trade,444.4,20
+20,A,2008,2008,441,Motor vehicle and parts dealers,39.7,20
+20,A,2008,2008,445,Food and beverage stores,65.6,20
+20,A,2008,2008,44RT,Retail trade,425.9,20
+20,A,2008,2008,452,General merchandise stores,72.2,20
+20,A,2008,2008,481,Air transportation,102.2,20
+20,A,2008,2008,482,Rail transportation,31.1,20
+20,A,2008,2008,483,Water transportation,34.2,20
+20,A,2008,2008,484,Truck transportation,163.2,20
+20,A,2008,2008,485,Transit and ground passenger transportation,16.9,20
+20,A,2008,2008,486,Pipeline transportation,15.0,20
+20,A,2008,2008,487OS,Other transportation and support activities,83.4,20
+20,A,2008,2008,48TW,Transportation and warehousing,477.6,20
+20,A,2008,2008,493,Warehousing and storage,31.6,20
+20,A,2008,2008,4A0,Other retail,248.4,20
+20,A,2008,2008,51,Information,511.1,20
+20,A,2008,2008,511,"Publishing industries, except internet (includes software)",131.3,20
+20,A,2008,2008,512,Motion picture and sound recording industries,51.3,20
+20,A,2008,2008,513,Broadcasting and telecommunications,280.8,20
+20,A,2008,2008,514,"Data processing, internet publishing, and other information services",47.7,20
+20,A,2008,2008,52,Finance and insurance,1121.3,20
+20,A,2008,2008,521CI,"Federal Reserve banks, credit intermediation, and related activities",285.5,20
+20,A,2008,2008,523,"Securities, commodity contracts, and investments",357.4,20
+20,A,2008,2008,524,Insurance carriers and related activities,366.5,20
+20,A,2008,2008,525,"Funds, trusts, and other financial vehicles",111.9,20
+20,A,2008,2008,53,Real estate and rental and leasing,752.5,20
+20,A,2008,2008,531,Real estate,641.6,20
+20,A,2008,2008,532RL,Rental and leasing services and lessors of intangible assets,110.9,20
+20,A,2008,2008,54,"Professional, scientific, and technical services",541.4,20
+20,A,2008,2008,5411,Legal services,51.3,20
+20,A,2008,2008,5412OP,"Miscellaneous professional, scientific, and technical services",389.6,20
+20,A,2008,2008,5415,Computer systems design and related services,100.6,20
+20,A,2008,2008,55,Management of companies and enterprises,176.3,20
+20,A,2008,2008,56,Administrative and waste management services,243.5,20
+20,A,2008,2008,561,Administrative and support services,200.9,20
+20,A,2008,2008,562,Waste management and remediation services,42.6,20
+20,A,2008,2008,6,"Educational services, health care, and social assistance",714.3,20
+20,A,2008,2008,61,Educational services,89.5,20
+20,A,2008,2008,62,Health care and social assistance,624.7,20
+20,A,2008,2008,621,Ambulatory health care services,264.7,20
+20,A,2008,2008,622,Hospitals,229.4,20
+20,A,2008,2008,623,Nursing and residential care facilities,70.9,20
+20,A,2008,2008,624,Social assistance,59.7,20
+20,A,2008,2008,7,"Arts, entertainment, recreation, accommodation, and food services",435.7,20
+20,A,2008,2008,71,"Arts, entertainment, and recreation",104.4,20
+20,A,2008,2008,711AS,"Performing arts, spectator sports, museums, and related activities",50.3,20
+20,A,2008,2008,713,"Amusements, gambling, and recreation industries",54.1,20
+20,A,2008,2008,72,Accommodation and food services,331.3,20
+20,A,2008,2008,721,Accommodation,74.5,20
+20,A,2008,2008,722,Food services and drinking places,256.8,20
+20,A,2008,2008,81,"Other services, except government",220.1,20
+20,A,2008,2008,FIRE,"Finance, insurance, real estate, rental, and leasing",1873.8,20
+20,A,2008,2008,G,Government,1139.7,20
+20,A,2008,2008,GF,Federal,391.5,20
+20,A,2008,2008,GFE,Government enterprises,37.9,20
+20,A,2008,2008,GFG,General government,353.6,20
+20,A,2008,2008,GFGD,National defense,253.5,20
+20,A,2008,2008,GFGN,Nondefense,100.1,20
+20,A,2008,2008,GSL,State and local,748.2,20
+20,A,2008,2008,GSLE,Government enterprises,143.2,20
+20,A,2008,2008,GSLG,General government,605.0,20
+20,A,2008,2008,HS,Housing,143.3,20
+20,A,2008,2008,ICT,Information-communications-technology-producing industries<sup>3</sup>,616.3,20;20.3.A
+20,A,2008,2008,II,All industries,12255.1,20
+20,A,2008,2008,ORE,Other real estate,498.3,20
+20,A,2008,2008,PGOOD,Private goods-producing industries<sup>1</sup>,4768.1,20;20.1.A
+20,A,2008,2008,PROF,Professional and business services,961.2,20
+20,A,2008,2008,PSERV,Private services-producing industries<sup>2</sup>,6347.3,20;20.2.A
+20,A,2008,2008,PVT,Private industries,11115.3,20
+20,A,2009,2009,11,"Agriculture, forestry, fishing, and hunting",209.7,20
+20,A,2009,2009,111CA,Farms,195.2,20
+20,A,2009,2009,113FF,"Forestry, fishing, and related activities",14.4,20
+20,A,2009,2009,21,Mining,129.5,20
+20,A,2009,2009,211,Oil and gas extraction,55.0,20
+20,A,2009,2009,212,"Mining, except oil and gas",43.4,20
+20,A,2009,2009,213,Support activities for mining,31.0,20
+20,A,2009,2009,22,Utilities,178.7,20
+20,A,2009,2009,23,Construction,533.3,20
+20,A,2009,2009,311FT,Food and beverage and tobacco products,534.8,20
+20,A,2009,2009,313TT,Textile mills and textile product mills,31.3,20
+20,A,2009,2009,315AL,Apparel and leather and allied products,14.5,20
+20,A,2009,2009,31G,Manufacturing,2817.7,20
+20,A,2009,2009,31ND,Nondurable goods,1539.0,20
+20,A,2009,2009,321,Wood products,44.7,20
+20,A,2009,2009,322,Paper products,101.3,20
+20,A,2009,2009,323,Printing and related support activities,44.4,20
+20,A,2009,2009,324,Petroleum and coal products,371.8,20
+20,A,2009,2009,325,Chemical products,333.4,20
+20,A,2009,2009,326,Plastics and rubber products,107.5,20
+20,A,2009,2009,327,Nonmetallic mineral products,51.2,20
+20,A,2009,2009,331,Primary metals,126.1,20
+20,A,2009,2009,332,Fabricated metal products,163.1,20
+20,A,2009,2009,333,Machinery,166.8,20
+20,A,2009,2009,334,Computer and electronic products,131.7,20
+20,A,2009,2009,335,"Electrical equipment, appliances, and components",52.1,20
+20,A,2009,2009,3361MV,"Motor vehicles, bodies and trailers, and parts",295.4,20
+20,A,2009,2009,3364OT,Other transportation equipment,130.8,20
+20,A,2009,2009,337,Furniture and related products,36.8,20
+20,A,2009,2009,339,Miscellaneous manufacturing,80.0,20
+20,A,2009,2009,33DG,Durable goods,1278.8,20
+20,A,2009,2009,42,Wholesale trade,322.9,20
+20,A,2009,2009,441,Motor vehicle and parts dealers,21.9,20
+20,A,2009,2009,445,Food and beverage stores,59.3,20
+20,A,2009,2009,44RT,Retail trade,375.6,20
+20,A,2009,2009,452,General merchandise stores,73.9,20
+20,A,2009,2009,481,Air transportation,75.0,20
+20,A,2009,2009,482,Rail transportation,21.8,20
+20,A,2009,2009,483,Water transportation,27.1,20
+20,A,2009,2009,484,Truck transportation,121.9,20
+20,A,2009,2009,485,Transit and ground passenger transportation,15.5,20
+20,A,2009,2009,486,Pipeline transportation,12.7,20
+20,A,2009,2009,487OS,Other transportation and support activities,69.3,20
+20,A,2009,2009,48TW,Transportation and warehousing,376.7,20
+20,A,2009,2009,493,Warehousing and storage,33.5,20
+20,A,2009,2009,4A0,Other retail,220.4,20
+20,A,2009,2009,51,Information,498.2,20
+20,A,2009,2009,511,"Publishing industries, except internet (includes software)",117.7,20
+20,A,2009,2009,512,Motion picture and sound recording industries,40.9,20
+20,A,2009,2009,513,Broadcasting and telecommunications,290.2,20
+20,A,2009,2009,514,"Data processing, internet publishing, and other information services",49.4,20
+20,A,2009,2009,52,Finance and insurance,914.6,20
+20,A,2009,2009,521CI,"Federal Reserve banks, credit intermediation, and related activities",291.1,20
+20,A,2009,2009,523,"Securities, commodity contracts, and investments",245.8,20
+20,A,2009,2009,524,Insurance carriers and related activities,279.7,20
+20,A,2009,2009,525,"Funds, trusts, and other financial vehicles",98.0,20
+20,A,2009,2009,53,Real estate and rental and leasing,688.2,20
+20,A,2009,2009,531,Real estate,600.1,20
+20,A,2009,2009,532RL,Rental and leasing services and lessors of intangible assets,88.1,20
+20,A,2009,2009,54,"Professional, scientific, and technical services",528.9,20
+20,A,2009,2009,5411,Legal services,67.8,20
+20,A,2009,2009,5412OP,"Miscellaneous professional, scientific, and technical services",370.3,20
+20,A,2009,2009,5415,Computer systems design and related services,90.8,20
+20,A,2009,2009,55,Management of companies and enterprises,155.3,20
+20,A,2009,2009,56,Administrative and waste management services,221.6,20
+20,A,2009,2009,561,Administrative and support services,185.2,20
+20,A,2009,2009,562,Waste management and remediation services,36.4,20
+20,A,2009,2009,6,"Educational services, health care, and social assistance",731.3,20
+20,A,2009,2009,61,Educational services,85.3,20
+20,A,2009,2009,62,Health care and social assistance,646.0,20
+20,A,2009,2009,621,Ambulatory health care services,266.3,20
+20,A,2009,2009,622,Hospitals,243.7,20
+20,A,2009,2009,623,Nursing and residential care facilities,70.2,20
+20,A,2009,2009,624,Social assistance,65.8,20
+20,A,2009,2009,7,"Arts, entertainment, recreation, accommodation, and food services",422.1,20
+20,A,2009,2009,71,"Arts, entertainment, and recreation",99.6,20
+20,A,2009,2009,711AS,"Performing arts, spectator sports, museums, and related activities",48.5,20
+20,A,2009,2009,713,"Amusements, gambling, and recreation industries",51.1,20
+20,A,2009,2009,72,Accommodation and food services,322.5,20
+20,A,2009,2009,721,Accommodation,74.6,20
+20,A,2009,2009,722,Food services and drinking places,247.9,20
+20,A,2009,2009,81,"Other services, except government",195.0,20
+20,A,2009,2009,FIRE,"Finance, insurance, real estate, rental, and leasing",1602.8,20
+20,A,2009,2009,G,Government,1181.9,20
+20,A,2009,2009,GF,Federal,415.9,20
+20,A,2009,2009,GFE,Government enterprises,37.2,20
+20,A,2009,2009,GFG,General government,378.8,20
+20,A,2009,2009,GFGD,National defense,264.6,20
+20,A,2009,2009,GFGN,Nondefense,114.1,20
+20,A,2009,2009,GSL,State and local,766.0,20
+20,A,2009,2009,GSLE,Government enterprises,155.2,20
+20,A,2009,2009,GSLG,General government,610.7,20
+20,A,2009,2009,HS,Housing,148.2,20
+20,A,2009,2009,ICT,Information-communications-technology-producing industries<sup>3</sup>,568.7,20;20.3.A
+20,A,2009,2009,II,All industries,10481.3,20
+20,A,2009,2009,ORE,Other real estate,451.9,20
+20,A,2009,2009,PGOOD,Private goods-producing industries<sup>1</sup>,3690.2,20;20.1.A
+20,A,2009,2009,PROF,Professional and business services,905.8,20
+20,A,2009,2009,PSERV,Private services-producing industries<sup>2</sup>,5609.1,20;20.2.A
+20,A,2009,2009,PVT,Private industries,9299.3,20
+20,A,2010,2010,11,"Agriculture, forestry, fishing, and hunting",220.8,20
+20,A,2010,2010,111CA,Farms,203.9,20
+20,A,2010,2010,113FF,"Forestry, fishing, and related activities",17.0,20
+20,A,2010,2010,21,Mining,193.7,20
+20,A,2010,2010,211,Oil and gas extraction,115.6,20
+20,A,2010,2010,212,"Mining, except oil and gas",43.0,20
+20,A,2010,2010,213,Support activities for mining,35.1,20
+20,A,2010,2010,22,Utilities,215.4,20
+20,A,2010,2010,23,Construction,490.9,20
+20,A,2010,2010,311FT,Food and beverage and tobacco products,576.8,20
+20,A,2010,2010,313TT,Textile mills and textile product mills,34.3,20
+20,A,2010,2010,315AL,Apparel and leather and allied products,12.9,20
+20,A,2010,2010,31G,Manufacturing,3230.6,20
+20,A,2010,2010,31ND,Nondurable goods,1802.4,20
+20,A,2010,2010,321,Wood products,48.6,20
+20,A,2010,2010,322,Paper products,113.0,20
+20,A,2010,2010,323,Printing and related support activities,44.3,20
+20,A,2010,2010,324,Petroleum and coal products,483.9,20
+20,A,2010,2010,325,Chemical products,412.4,20
+20,A,2010,2010,326,Plastics and rubber products,124.8,20
+20,A,2010,2010,327,Nonmetallic mineral products,54.0,20
+20,A,2010,2010,331,Primary metals,184.8,20
+20,A,2010,2010,332,Fabricated metal products,175.6,20
+20,A,2010,2010,333,Machinery,191.3,20
+20,A,2010,2010,334,Computer and electronic products,130.1,20
+20,A,2010,2010,335,"Electrical equipment, appliances, and components",57.8,20
+20,A,2010,2010,3361MV,"Motor vehicles, bodies and trailers, and parts",345.8,20
+20,A,2010,2010,3364OT,Other transportation equipment,128.2,20
+20,A,2010,2010,337,Furniture and related products,35.4,20
+20,A,2010,2010,339,Miscellaneous manufacturing,76.6,20
+20,A,2010,2010,33DG,Durable goods,1428.2,20
+20,A,2010,2010,42,Wholesale trade,471.6,20
+20,A,2010,2010,441,Motor vehicle and parts dealers,53.9,20
+20,A,2010,2010,445,Food and beverage stores,64.1,20
+20,A,2010,2010,44RT,Retail trade,436.1,20
+20,A,2010,2010,452,General merchandise stores,82.1,20
+20,A,2010,2010,481,Air transportation,79.2,20
+20,A,2010,2010,482,Rail transportation,32.7,20
+20,A,2010,2010,483,Water transportation,32.2,20
+20,A,2010,2010,484,Truck transportation,138.0,20
+20,A,2010,2010,485,Transit and ground passenger transportation,13.7,20
+20,A,2010,2010,486,Pipeline transportation,11.0,20
+20,A,2010,2010,487OS,Other transportation and support activities,75.2,20
+20,A,2010,2010,48TW,Transportation and warehousing,425.2,20
+20,A,2010,2010,493,Warehousing and storage,43.3,20
+20,A,2010,2010,4A0,Other retail,236.0,20
+20,A,2010,2010,51,Information,513.9,20
+20,A,2010,2010,511,"Publishing industries, except internet (includes software)",110.5,20
+20,A,2010,2010,512,Motion picture and sound recording industries,38.5,20
+20,A,2010,2010,513,Broadcasting and telecommunications,311.8,20
+20,A,2010,2010,514,"Data processing, internet publishing, and other information services",53.1,20
+20,A,2010,2010,52,Finance and insurance,924.4,20
+20,A,2010,2010,521CI,"Federal Reserve banks, credit intermediation, and related activities",272.4,20
+20,A,2010,2010,523,"Securities, commodity contracts, and investments",257.7,20
+20,A,2010,2010,524,Insurance carriers and related activities,288.9,20
+20,A,2010,2010,525,"Funds, trusts, and other financial vehicles",105.4,20
+20,A,2010,2010,53,Real estate and rental and leasing,725.7,20
+20,A,2010,2010,531,Real estate,617.4,20
+20,A,2010,2010,532RL,Rental and leasing services and lessors of intangible assets,108.2,20
+20,A,2010,2010,54,"Professional, scientific, and technical services",552.8,20
+20,A,2010,2010,5411,Legal services,81.3,20
+20,A,2010,2010,5412OP,"Miscellaneous professional, scientific, and technical services",369.5,20
+20,A,2010,2010,5415,Computer systems design and related services,102.1,20
+20,A,2010,2010,55,Management of companies and enterprises,156.8,20
+20,A,2010,2010,56,Administrative and waste management services,234.1,20
+20,A,2010,2010,561,Administrative and support services,199.5,20
+20,A,2010,2010,562,Waste management and remediation services,34.6,20
+20,A,2010,2010,6,"Educational services, health care, and social assistance",780.4,20
+20,A,2010,2010,61,Educational services,93.9,20
+20,A,2010,2010,62,Health care and social assistance,686.4,20
+20,A,2010,2010,621,Ambulatory health care services,271.3,20
+20,A,2010,2010,622,Hospitals,267.0,20
+20,A,2010,2010,623,Nursing and residential care facilities,75.1,20
+20,A,2010,2010,624,Social assistance,73.1,20
+20,A,2010,2010,7,"Arts, entertainment, recreation, accommodation, and food services",423.0,20
+20,A,2010,2010,71,"Arts, entertainment, and recreation",93.5,20
+20,A,2010,2010,711AS,"Performing arts, spectator sports, museums, and related activities",46.2,20
+20,A,2010,2010,713,"Amusements, gambling, and recreation industries",47.3,20
+20,A,2010,2010,72,Accommodation and food services,329.5,20
+20,A,2010,2010,721,Accommodation,73.5,20
+20,A,2010,2010,722,Food services and drinking places,256.0,20
+20,A,2010,2010,81,"Other services, except government",206.6,20
+20,A,2010,2010,FIRE,"Finance, insurance, real estate, rental, and leasing",1650.0,20
+20,A,2010,2010,G,Government,1228.4,20
+20,A,2010,2010,GF,Federal,448.9,20
+20,A,2010,2010,GFE,Government enterprises,39.5,20
+20,A,2010,2010,GFG,General government,409.4,20
+20,A,2010,2010,GFGD,National defense,282.1,20
+20,A,2010,2010,GFGN,Nondefense,127.3,20
+20,A,2010,2010,GSL,State and local,779.5,20
+20,A,2010,2010,GSLE,Government enterprises,168.8,20
+20,A,2010,2010,GSLG,General government,610.8,20
+20,A,2010,2010,HS,Housing,155.0,20
+20,A,2010,2010,ICT,Information-communications-technology-producing industries<sup>3</sup>,597.9,20;20.3.A
+20,A,2010,2010,II,All industries,11430.5,20
+20,A,2010,2010,ORE,Other real estate,462.4,20
+20,A,2010,2010,PGOOD,Private goods-producing industries<sup>1</sup>,4136.0,20;20.1.A
+20,A,2010,2010,PROF,Professional and business services,943.8,20
+20,A,2010,2010,PSERV,Private services-producing industries<sup>2</sup>,6066.0,20;20.2.A
+20,A,2010,2010,PVT,Private industries,10202.1,20
+20,A,2011,2011,11,"Agriculture, forestry, fishing, and hunting",249.6,20
+20,A,2011,2011,111CA,Farms,229.2,20
+20,A,2011,2011,113FF,"Forestry, fishing, and related activities",20.4,20
+20,A,2011,2011,21,Mining,244.0,20
+20,A,2011,2011,211,Oil and gas extraction,153.9,20
+20,A,2011,2011,212,"Mining, except oil and gas",54.2,20
+20,A,2011,2011,213,Support activities for mining,35.9,20
+20,A,2011,2011,22,Utilities,196.6,20
+20,A,2011,2011,23,Construction,494.8,20
+20,A,2011,2011,311FT,Food and beverage and tobacco products,646.2,20
+20,A,2011,2011,313TT,Textile mills and textile product mills,37.8,20
+20,A,2011,2011,315AL,Apparel and leather and allied products,14.8,20
+20,A,2011,2011,31G,Manufacturing,3732.2,20
+20,A,2011,2011,31ND,Nondurable goods,2138.8,20
+20,A,2011,2011,321,Wood products,49.3,20
+20,A,2011,2011,322,Paper products,121.9,20
+20,A,2011,2011,323,Printing and related support activities,45.4,20
+20,A,2011,2011,324,Petroleum and coal products,657.9,20
+20,A,2011,2011,325,Chemical products,476.9,20
+20,A,2011,2011,326,Plastics and rubber products,138.0,20
+20,A,2011,2011,327,Nonmetallic mineral products,55.1,20
+20,A,2011,2011,331,Primary metals,218.9,20
+20,A,2011,2011,332,Fabricated metal products,199.4,20
+20,A,2011,2011,333,Machinery,224.2,20
+20,A,2011,2011,334,Computer and electronic products,134.4,20
+20,A,2011,2011,335,"Electrical equipment, appliances, and components",69.5,20
+20,A,2011,2011,3361MV,"Motor vehicles, bodies and trailers, and parts",394.3,20
+20,A,2011,2011,3364OT,Other transportation equipment,131.5,20
+20,A,2011,2011,337,Furniture and related products,35.3,20
+20,A,2011,2011,339,Miscellaneous manufacturing,81.6,20
+20,A,2011,2011,33DG,Durable goods,1593.4,20
+20,A,2011,2011,42,Wholesale trade,596.0,20
+20,A,2011,2011,441,Motor vehicle and parts dealers,48.3,20
+20,A,2011,2011,445,Food and beverage stores,72.0,20
+20,A,2011,2011,44RT,Retail trade,452.3,20
+20,A,2011,2011,452,General merchandise stores,77.6,20
+20,A,2011,2011,481,Air transportation,109.4,20
+20,A,2011,2011,482,Rail transportation,39.2,20
+20,A,2011,2011,483,Water transportation,34.8,20
+20,A,2011,2011,484,Truck transportation,156.4,20
+20,A,2011,2011,485,Transit and ground passenger transportation,15.0,20
+20,A,2011,2011,486,Pipeline transportation,13.4,20
+20,A,2011,2011,487OS,Other transportation and support activities,85.0,20
+20,A,2011,2011,48TW,Transportation and warehousing,505.7,20
+20,A,2011,2011,493,Warehousing and storage,52.4,20
+20,A,2011,2011,4A0,Other retail,254.4,20
+20,A,2011,2011,51,Information,561.7,20
+20,A,2011,2011,511,"Publishing industries, except internet (includes software)",113.1,20
+20,A,2011,2011,512,Motion picture and sound recording industries,43.2,20
+20,A,2011,2011,513,Broadcasting and telecommunications,341.9,20
+20,A,2011,2011,514,"Data processing, internet publishing, and other information services",63.6,20
+20,A,2011,2011,52,Finance and insurance,964.2,20
+20,A,2011,2011,521CI,"Federal Reserve banks, credit intermediation, and related activities",231.5,20
+20,A,2011,2011,523,"Securities, commodity contracts, and investments",278.8,20
+20,A,2011,2011,524,Insurance carriers and related activities,342.2,20
+20,A,2011,2011,525,"Funds, trusts, and other financial vehicles",111.7,20
+20,A,2011,2011,53,Real estate and rental and leasing,735.9,20
+20,A,2011,2011,531,Real estate,614.5,20
+20,A,2011,2011,532RL,Rental and leasing services and lessors of intangible assets,121.4,20
+20,A,2011,2011,54,"Professional, scientific, and technical services",583.7,20
+20,A,2011,2011,5411,Legal services,81.6,20
+20,A,2011,2011,5412OP,"Miscellaneous professional, scientific, and technical services",395.9,20
+20,A,2011,2011,5415,Computer systems design and related services,106.1,20
+20,A,2011,2011,55,Management of companies and enterprises,168.6,20
+20,A,2011,2011,56,Administrative and waste management services,256.3,20
+20,A,2011,2011,561,Administrative and support services,215.7,20
+20,A,2011,2011,562,Waste management and remediation services,40.6,20
+20,A,2011,2011,6,"Educational services, health care, and social assistance",818.3,20
+20,A,2011,2011,61,Educational services,100.2,20
+20,A,2011,2011,62,Health care and social assistance,718.2,20
+20,A,2011,2011,621,Ambulatory health care services,278.1,20
+20,A,2011,2011,622,Hospitals,285.5,20
+20,A,2011,2011,623,Nursing and residential care facilities,78.7,20
+20,A,2011,2011,624,Social assistance,75.9,20
+20,A,2011,2011,7,"Arts, entertainment, recreation, accommodation, and food services",448.1,20
+20,A,2011,2011,71,"Arts, entertainment, and recreation",93.5,20
+20,A,2011,2011,711AS,"Performing arts, spectator sports, museums, and related activities",43.6,20
+20,A,2011,2011,713,"Amusements, gambling, and recreation industries",49.9,20
+20,A,2011,2011,72,Accommodation and food services,354.6,20
+20,A,2011,2011,721,Accommodation,76.7,20
+20,A,2011,2011,722,Food services and drinking places,277.9,20
+20,A,2011,2011,81,"Other services, except government",215.1,20
+20,A,2011,2011,FIRE,"Finance, insurance, real estate, rental, and leasing",1700.1,20
+20,A,2011,2011,G,Government,1227.2,20
+20,A,2011,2011,GF,Federal,436.8,20
+20,A,2011,2011,GFE,Government enterprises,41.6,20
+20,A,2011,2011,GFG,General government,395.2,20
+20,A,2011,2011,GFGD,National defense,281.0,20
+20,A,2011,2011,GFGN,Nondefense,114.2,20
+20,A,2011,2011,GSL,State and local,790.4,20
+20,A,2011,2011,GSLE,Government enterprises,174.8,20
+20,A,2011,2011,GSLG,General government,615.6,20
+20,A,2011,2011,HS,Housing,162.2,20
+20,A,2011,2011,ICT,Information-communications-technology-producing industries<sup>3</sup>,643.8,20;20.3.A
+20,A,2011,2011,II,All industries,12450.5,20
+20,A,2011,2011,ORE,Other real estate,452.3,20
+20,A,2011,2011,PGOOD,Private goods-producing industries<sup>1</sup>,4720.7,20;20.1.A
+20,A,2011,2011,PROF,Professional and business services,1008.6,20
+20,A,2011,2011,PSERV,Private services-producing industries<sup>2</sup>,6502.6,20;20.2.A
+20,A,2011,2011,PVT,Private industries,11223.3,20
+20,A,2012,2012,11,"Agriculture, forestry, fishing, and hunting",271.6,20
+20,A,2012,2012,111CA,Farms,255.4,20
+20,A,2012,2012,113FF,"Forestry, fishing, and related activities",16.2,20
+20,A,2012,2012,21,Mining,252.9,20
+20,A,2012,2012,211,Oil and gas extraction,137.7,20
+20,A,2012,2012,212,"Mining, except oil and gas",57.6,20
+20,A,2012,2012,213,Support activities for mining,57.6,20
+20,A,2012,2012,22,Utilities,180.9,20
+20,A,2012,2012,23,Construction,520.5,20
+20,A,2012,2012,311FT,Food and beverage and tobacco products,675.8,20
+20,A,2012,2012,313TT,Textile mills and textile product mills,35.8,20
+20,A,2012,2012,315AL,Apparel and leather and allied products,9.2,20
+20,A,2012,2012,31G,Manufacturing,3855.0,20
+20,A,2012,2012,31ND,Nondurable goods,2203.5,20
+20,A,2012,2012,321,Wood products,54.6,20
+20,A,2012,2012,322,Paper products,126.1,20
+20,A,2012,2012,323,Printing and related support activities,44.6,20
+20,A,2012,2012,324,Petroleum and coal products,674.0,20
+20,A,2012,2012,325,Chemical products,489.1,20
+20,A,2012,2012,326,Plastics and rubber products,148.8,20
+20,A,2012,2012,327,Nonmetallic mineral products,56.6,20
+20,A,2012,2012,331,Primary metals,203.5,20
+20,A,2012,2012,332,Fabricated metal products,205.1,20
+20,A,2012,2012,333,Machinery,251.6,20
+20,A,2012,2012,334,Computer and electronic products,126.3,20
+20,A,2012,2012,335,"Electrical equipment, appliances, and components",70.6,20
+20,A,2012,2012,3361MV,"Motor vehicles, bodies and trailers, and parts",400.9,20
+20,A,2012,2012,3364OT,Other transportation equipment,163.9,20
+20,A,2012,2012,337,Furniture and related products,43.3,20
+20,A,2012,2012,339,Miscellaneous manufacturing,75.2,20
+20,A,2012,2012,33DG,Durable goods,1651.6,20
+20,A,2012,2012,42,Wholesale trade,657.3,20
+20,A,2012,2012,441,Motor vehicle and parts dealers,58.6,20
+20,A,2012,2012,445,Food and beverage stores,73.8,20
+20,A,2012,2012,44RT,Retail trade,480.4,20
+20,A,2012,2012,452,General merchandise stores,76.6,20
+20,A,2012,2012,481,Air transportation,107.4,20
+20,A,2012,2012,482,Rail transportation,39.4,20
+20,A,2012,2012,483,Water transportation,36.9,20
+20,A,2012,2012,484,Truck transportation,169.4,20
+20,A,2012,2012,485,Transit and ground passenger transportation,14.5,20
+20,A,2012,2012,486,Pipeline transportation,11.1,20
+20,A,2012,2012,487OS,Other transportation and support activities,92.3,20
+20,A,2012,2012,48TW,Transportation and warehousing,532.6,20
+20,A,2012,2012,493,Warehousing and storage,61.7,20
+20,A,2012,2012,4A0,Other retail,271.3,20
+20,A,2012,2012,51,Information,619.9,20
+20,A,2012,2012,511,"Publishing industries, except internet (includes software)",106.4,20
+20,A,2012,2012,512,Motion picture and sound recording industries,48.9,20
+20,A,2012,2012,513,Broadcasting and telecommunications,360.8,20
+20,A,2012,2012,514,"Data processing, internet publishing, and other information services",103.8,20
+20,A,2012,2012,52,Finance and insurance,986.5,20
+20,A,2012,2012,521CI,"Federal Reserve banks, credit intermediation, and related activities",241.9,20
+20,A,2012,2012,523,"Securities, commodity contracts, and investments",245.7,20
+20,A,2012,2012,524,Insurance carriers and related activities,391.7,20
+20,A,2012,2012,525,"Funds, trusts, and other financial vehicles",107.2,20
+20,A,2012,2012,53,Real estate and rental and leasing,794.6,20
+20,A,2012,2012,531,Real estate,669.8,20
+20,A,2012,2012,532RL,Rental and leasing services and lessors of intangible assets,124.9,20
+20,A,2012,2012,54,"Professional, scientific, and technical services",593.2,20
+20,A,2012,2012,5411,Legal services,89.5,20
+20,A,2012,2012,5412OP,"Miscellaneous professional, scientific, and technical services",402.3,20
+20,A,2012,2012,5415,Computer systems design and related services,101.5,20
+20,A,2012,2012,55,Management of companies and enterprises,176.7,20
+20,A,2012,2012,56,Administrative and waste management services,270.2,20
+20,A,2012,2012,561,Administrative and support services,229.4,20
+20,A,2012,2012,562,Waste management and remediation services,40.7,20
+20,A,2012,2012,6,"Educational services, health care, and social assistance",857.6,20
+20,A,2012,2012,61,Educational services,95.4,20
+20,A,2012,2012,62,Health care and social assistance,762.2,20
+20,A,2012,2012,621,Ambulatory health care services,294.6,20
+20,A,2012,2012,622,Hospitals,310.9,20
+20,A,2012,2012,623,Nursing and residential care facilities,83.0,20
+20,A,2012,2012,624,Social assistance,73.7,20
+20,A,2012,2012,7,"Arts, entertainment, recreation, accommodation, and food services",470.8,20
+20,A,2012,2012,71,"Arts, entertainment, and recreation",92.8,20
+20,A,2012,2012,711AS,"Performing arts, spectator sports, museums, and related activities",43.0,20
+20,A,2012,2012,713,"Amusements, gambling, and recreation industries",49.8,20
+20,A,2012,2012,72,Accommodation and food services,378.0,20
+20,A,2012,2012,721,Accommodation,86.1,20
+20,A,2012,2012,722,Food services and drinking places,291.9,20
+20,A,2012,2012,81,"Other services, except government",227.4,20
+20,A,2012,2012,FIRE,"Finance, insurance, real estate, rental, and leasing",1781.1,20
+20,A,2012,2012,G,Government,1230.0,20
+20,A,2012,2012,GF,Federal,429.9,20
+20,A,2012,2012,GFE,Government enterprises,46.9,20
+20,A,2012,2012,GFG,General government,383.0,20
+20,A,2012,2012,GFGD,National defense,268.7,20
+20,A,2012,2012,GFGN,Nondefense,114.3,20
+20,A,2012,2012,GSL,State and local,800.0,20
+20,A,2012,2012,GSLE,Government enterprises,178.4,20
+20,A,2012,2012,GSLG,General government,621.6,20
+20,A,2012,2012,HS,Housing,180.5,20
+20,A,2012,2012,ICT,Information-communications-technology-producing industries<sup>3</sup>,699.2,20;20.3.A
+20,A,2012,2012,II,All industries,12978.2,20
+20,A,2012,2012,ORE,Other real estate,489.3,20
+20,A,2012,2012,PGOOD,Private goods-producing industries<sup>1</sup>,4900.1,20;20.1.A
+20,A,2012,2012,PROF,Professional and business services,1040.1,20
+20,A,2012,2012,PSERV,Private services-producing industries<sup>2</sup>,6848.2,20;20.2.A
+20,A,2012,2012,PVT,Private industries,11748.2,20
+20,A,2013,2013,11,"Agriculture, forestry, fishing, and hunting",271.5,20
+20,A,2013,2013,111CA,Farms,253.1,20
+20,A,2013,2013,113FF,"Forestry, fishing, and related activities",18.5,20
+20,A,2013,2013,21,Mining,267.1,20
+20,A,2013,2013,211,Oil and gas extraction,161.0,20
+20,A,2013,2013,212,"Mining, except oil and gas",53.0,20
+20,A,2013,2013,213,Support activities for mining,53.2,20
+20,A,2013,2013,22,Utilities,196.7,20
+20,A,2013,2013,23,Construction,564.1,20
+20,A,2013,2013,311FT,Food and beverage and tobacco products,691.9,20
+20,A,2013,2013,313TT,Textile mills and textile product mills,36.9,20
+20,A,2013,2013,315AL,Apparel and leather and allied products,9.2,20
+20,A,2013,2013,31G,Manufacturing,3957.2,20
+20,A,2013,2013,31ND,Nondurable goods,2264.4,20
+20,A,2013,2013,321,Wood products,59.7,20
+20,A,2013,2013,322,Paper products,128.3,20
+20,A,2013,2013,323,Printing and related support activities,44.3,20
+20,A,2013,2013,324,Petroleum and coal products,687.1,20
+20,A,2013,2013,325,Chemical products,511.4,20
+20,A,2013,2013,326,Plastics and rubber products,155.4,20
+20,A,2013,2013,327,Nonmetallic mineral products,59.0,20
+20,A,2013,2013,331,Primary metals,200.7,20
+20,A,2013,2013,332,Fabricated metal products,209.5,20
+20,A,2013,2013,333,Machinery,240.3,20
+20,A,2013,2013,334,Computer and electronic products,124.6,20
+20,A,2013,2013,335,"Electrical equipment, appliances, and components",66.1,20
+20,A,2013,2013,3361MV,"Motor vehicles, bodies and trailers, and parts",431.2,20
+20,A,2013,2013,3364OT,Other transportation equipment,170.3,20
+20,A,2013,2013,337,Furniture and related products,43.6,20
+20,A,2013,2013,339,Miscellaneous manufacturing,87.9,20
+20,A,2013,2013,33DG,Durable goods,1692.9,20
+20,A,2013,2013,42,Wholesale trade,710.8,20
+20,A,2013,2013,441,Motor vehicle and parts dealers,64.4,20
+20,A,2013,2013,445,Food and beverage stores,72.4,20
+20,A,2013,2013,44RT,Retail trade,511.9,20
+20,A,2013,2013,452,General merchandise stores,80.1,20
+20,A,2013,2013,481,Air transportation,110.1,20
+20,A,2013,2013,482,Rail transportation,40.9,20
+20,A,2013,2013,483,Water transportation,33.8,20
+20,A,2013,2013,484,Truck transportation,174.2,20
+20,A,2013,2013,485,Transit and ground passenger transportation,18.7,20
+20,A,2013,2013,486,Pipeline transportation,11.9,20
+20,A,2013,2013,487OS,Other transportation and support activities,97.0,20
+20,A,2013,2013,48TW,Transportation and warehousing,550.1,20
+20,A,2013,2013,493,Warehousing and storage,63.4,20
+20,A,2013,2013,4A0,Other retail,295.0,20
+20,A,2013,2013,51,Information,604.7,20
+20,A,2013,2013,511,"Publishing industries, except internet (includes software)",114.6,20
+20,A,2013,2013,512,Motion picture and sound recording industries,51.7,20
+20,A,2013,2013,513,Broadcasting and telecommunications,343.6,20
+20,A,2013,2013,514,"Data processing, internet publishing, and other information services",94.8,20
+20,A,2013,2013,52,Finance and insurance,1148.2,20
+20,A,2013,2013,521CI,"Federal Reserve banks, credit intermediation, and related activities",304.0,20
+20,A,2013,2013,523,"Securities, commodity contracts, and investments",264.4,20
+20,A,2013,2013,524,Insurance carriers and related activities,449.1,20
+20,A,2013,2013,525,"Funds, trusts, and other financial vehicles",130.8,20
+20,A,2013,2013,53,Real estate and rental and leasing,863.0,20
+20,A,2013,2013,531,Real estate,724.5,20
+20,A,2013,2013,532RL,Rental and leasing services and lessors of intangible assets,138.5,20
+20,A,2013,2013,54,"Professional, scientific, and technical services",608.6,20
+20,A,2013,2013,5411,Legal services,87.5,20
+20,A,2013,2013,5412OP,"Miscellaneous professional, scientific, and technical services",411.7,20
+20,A,2013,2013,5415,Computer systems design and related services,109.3,20
+20,A,2013,2013,55,Management of companies and enterprises,173.5,20
+20,A,2013,2013,56,Administrative and waste management services,287.6,20
+20,A,2013,2013,561,Administrative and support services,243.9,20
+20,A,2013,2013,562,Waste management and remediation services,43.8,20
+20,A,2013,2013,6,"Educational services, health care, and social assistance",861.0,20
+20,A,2013,2013,61,Educational services,102.3,20
+20,A,2013,2013,62,Health care and social assistance,758.6,20
+20,A,2013,2013,621,Ambulatory health care services,278.5,20
+20,A,2013,2013,622,Hospitals,322.8,20
+20,A,2013,2013,623,Nursing and residential care facilities,84.6,20
+20,A,2013,2013,624,Social assistance,72.8,20
+20,A,2013,2013,7,"Arts, entertainment, recreation, accommodation, and food services",488.9,20
+20,A,2013,2013,71,"Arts, entertainment, and recreation",99.0,20
+20,A,2013,2013,711AS,"Performing arts, spectator sports, museums, and related activities",46.9,20
+20,A,2013,2013,713,"Amusements, gambling, and recreation industries",52.1,20
+20,A,2013,2013,72,Accommodation and food services,389.9,20
+20,A,2013,2013,721,Accommodation,87.8,20
+20,A,2013,2013,722,Food services and drinking places,302.2,20
+20,A,2013,2013,81,"Other services, except government",226.7,20
+20,A,2013,2013,FIRE,"Finance, insurance, real estate, rental, and leasing",2011.2,20
+20,A,2013,2013,G,Government,1216.4,20
+20,A,2013,2013,GF,Federal,392.5,20
+20,A,2013,2013,GFE,Government enterprises,48.0,20
+20,A,2013,2013,GFG,General government,344.6,20
+20,A,2013,2013,GFGD,National defense,236.4,20
+20,A,2013,2013,GFGN,Nondefense,108.2,20
+20,A,2013,2013,GSL,State and local,823.9,20
+20,A,2013,2013,GSLE,Government enterprises,183.5,20
+20,A,2013,2013,GSLG,General government,640.4,20
+20,A,2013,2013,HS,Housing,195.5,20
+20,A,2013,2013,ICT,Information-communications-technology-producing industries<sup>3</sup>,688.8,20;20.3.A
+20,A,2013,2013,II,All industries,13508.1,20
+20,A,2013,2013,ORE,Other real estate,528.9,20
+20,A,2013,2013,PGOOD,Private goods-producing industries<sup>1</sup>,5060.0,20;20.1.A
+20,A,2013,2013,PROF,Professional and business services,1069.7,20
+20,A,2013,2013,PSERV,Private services-producing industries<sup>2</sup>,7231.7,20;20.2.A
+20,A,2013,2013,PVT,Private industries,12291.7,20
+20,A,2014,2014,11,"Agriculture, forestry, fishing, and hunting",298.0,20
+20,A,2014,2014,111CA,Farms,275.2,20
+20,A,2014,2014,113FF,"Forestry, fishing, and related activities",22.8,20
+20,A,2014,2014,21,Mining,309.5,20
+20,A,2014,2014,211,Oil and gas extraction,176.9,20
+20,A,2014,2014,212,"Mining, except oil and gas",59.1,20
+20,A,2014,2014,213,Support activities for mining,73.5,20
+20,A,2014,2014,22,Utilities,221.5,20
+20,A,2014,2014,23,Construction,614.7,20
+20,A,2014,2014,311FT,Food and beverage and tobacco products,711.5,20
+20,A,2014,2014,313TT,Textile mills and textile product mills,37.6,20
+20,A,2014,2014,315AL,Apparel and leather and allied products,9.1,20
+20,A,2014,2014,31G,Manufacturing,3989.1,20
+20,A,2014,2014,31ND,Nondurable goods,2219.7,20
+20,A,2014,2014,321,Wood products,66.3,20
+20,A,2014,2014,322,Paper products,128.9,20
+20,A,2014,2014,323,Printing and related support activities,43.5,20
+20,A,2014,2014,324,Petroleum and coal products,619.6,20
+20,A,2014,2014,325,Chemical products,504.9,20
+20,A,2014,2014,326,Plastics and rubber products,164.6,20
+20,A,2014,2014,327,Nonmetallic mineral products,64.8,20
+20,A,2014,2014,331,Primary metals,201.3,20
+20,A,2014,2014,332,Fabricated metal products,218.5,20
+20,A,2014,2014,333,Machinery,252.7,20
+20,A,2014,2014,334,Computer and electronic products,116.4,20
+20,A,2014,2014,335,"Electrical equipment, appliances, and components",74.1,20
+20,A,2014,2014,3361MV,"Motor vehicles, bodies and trailers, and parts",465.9,20
+20,A,2014,2014,3364OT,Other transportation equipment,182.3,20
+20,A,2014,2014,337,Furniture and related products,44.3,20
+20,A,2014,2014,339,Miscellaneous manufacturing,82.9,20
+20,A,2014,2014,33DG,Durable goods,1769.5,20
+20,A,2014,2014,42,Wholesale trade,765.6,20
+20,A,2014,2014,441,Motor vehicle and parts dealers,77.9,20
+20,A,2014,2014,445,Food and beverage stores,77.4,20
+20,A,2014,2014,44RT,Retail trade,556.9,20
+20,A,2014,2014,452,General merchandise stores,82.4,20
+20,A,2014,2014,481,Air transportation,115.1,20
+20,A,2014,2014,482,Rail transportation,43.7,20
+20,A,2014,2014,483,Water transportation,37.7,20
+20,A,2014,2014,484,Truck transportation,187.7,20
+20,A,2014,2014,485,Transit and ground passenger transportation,23.1,20
+20,A,2014,2014,486,Pipeline transportation,11.9,20
+20,A,2014,2014,487OS,Other transportation and support activities,107.0,20
+20,A,2014,2014,48TW,Transportation and warehousing,590.3,20
+20,A,2014,2014,493,Warehousing and storage,64.0,20
+20,A,2014,2014,4A0,Other retail,319.2,20
+20,A,2014,2014,51,Information,671.0,20
+20,A,2014,2014,511,"Publishing industries, except internet (includes software)",122.3,20
+20,A,2014,2014,512,Motion picture and sound recording industries,53.6,20
+20,A,2014,2014,513,Broadcasting and telecommunications,394.0,20
+20,A,2014,2014,514,"Data processing, internet publishing, and other information services",101.1,20
+20,A,2014,2014,52,Finance and insurance,1177.8,20
+20,A,2014,2014,521CI,"Federal Reserve banks, credit intermediation, and related activities",312.3,20
+20,A,2014,2014,523,"Securities, commodity contracts, and investments",313.8,20
+20,A,2014,2014,524,Insurance carriers and related activities,417.3,20
+20,A,2014,2014,525,"Funds, trusts, and other financial vehicles",134.4,20
+20,A,2014,2014,53,Real estate and rental and leasing,943.5,20
+20,A,2014,2014,531,Real estate,787.5,20
+20,A,2014,2014,532RL,Rental and leasing services and lessors of intangible assets,156.0,20
+20,A,2014,2014,54,"Professional, scientific, and technical services",648.8,20
+20,A,2014,2014,5411,Legal services,87.9,20
+20,A,2014,2014,5412OP,"Miscellaneous professional, scientific, and technical services",436.9,20
+20,A,2014,2014,5415,Computer systems design and related services,124.0,20
+20,A,2014,2014,55,Management of companies and enterprises,186.5,20
+20,A,2014,2014,56,Administrative and waste management services,334.9,20
+20,A,2014,2014,561,Administrative and support services,286.7,20
+20,A,2014,2014,562,Waste management and remediation services,48.2,20
+20,A,2014,2014,6,"Educational services, health care, and social assistance",891.4,20
+20,A,2014,2014,61,Educational services,104.8,20
+20,A,2014,2014,62,Health care and social assistance,786.5,20
+20,A,2014,2014,621,Ambulatory health care services,297.5,20
+20,A,2014,2014,622,Hospitals,322.9,20
+20,A,2014,2014,623,Nursing and residential care facilities,88.4,20
+20,A,2014,2014,624,Social assistance,77.8,20
+20,A,2014,2014,7,"Arts, entertainment, recreation, accommodation, and food services",525.0,20
+20,A,2014,2014,71,"Arts, entertainment, and recreation",105.0,20
+20,A,2014,2014,711AS,"Performing arts, spectator sports, museums, and related activities",50.8,20
+20,A,2014,2014,713,"Amusements, gambling, and recreation industries",54.1,20
+20,A,2014,2014,72,Accommodation and food services,420.0,20
+20,A,2014,2014,721,Accommodation,98.4,20
+20,A,2014,2014,722,Food services and drinking places,321.7,20
+20,A,2014,2014,81,"Other services, except government",241.8,20
+20,A,2014,2014,FIRE,"Finance, insurance, real estate, rental, and leasing",2121.3,20
+20,A,2014,2014,G,Government,1221.5,20
+20,A,2014,2014,GF,Federal,377.8,20
+20,A,2014,2014,GFE,Government enterprises,46.7,20
+20,A,2014,2014,GFG,General government,331.1,20
+20,A,2014,2014,GFGD,National defense,222.9,20
+20,A,2014,2014,GFGN,Nondefense,108.1,20
+20,A,2014,2014,GSL,State and local,843.7,20
+20,A,2014,2014,GSLE,Government enterprises,188.2,20
+20,A,2014,2014,GSLG,General government,655.5,20
+20,A,2014,2014,HS,Housing,200.9,20
+20,A,2014,2014,ICT,Information-communications-technology-producing industries<sup>3</sup>,759.2,20;20.3.A
+20,A,2014,2014,II,All industries,14187.6,20
+20,A,2014,2014,ORE,Other real estate,586.6,20
+20,A,2014,2014,PGOOD,Private goods-producing industries<sup>1</sup>,5211.4,20;20.1.A
+20,A,2014,2014,PROF,Professional and business services,1170.2,20
+20,A,2014,2014,PSERV,Private services-producing industries<sup>2</sup>,7754.7,20;20.2.A
+20,A,2014,2014,PVT,Private industries,12966.1,20
+20,A,2015,2015,11,"Agriculture, forestry, fishing, and hunting",275.8,20
+20,A,2015,2015,111CA,Farms,256.9,20
+20,A,2015,2015,113FF,"Forestry, fishing, and related activities",18.8,20
+20,A,2015,2015,21,Mining,219.2,20
+20,A,2015,2015,211,Oil and gas extraction,89.9,20
+20,A,2015,2015,212,"Mining, except oil and gas",56.6,20
+20,A,2015,2015,213,Support activities for mining,72.7,20
+20,A,2015,2015,22,Utilities,191.8,20
+20,A,2015,2015,23,Construction,680.1,20
+20,A,2015,2015,311FT,Food and beverage and tobacco products,684.9,20
+20,A,2015,2015,313TT,Textile mills and textile product mills,35.1,20
+20,A,2015,2015,315AL,Apparel and leather and allied products,8.7,20
+20,A,2015,2015,31G,Manufacturing,3588.8,20
+20,A,2015,2015,31ND,Nondurable goods,1877.3,20
+20,A,2015,2015,321,Wood products,68.3,20
+20,A,2015,2015,322,Paper products,124.5,20
+20,A,2015,2015,323,Printing and related support activities,42.1,20
+20,A,2015,2015,324,Petroleum and coal products,369.0,20
+20,A,2015,2015,325,Chemical products,456.5,20
+20,A,2015,2015,326,Plastics and rubber products,156.6,20
+20,A,2015,2015,327,Nonmetallic mineral products,65.9,20
+20,A,2015,2015,331,Primary metals,167.9,20
+20,A,2015,2015,332,Fabricated metal products,208.6,20
+20,A,2015,2015,333,Machinery,233.0,20
+20,A,2015,2015,334,Computer and electronic products,105.1,20
+20,A,2015,2015,335,"Electrical equipment, appliances, and components",65.8,20
+20,A,2015,2015,3361MV,"Motor vehicles, bodies and trailers, and parts",486.0,20
+20,A,2015,2015,3364OT,Other transportation equipment,177.3,20
+20,A,2015,2015,337,Furniture and related products,46.3,20
+20,A,2015,2015,339,Miscellaneous manufacturing,87.3,20
+20,A,2015,2015,33DG,Durable goods,1711.5,20
+20,A,2015,2015,42,Wholesale trade,756.3,20
+20,A,2015,2015,441,Motor vehicle and parts dealers,96.2,20
+20,A,2015,2015,445,Food and beverage stores,79.8,20
+20,A,2015,2015,44RT,Retail trade,600.8,20
+20,A,2015,2015,452,General merchandise stores,84.6,20
+20,A,2015,2015,481,Air transportation,104.7,20
+20,A,2015,2015,482,Rail transportation,36.3,20
+20,A,2015,2015,483,Water transportation,35.1,20
+20,A,2015,2015,484,Truck transportation,175.8,20
+20,A,2015,2015,485,Transit and ground passenger transportation,25.7,20
+20,A,2015,2015,486,Pipeline transportation,7.4,20
+20,A,2015,2015,487OS,Other transportation and support activities,107.6,20
+20,A,2015,2015,48TW,Transportation and warehousing,553.5,20
+20,A,2015,2015,493,Warehousing and storage,61.1,20
+20,A,2015,2015,4A0,Other retail,340.2,20
+20,A,2015,2015,51,Information,674.3,20
+20,A,2015,2015,511,"Publishing industries, except internet (includes software)",119.8,20
+20,A,2015,2015,512,Motion picture and sound recording industries,53.8,20
+20,A,2015,2015,513,Broadcasting and telecommunications,388.6,20
+20,A,2015,2015,514,"Data processing, internet publishing, and other information services",112.2,20
+20,A,2015,2015,52,Finance and insurance,1186.2,20
+20,A,2015,2015,521CI,"Federal Reserve banks, credit intermediation, and related activities",320.8,20
+20,A,2015,2015,523,"Securities, commodity contracts, and investments",310.8,20
+20,A,2015,2015,524,Insurance carriers and related activities,397.8,20
+20,A,2015,2015,525,"Funds, trusts, and other financial vehicles",156.8,20
+20,A,2015,2015,53,Real estate and rental and leasing,1031.9,20
+20,A,2015,2015,531,Real estate,893.2,20
+20,A,2015,2015,532RL,Rental and leasing services and lessors of intangible assets,138.7,20
+20,A,2015,2015,54,"Professional, scientific, and technical services",645.0,20
+20,A,2015,2015,5411,Legal services,86.2,20
+20,A,2015,2015,5412OP,"Miscellaneous professional, scientific, and technical services",443.9,20
+20,A,2015,2015,5415,Computer systems design and related services,114.9,20
+20,A,2015,2015,55,Management of companies and enterprises,195.3,20
+20,A,2015,2015,56,Administrative and waste management services,365.4,20
+20,A,2015,2015,561,Administrative and support services,316.5,20
+20,A,2015,2015,562,Waste management and remediation services,48.9,20
+20,A,2015,2015,6,"Educational services, health care, and social assistance",939.3,20
+20,A,2015,2015,61,Educational services,108.3,20
+20,A,2015,2015,62,Health care and social assistance,831.0,20
+20,A,2015,2015,621,Ambulatory health care services,315.9,20
+20,A,2015,2015,622,Hospitals,340.3,20
+20,A,2015,2015,623,Nursing and residential care facilities,92.8,20
+20,A,2015,2015,624,Social assistance,82.0,20
+20,A,2015,2015,7,"Arts, entertainment, recreation, accommodation, and food services",560.7,20
+20,A,2015,2015,71,"Arts, entertainment, and recreation",120.3,20
+20,A,2015,2015,711AS,"Performing arts, spectator sports, museums, and related activities",62.6,20
+20,A,2015,2015,713,"Amusements, gambling, and recreation industries",57.7,20
+20,A,2015,2015,72,Accommodation and food services,440.4,20
+20,A,2015,2015,721,Accommodation,96.0,20
+20,A,2015,2015,722,Food services and drinking places,344.4,20
+20,A,2015,2015,81,"Other services, except government",247.2,20
+20,A,2015,2015,FIRE,"Finance, insurance, real estate, rental, and leasing",2218.0,20
+20,A,2015,2015,G,Government,1227.2,20
+20,A,2015,2015,GF,Federal,364.2,20
+20,A,2015,2015,GFE,Government enterprises,38.2,20
+20,A,2015,2015,GFG,General government,326.0,20
+20,A,2015,2015,GFGD,National defense,211.7,20
+20,A,2015,2015,GFGN,Nondefense,114.3,20
+20,A,2015,2015,GSL,State and local,863.0,20
+20,A,2015,2015,GSLE,Government enterprises,191.4,20
+20,A,2015,2015,GSLG,General government,671.7,20
+20,A,2015,2015,HS,Housing,212.7,20
+20,A,2015,2015,ICT,Information-communications-technology-producing industries<sup>3</sup>,751.2,20;20.3.A
+20,A,2015,2015,II,All industries,13938.9,20
+20,A,2015,2015,ORE,Other real estate,680.4,20
+20,A,2015,2015,PGOOD,Private goods-producing industries<sup>1</sup>,4763.9,20;20.1.A
+20,A,2015,2015,PROF,Professional and business services,1205.7,20
+20,A,2015,2015,PSERV,Private services-producing industries<sup>2</sup>,7947.8,20;20.2.A
+20,A,2015,2015,PVT,Private industries,12711.7,20
+20,A,2016,2016,11,"Agriculture, forestry, fishing, and hunting",263.4,20
+20,A,2016,2016,111CA,Farms,249.5,20
+20,A,2016,2016,113FF,"Forestry, fishing, and related activities",13.9,20
+20,A,2016,2016,21,Mining,155.9,20
+20,A,2016,2016,211,Oil and gas extraction,68.7,20
+20,A,2016,2016,212,"Mining, except oil and gas",50.3,20
+20,A,2016,2016,213,Support activities for mining,36.9,20
+20,A,2016,2016,22,Utilities,167.1,20
+20,A,2016,2016,23,Construction,731.8,20
+20,A,2016,2016,311FT,Food and beverage and tobacco products,681.7,20
+20,A,2016,2016,313TT,Textile mills and textile product mills,33.3,20
+20,A,2016,2016,315AL,Apparel and leather and allied products,8.9,20
+20,A,2016,2016,31G,Manufacturing,3448.4,20
+20,A,2016,2016,31ND,Nondurable goods,1823.3,20
+20,A,2016,2016,321,Wood products,69.5,20
+20,A,2016,2016,322,Paper products,120.6,20
+20,A,2016,2016,323,Printing and related support activities,44.7,20
+20,A,2016,2016,324,Petroleum and coal products,355.7,20
+20,A,2016,2016,325,Chemical products,425.9,20
+20,A,2016,2016,326,Plastics and rubber products,152.6,20
+20,A,2016,2016,327,Nonmetallic mineral products,69.8,20
+20,A,2016,2016,331,Primary metals,147.1,20
+20,A,2016,2016,332,Fabricated metal products,201.1,20
+20,A,2016,2016,333,Machinery,218.4,20
+20,A,2016,2016,334,Computer and electronic products,106.9,20
+20,A,2016,2016,335,"Electrical equipment, appliances, and components",67.0,20
+20,A,2016,2016,3361MV,"Motor vehicles, bodies and trailers, and parts",470.2,20
+20,A,2016,2016,3364OT,Other transportation equipment,154.8,20
+20,A,2016,2016,337,Furniture and related products,46.5,20
+20,A,2016,2016,339,Miscellaneous manufacturing,73.8,20
+20,A,2016,2016,33DG,Durable goods,1625.0,20
+20,A,2016,2016,42,Wholesale trade,780.4,20
+20,A,2016,2016,441,Motor vehicle and parts dealers,112.0,20
+20,A,2016,2016,445,Food and beverage stores,81.1,20
+20,A,2016,2016,44RT,Retail trade,629.8,20
+20,A,2016,2016,452,General merchandise stores,82.7,20
+20,A,2016,2016,481,Air transportation,96.8,20
+20,A,2016,2016,482,Rail transportation,33.4,20
+20,A,2016,2016,483,Water transportation,36.5,20
+20,A,2016,2016,484,Truck transportation,172.7,20
+20,A,2016,2016,485,Transit and ground passenger transportation,26.8,20
+20,A,2016,2016,486,Pipeline transportation,6.0,20
+20,A,2016,2016,487OS,Other transportation and support activities,109.3,20
+20,A,2016,2016,48TW,Transportation and warehousing,542.9,20
+20,A,2016,2016,493,Warehousing and storage,61.4,20
+20,A,2016,2016,4A0,Other retail,354.1,20
+20,A,2016,2016,51,Information,721.6,20
+20,A,2016,2016,511,"Publishing industries, except internet (includes software)",137.8,20
+20,A,2016,2016,512,Motion picture and sound recording industries,53.1,20
+20,A,2016,2016,513,Broadcasting and telecommunications,405.6,20
+20,A,2016,2016,514,"Data processing, internet publishing, and other information services",125.1,20
+20,A,2016,2016,52,Finance and insurance,1168.2,20
+20,A,2016,2016,521CI,"Federal Reserve banks, credit intermediation, and related activities",352.9,20
+20,A,2016,2016,523,"Securities, commodity contracts, and investments",272.6,20
+20,A,2016,2016,524,Insurance carriers and related activities,392.0,20
+20,A,2016,2016,525,"Funds, trusts, and other financial vehicles",150.7,20
+20,A,2016,2016,53,Real estate and rental and leasing,1103.9,20
+20,A,2016,2016,531,Real estate,970.0,20
+20,A,2016,2016,532RL,Rental and leasing services and lessors of intangible assets,134.0,20
+20,A,2016,2016,54,"Professional, scientific, and technical services",679.8,20
+20,A,2016,2016,5411,Legal services,77.1,20
+20,A,2016,2016,5412OP,"Miscellaneous professional, scientific, and technical services",476.5,20
+20,A,2016,2016,5415,Computer systems design and related services,126.3,20
+20,A,2016,2016,55,Management of companies and enterprises,191.9,20
+20,A,2016,2016,56,Administrative and waste management services,422.3,20
+20,A,2016,2016,561,Administrative and support services,364.7,20
+20,A,2016,2016,562,Waste management and remediation services,57.7,20
+20,A,2016,2016,6,"Educational services, health care, and social assistance",978.2,20
+20,A,2016,2016,61,Educational services,106.7,20
+20,A,2016,2016,62,Health care and social assistance,871.5,20
+20,A,2016,2016,621,Ambulatory health care services,334.7,20
+20,A,2016,2016,622,Hospitals,353.1,20
+20,A,2016,2016,623,Nursing and residential care facilities,95.8,20
+20,A,2016,2016,624,Social assistance,87.8,20
+20,A,2016,2016,7,"Arts, entertainment, recreation, accommodation, and food services",581.3,20
+20,A,2016,2016,71,"Arts, entertainment, and recreation",123.6,20
+20,A,2016,2016,711AS,"Performing arts, spectator sports, museums, and related activities",63.0,20
+20,A,2016,2016,713,"Amusements, gambling, and recreation industries",60.6,20
+20,A,2016,2016,72,Accommodation and food services,457.7,20
+20,A,2016,2016,721,Accommodation,102.7,20
+20,A,2016,2016,722,Food services and drinking places,355.0,20
+20,A,2016,2016,81,"Other services, except government",266.3,20
+20,A,2016,2016,FIRE,"Finance, insurance, real estate, rental, and leasing",2272.1,20
+20,A,2016,2016,G,Government,1260.1,20
+20,A,2016,2016,GF,Federal,362.6,20
+20,A,2016,2016,GFE,Government enterprises,36.5,20
+20,A,2016,2016,GFG,General government,326.1,20
+20,A,2016,2016,GFGD,National defense,211.4,20
+20,A,2016,2016,GFGN,Nondefense,114.8,20
+20,A,2016,2016,GSL,State and local,897.4,20
+20,A,2016,2016,GSLE,Government enterprises,198.2,20
+20,A,2016,2016,GSLG,General government,699.2,20
+20,A,2016,2016,HS,Housing,228.6,20
+20,A,2016,2016,ICT,Information-communications-technology-producing industries<sup>3</sup>,814.3,20;20.3.A
+20,A,2016,2016,II,All industries,14093.2,20
+20,A,2016,2016,ORE,Other real estate,741.4,20
+20,A,2016,2016,PGOOD,Private goods-producing industries<sup>1</sup>,4599.5,20;20.1.A
+20,A,2016,2016,PROF,Professional and business services,1294.1,20
+20,A,2016,2016,PSERV,Private services-producing industries<sup>2</sup>,8233.6,20;20.2.A
+20,A,2016,2016,PVT,Private industries,12833.2,20
+20,A,2017,2017,11,"Agriculture, forestry, fishing, and hunting",272.1,20
+20,A,2017,2017,111CA,Farms,256.8,20
+20,A,2017,2017,113FF,"Forestry, fishing, and related activities",15.3,20
+20,A,2017,2017,21,Mining,195.5,20
+20,A,2017,2017,211,Oil and gas extraction,92.9,20
+20,A,2017,2017,212,"Mining, except oil and gas",49.6,20
+20,A,2017,2017,213,Support activities for mining,53.0,20
+20,A,2017,2017,22,Utilities,160.4,20
+20,A,2017,2017,23,Construction,737.7,20
+20,A,2017,2017,311FT,Food and beverage and tobacco products,677.9,20
+20,A,2017,2017,313TT,Textile mills and textile product mills,32.4,20
+20,A,2017,2017,315AL,Apparel and leather and allied products,6.3,20
+20,A,2017,2017,31G,Manufacturing,3566.9,20
+20,A,2017,2017,31ND,Nondurable goods,1915.5,20
+20,A,2017,2017,321,Wood products,72.8,20
+20,A,2017,2017,322,Paper products,129.4,20
+20,A,2017,2017,323,Printing and related support activities,43.3,20
+20,A,2017,2017,324,Petroleum and coal products,428.1,20
+20,A,2017,2017,325,Chemical products,437.6,20
+20,A,2017,2017,326,Plastics and rubber products,160.6,20
+20,A,2017,2017,327,Nonmetallic mineral products,68.8,20
+20,A,2017,2017,331,Primary metals,163.1,20
+20,A,2017,2017,332,Fabricated metal products,201.5,20
+20,A,2017,2017,333,Machinery,230.6,20
+20,A,2017,2017,334,Computer and electronic products,105.6,20
+20,A,2017,2017,335,"Electrical equipment, appliances, and components",66.6,20
+20,A,2017,2017,3361MV,"Motor vehicles, bodies and trailers, and parts",438.0,20
+20,A,2017,2017,3364OT,Other transportation equipment,184.7,20
+20,A,2017,2017,337,Furniture and related products,47.4,20
+20,A,2017,2017,339,Miscellaneous manufacturing,72.2,20
+20,A,2017,2017,33DG,Durable goods,1651.4,20
+20,A,2017,2017,42,Wholesale trade,877.7,20
+20,A,2017,2017,441,Motor vehicle and parts dealers,120.0,20
+20,A,2017,2017,445,Food and beverage stores,87.2,20
+20,A,2017,2017,44RT,Retail trade,668.0,20
+20,A,2017,2017,452,General merchandise stores,81.8,20
+20,A,2017,2017,481,Air transportation,107.6,20
+20,A,2017,2017,482,Rail transportation,35.2,20
+20,A,2017,2017,483,Water transportation,41.0,20
+20,A,2017,2017,484,Truck transportation,189.2,20
+20,A,2017,2017,485,Transit and ground passenger transportation,34.9,20
+20,A,2017,2017,486,Pipeline transportation,7.1,20
+20,A,2017,2017,487OS,Other transportation and support activities,113.7,20
+20,A,2017,2017,48TW,Transportation and warehousing,591.4,20
+20,A,2017,2017,493,Warehousing and storage,62.7,20
+20,A,2017,2017,4A0,Other retail,379.1,20
+20,A,2017,2017,51,Information,753.3,20
+20,A,2017,2017,511,"Publishing industries, except internet (includes software)",149.3,20
+20,A,2017,2017,512,Motion picture and sound recording industries,53.0,20
+20,A,2017,2017,513,Broadcasting and telecommunications,399.9,20
+20,A,2017,2017,514,"Data processing, internet publishing, and other information services",151.1,20
+20,A,2017,2017,52,Finance and insurance,1299.7,20
+20,A,2017,2017,521CI,"Federal Reserve banks, credit intermediation, and related activities",409.1,20
+20,A,2017,2017,523,"Securities, commodity contracts, and investments",265.9,20
+20,A,2017,2017,524,Insurance carriers and related activities,474.3,20
+20,A,2017,2017,525,"Funds, trusts, and other financial vehicles",150.5,20
+20,A,2017,2017,53,Real estate and rental and leasing,1122.4,20
+20,A,2017,2017,531,Real estate,985.9,20
+20,A,2017,2017,532RL,Rental and leasing services and lessors of intangible assets,136.5,20
+20,A,2017,2017,54,"Professional, scientific, and technical services",743.4,20
+20,A,2017,2017,5411,Legal services,88.3,20
+20,A,2017,2017,5412OP,"Miscellaneous professional, scientific, and technical services",505.5,20
+20,A,2017,2017,5415,Computer systems design and related services,149.7,20
+20,A,2017,2017,55,Management of companies and enterprises,198.5,20
+20,A,2017,2017,56,Administrative and waste management services,452.3,20
+20,A,2017,2017,561,Administrative and support services,389.9,20
+20,A,2017,2017,562,Waste management and remediation services,62.5,20
+20,A,2017,2017,6,"Educational services, health care, and social assistance",1027.4,20
+20,A,2017,2017,61,Educational services,111.9,20
+20,A,2017,2017,62,Health care and social assistance,915.5,20
+20,A,2017,2017,621,Ambulatory health care services,362.7,20
+20,A,2017,2017,622,Hospitals,360.0,20
+20,A,2017,2017,623,Nursing and residential care facilities,96.5,20
+20,A,2017,2017,624,Social assistance,96.3,20
+20,A,2017,2017,7,"Arts, entertainment, recreation, accommodation, and food services",621.8,20
+20,A,2017,2017,71,"Arts, entertainment, and recreation",138.7,20
+20,A,2017,2017,711AS,"Performing arts, spectator sports, museums, and related activities",72.2,20
+20,A,2017,2017,713,"Amusements, gambling, and recreation industries",66.5,20
+20,A,2017,2017,72,Accommodation and food services,483.0,20
+20,A,2017,2017,721,Accommodation,106.6,20
+20,A,2017,2017,722,Food services and drinking places,376.4,20
+20,A,2017,2017,81,"Other services, except government",275.7,20
+20,A,2017,2017,FIRE,"Finance, insurance, real estate, rental, and leasing",2422.1,20
+20,A,2017,2017,G,Government,1291.7,20
+20,A,2017,2017,GF,Federal,358.0,20
+20,A,2017,2017,GFE,Government enterprises,30.5,20
+20,A,2017,2017,GFG,General government,327.5,20
+20,A,2017,2017,GFGD,National defense,218.7,20
+20,A,2017,2017,GFGN,Nondefense,108.8,20
+20,A,2017,2017,GSL,State and local,933.7,20
+20,A,2017,2017,GSLE,Government enterprises,209.7,20
+20,A,2017,2017,GSLG,General government,724.0,20
+20,A,2017,2017,HS,Housing,238.3,20
+20,A,2017,2017,ICT,Information-communications-technology-producing industries<sup>3</sup>,862.0,20;20.3.A
+20,A,2017,2017,II,All industries,14856.0,20
+20,A,2017,2017,ORE,Other real estate,747.6,20
+20,A,2017,2017,PGOOD,Private goods-producing industries<sup>1</sup>,4772.2,20;20.1.A
+20,A,2017,2017,PROF,Professional and business services,1394.2,20
+20,A,2017,2017,PSERV,Private services-producing industries<sup>2</sup>,8792.1,20;20.2.A
+20,A,2017,2017,PVT,Private industries,13564.3,20
+20,A,2018,2018,11,"Agriculture, forestry, fishing, and hunting",271.0,20
+20,A,2018,2018,111CA,Farms,258.2,20
+20,A,2018,2018,113FF,"Forestry, fishing, and related activities",12.8,20
+20,A,2018,2018,21,Mining,272.1,20
+20,A,2018,2018,211,Oil and gas extraction,157.4,20
+20,A,2018,2018,212,"Mining, except oil and gas",54.4,20
+20,A,2018,2018,213,Support activities for mining,60.2,20
+20,A,2018,2018,22,Utilities,195.1,20
+20,A,2018,2018,23,Construction,772.9,20
+20,A,2018,2018,311FT,Food and beverage and tobacco products,686.0,20
+20,A,2018,2018,313TT,Textile mills and textile product mills,34.1,20
+20,A,2018,2018,315AL,Apparel and leather and allied products,7.6,20
+20,A,2018,2018,31G,Manufacturing,3781.6,20
+20,A,2018,2018,31ND,Nondurable goods,2015.3,20
+20,A,2018,2018,321,Wood products,83.4,20
+20,A,2018,2018,322,Paper products,130.0,20
+20,A,2018,2018,323,Printing and related support activities,41.7,20
+20,A,2018,2018,324,Petroleum and coal products,514.6,20
+20,A,2018,2018,325,Chemical products,429.2,20
+20,A,2018,2018,326,Plastics and rubber products,172.0,20
+20,A,2018,2018,327,Nonmetallic mineral products,72.0,20
+20,A,2018,2018,331,Primary metals,186.8,20
+20,A,2018,2018,332,Fabricated metal products,221.4,20
+20,A,2018,2018,333,Machinery,234.8,20
+20,A,2018,2018,334,Computer and electronic products,106.7,20
+20,A,2018,2018,335,"Electrical equipment, appliances, and components",68.3,20
+20,A,2018,2018,3361MV,"Motor vehicles, bodies and trailers, and parts",476.9,20
+20,A,2018,2018,3364OT,Other transportation equipment,193.5,20
+20,A,2018,2018,337,Furniture and related products,46.7,20
+20,A,2018,2018,339,Miscellaneous manufacturing,75.7,20
+20,A,2018,2018,33DG,Durable goods,1766.3,20
+20,A,2018,2018,42,Wholesale trade,953.0,20
+20,A,2018,2018,441,Motor vehicle and parts dealers,127.2,20
+20,A,2018,2018,445,Food and beverage stores,89.0,20
+20,A,2018,2018,44RT,Retail trade,710.7,20
+20,A,2018,2018,452,General merchandise stores,87.5,20
+20,A,2018,2018,481,Air transportation,122.6,20
+20,A,2018,2018,482,Rail transportation,39.9,20
+20,A,2018,2018,483,Water transportation,44.1,20
+20,A,2018,2018,484,Truck transportation,209.9,20
+20,A,2018,2018,485,Transit and ground passenger transportation,49.3,20
+20,A,2018,2018,486,Pipeline transportation,11.6,20
+20,A,2018,2018,487OS,Other transportation and support activities,122.9,20
+20,A,2018,2018,48TW,Transportation and warehousing,661.7,20
+20,A,2018,2018,493,Warehousing and storage,61.3,20
+20,A,2018,2018,4A0,Other retail,407.1,20
+20,A,2018,2018,51,Information,836.4,20
+20,A,2018,2018,511,"Publishing industries, except internet (includes software)",153.2,20
+20,A,2018,2018,512,Motion picture and sound recording industries,68.9,20
+20,A,2018,2018,513,Broadcasting and telecommunications,412.3,20
+20,A,2018,2018,514,"Data processing, internet publishing, and other information services",201.9,20
+20,A,2018,2018,52,Finance and insurance,1363.4,20
+20,A,2018,2018,521CI,"Federal Reserve banks, credit intermediation, and related activities",425.3,20
+20,A,2018,2018,523,"Securities, commodity contracts, and investments",288.1,20
+20,A,2018,2018,524,Insurance carriers and related activities,501.9,20
+20,A,2018,2018,525,"Funds, trusts, and other financial vehicles",148.2,20
+20,A,2018,2018,53,Real estate and rental and leasing,1153.5,20
+20,A,2018,2018,531,Real estate,1000.9,20
+20,A,2018,2018,532RL,Rental and leasing services and lessors of intangible assets,152.7,20
+20,A,2018,2018,54,"Professional, scientific, and technical services",777.9,20
+20,A,2018,2018,5411,Legal services,81.7,20
+20,A,2018,2018,5412OP,"Miscellaneous professional, scientific, and technical services",535.5,20
+20,A,2018,2018,5415,Computer systems design and related services,160.7,20
+20,A,2018,2018,55,Management of companies and enterprises,212.6,20
+20,A,2018,2018,56,Administrative and waste management services,501.4,20
+20,A,2018,2018,561,Administrative and support services,434.9,20
+20,A,2018,2018,562,Waste management and remediation services,66.5,20
+20,A,2018,2018,6,"Educational services, health care, and social assistance",1056.9,20
+20,A,2018,2018,61,Educational services,112.3,20
+20,A,2018,2018,62,Health care and social assistance,944.6,20
+20,A,2018,2018,621,Ambulatory health care services,369.5,20
+20,A,2018,2018,622,Hospitals,378.2,20
+20,A,2018,2018,623,Nursing and residential care facilities,96.6,20
+20,A,2018,2018,624,Social assistance,100.2,20
+20,A,2018,2018,7,"Arts, entertainment, recreation, accommodation, and food services",661.0,20
+20,A,2018,2018,71,"Arts, entertainment, and recreation",147.1,20
+20,A,2018,2018,711AS,"Performing arts, spectator sports, museums, and related activities",76.3,20
+20,A,2018,2018,713,"Amusements, gambling, and recreation industries",70.7,20
+20,A,2018,2018,72,Accommodation and food services,513.9,20
+20,A,2018,2018,721,Accommodation,112.2,20
+20,A,2018,2018,722,Food services and drinking places,401.7,20
+20,A,2018,2018,81,"Other services, except government",283.7,20
+20,A,2018,2018,FIRE,"Finance, insurance, real estate, rental, and leasing",2516.9,20
+20,A,2018,2018,G,Government,1383.2,20
+20,A,2018,2018,GF,Federal,389.0,20
+20,A,2018,2018,GFE,Government enterprises,31.7,20
+20,A,2018,2018,GFG,General government,357.3,20
+20,A,2018,2018,GFGD,National defense,239.4,20
+20,A,2018,2018,GFGN,Nondefense,117.8,20
+20,A,2018,2018,GSL,State and local,994.2,20
+20,A,2018,2018,GSLE,Government enterprises,221.5,20
+20,A,2018,2018,GSLG,General government,772.8,20
+20,A,2018,2018,HS,Housing,239.8,20
+20,A,2018,2018,ICT,Information-communications-technology-producing industries<sup>3</sup>,944.8,20;20.3.A
+20,A,2018,2018,II,All industries,15848.0,20
+20,A,2018,2018,ORE,Other real estate,761.1,20
+20,A,2018,2018,PGOOD,Private goods-producing industries<sup>1</sup>,5097.6,20;20.1.A
+20,A,2018,2018,PROF,Professional and business services,1491.9,20
+20,A,2018,2018,PSERV,Private services-producing industries<sup>2</sup>,9367.2,20;20.2.A
+20,A,2018,2018,PVT,Private industries,14464.8,20
+20,A,2019,2019,11,"Agriculture, forestry, fishing, and hunting",274.8,20
+20,A,2019,2019,111CA,Farms,265.4,20
+20,A,2019,2019,113FF,"Forestry, fishing, and related activities",9.4,20
+20,A,2019,2019,21,Mining,263.7,20
+20,A,2019,2019,211,Oil and gas extraction,143.2,20
+20,A,2019,2019,212,"Mining, except oil and gas",53.0,20
+20,A,2019,2019,213,Support activities for mining,67.5,20
+20,A,2019,2019,22,Utilities,186.4,20
+20,A,2019,2019,23,Construction,779.2,20
+20,A,2019,2019,311FT,Food and beverage and tobacco products,705.0,20
+20,A,2019,2019,313TT,Textile mills and textile product mills,33.2,20
+20,A,2019,2019,315AL,Apparel and leather and allied products,7.7,20
+20,A,2019,2019,31G,Manufacturing,3672.6,20
+20,A,2019,2019,31ND,Nondurable goods,1964.6,20
+20,A,2019,2019,321,Wood products,75.6,20
+20,A,2019,2019,322,Paper products,128.2,20
+20,A,2019,2019,323,Printing and related support activities,39.6,20
+20,A,2019,2019,324,Petroleum and coal products,454.3,20
+20,A,2019,2019,325,Chemical products,431.0,20
+20,A,2019,2019,326,Plastics and rubber products,165.5,20
+20,A,2019,2019,327,Nonmetallic mineral products,72.0,20
+20,A,2019,2019,331,Primary metals,168.5,20
+20,A,2019,2019,332,Fabricated metal products,218.7,20
+20,A,2019,2019,333,Machinery,230.2,20
+20,A,2019,2019,334,Computer and electronic products,101.0,20
+20,A,2019,2019,335,"Electrical equipment, appliances, and components",71.4,20
+20,A,2019,2019,3361MV,"Motor vehicles, bodies and trailers, and parts",488.5,20
+20,A,2019,2019,3364OT,Other transportation equipment,162.9,20
+20,A,2019,2019,337,Furniture and related products,43.8,20
+20,A,2019,2019,339,Miscellaneous manufacturing,75.4,20
+20,A,2019,2019,33DG,Durable goods,1708.0,20
+20,A,2019,2019,42,Wholesale trade,936.0,20
+20,A,2019,2019,441,Motor vehicle and parts dealers,113.8,20
+20,A,2019,2019,445,Food and beverage stores,94.7,20
+20,A,2019,2019,44RT,Retail trade,710.4,20
+20,A,2019,2019,452,General merchandise stores,84.6,20
+20,A,2019,2019,481,Air transportation,132.1,20
+20,A,2019,2019,482,Rail transportation,38.7,20
+20,A,2019,2019,483,Water transportation,45.4,20
+20,A,2019,2019,484,Truck transportation,212.0,20
+20,A,2019,2019,485,Transit and ground passenger transportation,55.2,20
+20,A,2019,2019,486,Pipeline transportation,22.7,20
+20,A,2019,2019,487OS,Other transportation and support activities,120.5,20
+20,A,2019,2019,48TW,Transportation and warehousing,688.1,20
+20,A,2019,2019,493,Warehousing and storage,61.6,20
+20,A,2019,2019,4A0,Other retail,417.3,20
+20,A,2019,2019,51,Information,818.4,20
+20,A,2019,2019,511,"Publishing industries, except internet (includes software)",140.1,20
+20,A,2019,2019,512,Motion picture and sound recording industries,78.3,20
+20,A,2019,2019,513,Broadcasting and telecommunications,392.4,20
+20,A,2019,2019,514,"Data processing, internet publishing, and other information services",207.6,20
+20,A,2019,2019,52,Finance and insurance,1355.6,20
+20,A,2019,2019,521CI,"Federal Reserve banks, credit intermediation, and related activities",379.8,20
+20,A,2019,2019,523,"Securities, commodity contracts, and investments",329.0,20
+20,A,2019,2019,524,Insurance carriers and related activities,501.2,20
+20,A,2019,2019,525,"Funds, trusts, and other financial vehicles",145.6,20
+20,A,2019,2019,53,Real estate and rental and leasing,1252.0,20
+20,A,2019,2019,531,Real estate,1091.0,20
+20,A,2019,2019,532RL,Rental and leasing services and lessors of intangible assets,160.9,20
+20,A,2019,2019,54,"Professional, scientific, and technical services",822.7,20
+20,A,2019,2019,5411,Legal services,80.8,20
+20,A,2019,2019,5412OP,"Miscellaneous professional, scientific, and technical services",588.7,20
+20,A,2019,2019,5415,Computer systems design and related services,153.2,20
+20,A,2019,2019,55,Management of companies and enterprises,226.1,20
+20,A,2019,2019,56,Administrative and waste management services,543.2,20
+20,A,2019,2019,561,Administrative and support services,473.9,20
+20,A,2019,2019,562,Waste management and remediation services,69.3,20
+20,A,2019,2019,6,"Educational services, health care, and social assistance",1101.5,20
+20,A,2019,2019,61,Educational services,112.9,20
+20,A,2019,2019,62,Health care and social assistance,988.7,20
+20,A,2019,2019,621,Ambulatory health care services,378.8,20
+20,A,2019,2019,622,Hospitals,406.2,20
+20,A,2019,2019,623,Nursing and residential care facilities,102.6,20
+20,A,2019,2019,624,Social assistance,100.9,20
+20,A,2019,2019,7,"Arts, entertainment, recreation, accommodation, and food services",690.0,20
+20,A,2019,2019,71,"Arts, entertainment, and recreation",159.6,20
+20,A,2019,2019,711AS,"Performing arts, spectator sports, museums, and related activities",83.9,20
+20,A,2019,2019,713,"Amusements, gambling, and recreation industries",75.7,20
+20,A,2019,2019,72,Accommodation and food services,530.5,20
+20,A,2019,2019,721,Accommodation,111.6,20
+20,A,2019,2019,722,Food services and drinking places,418.8,20
+20,A,2019,2019,81,"Other services, except government",298.9,20
+20,A,2019,2019,FIRE,"Finance, insurance, real estate, rental, and leasing",2607.6,20
+20,A,2019,2019,G,Government,1498.2,20
+20,A,2019,2019,GF,Federal,424.8,20
+20,A,2019,2019,GFE,Government enterprises,33.3,20
+20,A,2019,2019,GFG,General government,391.5,20
+20,A,2019,2019,GFGD,National defense,270.1,20
+20,A,2019,2019,GFGN,Nondefense,121.5,20
+20,A,2019,2019,GSL,State and local,1073.4,20
+20,A,2019,2019,GSLE,Government enterprises,231.3,20
+20,A,2019,2019,GSLG,General government,842.1,20
+20,A,2019,2019,HS,Housing,247.5,20
+20,A,2019,2019,ICT,Information-communications-technology-producing industries<sup>3</sup>,912.1,20;20.3.A
+20,A,2019,2019,II,All industries,16118.0,20
+20,A,2019,2019,ORE,Other real estate,843.5,20
+20,A,2019,2019,PGOOD,Private goods-producing industries<sup>1</sup>,4990.4,20;20.1.A
+20,A,2019,2019,PROF,Professional and business services,1592.1,20
+20,A,2019,2019,PSERV,Private services-producing industries<sup>2</sup>,9629.4,20;20.2.A
+20,A,2019,2019,PVT,Private industries,14619.7,20
+20,A,2020,2020,11,"Agriculture, forestry, fishing, and hunting",280.4,20
+20,A,2020,2020,111CA,Farms,270.4,20
+20,A,2020,2020,113FF,"Forestry, fishing, and related activities",10.0,20
+20,A,2020,2020,21,Mining,181.3,20
+20,A,2020,2020,211,Oil and gas extraction,107.1,20
+20,A,2020,2020,212,"Mining, except oil and gas",39.4,20
+20,A,2020,2020,213,Support activities for mining,34.8,20
+20,A,2020,2020,22,Utilities,148.2,20
+20,A,2020,2020,23,Construction,845.7,20
+20,A,2020,2020,311FT,Food and beverage and tobacco products,710.1,20
+20,A,2020,2020,313TT,Textile mills and textile product mills,30.1,20
+20,A,2020,2020,315AL,Apparel and leather and allied products,7.7,20
+20,A,2020,2020,31G,Manufacturing,3253.7,20
+20,A,2020,2020,31ND,Nondurable goods,1720.1,20
+20,A,2020,2020,321,Wood products,80.7,20
+20,A,2020,2020,322,Paper products,115.1,20
+20,A,2020,2020,323,Printing and related support activities,37.7,20
+20,A,2020,2020,324,Petroleum and coal products,292.6,20
+20,A,2020,2020,325,Chemical products,372.2,20
+20,A,2020,2020,326,Plastics and rubber products,154.6,20
+20,A,2020,2020,327,Nonmetallic mineral products,69.5,20
+20,A,2020,2020,331,Primary metals,142.7,20
+20,A,2020,2020,332,Fabricated metal products,198.0,20
+20,A,2020,2020,333,Machinery,202.2,20
+20,A,2020,2020,334,Computer and electronic products,93.7,20
+20,A,2020,2020,335,"Electrical equipment, appliances, and components",69.5,20
+20,A,2020,2020,3361MV,"Motor vehicles, bodies and trailers, and parts",433.6,20
+20,A,2020,2020,3364OT,Other transportation equipment,138.0,20
+20,A,2020,2020,337,Furniture and related products,40.5,20
+20,A,2020,2020,339,Miscellaneous manufacturing,65.3,20
+20,A,2020,2020,33DG,Durable goods,1533.6,20
+20,A,2020,2020,42,Wholesale trade,823.7,20
+20,A,2020,2020,441,Motor vehicle and parts dealers,101.8,20
+20,A,2020,2020,445,Food and beverage stores,98.4,20
+20,A,2020,2020,44RT,Retail trade,734.5,20
+20,A,2020,2020,452,General merchandise stores,89.5,20
+20,A,2020,2020,481,Air transportation,62.5,20
+20,A,2020,2020,482,Rail transportation,32.2,20
+20,A,2020,2020,483,Water transportation,26.7,20
+20,A,2020,2020,484,Truck transportation,216.8,20
+20,A,2020,2020,485,Transit and ground passenger transportation,32.4,20
+20,A,2020,2020,486,Pipeline transportation,20.8,20
+20,A,2020,2020,487OS,Other transportation and support activities,124.4,20
+20,A,2020,2020,48TW,Transportation and warehousing,571.6,20
+20,A,2020,2020,493,Warehousing and storage,55.9,20
+20,A,2020,2020,4A0,Other retail,444.9,20
+20,A,2020,2020,51,Information,842.2,20
+20,A,2020,2020,511,"Publishing industries, except internet (includes software)",141.9,20
+20,A,2020,2020,512,Motion picture and sound recording industries,71.4,20
+20,A,2020,2020,513,Broadcasting and telecommunications,407.0,20
+20,A,2020,2020,514,"Data processing, internet publishing, and other information services",221.9,20
+20,A,2020,2020,52,Finance and insurance,1403.4,20
+20,A,2020,2020,521CI,"Federal Reserve banks, credit intermediation, and related activities",375.4,20
+20,A,2020,2020,523,"Securities, commodity contracts, and investments",321.7,20
+20,A,2020,2020,524,Insurance carriers and related activities,551.5,20
+20,A,2020,2020,525,"Funds, trusts, and other financial vehicles",154.8,20
+20,A,2020,2020,53,Real estate and rental and leasing,1241.2,20
+20,A,2020,2020,531,Real estate,1082.7,20
+20,A,2020,2020,532RL,Rental and leasing services and lessors of intangible assets,158.5,20
+20,A,2020,2020,54,"Professional, scientific, and technical services",846.9,20
+20,A,2020,2020,5411,Legal services,86.2,20
+20,A,2020,2020,5412OP,"Miscellaneous professional, scientific, and technical services",603.0,20
+20,A,2020,2020,5415,Computer systems design and related services,157.8,20
+20,A,2020,2020,55,Management of companies and enterprises,235.3,20
+20,A,2020,2020,56,Administrative and waste management services,501.2,20
+20,A,2020,2020,561,Administrative and support services,433.7,20
+20,A,2020,2020,562,Waste management and remediation services,67.6,20
+20,A,2020,2020,6,"Educational services, health care, and social assistance",1023.5,20
+20,A,2020,2020,61,Educational services,97.8,20
+20,A,2020,2020,62,Health care and social assistance,925.7,20
+20,A,2020,2020,621,Ambulatory health care services,346.6,20
+20,A,2020,2020,622,Hospitals,381.7,20
+20,A,2020,2020,623,Nursing and residential care facilities,93.2,20
+20,A,2020,2020,624,Social assistance,104.2,20
+20,A,2020,2020,7,"Arts, entertainment, recreation, accommodation, and food services",568.7,20
+20,A,2020,2020,71,"Arts, entertainment, and recreation",134.3,20
+20,A,2020,2020,711AS,"Performing arts, spectator sports, museums, and related activities",67.7,20
+20,A,2020,2020,713,"Amusements, gambling, and recreation industries",66.6,20
+20,A,2020,2020,72,Accommodation and food services,434.4,20
+20,A,2020,2020,721,Accommodation,56.0,20
+20,A,2020,2020,722,Food services and drinking places,378.4,20
+20,A,2020,2020,81,"Other services, except government",281.6,20
+20,A,2020,2020,FIRE,"Finance, insurance, real estate, rental, and leasing",2644.6,20
+20,A,2020,2020,G,Government,1556.3,20
+20,A,2020,2020,GF,Federal,462.0,20
+20,A,2020,2020,GFE,Government enterprises,28.5,20
+20,A,2020,2020,GFG,General government,433.5,20
+20,A,2020,2020,GFGD,National defense,274.3,20
+20,A,2020,2020,GFGN,Nondefense,159.2,20
+20,A,2020,2020,GSL,State and local,1094.4,20
+20,A,2020,2020,GSLE,Government enterprises,207.7,20
+20,A,2020,2020,GSLG,General government,886.7,20
+20,A,2020,2020,HS,Housing,279.1,20
+20,A,2020,2020,ICT,Information-communications-technology-producing industries<sup>3</sup>,943.4,20;20.3.A
+20,A,2020,2020,II,All industries,15339.4,20
+20,A,2020,2020,ORE,Other real estate,803.6,20
+20,A,2020,2020,PGOOD,Private goods-producing industries<sup>1</sup>,4561.0,20;20.1.A
+20,A,2020,2020,PROF,Professional and business services,1583.5,20
+20,A,2020,2020,PSERV,Private services-producing industries<sup>2</sup>,9222.0,20;20.2.A
+20,A,2020,2020,PVT,Private industries,13783.0,20
+20,A,2021,2021,11,"Agriculture, forestry, fishing, and hunting",306.3,20
+20,A,2021,2021,111CA,Farms,289.7,20
+20,A,2021,2021,113FF,"Forestry, fishing, and related activities",16.6,20
+20,A,2021,2021,21,Mining,277.4,20
+20,A,2021,2021,211,Oil and gas extraction,195.0,20
+20,A,2021,2021,212,"Mining, except oil and gas",48.9,20
+20,A,2021,2021,213,Support activities for mining,33.5,20
+20,A,2021,2021,22,Utilities,201.2,20
+20,A,2021,2021,23,Construction,973.5,20
+20,A,2021,2021,311FT,Food and beverage and tobacco products,780.2,20
+20,A,2021,2021,313TT,Textile mills and textile product mills,34.1,20
+20,A,2021,2021,315AL,Apparel and leather and allied products,8.1,20
+20,A,2021,2021,31G,Manufacturing,3892.0,20
+20,A,2021,2021,31ND,Nondurable goods,2080.9,20
+20,A,2021,2021,321,Wood products,103.5,20
+20,A,2021,2021,322,Paper products,132.1,20
+20,A,2021,2021,323,Printing and related support activities,39.0,20
+20,A,2021,2021,324,Petroleum and coal products,462.7,20
+20,A,2021,2021,325,Chemical products,432.5,20
+20,A,2021,2021,326,Plastics and rubber products,192.3,20
+20,A,2021,2021,327,Nonmetallic mineral products,77.8,20
+20,A,2021,2021,331,Primary metals,207.9,20
+20,A,2021,2021,332,Fabricated metal products,243.0,20
+20,A,2021,2021,333,Machinery,233.0,20
+20,A,2021,2021,334,Computer and electronic products,92.0,20
+20,A,2021,2021,335,"Electrical equipment, appliances, and components",80.9,20
+20,A,2021,2021,3361MV,"Motor vehicles, bodies and trailers, and parts",523.6,20
+20,A,2021,2021,3364OT,Other transportation equipment,127.6,20
+20,A,2021,2021,337,Furniture and related products,44.9,20
+20,A,2021,2021,339,Miscellaneous manufacturing,77.0,20
+20,A,2021,2021,33DG,Durable goods,1811.1,20
+20,A,2021,2021,42,Wholesale trade,1123.0,20
+20,A,2021,2021,441,Motor vehicle and parts dealers,123.3,20
+20,A,2021,2021,445,Food and beverage stores,111.4,20
+20,A,2021,2021,44RT,Retail trade,940.4,20
+20,A,2021,2021,452,General merchandise stores,98.0,20
+20,A,2021,2021,481,Air transportation,97.6,20
+20,A,2021,2021,482,Rail transportation,38.1,20
+20,A,2021,2021,483,Water transportation,20.7,20
+20,A,2021,2021,484,Truck transportation,259.1,20
+20,A,2021,2021,485,Transit and ground passenger transportation,40.6,20
+20,A,2021,2021,486,Pipeline transportation,22.1,20
+20,A,2021,2021,487OS,Other transportation and support activities,159.0,20
+20,A,2021,2021,48TW,Transportation and warehousing,695.9,20
+20,A,2021,2021,493,Warehousing and storage,58.7,20
+20,A,2021,2021,4A0,Other retail,607.7,20
+20,A,2021,2021,51,Information,952.4,20
+20,A,2021,2021,511,"Publishing industries, except internet (includes software)",146.4,20
+20,A,2021,2021,512,Motion picture and sound recording industries,75.2,20
+20,A,2021,2021,513,Broadcasting and telecommunications,438.6,20
+20,A,2021,2021,514,"Data processing, internet publishing, and other information services",292.3,20
+20,A,2021,2021,52,Finance and insurance,1466.4,20
+20,A,2021,2021,521CI,"Federal Reserve banks, credit intermediation, and related activities",351.7,20
+20,A,2021,2021,523,"Securities, commodity contracts, and investments",363.0,20
+20,A,2021,2021,524,Insurance carriers and related activities,593.4,20
+20,A,2021,2021,525,"Funds, trusts, and other financial vehicles",158.2,20
+20,A,2021,2021,53,Real estate and rental and leasing,1525.9,20
+20,A,2021,2021,531,Real estate,1282.6,20
+20,A,2021,2021,532RL,Rental and leasing services and lessors of intangible assets,243.3,20
+20,A,2021,2021,54,"Professional, scientific, and technical services",934.6,20
+20,A,2021,2021,5411,Legal services,85.4,20
+20,A,2021,2021,5412OP,"Miscellaneous professional, scientific, and technical services",674.6,20
+20,A,2021,2021,5415,Computer systems design and related services,174.5,20
+20,A,2021,2021,55,Management of companies and enterprises,250.8,20
+20,A,2021,2021,56,Administrative and waste management services,547.4,20
+20,A,2021,2021,561,Administrative and support services,473.5,20
+20,A,2021,2021,562,Waste management and remediation services,73.9,20
+20,A,2021,2021,6,"Educational services, health care, and social assistance",1172.1,20
+20,A,2021,2021,61,Educational services,105.3,20
+20,A,2021,2021,62,Health care and social assistance,1066.8,20
+20,A,2021,2021,621,Ambulatory health care services,399.5,20
+20,A,2021,2021,622,Hospitals,443.6,20
+20,A,2021,2021,623,Nursing and residential care facilities,101.1,20
+20,A,2021,2021,624,Social assistance,122.6,20
+20,A,2021,2021,7,"Arts, entertainment, recreation, accommodation, and food services",745.5,20
+20,A,2021,2021,71,"Arts, entertainment, and recreation",175.3,20
+20,A,2021,2021,711AS,"Performing arts, spectator sports, museums, and related activities",89.6,20
+20,A,2021,2021,713,"Amusements, gambling, and recreation industries",85.7,20
+20,A,2021,2021,72,Accommodation and food services,570.2,20
+20,A,2021,2021,721,Accommodation,71.4,20
+20,A,2021,2021,722,Food services and drinking places,498.9,20
+20,A,2021,2021,81,"Other services, except government",326.3,20
+20,A,2021,2021,FIRE,"Finance, insurance, real estate, rental, and leasing",2992.3,20
+20,A,2021,2021,G,Government,1776.3,20
+20,A,2021,2021,GF,Federal,511.4,20
+20,A,2021,2021,GFE,Government enterprises,34.4,20
+20,A,2021,2021,GFG,General government,477.0,20
+20,A,2021,2021,GFGD,National defense,276.5,20
+20,A,2021,2021,GFGN,Nondefense,200.5,20
+20,A,2021,2021,GSL,State and local,1264.9,20
+20,A,2021,2021,GSLE,Government enterprises,255.5,20
+20,A,2021,2021,GSLG,General government,1009.4,20
+20,A,2021,2021,HS,Housing,295.0,20
+20,A,2021,2021,ICT,Information-communications-technology-producing industries<sup>3</sup>,1070.8,20;20.3.A
+20,A,2021,2021,II,All industries,18107.6,20
+20,A,2021,2021,ORE,Other real estate,987.6,20
+20,A,2021,2021,PGOOD,Private goods-producing industries<sup>1</sup>,5449.3,20;20.1.A
+20,A,2021,2021,PROF,Professional and business services,1732.8,20
+20,A,2021,2021,PSERV,Private services-producing industries<sup>2</sup>,10882.1,20;20.2.A
+20,A,2021,2021,PVT,Private industries,16331.4,20
+20,A,2022,2022,11,"Agriculture, forestry, fishing, and hunting",348.2,20
+20,A,2022,2022,111CA,Farms,329.6,20
+20,A,2022,2022,113FF,"Forestry, fishing, and related activities",18.6,20
+20,A,2022,2022,21,Mining,423.6,20
+20,A,2022,2022,211,Oil and gas extraction,324.7,20
+20,A,2022,2022,212,"Mining, except oil and gas",62.7,20
+20,A,2022,2022,213,Support activities for mining,36.3,20
+20,A,2022,2022,22,Utilities,258.4,20
+20,A,2022,2022,23,Construction,1091.6,20
+20,A,2022,2022,311FT,Food and beverage and tobacco products,910.8,20
+20,A,2022,2022,313TT,Textile mills and textile product mills,33.6,20
+20,A,2022,2022,315AL,Apparel and leather and allied products,5.7,20
+20,A,2022,2022,31G,Manufacturing,4464.3,20
+20,A,2022,2022,31ND,Nondurable goods,2445.4,20
+20,A,2022,2022,321,Wood products,114.7,20
+20,A,2022,2022,322,Paper products,147.3,20
+20,A,2022,2022,323,Printing and related support activities,46.9,20
+20,A,2022,2022,324,Petroleum and coal products,650.6,20
+20,A,2022,2022,325,Chemical products,444.6,20
+20,A,2022,2022,326,Plastics and rubber products,205.9,20
+20,A,2022,2022,327,Nonmetallic mineral products,95.3,20
+20,A,2022,2022,331,Primary metals,232.0,20
+20,A,2022,2022,332,Fabricated metal products,277.6,20
+20,A,2022,2022,333,Machinery,261.1,20
+20,A,2022,2022,334,Computer and electronic products,112.6,20
+20,A,2022,2022,335,"Electrical equipment, appliances, and components",99.5,20
+20,A,2022,2022,3361MV,"Motor vehicles, bodies and trailers, and parts",550.2,20
+20,A,2022,2022,3364OT,Other transportation equipment,149.8,20
+20,A,2022,2022,337,Furniture and related products,50.2,20
+20,A,2022,2022,339,Miscellaneous manufacturing,75.9,20
+20,A,2022,2022,33DG,Durable goods,2018.8,20
+20,A,2022,2022,42,Wholesale trade,1289.2,20
+20,A,2022,2022,441,Motor vehicle and parts dealers,181.9,20
+20,A,2022,2022,445,Food and beverage stores,124.7,20
+20,A,2022,2022,44RT,Retail trade,1041.5,20
+20,A,2022,2022,452,General merchandise stores,96.0,20
+20,A,2022,2022,481,Air transportation,149.1,20
+20,A,2022,2022,482,Rail transportation,45.0,20
+20,A,2022,2022,483,Water transportation,45.6,20
+20,A,2022,2022,484,Truck transportation,317.8,20
+20,A,2022,2022,485,Transit and ground passenger transportation,61.1,20
+20,A,2022,2022,486,Pipeline transportation,26.2,20
+20,A,2022,2022,487OS,Other transportation and support activities,179.7,20
+20,A,2022,2022,48TW,Transportation and warehousing,887.5,20
+20,A,2022,2022,493,Warehousing and storage,63.0,20
+20,A,2022,2022,4A0,Other retail,638.9,20
+20,A,2022,2022,51,Information,1065.2,20
+20,A,2022,2022,511,"Publishing industries, except internet (includes software)",188.0,20
+20,A,2022,2022,512,Motion picture and sound recording industries,80.7,20
+20,A,2022,2022,513,Broadcasting and telecommunications,471.3,20
+20,A,2022,2022,514,"Data processing, internet publishing, and other information services",325.2,20
+20,A,2022,2022,52,Finance and insurance,1500.4,20
+20,A,2022,2022,521CI,"Federal Reserve banks, credit intermediation, and related activities",338.0,20
+20,A,2022,2022,523,"Securities, commodity contracts, and investments",371.5,20
+20,A,2022,2022,524,Insurance carriers and related activities,623.0,20
+20,A,2022,2022,525,"Funds, trusts, and other financial vehicles",167.9,20
+20,A,2022,2022,53,Real estate and rental and leasing,1655.4,20
+20,A,2022,2022,531,Real estate,1380.0,20
+20,A,2022,2022,532RL,Rental and leasing services and lessors of intangible assets,275.5,20
+20,A,2022,2022,54,"Professional, scientific, and technical services",1054.5,20
+20,A,2022,2022,5411,Legal services,90.0,20
+20,A,2022,2022,5412OP,"Miscellaneous professional, scientific, and technical services",748.2,20
+20,A,2022,2022,5415,Computer systems design and related services,216.3,20
+20,A,2022,2022,55,Management of companies and enterprises,270.6,20
+20,A,2022,2022,56,Administrative and waste management services,629.6,20
+20,A,2022,2022,561,Administrative and support services,549.3,20
+20,A,2022,2022,562,Waste management and remediation services,80.3,20
+20,A,2022,2022,6,"Educational services, health care, and social assistance",1288.3,20
+20,A,2022,2022,61,Educational services,121.8,20
+20,A,2022,2022,62,Health care and social assistance,1166.6,20
+20,A,2022,2022,621,Ambulatory health care services,446.5,20
+20,A,2022,2022,622,Hospitals,489.4,20
+20,A,2022,2022,623,Nursing and residential care facilities,106.5,20
+20,A,2022,2022,624,Social assistance,124.2,20
+20,A,2022,2022,7,"Arts, entertainment, recreation, accommodation, and food services",920.3,20
+20,A,2022,2022,71,"Arts, entertainment, and recreation",217.3,20
+20,A,2022,2022,711AS,"Performing arts, spectator sports, museums, and related activities",118.3,20
+20,A,2022,2022,713,"Amusements, gambling, and recreation industries",99.0,20
+20,A,2022,2022,72,Accommodation and food services,703.0,20
+20,A,2022,2022,721,Accommodation,118.2,20
+20,A,2022,2022,722,Food services and drinking places,584.8,20
+20,A,2022,2022,81,"Other services, except government",381.0,20
+20,A,2022,2022,FIRE,"Finance, insurance, real estate, rental, and leasing",3155.8,20
+20,A,2022,2022,G,Government,1987.2,20
+20,A,2022,2022,GF,Federal,509.6,20
+20,A,2022,2022,GFE,Government enterprises,42.0,20
+20,A,2022,2022,GFG,General government,467.5,20
+20,A,2022,2022,GFGD,National defense,271.7,20
+20,A,2022,2022,GFGN,Nondefense,195.9,20
+20,A,2022,2022,GSL,State and local,1477.6,20
+20,A,2022,2022,GSLE,Government enterprises,301.8,20
+20,A,2022,2022,GSLG,General government,1175.8,20
+20,A,2022,2022,HS,Housing,288.1,20
+20,A,2022,2022,ICT,Information-communications-technology-producing industries<sup>3</sup>,1233.7,20;20.3.A
+20,A,2022,2022,II,All industries,20556.6,20
+20,A,2022,2022,ORE,Other real estate,1091.9,20
+20,A,2022,2022,PGOOD,Private goods-producing industries<sup>1</sup>,6327.7,20;20.1.A
+20,A,2022,2022,PROF,Professional and business services,1954.6,20
+20,A,2022,2022,PSERV,Private services-producing industries<sup>2</sup>,12241.8,20;20.2.A
+20,A,2022,2022,PVT,Private industries,18569.5,20
+20,A,2023,2023,11,"Agriculture, forestry, fishing, and hunting",367.6,20
+20,A,2023,2023,111CA,Farms,351.8,20
+20,A,2023,2023,113FF,"Forestry, fishing, and related activities",15.8,20
+20,A,2023,2023,21,Mining,312.7,20
+20,A,2023,2023,211,Oil and gas extraction,207.8,20
+20,A,2023,2023,212,"Mining, except oil and gas",61.5,20
+20,A,2023,2023,213,Support activities for mining,43.5,20
+20,A,2023,2023,22,Utilities,188.0,20
+20,A,2023,2023,23,Construction,1164.5,20
+20,A,2023,2023,311FT,Food and beverage and tobacco products,883.8,20
+20,A,2023,2023,313TT,Textile mills and textile product mills,31.0,20
+20,A,2023,2023,315AL,Apparel and leather and allied products,8.1,20
+20,A,2023,2023,31G,Manufacturing,4326.1,20
+20,A,2023,2023,31ND,Nondurable goods,2271.0,20
+20,A,2023,2023,321,Wood products,111.1,20
+20,A,2023,2023,322,Paper products,143.8,20
+20,A,2023,2023,323,Printing and related support activities,43.6,20
+20,A,2023,2023,324,Petroleum and coal products,507.5,20
+20,A,2023,2023,325,Chemical products,458.8,20
+20,A,2023,2023,326,Plastics and rubber products,194.3,20
+20,A,2023,2023,327,Nonmetallic mineral products,97.7,20
+20,A,2023,2023,331,Primary metals,224.5,20
+20,A,2023,2023,332,Fabricated metal products,267.2,20
+20,A,2023,2023,333,Machinery,245.1,20
+20,A,2023,2023,334,Computer and electronic products,105.6,20
+20,A,2023,2023,335,"Electrical equipment, appliances, and components",111.1,20
+20,A,2023,2023,3361MV,"Motor vehicles, bodies and trailers, and parts",603.5,20
+20,A,2023,2023,3364OT,Other transportation equipment,172.6,20
+20,A,2023,2023,337,Furniture and related products,49.9,20
+20,A,2023,2023,339,Miscellaneous manufacturing,66.8,20
+20,A,2023,2023,33DG,Durable goods,2055.1,20
+20,A,2023,2023,42,Wholesale trade,1211.3,20
+20,A,2023,2023,441,Motor vehicle and parts dealers,181.6,20
+20,A,2023,2023,445,Food and beverage stores,111.8,20
+20,A,2023,2023,44RT,Retail trade,973.5,20
+20,A,2023,2023,452,General merchandise stores,93.7,20
+20,A,2023,2023,481,Air transportation,142.8,20
+20,A,2023,2023,482,Rail transportation,39.7,20
+20,A,2023,2023,483,Water transportation,48.9,20
+20,A,2023,2023,484,Truck transportation,271.4,20
+20,A,2023,2023,485,Transit and ground passenger transportation,74.4,20
+20,A,2023,2023,486,Pipeline transportation,24.9,20
+20,A,2023,2023,487OS,Other transportation and support activities,140.0,20
+20,A,2023,2023,48TW,Transportation and warehousing,805.1,20
+20,A,2023,2023,493,Warehousing and storage,63.2,20
+20,A,2023,2023,4A0,Other retail,586.5,20
+20,A,2023,2023,51,Information,1045.5,20
+20,A,2023,2023,511,"Publishing industries, except internet (includes software)",188.9,20
+20,A,2023,2023,512,Motion picture and sound recording industries,88.3,20
+20,A,2023,2023,513,Broadcasting and telecommunications,444.4,20
+20,A,2023,2023,514,"Data processing, internet publishing, and other information services",324.0,20
+20,A,2023,2023,52,Finance and insurance,1769.0,20
+20,A,2023,2023,521CI,"Federal Reserve banks, credit intermediation, and related activities",426.6,20
+20,A,2023,2023,523,"Securities, commodity contracts, and investments",471.0,20
+20,A,2023,2023,524,Insurance carriers and related activities,671.6,20
+20,A,2023,2023,525,"Funds, trusts, and other financial vehicles",199.7,20
+20,A,2023,2023,53,Real estate and rental and leasing,1770.9,20
+20,A,2023,2023,531,Real estate,1476.5,20
+20,A,2023,2023,532RL,Rental and leasing services and lessors of intangible assets,294.4,20
+20,A,2023,2023,54,"Professional, scientific, and technical services",1074.8,20
+20,A,2023,2023,5411,Legal services,87.2,20
+20,A,2023,2023,5412OP,"Miscellaneous professional, scientific, and technical services",770.5,20
+20,A,2023,2023,5415,Computer systems design and related services,217.1,20
+20,A,2023,2023,55,Management of companies and enterprises,282.5,20
+20,A,2023,2023,56,Administrative and waste management services,606.0,20
+20,A,2023,2023,561,Administrative and support services,522.9,20
+20,A,2023,2023,562,Waste management and remediation services,83.1,20
+20,A,2023,2023,6,"Educational services, health care, and social assistance",1382.8,20
+20,A,2023,2023,61,Educational services,132.2,20
+20,A,2023,2023,62,Health care and social assistance,1250.5,20
+20,A,2023,2023,621,Ambulatory health care services,478.0,20
+20,A,2023,2023,622,Hospitals,517.9,20
+20,A,2023,2023,623,Nursing and residential care facilities,120.0,20
+20,A,2023,2023,624,Social assistance,134.6,20
+20,A,2023,2023,7,"Arts, entertainment, recreation, accommodation, and food services",978.1,20
+20,A,2023,2023,71,"Arts, entertainment, and recreation",222.1,20
+20,A,2023,2023,711AS,"Performing arts, spectator sports, museums, and related activities",113.0,20
+20,A,2023,2023,713,"Amusements, gambling, and recreation industries",109.1,20
+20,A,2023,2023,72,Accommodation and food services,756.0,20
+20,A,2023,2023,721,Accommodation,131.3,20
+20,A,2023,2023,722,Food services and drinking places,624.7,20
+20,A,2023,2023,81,"Other services, except government",434.6,20
+20,A,2023,2023,FIRE,"Finance, insurance, real estate, rental, and leasing",3539.9,20
+20,A,2023,2023,G,Government,2036.0,20
+20,A,2023,2023,GF,Federal,531.8,20
+20,A,2023,2023,GFE,Government enterprises,39.6,20
+20,A,2023,2023,GFG,General government,492.2,20
+20,A,2023,2023,GFGD,National defense,307.5,20
+20,A,2023,2023,GFGN,Nondefense,184.7,20
+20,A,2023,2023,GSL,State and local,1504.1,20
+20,A,2023,2023,GSLE,Government enterprises,319.3,20
+20,A,2023,2023,GSLG,General government,1184.9,20
+20,A,2023,2023,HS,Housing,303.6,20
+20,A,2023,2023,ICT,Information-communications-technology-producing industries<sup>3</sup>,1204.6,20;20.3.A
+20,A,2023,2023,II,All industries,20728.8,20
+20,A,2023,2023,ORE,Other real estate,1172.9,20
+20,A,2023,2023,PGOOD,Private goods-producing industries<sup>1</sup>,6170.8,20;20.1.A
+20,A,2023,2023,PROF,Professional and business services,1963.3,20
+20,A,2023,2023,PSERV,Private services-producing industries<sup>2</sup>,12521.9,20;20.2.A
+20,A,2023,2023,PVT,Private industries,18692.8,20
+20,A,2024,2024,11,"Agriculture, forestry, fishing, and hunting",364.2,20
+20,A,2024,2024,111CA,Farms,349.9,20
+20,A,2024,2024,113FF,"Forestry, fishing, and related activities",14.3,20
+20,A,2024,2024,21,Mining,302.2,20
+20,A,2024,2024,211,Oil and gas extraction,203.4,20
+20,A,2024,2024,212,"Mining, except oil and gas",59.1,20
+20,A,2024,2024,213,Support activities for mining,39.7,20
+20,A,2024,2024,22,Utilities,188.9,20
+20,A,2024,2024,23,Construction,1206.1,20
+20,A,2024,2024,311FT,Food and beverage and tobacco products,892.7,20
+20,A,2024,2024,313TT,Textile mills and textile product mills,30.5,20
+20,A,2024,2024,315AL,Apparel and leather and allied products,9.4,20
+20,A,2024,2024,31G,Manufacturing,4253.9,20
+20,A,2024,2024,31ND,Nondurable goods,2213.8,20
+20,A,2024,2024,321,Wood products,114.0,20
+20,A,2024,2024,322,Paper products,144.4,20
+20,A,2024,2024,323,Printing and related support activities,43.1,20
+20,A,2024,2024,324,Petroleum and coal products,454.9,20
+20,A,2024,2024,325,Chemical products,441.8,20
+20,A,2024,2024,326,Plastics and rubber products,196.9,20
+20,A,2024,2024,327,Nonmetallic mineral products,97.8,20
+20,A,2024,2024,331,Primary metals,225.6,20
+20,A,2024,2024,332,Fabricated metal products,270.0,20
+20,A,2024,2024,333,Machinery,228.1,20
+20,A,2024,2024,334,Computer and electronic products,112.8,20
+20,A,2024,2024,335,"Electrical equipment, appliances, and components",112.5,20
+20,A,2024,2024,3361MV,"Motor vehicles, bodies and trailers, and parts",585.1,20
+20,A,2024,2024,3364OT,Other transportation equipment,179.8,20
+20,A,2024,2024,337,Furniture and related products,50.2,20
+20,A,2024,2024,339,Miscellaneous manufacturing,64.3,20
+20,A,2024,2024,33DG,Durable goods,2040.1,20
+20,A,2024,2024,42,Wholesale trade,1233.2,20
+20,A,2024,2024,441,Motor vehicle and parts dealers,195.0,20
+20,A,2024,2024,445,Food and beverage stores,114.7,20
+20,A,2024,2024,44RT,Retail trade,985.0,20
+20,A,2024,2024,452,General merchandise stores,84.4,20
+20,A,2024,2024,481,Air transportation,153.6,20
+20,A,2024,2024,482,Rail transportation,39.3,20
+20,A,2024,2024,483,Water transportation,53.2,20
+20,A,2024,2024,484,Truck transportation,269.6,20
+20,A,2024,2024,485,Transit and ground passenger transportation,94.4,20
+20,A,2024,2024,486,Pipeline transportation,24.7,20
+20,A,2024,2024,487OS,Other transportation and support activities,138.7,20
+20,A,2024,2024,48TW,Transportation and warehousing,833.9,20
+20,A,2024,2024,493,Warehousing and storage,60.5,20
+20,A,2024,2024,4A0,Other retail,590.9,20
+20,A,2024,2024,51,Information,1094.5,20
+20,A,2024,2024,511,"Publishing industries, except internet (includes software)",208.9,20
+20,A,2024,2024,512,Motion picture and sound recording industries,87.6,20
+20,A,2024,2024,513,Broadcasting and telecommunications,437.0,20
+20,A,2024,2024,514,"Data processing, internet publishing, and other information services",361.0,20
+20,A,2024,2024,52,Finance and insurance,1928.1,20
+20,A,2024,2024,521CI,"Federal Reserve banks, credit intermediation, and related activities",410.6,20
+20,A,2024,2024,523,"Securities, commodity contracts, and investments",536.6,20
+20,A,2024,2024,524,Insurance carriers and related activities,744.2,20
+20,A,2024,2024,525,"Funds, trusts, and other financial vehicles",236.8,20
+20,A,2024,2024,53,Real estate and rental and leasing,1828.6,20
+20,A,2024,2024,531,Real estate,1526.5,20
+20,A,2024,2024,532RL,Rental and leasing services and lessors of intangible assets,302.2,20
+20,A,2024,2024,54,"Professional, scientific, and technical services",1134.4,20
+20,A,2024,2024,5411,Legal services,95.2,20
+20,A,2024,2024,5412OP,"Miscellaneous professional, scientific, and technical services",827.3,20
+20,A,2024,2024,5415,Computer systems design and related services,212.0,20
+20,A,2024,2024,55,Management of companies and enterprises,313.6,20
+20,A,2024,2024,56,Administrative and waste management services,603.4,20
+20,A,2024,2024,561,Administrative and support services,514.5,20
+20,A,2024,2024,562,Waste management and remediation services,88.9,20
+20,A,2024,2024,6,"Educational services, health care, and social assistance",1539.8,20
+20,A,2024,2024,61,Educational services,161.0,20
+20,A,2024,2024,62,Health care and social assistance,1378.8,20
+20,A,2024,2024,621,Ambulatory health care services,547.0,20
+20,A,2024,2024,622,Hospitals,569.3,20
+20,A,2024,2024,623,Nursing and residential care facilities,134.7,20
+20,A,2024,2024,624,Social assistance,127.8,20
+20,A,2024,2024,7,"Arts, entertainment, recreation, accommodation, and food services",1030.1,20
+20,A,2024,2024,71,"Arts, entertainment, and recreation",244.1,20
+20,A,2024,2024,711AS,"Performing arts, spectator sports, museums, and related activities",128.8,20
+20,A,2024,2024,713,"Amusements, gambling, and recreation industries",115.2,20
+20,A,2024,2024,72,Accommodation and food services,786.0,20
+20,A,2024,2024,721,Accommodation,127.2,20
+20,A,2024,2024,722,Food services and drinking places,658.9,20
+20,A,2024,2024,81,"Other services, except government",467.5,20
+20,A,2024,2024,FIRE,"Finance, insurance, real estate, rental, and leasing",3756.8,20
+20,A,2024,2024,G,Government,2131.2,20
+20,A,2024,2024,GF,Federal,567.3,20
+20,A,2024,2024,GFE,Government enterprises,32.6,20
+20,A,2024,2024,GFG,General government,534.7,20
+20,A,2024,2024,GFGD,National defense,342.5,20
+20,A,2024,2024,GFGN,Nondefense,192.2,20
+20,A,2024,2024,GSL,State and local,1563.9,20
+20,A,2024,2024,GSLE,Government enterprises,340.1,20
+20,A,2024,2024,GSLG,General government,1223.7,20
+20,A,2024,2024,HS,Housing,309.7,20
+20,A,2024,2024,ICT,Information-communications-technology-producing industries<sup>3</sup>,1253.9,20;20.3.A
+20,A,2024,2024,II,All industries,21438.5,20
+20,A,2024,2024,ORE,Other real estate,1216.7,20
+20,A,2024,2024,PGOOD,Private goods-producing industries<sup>1</sup>,6126.3,20;20.1.A
+20,A,2024,2024,PROF,Professional and business services,2051.5,20
+20,A,2024,2024,PSERV,Private services-producing industries<sup>2</sup>,13181.1,20;20.2.A
+20,A,2024,2024,PVT,Private industries,19307.4,20

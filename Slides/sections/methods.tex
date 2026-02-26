@@ -417,7 +417,111 @@ Healthcare subsectors cluster at the top --- among the most labor-intensive indu
 \end{frame}
 
 %---------------------------------------------------------------------
-% Frame 16: Summary
+% Frame 16: Value Added vs Gross Output
+%---------------------------------------------------------------------
+\begin{frame}{Value Added vs.\ Gross Output Across Industries}
+
+{\small Value added is a fraction of gross output; the rest is intermediate inputs ($\text{GO} = \text{VA} + \text{II}$):}
+
+\vspace{-6pt}
+\begin{table}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{0.9}
+\begin{tabular}{lrrrr}
+\toprule
+Industry & VA (\$B) & GO (\$B) & VA/GO & VA/GDP \\
+\midrule
+Healthcare (62) & 2,044 & 3,294 & \textbf{0.620} & 7.3\% \\
+\quad Ambulatory (621) & 1,005 & 1,483 & 0.678 & 3.6\% \\
+\quad Hospitals (622) & 643 & 1,161 & 0.554 & 2.3\% \\
+\quad Nursing (623) & 197 & 317 & 0.621 & 0.7\% \\
+\midrule
+Manufacturing (31--33) & 2,817 & 7,143 & 0.394 & 10.1\% \\
+Professional svcs (54) & 2,221 & 3,295 & 0.674 & 8.0\% \\
+Information (51) & 1,491 & 2,537 & 0.588 & 5.4\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{-8pt}
+{\footnotesize BEA GDP-by-Industry, 2023. Healthcare retains 62\% of GO as VA---higher than manufacturing (39\%) but lower than professional services (67\%). Hospitals have the lowest VA/GO (0.55), reflecting large intermediate input purchases.}
+
+\end{frame}
+
+%---------------------------------------------------------------------
+% Frame 17: NHE vs Healthcare Value Added
+%---------------------------------------------------------------------
+\begin{frame}{Healthcare Spending $\neq$ Healthcare Value Added}
+
+{\small CMS National Health Expenditures ($\sim$18\% of GDP) spans \emph{multiple} BEA industries:}
+
+\vspace{-4pt}
+\begin{table}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrr}
+\toprule
+BEA Industry & VA (\$B) & VA/GDP \\
+\midrule
+Health care \& social assistance (62) & 2,044 & 7.3\% \\
+Chemical products, incl.\ pharma (325) & 515 & 1.9\% \\
+Misc.\ mfg, incl.\ medical devices (339) & 109 & 0.4\% \\
+Insurance carriers, incl.\ health ins.\ (524) & 750 & 2.7\% \\
+Wholesale trade, incl.\ drug distribution (42) & 1,653 & 5.9\% \\
+\bottomrule
+\end{tabular}
+\caption*{\footnotesize 2023. Only a fraction of each affiliated industry is healthcare-related.}
+\end{table}
+
+\vspace{-6pt}
+\small
+\begin{itemize}\setlength{\itemsep}{0pt}
+    \item Healthcare \textbf{value added} (NAICS 62) = 7.3\% of GDP---our measurement base
+    \item Remaining $\sim$11\% of NHE reflects intermediate inputs \emph{and} output of affiliated industries (pharma, devices, health insurance, drug wholesaling)
+\end{itemize}
+
+\end{frame}
+
+%---------------------------------------------------------------------
+% Frame 18: Reconciling Labor Share and Employment
+%---------------------------------------------------------------------
+\begin{frame}{Reconciling Labor Share, Employment, and Wages}
+
+\begin{block}{The Apparent Puzzle}
+\small Healthcare has a very high labor share (0.81), yet produces 7.3\% of GDP with $\sim$12\% of workers.
+\end{block}
+
+\vspace{-4pt}
+\begin{table}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcc}
+ & Healthcare & Economy \\
+\hline
+Share of GDP (value added) & 7.3\% & 100\% \\
+Share of employment & $\sim$12\% & 100\% \\
+VA per worker (relative) & $\sim$0.6$\times$ & 1$\times$ \\
+Labor share ($\alpha_L$) & 0.81 & 0.54 \\
+Avg.\ compensation (relative) & $\sim$1.15$\times$ & 1$\times$ \\
+\end{tabular}
+\end{table}
+
+\vspace{-6pt}
+\begin{alertblock}{Resolution}
+\small High labor share means most VA \emph{accrues to workers}, not that there are many. Healthcare has \textbf{below}-average VA per worker but \textbf{above}-average wages:
+
+\vspace{2pt}
+$\displaystyle \frac{w_{\text{hc}}}{w_{\text{avg}}} = \frac{\alpha_L^{\text{hc}}}{\alpha_L^{\text{avg}}} \times \frac{\text{VA/worker}_{\text{hc}}}{\text{VA/worker}_{\text{avg}}} \approx \frac{0.81}{0.54} \times 0.6 \approx 1.15$
+\end{alertblock}
+
+\end{frame}
+
+%---------------------------------------------------------------------
+% Frame 19: Summary
 %---------------------------------------------------------------------
 \begin{frame}{Methodology: Summary}
 
