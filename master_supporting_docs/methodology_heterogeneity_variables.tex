@@ -1,0 +1,313 @@
+% =============================================================================
+% 异质性变量测度方法论章节
+% 企业外生跨区网络扩展阻力指数及相关变量构建
+% =============================================================================
+% 用法: \input{methodology_heterogeneity_variables.tex}
+% 依赖: amsmath, amssymb, booktabs
+% =============================================================================
+
+\subsection{地方保护主义指数的构建}\label{subsec:protection}
+
+本文借鉴曹春方等（2015）\nocite{cao2015}的"市场分割反推法"思路，
+利用上市公司在注册地以外的异地子公司数量（企业异地投资）作为微观数据基础，
+基于双向固定效应面板残差法构建地级市层面的地方保护主义指数
+$Protection_d$。核心逻辑为：在控制企业个体异质性与时间趋势后，
+若某城市企业的实际向外扩张显著低于理论预期，
+则说明该市存在较严重的地方行政干预与资本锁定效应。具体测算步骤如下：
+
+\paragraph{第一步：微观预期投资模型拟合。}
+利用面板数据拟合双向固定效应模型，剔除企业基本面与行业趋势的可预测部分：
+\begin{equation}\label{eq:panel-fe}
+  Outward\_Inv_{i,j,d,t} = \alpha_i + \gamma_t + \beta_1 Size_{i,t}
+    + \beta_2 ROA_{i,t} + \varepsilon_{i,j,d,t}
+\end{equation}
+其中，$Outward\_Inv_{i,j,d,t}$ 为企业 $i$ 在 $t$ 年位于城市 $d$、
+属于行业 $j$ 的异地子公司数量；$\alpha_i$ 为企业个体固定效应，
+彻底剔除每个企业不随时间变化的先天特质；$\gamma_t$ 为年份固定效应，
+控制宏观经济波动对全体企业的同步冲击；$Size_{i,t}$ 为企业规模（总资产对数），
+$ROA_{i,t}$ 为总资产收益率；$\varepsilon_{i,j,d,t}$ 为残差项，
+代表企业实际扩张偏离理论预期的"异常部分"。
+
+\paragraph{第二步：城市层面"资本锁定效应"提取。}
+将回归残差按照企业注册地所在城市 $d$ 进行均值汇总：
+\begin{equation}\label{eq:mean-residual}
+  \bar{\varepsilon}_d = \frac{1}{N_d} \sum_{i \in d} \varepsilon_{i,j,d,t}
+\end{equation}
+其中 $N_d$ 为城市 $d$ 的企业样本数。经济学含义为：
+若 $\bar{\varepsilon}_d < 0$，说明该城市的上市公司实际向外扩张步伐
+显著落后于全国同等条件企业的理论预期，
+意味着该市的"地方行政干预/资本锁定"越严重。
+
+\paragraph{第三步：指数反转与极差标准化。}
+为使 $Protection_d$ 满足"数值越大代表保护主义越重"的逻辑，
+需要对平均残差取相反数，并进行 $[0,1]$ 的极差标准化处理：
+\begin{equation}\label{eq:protection}
+  Protection_d = \frac{\max(-\bar{\varepsilon}) - (-\bar{\varepsilon}_d)}
+    {\max(-\bar{\varepsilon}) - \min(-\bar{\varepsilon})}
+\end{equation}
+其中，$\max(\cdot)$ 与 $\min(\cdot)$ 分别取全部城市 $-\bar{\varepsilon}_d$
+的最大值和最小值。经此处理，$Protection_d$ 的值域为 $[0,1]$，
+越接近 $1$ 代表该城市越封闭、越排外。
+
+%% ---------------------------------------------------------------------------
+\subsection{企业外生技术扩张阻力指数的构建}\label{subsec:friction}
+
+在关键核心技术协同攻关中，技术的异质性组合需求与地理空间的制度摩擦
+共同决定了企业整合供应链网络的难度。依据前文推导，本文测算
+企业 $i$ 在 $t$ 年位于城市 $c$ 时的"复合外生网络扩张阻力指数"（$Friction$）。
+该指数的构建逻辑与测度步骤如下：
+
+\paragraph{第一步：界定企业复合技术需求 $D_{i,t,k}$。}
+企业的技术扩张方向内生于其先天的技术基因。
+本文首先提取企业 $i$ 历年发明专利的 IPC 主分类号，
+计算各项主分类号 $j$ 占当期专利总量的比重，
+构建企业内部技术组合向量 $\theta_{i,j,t}$。
+随后，将 $\theta_{i,j,t}$ 与基于全国专利引证网络计算的
+客观技术协同依赖权重 $\omega_{j,k}$ 相乘。
+为严格聚焦于"跨界要素搜寻"，本文将被投企业自身
+已掌握的技术领域（即 $k \in J_i$，其中 $J_i$ 为企业 $i$ 拥有的技术集合）
+予以剔除，从而加总得到企业 $i$ 对外部未知技术 $k$ 的绝对复合需求量：
+\begin{equation}\label{eq:demand}
+  D_{i,t,k} = \sum_{\substack{j \in J_i}} \theta_{i,j,t} \times \omega_{j,k},
+  \quad k \notin J_i
+\end{equation}
+其中，$\omega_{j,k}$ 的测度严格排除 $k = j$ 的"自我引用"，
+仅计入跨领域的互补依赖关系。
+
+\paragraph{第二步：评估技术 $k$ 的跨区空间阻力势能。}
+外部技术散落于全国不同的地理空间中，且受制于各地异质性的制度摩擦。
+本文提取技术 $k$ 在目标城市 $d$ 的产能份额 $Share_{k,d}$，
+并将其与该城市的地方保护主义指数 $Protection_d$
+（构建方法见第~\ref{subsec:protection}~节）交乘。
+鉴于同城范围内的要素匹配不涉及跨行政区划的壁垒，
+本文严格剔除企业所在的本市（即设定 $d \neq c$），
+加总得到企业前往异地获取技术 $k$ 所面临的"跨区空间阻力势能"：
+\begin{equation}\label{eq:spatial-friction}
+  SpatialFriction_{k,c} = \sum_{d \neq c} Share_{k,d} \times Protection_d
+\end{equation}
+
+\paragraph{第三步：供需匹配与指数合成。}
+最终，将第一步中企业的"跨界技术需求"$D_{i,t,k}$
+与第二步中相应的"跨区阻力势能" $SpatialFriction_{k,c}$
+进行交乘并依技术 $k$ 累加，得到企业 $i$ 在 $t$ 年位于城市 $c$ 时
+的复合外生网络扩张阻力指数：
+\begin{equation}\label{eq:friction}
+  Friction_{i,t,c} = \sum_{k \notin J_i}
+    D_{i,t,k} \times SpatialFriction_{k,c}
+    = \sum_{k \notin J_i} \left[
+      \left( \sum_{j \in J_i} \theta_{i,j,t} \times \omega_{j,k} \right)
+      \times \sum_{d \neq c} \left( Share_{k,d} \times Protection_d \right)
+    \right]
+\end{equation}
+
+该指数完全由企业先天的微观技术属性（$\theta_{i,j,t}$）、
+宏观技术的客观互补规律（$\omega_{j,k}$）以及空间维度的
+外生制度壁垒（$Protection_d$）共同决定，
+彻底剥离了企业主观择址的内生性干扰，
+精准刻画了企业在构建全国统一大市场供应链闭环时所承受的摩擦阻力。
+
+\paragraph{计算效率优化：Total--Local 扣减法。}
+在实际计算式~\eqref{eq:spatial-friction} 时，若对每个企业逐一遍历
+除本市外的近 300 个城市将产生数十亿行数据。本文采用等价的降维算法：
+\begin{equation}\label{eq:total-local}
+  \sum_{d \neq c} Share_{k,d} \times Protection_d
+  = \underbrace{\sum_{d} Share_{k,d} \times Protection_d}_{\text{全国总阻力势能 (Total)}}
+  - \underbrace{Share_{k,c} \times Protection_c}_{\text{本地势能 (Local)}}
+\end{equation}
+该算法将计算复杂度从 $O(N \times D)$ 降至 $O(D + N)$，
+在数学上完全等价，计算速度提升数千倍。
+
+%% ---------------------------------------------------------------------------
+\subsection{企业外生网络扩张阻力的异质性分组设定}\label{subsec:friction-group}
+
+为探究国家级风险投资在不同网络摩擦环境下的异质性处理效应，
+本文基于受资企业（处理组）面临的外生网络扩张阻力指数（$Friction$）
+进行了内部切分。为规避风险资本注入后可能引发的反向因果与内生性偏误，
+本文严格提取了处理组企业在\textbf{接受国家级风险投资前（Pre-treatment）}%
+的历年阻力指数，并计算其历史均值以平滑年度波动：
+\begin{equation}\label{eq:pre-friction}
+  \overline{Friction}^{\,\text{pre}}_i
+  = \frac{1}{T^{\text{pre}}_i}
+    \sum_{t < t^*_i} Friction_{i,t,c}
+\end{equation}
+其中，$t^*_i$ 为企业 $i$ 首次接受国家级风险投资的年份，
+$T^{\text{pre}}_i$ 为事前观测年数。
+
+随后，本文计算全体处理组企业该事前阻力均值的算术平均数作为门槛阈值：
+\begin{equation}\label{eq:threshold}
+  \bar{F}^{\,\text{threshold}}
+  = \frac{1}{N^{\text{treat}}}
+    \sum_{i \in \text{Treated}}
+    \overline{Friction}^{\,\text{pre}}_i
+\end{equation}
+
+分组规则如下：
+\begin{equation}\label{eq:grouping}
+  FrictionGroup_i =
+  \begin{cases}
+    1 \;(\text{低阻力组}), & \text{若 } \overline{Friction}^{\,\text{pre}}_i
+      < \bar{F}^{\,\text{threshold}} \\[4pt]
+    0 \;(\text{高阻力组}), & \text{若 } \overline{Friction}^{\,\text{pre}}_i
+      \geq \bar{F}^{\,\text{threshold}} \\[4pt]
+    \text{缺省值}, & \text{若 } i \in \text{控制组}
+  \end{cases}
+\end{equation}
+控制组企业作为基准参照系，不参与此异质性分组。
+该分组变量将用于构建多时点双重差分模型中的分组处理变量，
+以精准识别政策干预在不同制度摩擦约束下的边际效应差异。
+
+%% ---------------------------------------------------------------------------
+\subsection{央地协同（跨区资本网络）指标的构建}\label{subsec:coordination}
+
+本文利用私募通微观投资事件数据构建了企业级"央地协同（跨区资本网络）"
+特征指标。具体测算步骤如下：
+
+\paragraph{第一步：事件级协同判定。}
+提取被投企业 $i$ 的所在城市（$City_i$）与投资机构 $m$ 的所属城市
+（$City_m$）。若 $City_m \neq City_i$（即投资机构的所属城市名称
+未包含在被投企业的地区字符串中），则判定该笔投资为"跨区/央地协同投资"，
+生成虚拟变量：
+\begin{equation}\label{eq:cross-region}
+  CrossRegion_{i,m,t} =
+  \begin{cases}
+    1, & \text{若 } City_m \notin City_i \;(\text{跨区投资}) \\
+    0, & \text{若 } City_m \in City_i \;(\text{同城投资})
+  \end{cases}
+\end{equation}
+
+\paragraph{第二步：企业级协同深度测度。}
+按照企业的统一社会信用代码进行分组加总，
+计算该企业在样本期内累计获得的跨区投资总次数，
+作为其"央地协同累计次数"：
+\begin{equation}\label{eq:coordination-depth}
+  CoordDepth_i = \sum_{m,t} CrossRegion_{i,m,t}
+\end{equation}
+
+\paragraph{第三步：企业级协同广度测度。}
+进一步筛选出所有跨区投资记录（$CrossRegion = 1$），
+按照统一社会信用代码进行分组，计算为该企业提供跨区投资的
+去重后的异质性城市数量：
+\begin{equation}\label{eq:coordination-breadth}
+  CoordBreadth_i = \left| \left\{ City_m \,:\,
+    CrossRegion_{i,m,t} = 1,\; \forall\, m,t \right\} \right|
+\end{equation}
+该指标精准刻画了企业获取外部资源网络的地理广度与异质性丰度。
+例如，企业 $i$ 同时获得北京和苏州的异地投资，
+则 $CoordBreadth_i = 2$。
+
+
+%% ===========================================================================
+%% 附录：沙盘推演案例
+%% ===========================================================================
+% 以下内容可置于论文附录中，帮助审稿人直观理解 Friction 指数的计算逻辑。
+% 若不需要附录，可注释掉本节。
+
+\appendix
+\section{Friction 指数计算示例：以"星河造车"（虚构）为例}\label{app:example}
+
+为帮助读者直观理解公式~\eqref{eq:friction} 的计算逻辑，
+本节以虚构企业"星河造车"为例进行沙盘推演。
+
+\paragraph{基本设定。}
+假设全国仅有三个城市：上海（本市）、北京和深圳。
+星河造车位于上海，拥有两项核心技术：
+\begin{itemize}
+  \item 造电池（$j_1$），占公司专利的 60\%
+    $\Rightarrow \theta_{i,j_1} = 0.6$
+  \item 造底盘（$j_2$），占公司专利的 40\%
+    $\Rightarrow \theta_{i,j_2} = 0.4$
+\end{itemize}
+
+\paragraph{宏观技术互补规律。}
+基于全国专利引证网络：
+\begin{itemize}
+  \item 造电池（$j_1$）需要结合"AI 芯片"（$k_1$）做电池管理，
+    关联度 $\omega_{j_1,k_1} = 0.2$；同时需要"激光雷达"（$k_2$）防碰撞，
+    关联度 $\omega_{j_1,k_2} = 0.1$。
+  \item 造底盘（$j_2$）极度依赖"AI 芯片"（$k_1$）做线控，
+    关联度 $\omega_{j_2,k_1} = 0.5$；依赖"激光雷达"（$k_2$）
+    的关联度 $\omega_{j_2,k_2} = 0.3$。
+\end{itemize}
+
+\paragraph{目标技术的全国分布与各地保护壁垒。}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{案例数据设定}\label{tab:example-data}
+\begin{tabular}{lcccc}
+\toprule
+城市 & $Protection_d$ & $Share_{k_1,d}$ (AI 芯片) & $Share_{k_2,d}$ (激光雷达) & 备注 \\
+\midrule
+北京   & 0.8 & 70\% & 30\% & 地方保护极度严重 \\
+深圳   & 0.2 & 20\% & 60\% & 非常开放 \\
+上海   & ---  & 10\% & 10\% & 本市，同城剔除 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{第一部分：企业对外部技术 $k$ 的"复合需求" $D_{i,t,k}$。}
+
+由于星河造车不掌握 AI 芯片（$k_1$）和激光雷达（$k_2$），
+故 $k_1, k_2 \notin J_i$：
+
+对 AI 芯片（$k_1$）的总需求：
+\begin{align*}
+  D_{i,t,k_1}
+  &= \theta_{i,j_1} \times \omega_{j_1,k_1}
+   + \theta_{i,j_2} \times \omega_{j_2,k_1} \\
+  &= (0.6 \times 0.2) + (0.4 \times 0.5) \\
+  &= 0.12 + 0.20 = 0.32
+\end{align*}
+
+对激光雷达（$k_2$）的总需求：
+\begin{align*}
+  D_{i,t,k_2}
+  &= \theta_{i,j_1} \times \omega_{j_1,k_2}
+   + \theta_{i,j_2} \times \omega_{j_2,k_2} \\
+  &= (0.6 \times 0.1) + (0.4 \times 0.3) \\
+  &= 0.06 + 0.12 = 0.18
+\end{align*}
+
+\paragraph{第二部分：计算外部技术 $k$ 的"跨区阻力势能"。}
+
+利用 Total--Local 扣减法，剔除同城（上海）后：
+
+找 AI 芯片（$k_1$）的跨区阻力：
+\begin{align*}
+  SpatialFriction_{k_1,\text{上海}}
+  &= (Share_{k_1,\text{北京}} \times Protection_{\text{北京}})
+   + (Share_{k_1,\text{深圳}} \times Protection_{\text{深圳}}) \\
+  &= (0.7 \times 0.8) + (0.2 \times 0.2) \\
+  &= 0.56 + 0.04 = 0.60
+\end{align*}
+
+找激光雷达（$k_2$）的跨区阻力：
+\begin{align*}
+  SpatialFriction_{k_2,\text{上海}}
+  &= (Share_{k_2,\text{北京}} \times Protection_{\text{北京}})
+   + (Share_{k_2,\text{深圳}} \times Protection_{\text{深圳}}) \\
+  &= (0.3 \times 0.8) + (0.6 \times 0.2) \\
+  &= 0.24 + 0.12 = 0.36
+\end{align*}
+
+\noindent
+注意：AI 芯片方向的阻力远大于激光雷达，
+因为大部分 AI 芯片产能集中在北京（地方保护严重），
+而激光雷达产能集中在深圳（相对开放）。
+
+\paragraph{第三步：终极组装相乘。}
+
+\begin{align*}
+  Friction_{\text{星河},t,\text{上海}}
+  &= D_{i,t,k_1} \times SpatialFriction_{k_1,\text{上海}}
+   + D_{i,t,k_2} \times SpatialFriction_{k_2,\text{上海}} \\
+  &= 0.32 \times 0.60 + 0.18 \times 0.36 \\
+  &= 0.192 + 0.0648 \\
+  &= \mathbf{0.2568}
+\end{align*}
+
+因此，上海"星河造车"的复合外生扩张阻力指数 $Friction = 0.2568$。
+该数值意味着：星河造车的核心互补技术（尤其是 AI 芯片）
+高度集中于地方保护严重的城市，
+企业在构建跨区供应链闭环时将面临较大的制度摩擦阻力。
