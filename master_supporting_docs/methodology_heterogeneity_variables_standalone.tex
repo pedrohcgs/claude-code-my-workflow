@@ -1,0 +1,60 @@
+% =============================================================================
+% 异质性变量测度方法论 — 独立编译版本
+% 编译命令: xelatex methodology_heterogeneity_variables_standalone.tex
+% =============================================================================
+\documentclass[12pt,a4paper]{article}
+
+% --- 中文支持 ---
+\usepackage{xeCJK}
+\setCJKmainfont{WenQuanYi Zen Hei}
+\setCJKsansfont{WenQuanYi Zen Hei}
+\setCJKmonofont{WenQuanYi Zen Hei}
+
+% --- 数学与排版 ---
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  citecolor=blue!70!black,
+  urlcolor=blue!70!black
+}
+
+% --- 标题信息 ---
+\title{\textbf{异质性变量测度方法论} \\ \large 企业外生跨区网络扩展阻力指数及相关变量构建}
+\author{}
+\date{}
+
+% --- 消除 \nocite 错误（无 bib 文件时） ---
+\renewcommand{\nocite}[1]{}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\vspace{-1em}
+\begin{abstract}
+\noindent
+本文档详细阐述了四个核心异质性变量的测度方法论：
+（1）地方保护主义指数 $Protection_d$——基于双向固定效应面板残差法与极差标准化；
+（2）企业外生技术扩张阻力指数 $Friction_{i,t,c}$——融合企业技术组合、宏观技术互补规律与空间制度壁垒的三步构建法；
+（3）异质性分组设定——基于处理组事前均值切分；
+（4）央地协同（跨区资本网络）指标——深度与广度双维度测度。
+附录以"星河造车"虚构案例进行沙盘推演，完整演示 $Friction$ 指数的数值计算过程。
+\end{abstract}
+
+\vspace{1em}
+\tableofcontents
+\newpage
+
+% === 正文：引入方法论片段 ===
+\setcounter{section}{0}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
+\input{methodology_heterogeneity_variables.tex}
+
+\end{document}
