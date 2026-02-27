@@ -28,3 +28,27 @@ The repository already followed a task-based DAG pattern but used different nami
 ## Decision: Makefile target ordering
 
 User caught that `include ../../generic.make` before `all:` caused generic.make's first target to become the default. Fixed by moving `all:` above the includes in all 9 Makefiles.
+
+
+## Post-Compaction Fixes (continued session)
+
+### shell_functions.make broken by Make's `$(shell)` expansion
+- `$(shell cat ../../shell_functions.sh)` stripped newlines and Make expanded `$@`, `$1`, `$(basename ...)` as its own variables
+- Fix: Changed to `. ../../shell_functions.sh; stata_with_flag` — POSIX source lets bash read functions directly
+
+### Stata log paths
+- `log using "output/..."` → `log using "task_name.log"` (current directory, since Make runs from `code/`)
+
+### Stata input/output paths (all 9 .do files)
+- All `"input/..."` → `"../input/..."` and `"output/..."` → `"../output/..."` (82 references)
+- `capture mkdir "outputs"` → `capture mkdir "../output"` (9 files)
+- Cross-task ref: `"../download_bea_gdp_industry/input/"` → `"../../download_bea_gdp_industry/input/"` in `download_bea_nipa_supplements`
+- Stale comment headers fixed (`inputs/` → `../input/`, `outputs/` → `../output/`)
+- Python/bash shell calls: `shell python3 code/fetch_bea_api.py` → `shell python3 fetch_bea_api.py` (5 calls, 3 files)
+
+### Key lesson
+When Make runs recipes from `code/`, all paths to sibling dirs (`input/`, `output/`) need `../` prefix. Python scripts were already correct (used `os.path.join(SCRIPT_DIR, "..", "input")`).
+
+---
+**Context compaction (auto) at 12:05**
+Check git log and quality_reports/plans/ for current state.

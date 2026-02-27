@@ -1,7 +1,7 @@
-FUNCTIONS = $(shell cat ../../shell_functions.sh)
-STATA = @$(FUNCTIONS); stata_with_flag
-PYTHON = @$(FUNCTIONS); python_run
-R = @$(FUNCTIONS); R_pc_and_slurm
+# Source shell functions at runtime so bash (not Make) handles $@, $1, etc.
+STATA = @. ../../shell_functions.sh; stata_with_flag
+PYTHON = @. ../../shell_functions.sh; python_run
+R = @. ../../shell_functions.sh; R_pc_and_slurm
 
 #If 'make -n' option is invoked
 ifneq (,$(findstring n,$(MAKEFLAGS)))

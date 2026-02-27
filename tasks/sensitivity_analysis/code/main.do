@@ -4,18 +4,18 @@
 * Purpose: Test robustness of factor share estimates to
 *          different mixed income treatments, nonprofit
 *          handling, and gross vs net specifications
-* Inputs:  inputs/factor_shares/factor_shares_raw.dta
-*          inputs/factor_shares/factor_shares_adjusted.dta
-* Outputs: outputs/sensitivity_results.dta
-*          outputs/sensitivity_summary.tex
+* Inputs:  ../input/factor_shares/factor_shares_raw.dta
+*          ../input/factor_shares/factor_shares_adjusted.dta
+* Outputs: ../output/sensitivity_results.dta
+*          ../output/sensitivity_summary.tex
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/sensitivity_analysis.log", replace
+capture mkdir "../output"
+log using "sensitivity_analysis.log", replace
 
 * --- 0. Setup ---
 // UChicago palette
@@ -25,7 +25,7 @@ local phoenix   "255 163 25"
 
 * --- 1. Load adjusted factor shares ---
 display "Loading adjusted factor shares..."
-use "input/factor_shares/factor_shares_adjusted.dta", clear
+use "../input/factor_shares/factor_shares_adjusted.dta", clear
 display "Observations: " _N
 describe, short
 
@@ -153,7 +153,7 @@ label variable labor_share "Labor share"
 label variable capital_share "Capital share"
 
 compress
-save "output/sensitivity_results.dta", replace
+save "../output/sensitivity_results.dta", replace
 
 * Compute summary statistics
 collapse (mean) mean_labor=labor_share mean_capital=capital_share ///
@@ -183,10 +183,10 @@ capture {
     * Export
     * Note: This is a basic export. For publication quality, may need
     * manual formatting or esttab with stored estimates.
-    export delimited using "output/sensitivity_summary.csv", replace
+    export delimited using "../output/sensitivity_summary.csv", replace
 
     * Create a basic LaTeX table
-    file open tex using "output/sensitivity_summary.tex", write replace
+    file open tex using "../output/sensitivity_summary.tex", write replace
     file write tex "\begin{table}[htbp]" _n
     file write tex "\centering" _n
     file write tex "\caption{Factor Shares: Sensitivity to Specification}" _n
@@ -229,12 +229,12 @@ capture {
     file write tex "\end{table}" _n
     file close tex
 
-    display "LaTeX table saved to outputs/sensitivity_summary.tex"
+    display "LaTeX table saved to ../output/sensitivity_summary.tex"
 }
 
 * --- 7. Verification ---
 display _n "=== Verification ==="
-use "output/sensitivity_results.dta", clear
+use "../output/sensitivity_results.dta", clear
 
 * All shares should be in [0, 1]
 summarize labor_share capital_share
@@ -249,7 +249,7 @@ display "Number of specifications: `n_specs'"
 assert `n_specs' >= 3
 
 * Check outputs exist
-capture confirm file "output/sensitivity_summary.tex"
+capture confirm file "../output/sensitivity_summary.tex"
 if _rc == 0 {
     display "LaTeX table: OK"
 }

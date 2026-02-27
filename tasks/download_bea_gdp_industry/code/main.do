@@ -3,45 +3,45 @@
 * Project: Capital and Labor Shares in Healthcare
 * Purpose: Import BEA data via API (primary) or NIPA bulk (fallback),
 *          save as .dta files for downstream analysis
-* Inputs:  inputs/bea_api_key.txt (user provides)
-* Outputs: outputs/bea_va_panel.dta       (API: VA components by industry)
-*          outputs/nipa_comp.dta           (NIPA fallback: compensation)
-*          outputs/nipa_natl_income.dta    (NIPA fallback: national income)
-*          outputs/nipa_prop_income.dta    (NIPA fallback: prop income)
-*          outputs/nipa_self_employed.dta  (NIPA fallback: self-employed)
-*          outputs/nipa_fte_employees.dta  (NIPA fallback: FTE employees)
+* Inputs:  ../input/bea_api_key.txt (user provides)
+* Outputs: ../output/bea_va_panel.dta       (API: VA components by industry)
+*          ../output/nipa_comp.dta           (NIPA fallback: compensation)
+*          ../output/nipa_natl_income.dta    (NIPA fallback: national income)
+*          ../output/nipa_prop_income.dta    (NIPA fallback: prop income)
+*          ../output/nipa_self_employed.dta  (NIPA fallback: self-employed)
+*          ../output/nipa_fte_employees.dta  (NIPA fallback: FTE employees)
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/download_bea_gdp_industry.log", replace
+capture mkdir "../output"
+log using "download_bea_gdp_industry.log", replace
 
 * --- 0. Setup ---
 local task_root = c(pwd)
 
 * --- 1. Try BEA API first ---
 display "Attempting BEA API download..."
-capture confirm file "input/bea_api_key.txt"
+capture confirm file "../input/bea_api_key.txt"
 if _rc == 0 {
     * Always re-run API fetch if key exists (may have been activated)
-    shell python3 code/fetch_bea_api.py
+    shell python3 fetch_bea_api.py
 }
 
 * --- 2. Preprocess API data if available ---
-capture confirm file "output/bea_va_components.csv"
+capture confirm file "../output/bea_va_components.csv"
 local api_success = 0
 if _rc == 0 {
     * Check that the CSV has actual data (not just headers)
-    quietly import delimited using "output/bea_va_components.csv", clear
+    quietly import delimited using "../output/bea_va_components.csv", clear
     if _N > 100 {
         local api_success = 1
         clear
         * Run preprocessing to create clean panel
         display "Preprocessing API data..."
-        shell python3 code/preprocess_bea_api.py
+        shell python3 preprocess_bea_api.py
     }
     else {
         display "API CSV has too few rows (_N = " _N "). Falling back to NIPA."
@@ -50,10 +50,10 @@ if _rc == 0 {
 }
 
 * --- 3. Import BEA VA panel (from API) ---
-capture confirm file "output/bea_va_panel.csv"
+capture confirm file "../output/bea_va_panel.csv"
 if _rc == 0 {
     display _n "=== Importing BEA GDP-by-Industry Panel ==="
-    import delimited using "output/bea_va_panel.csv", clear varnames(1) ///
+    import delimited using "../output/bea_va_panel.csv", clear varnames(1) ///
         stringcols(1 3)
 
     * Convert value_added etc from billions to millions for consistency with NIPA
@@ -117,7 +117,7 @@ if _rc == 0 {
 
     label data "BEA GDP-by-Industry VA components panel"
     compress
-    save "output/bea_va_panel.dta", replace
+    save "../output/bea_va_panel.dta", replace
     display "Saved: bea_va_panel.dta (" _N " observations)"
 }
 else {
@@ -131,29 +131,29 @@ else {
 display _n "=== NIPA Supplementary Data ==="
 
 * Download NIPA bulk data if not present
-capture confirm file "output/NipaDataA.txt"
+capture confirm file "../output/NipaDataA.txt"
 if _rc != 0 {
     display "Downloading NipaDataA.txt from BEA..."
-    shell curl -sS -o "output/NipaDataA.txt" "https://apps.bea.gov/national/Release/TXT/NipaDataA.txt"
+    shell curl -sS -o "../output/NipaDataA.txt" "https://apps.bea.gov/national/Release/TXT/NipaDataA.txt"
 }
-capture confirm file "output/SeriesRegister.txt"
+capture confirm file "../output/SeriesRegister.txt"
 if _rc != 0 {
     display "Downloading SeriesRegister.txt..."
-    shell curl -sS -o "output/SeriesRegister.txt" "https://apps.bea.gov/national/Release/TXT/SeriesRegister.txt"
+    shell curl -sS -o "../output/SeriesRegister.txt" "https://apps.bea.gov/national/Release/TXT/SeriesRegister.txt"
 }
 
 * Run NIPA extraction (produces compensation, NI, prop income, self-employed, FTE)
-capture confirm file "output/nipa_comp.csv"
+capture confirm file "../output/nipa_comp.csv"
 if _rc != 0 {
     display "Extracting supplementary data from NIPA bulk file..."
-    shell python3 code/extract_nipa_bulk.py
+    shell python3 extract_nipa_bulk.py
 }
 
 * Import NIPA supplementary datasets
 foreach dataset in nipa_comp nipa_natl_income nipa_prop_income nipa_self_employed nipa_fte_employees {
-    capture confirm file "output/`dataset'.csv"
+    capture confirm file "../output/`dataset'.csv"
     if _rc == 0 {
-        import delimited using "output/`dataset'.csv", clear varnames(1) stringcols(1 4 5)
+        import delimited using "../output/`dataset'.csv", clear varnames(1) stringcols(1 4 5)
 
         * Rename value column based on dataset
         if "`dataset'" == "nipa_comp" {
@@ -178,7 +178,7 @@ foreach dataset in nipa_comp nipa_natl_income nipa_prop_income nipa_self_employe
         }
 
         compress
-        save "output/`dataset'.dta", replace
+        save "../output/`dataset'.dta", replace
         display "  `dataset': " _N " observations"
     }
     else {
@@ -190,9 +190,9 @@ foreach dataset in nipa_comp nipa_natl_income nipa_prop_income nipa_self_employe
 display _n "=== Final Verification ==="
 
 * BEA VA panel
-capture confirm file "output/bea_va_panel.dta"
+capture confirm file "../output/bea_va_panel.dta"
 if _rc == 0 {
-    quietly use "output/bea_va_panel.dta", clear
+    quietly use "../output/bea_va_panel.dta", clear
     quietly count if inlist(naics_code, "62", "621", "622", "623")
     display "  bea_va_panel.dta: " _N " obs, " r(N) " healthcare"
     display "  STATUS: GDP-by-Industry VA data AVAILABLE"
@@ -204,9 +204,9 @@ else {
 
 * NIPA supplementary
 foreach dataset in nipa_prop_income nipa_self_employed nipa_fte_employees {
-    capture confirm file "output/`dataset'.dta"
+    capture confirm file "../output/`dataset'.dta"
     if _rc == 0 {
-        quietly use "output/`dataset'.dta", clear
+        quietly use "../output/`dataset'.dta", clear
         quietly count if naics_code == "62"
         display "  `dataset': " _N " obs, " r(N) " healthcare"
     }

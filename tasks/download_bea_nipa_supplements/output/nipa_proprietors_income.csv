@@ -1,0 +1,757 @@
+TableName,SeriesCode,LineNumber,LineDescription,TimePeriod,METRIC_NAME,CL_UNIT,UNIT_MULT,DataValue,NoteRef,SourceTable
+T61200D,B046RC,1,Nonfarm proprietors' income,1998,Current Dollars,Level,6,"579,474",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,1999,Current Dollars,Level,6,"627,671",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2000,Current Dollars,Level,6,"674,045",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2001,Current Dollars,Level,6,"728,238",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2002,Current Dollars,Level,6,"761,940",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2003,Current Dollars,Level,6,"767,702",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2004,Current Dollars,Level,6,"814,869",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2005,Current Dollars,Level,6,"870,539",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2006,Current Dollars,Level,6,"948,631",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2007,Current Dollars,Level,6,"881,248",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2008,Current Dollars,Level,6,"785,625",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2009,Current Dollars,Level,6,"774,785",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2010,Current Dollars,Level,6,"930,451",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2011,Current Dollars,Level,6,"977,678",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2012,Current Dollars,Level,6,"1,077,861",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2013,Current Dollars,Level,6,"1,071,909",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2014,Current Dollars,Level,6,"1,097,335",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2015,Current Dollars,Level,6,"1,059,283",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2016,Current Dollars,Level,6,"1,066,239",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2017,Current Dollars,Level,6,"1,088,100",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2018,Current Dollars,Level,6,"1,109,779",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2019,Current Dollars,Level,6,"1,147,967",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2020,Current Dollars,Level,6,"1,143,486",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2021,Current Dollars,Level,6,"1,364,069",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2022,Current Dollars,Level,6,"1,345,740",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2023,Current Dollars,Level,6,"1,561,043",T61200D,T61200D
+T61200D,B046RC,1,Nonfarm proprietors' income,2024,Current Dollars,Level,6,"1,652,677",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",1998,Current Dollars,Level,6,"7,036",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",1999,Current Dollars,Level,6,"6,692",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2000,Current Dollars,Level,6,"8,055",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2001,Current Dollars,Level,6,"8,203",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2002,Current Dollars,Level,6,"7,614",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2003,Current Dollars,Level,6,"7,194",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2004,Current Dollars,Level,6,"7,295",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2005,Current Dollars,Level,6,"7,718",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2006,Current Dollars,Level,6,"8,436",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2007,Current Dollars,Level,6,"5,285",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2008,Current Dollars,Level,6,"3,903",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2009,Current Dollars,Level,6,"3,609",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2010,Current Dollars,Level,6,"7,412",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2011,Current Dollars,Level,6,"6,363",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2012,Current Dollars,Level,6,"7,400",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2013,Current Dollars,Level,6,"6,768",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2014,Current Dollars,Level,6,"6,305",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2015,Current Dollars,Level,6,"7,370",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2016,Current Dollars,Level,6,"7,535",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2017,Current Dollars,Level,6,"7,294",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2018,Current Dollars,Level,6,"7,128",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2019,Current Dollars,Level,6,"6,473",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2020,Current Dollars,Level,6,"8,039",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2021,Current Dollars,Level,6,"7,725",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2022,Current Dollars,Level,6,"6,276",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2023,Current Dollars,Level,6,"8,907",T61200D,T61200D
+T61200D,N1800C,2,"Forestry, fishing, and related activities",2024,Current Dollars,Level,6,"9,436",T61200D,T61200D
+T61200D,N1801C,3,Mining,1998,Current Dollars,Level,6,"8,489",T61200D,T61200D
+T61200D,N1801C,3,Mining,1999,Current Dollars,Level,6,"6,835",T61200D,T61200D
+T61200D,N1801C,3,Mining,2000,Current Dollars,Level,6,"10,310",T61200D,T61200D
+T61200D,N1801C,3,Mining,2001,Current Dollars,Level,6,"14,337",T61200D,T61200D
+T61200D,N1801C,3,Mining,2002,Current Dollars,Level,6,"14,636",T61200D,T61200D
+T61200D,N1801C,3,Mining,2003,Current Dollars,Level,6,"20,248",T61200D,T61200D
+T61200D,N1801C,3,Mining,2004,Current Dollars,Level,6,"23,759",T61200D,T61200D
+T61200D,N1801C,3,Mining,2005,Current Dollars,Level,6,"37,655",T61200D,T61200D
+T61200D,N1801C,3,Mining,2006,Current Dollars,Level,6,"42,054",T61200D,T61200D
+T61200D,N1801C,3,Mining,2007,Current Dollars,Level,6,"22,944",T61200D,T61200D
+T61200D,N1801C,3,Mining,2008,Current Dollars,Level,6,"59,078",T61200D,T61200D
+T61200D,N1801C,3,Mining,2009,Current Dollars,Level,6,"11,353",T61200D,T61200D
+T61200D,N1801C,3,Mining,2010,Current Dollars,Level,6,"18,709",T61200D,T61200D
+T61200D,N1801C,3,Mining,2011,Current Dollars,Level,6,"38,630",T61200D,T61200D
+T61200D,N1801C,3,Mining,2012,Current Dollars,Level,6,"40,406",T61200D,T61200D
+T61200D,N1801C,3,Mining,2013,Current Dollars,Level,6,"41,613",T61200D,T61200D
+T61200D,N1801C,3,Mining,2014,Current Dollars,Level,6,"47,138",T61200D,T61200D
+T61200D,N1801C,3,Mining,2015,Current Dollars,Level,6,"-9,699",T61200D,T61200D
+T61200D,N1801C,3,Mining,2016,Current Dollars,Level,6,"-25,519",T61200D,T61200D
+T61200D,N1801C,3,Mining,2017,Current Dollars,Level,6,"5,105",T61200D,T61200D
+T61200D,N1801C,3,Mining,2018,Current Dollars,Level,6,"19,811",T61200D,T61200D
+T61200D,N1801C,3,Mining,2019,Current Dollars,Level,6,"16,395",T61200D,T61200D
+T61200D,N1801C,3,Mining,2020,Current Dollars,Level,6,"-5,396",T61200D,T61200D
+T61200D,N1801C,3,Mining,2021,Current Dollars,Level,6,"23,590",T61200D,T61200D
+T61200D,N1801C,3,Mining,2022,Current Dollars,Level,6,"63,409",T61200D,T61200D
+T61200D,N1801C,3,Mining,2023,Current Dollars,Level,6,"57,562",T61200D,T61200D
+T61200D,N1801C,3,Mining,2024,Current Dollars,Level,6,"56,056",T61200D,T61200D
+T61200D,N1802C,4,Utilities,1998,Current Dollars,Level,6,824,T61200D,T61200D
+T61200D,N1802C,4,Utilities,1999,Current Dollars,Level,6,583,T61200D,T61200D
+T61200D,N1802C,4,Utilities,2000,Current Dollars,Level,6,"1,233",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2001,Current Dollars,Level,6,"2,363",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2002,Current Dollars,Level,6,18,T61200D,T61200D
+T61200D,N1802C,4,Utilities,2003,Current Dollars,Level,6,415,T61200D,T61200D
+T61200D,N1802C,4,Utilities,2004,Current Dollars,Level,6,"1,273",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2005,Current Dollars,Level,6,657,T61200D,T61200D
+T61200D,N1802C,4,Utilities,2006,Current Dollars,Level,6,"3,012",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2007,Current Dollars,Level,6,"1,058",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2008,Current Dollars,Level,6,-728,T61200D,T61200D
+T61200D,N1802C,4,Utilities,2009,Current Dollars,Level,6,"-5,449",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2010,Current Dollars,Level,6,"-5,218",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2011,Current Dollars,Level,6,"-10,450",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2012,Current Dollars,Level,6,"-9,325",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2013,Current Dollars,Level,6,"-12,556",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2014,Current Dollars,Level,6,"-10,675",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2015,Current Dollars,Level,6,"-11,674",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2016,Current Dollars,Level,6,"-18,213",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2017,Current Dollars,Level,6,"-16,606",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2018,Current Dollars,Level,6,"-4,550",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2019,Current Dollars,Level,6,"-9,606",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2020,Current Dollars,Level,6,"-9,803",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2021,Current Dollars,Level,6,"-4,401",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2022,Current Dollars,Level,6,-729,T61200D,T61200D
+T61200D,N1802C,4,Utilities,2023,Current Dollars,Level,6,"7,639",T61200D,T61200D
+T61200D,N1802C,4,Utilities,2024,Current Dollars,Level,6,"8,714",T61200D,T61200D
+T61200D,N1803C,5,Construction,1998,Current Dollars,Level,6,"85,148",T61200D,T61200D
+T61200D,N1803C,5,Construction,1999,Current Dollars,Level,6,"100,852",T61200D,T61200D
+T61200D,N1803C,5,Construction,2000,Current Dollars,Level,6,"111,822",T61200D,T61200D
+T61200D,N1803C,5,Construction,2001,Current Dollars,Level,6,"122,968",T61200D,T61200D
+T61200D,N1803C,5,Construction,2002,Current Dollars,Level,6,"131,007",T61200D,T61200D
+T61200D,N1803C,5,Construction,2003,Current Dollars,Level,6,"139,091",T61200D,T61200D
+T61200D,N1803C,5,Construction,2004,Current Dollars,Level,6,"151,248",T61200D,T61200D
+T61200D,N1803C,5,Construction,2005,Current Dollars,Level,6,"157,729",T61200D,T61200D
+T61200D,N1803C,5,Construction,2006,Current Dollars,Level,6,"173,523",T61200D,T61200D
+T61200D,N1803C,5,Construction,2007,Current Dollars,Level,6,"147,382",T61200D,T61200D
+T61200D,N1803C,5,Construction,2008,Current Dollars,Level,6,"110,031",T61200D,T61200D
+T61200D,N1803C,5,Construction,2009,Current Dollars,Level,6,"110,011",T61200D,T61200D
+T61200D,N1803C,5,Construction,2010,Current Dollars,Level,6,"140,140",T61200D,T61200D
+T61200D,N1803C,5,Construction,2011,Current Dollars,Level,6,"145,545",T61200D,T61200D
+T61200D,N1803C,5,Construction,2012,Current Dollars,Level,6,"157,598",T61200D,T61200D
+T61200D,N1803C,5,Construction,2013,Current Dollars,Level,6,"159,183",T61200D,T61200D
+T61200D,N1803C,5,Construction,2014,Current Dollars,Level,6,"168,042",T61200D,T61200D
+T61200D,N1803C,5,Construction,2015,Current Dollars,Level,6,"172,911",T61200D,T61200D
+T61200D,N1803C,5,Construction,2016,Current Dollars,Level,6,"174,767",T61200D,T61200D
+T61200D,N1803C,5,Construction,2017,Current Dollars,Level,6,"185,791",T61200D,T61200D
+T61200D,N1803C,5,Construction,2018,Current Dollars,Level,6,"185,275",T61200D,T61200D
+T61200D,N1803C,5,Construction,2019,Current Dollars,Level,6,"199,066",T61200D,T61200D
+T61200D,N1803C,5,Construction,2020,Current Dollars,Level,6,"196,511",T61200D,T61200D
+T61200D,N1803C,5,Construction,2021,Current Dollars,Level,6,"203,037",T61200D,T61200D
+T61200D,N1803C,5,Construction,2022,Current Dollars,Level,6,"208,149",T61200D,T61200D
+T61200D,N1803C,5,Construction,2023,Current Dollars,Level,6,"231,775",T61200D,T61200D
+T61200D,N1803C,5,Construction,2024,Current Dollars,Level,6,"246,068",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,1998,Current Dollars,Level,6,"17,173",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,1999,Current Dollars,Level,6,"17,041",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2000,Current Dollars,Level,6,"18,449",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2001,Current Dollars,Level,6,"16,999",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2002,Current Dollars,Level,6,"17,824",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2003,Current Dollars,Level,6,"16,250",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2004,Current Dollars,Level,6,"22,677",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2005,Current Dollars,Level,6,"23,537",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2006,Current Dollars,Level,6,"27,553",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2007,Current Dollars,Level,6,"25,161",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2008,Current Dollars,Level,6,"16,907",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2009,Current Dollars,Level,6,"9,664",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2010,Current Dollars,Level,6,"15,748",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2011,Current Dollars,Level,6,"22,293",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2012,Current Dollars,Level,6,"24,785",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2013,Current Dollars,Level,6,"26,837",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2014,Current Dollars,Level,6,"26,437",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2015,Current Dollars,Level,6,"29,991",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2016,Current Dollars,Level,6,"18,638",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2017,Current Dollars,Level,6,"19,823",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2018,Current Dollars,Level,6,"24,065",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2019,Current Dollars,Level,6,"26,377",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2020,Current Dollars,Level,6,"33,652",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2021,Current Dollars,Level,6,"56,070",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2022,Current Dollars,Level,6,"53,944",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2023,Current Dollars,Level,6,"58,794",T61200D,T61200D
+T61200D,N1804C,6,Manufacturing,2024,Current Dollars,Level,6,"57,757",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,1998,Current Dollars,Level,6,"9,392",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,1999,Current Dollars,Level,6,"9,432",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2000,Current Dollars,Level,6,"11,387",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2001,Current Dollars,Level,6,"9,276",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2002,Current Dollars,Level,6,"11,788",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2003,Current Dollars,Level,6,"9,492",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2004,Current Dollars,Level,6,"11,323",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2005,Current Dollars,Level,6,"11,740",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2006,Current Dollars,Level,6,"13,316",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2007,Current Dollars,Level,6,"10,633",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2008,Current Dollars,Level,6,-439,T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2009,Current Dollars,Level,6,581,T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2010,Current Dollars,Level,6,"5,578",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2011,Current Dollars,Level,6,"4,616",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2012,Current Dollars,Level,6,"8,217",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2013,Current Dollars,Level,6,"11,235",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2014,Current Dollars,Level,6,"8,241",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2015,Current Dollars,Level,6,"8,972",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2016,Current Dollars,Level,6,"10,269",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2017,Current Dollars,Level,6,"13,499",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2018,Current Dollars,Level,6,"12,566",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2019,Current Dollars,Level,6,"14,173",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2020,Current Dollars,Level,6,"23,383",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2021,Current Dollars,Level,6,"30,438",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2022,Current Dollars,Level,6,"23,062",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2023,Current Dollars,Level,6,"25,771",T61200D,T61200D
+T61200D,N1805C,7,Durable goods,2024,Current Dollars,Level,6,"26,263",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,1998,Current Dollars,Level,6,"7,781",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,1999,Current Dollars,Level,6,"7,609",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2000,Current Dollars,Level,6,"7,063",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2001,Current Dollars,Level,6,"7,724",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2002,Current Dollars,Level,6,"6,036",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2003,Current Dollars,Level,6,"6,758",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2004,Current Dollars,Level,6,"11,354",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2005,Current Dollars,Level,6,"11,797",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2006,Current Dollars,Level,6,"14,238",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2007,Current Dollars,Level,6,"14,528",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2008,Current Dollars,Level,6,"17,346",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2009,Current Dollars,Level,6,"9,083",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2010,Current Dollars,Level,6,"10,170",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2011,Current Dollars,Level,6,"17,677",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2012,Current Dollars,Level,6,"16,567",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2013,Current Dollars,Level,6,"15,602",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2014,Current Dollars,Level,6,"18,196",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2015,Current Dollars,Level,6,"21,019",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2016,Current Dollars,Level,6,"8,368",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2017,Current Dollars,Level,6,"6,324",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2018,Current Dollars,Level,6,"11,499",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2019,Current Dollars,Level,6,"12,204",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2020,Current Dollars,Level,6,"10,269",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2021,Current Dollars,Level,6,"25,632",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2022,Current Dollars,Level,6,"30,882",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2023,Current Dollars,Level,6,"33,024",T61200D,T61200D
+T61200D,N1806C,8,Nondurable goods,2024,Current Dollars,Level,6,"31,494",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,1998,Current Dollars,Level,6,"21,905",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,1999,Current Dollars,Level,6,"23,100",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2000,Current Dollars,Level,6,"24,802",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2001,Current Dollars,Level,6,"25,683",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2002,Current Dollars,Level,6,"27,868",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2003,Current Dollars,Level,6,"28,599",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2004,Current Dollars,Level,6,"31,866",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2005,Current Dollars,Level,6,"33,117",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2006,Current Dollars,Level,6,"36,602",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2007,Current Dollars,Level,6,"32,291",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2008,Current Dollars,Level,6,"27,134",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2009,Current Dollars,Level,6,"23,123",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2010,Current Dollars,Level,6,"26,538",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2011,Current Dollars,Level,6,"29,287",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2012,Current Dollars,Level,6,"30,972",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2013,Current Dollars,Level,6,"30,353",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2014,Current Dollars,Level,6,"31,770",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2015,Current Dollars,Level,6,"32,522",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2016,Current Dollars,Level,6,"30,237",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2017,Current Dollars,Level,6,"28,506",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2018,Current Dollars,Level,6,"28,180",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2019,Current Dollars,Level,6,"29,954",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2020,Current Dollars,Level,6,"39,698",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2021,Current Dollars,Level,6,"45,512",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2022,Current Dollars,Level,6,"49,503",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2023,Current Dollars,Level,6,"54,631",T61200D,T61200D
+T61200D,N1807C,9,Wholesale trade,2024,Current Dollars,Level,6,"58,091",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,1998,Current Dollars,Level,6,"46,650",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,1999,Current Dollars,Level,6,"50,893",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2000,Current Dollars,Level,6,"51,025",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2001,Current Dollars,Level,6,"53,362",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2002,Current Dollars,Level,6,"55,975",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2003,Current Dollars,Level,6,"59,187",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2004,Current Dollars,Level,6,"61,117",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2005,Current Dollars,Level,6,"64,121",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2006,Current Dollars,Level,6,"71,478",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2007,Current Dollars,Level,6,"57,476",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2008,Current Dollars,Level,6,"35,902",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2009,Current Dollars,Level,6,"48,364",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2010,Current Dollars,Level,6,"63,947",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2011,Current Dollars,Level,6,"66,662",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2012,Current Dollars,Level,6,"70,809",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2013,Current Dollars,Level,6,"69,796",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2014,Current Dollars,Level,6,"72,930",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2015,Current Dollars,Level,6,"71,903",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2016,Current Dollars,Level,6,"69,469",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2017,Current Dollars,Level,6,"68,766",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2018,Current Dollars,Level,6,"73,461",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2019,Current Dollars,Level,6,"73,605",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2020,Current Dollars,Level,6,"84,697",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2021,Current Dollars,Level,6,"94,098",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2022,Current Dollars,Level,6,"87,248",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2023,Current Dollars,Level,6,"96,131",T61200D,T61200D
+T61200D,N1808C,10,Retail trade,2024,Current Dollars,Level,6,"99,132",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,1998,Current Dollars,Level,6,"26,240",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,1999,Current Dollars,Level,6,"23,335",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2000,Current Dollars,Level,6,"25,723",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2001,Current Dollars,Level,6,"34,014",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2002,Current Dollars,Level,6,"29,861",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2003,Current Dollars,Level,6,"31,608",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2004,Current Dollars,Level,6,"34,365",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2005,Current Dollars,Level,6,"35,892",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2006,Current Dollars,Level,6,"40,208",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2007,Current Dollars,Level,6,"50,334",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2008,Current Dollars,Level,6,"36,546",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2009,Current Dollars,Level,6,"37,170",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2010,Current Dollars,Level,6,"45,121",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2011,Current Dollars,Level,6,"48,952",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2012,Current Dollars,Level,6,"53,634",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2013,Current Dollars,Level,6,"51,235",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2014,Current Dollars,Level,6,"56,076",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2015,Current Dollars,Level,6,"59,743",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2016,Current Dollars,Level,6,"57,119",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2017,Current Dollars,Level,6,"59,401",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2018,Current Dollars,Level,6,"56,272",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2019,Current Dollars,Level,6,"57,657",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2020,Current Dollars,Level,6,"57,953",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2021,Current Dollars,Level,6,"74,877",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2022,Current Dollars,Level,6,"83,598",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2023,Current Dollars,Level,6,"120,121",T61200D,T61200D
+T61200D,N1809C,11,Transportation and warehousing,2024,Current Dollars,Level,6,"128,080",T61200D,T61200D
+T61200D,N1810C,12,Information,1998,Current Dollars,Level,6,"7,264",T61200D,T61200D
+T61200D,N1810C,12,Information,1999,Current Dollars,Level,6,"6,315",T61200D,T61200D
+T61200D,N1810C,12,Information,2000,Current Dollars,Level,6,"4,706",T61200D,T61200D
+T61200D,N1810C,12,Information,2001,Current Dollars,Level,6,"3,564",T61200D,T61200D
+T61200D,N1810C,12,Information,2002,Current Dollars,Level,6,"5,602",T61200D,T61200D
+T61200D,N1810C,12,Information,2003,Current Dollars,Level,6,"6,150",T61200D,T61200D
+T61200D,N1810C,12,Information,2004,Current Dollars,Level,6,"6,903",T61200D,T61200D
+T61200D,N1810C,12,Information,2005,Current Dollars,Level,6,"11,825",T61200D,T61200D
+T61200D,N1810C,12,Information,2006,Current Dollars,Level,6,"9,559",T61200D,T61200D
+T61200D,N1810C,12,Information,2007,Current Dollars,Level,6,"20,145",T61200D,T61200D
+T61200D,N1810C,12,Information,2008,Current Dollars,Level,6,"23,117",T61200D,T61200D
+T61200D,N1810C,12,Information,2009,Current Dollars,Level,6,"20,141",T61200D,T61200D
+T61200D,N1810C,12,Information,2010,Current Dollars,Level,6,"17,052",T61200D,T61200D
+T61200D,N1810C,12,Information,2011,Current Dollars,Level,6,"10,697",T61200D,T61200D
+T61200D,N1810C,12,Information,2012,Current Dollars,Level,6,"30,361",T61200D,T61200D
+T61200D,N1810C,12,Information,2013,Current Dollars,Level,6,"39,491",T61200D,T61200D
+T61200D,N1810C,12,Information,2014,Current Dollars,Level,6,"35,421",T61200D,T61200D
+T61200D,N1810C,12,Information,2015,Current Dollars,Level,6,"39,226",T61200D,T61200D
+T61200D,N1810C,12,Information,2016,Current Dollars,Level,6,"37,482",T61200D,T61200D
+T61200D,N1810C,12,Information,2017,Current Dollars,Level,6,"29,159",T61200D,T61200D
+T61200D,N1810C,12,Information,2018,Current Dollars,Level,6,"33,581",T61200D,T61200D
+T61200D,N1810C,12,Information,2019,Current Dollars,Level,6,"29,043",T61200D,T61200D
+T61200D,N1810C,12,Information,2020,Current Dollars,Level,6,"20,861",T61200D,T61200D
+T61200D,N1810C,12,Information,2021,Current Dollars,Level,6,"19,867",T61200D,T61200D
+T61200D,N1810C,12,Information,2022,Current Dollars,Level,6,"24,226",T61200D,T61200D
+T61200D,N1810C,12,Information,2023,Current Dollars,Level,6,"40,685",T61200D,T61200D
+T61200D,N1810C,12,Information,2024,Current Dollars,Level,6,"45,701",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",1998,Current Dollars,Level,6,"69,433",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",1999,Current Dollars,Level,6,"83,187",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2000,Current Dollars,Level,6,"93,269",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2001,Current Dollars,Level,6,"105,322",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2002,Current Dollars,Level,6,"101,005",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2003,Current Dollars,Level,6,"95,566",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2004,Current Dollars,Level,6,"86,996",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2005,Current Dollars,Level,6,"93,601",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2006,Current Dollars,Level,6,"86,369",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2007,Current Dollars,Level,6,"52,548",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2008,Current Dollars,Level,6,"19,005",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2009,Current Dollars,Level,6,"66,207",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2010,Current Dollars,Level,6,"92,730",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2011,Current Dollars,Level,6,"73,697",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2012,Current Dollars,Level,6,"117,018",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2013,Current Dollars,Level,6,"111,049",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2014,Current Dollars,Level,6,"81,331",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2015,Current Dollars,Level,6,"80,728",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2016,Current Dollars,Level,6,"122,115",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2017,Current Dollars,Level,6,"109,334",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2018,Current Dollars,Level,6,"81,656",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2019,Current Dollars,Level,6,"91,940",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2020,Current Dollars,Level,6,"97,388",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2021,Current Dollars,Level,6,"117,256",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2022,Current Dollars,Level,6,"93,291",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2023,Current Dollars,Level,6,"112,670",T61200D,T61200D
+T61200D,N1811C,13,"Finance, insurance, real estate, rental, and leasing",2024,Current Dollars,Level,6,"118,927",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,1998,Current Dollars,Level,6,"27,827",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,1999,Current Dollars,Level,6,"37,802",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2000,Current Dollars,Level,6,"49,662",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2001,Current Dollars,Level,6,"58,355",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2002,Current Dollars,Level,6,"54,139",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2003,Current Dollars,Level,6,"50,032",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2004,Current Dollars,Level,6,"47,281",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2005,Current Dollars,Level,6,"47,609",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2006,Current Dollars,Level,6,"49,990",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2007,Current Dollars,Level,6,"40,646",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2008,Current Dollars,Level,6,"22,307",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2009,Current Dollars,Level,6,"74,208",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2010,Current Dollars,Level,6,"87,150",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2011,Current Dollars,Level,6,"56,738",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2012,Current Dollars,Level,6,"69,767",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2013,Current Dollars,Level,6,"50,861",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2014,Current Dollars,Level,6,"18,898",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2015,Current Dollars,Level,6,"9,629",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2016,Current Dollars,Level,6,"42,208",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2017,Current Dollars,Level,6,"52,209",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2018,Current Dollars,Level,6,"30,286",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2019,Current Dollars,Level,6,"32,442",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2020,Current Dollars,Level,6,"60,872",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2021,Current Dollars,Level,6,"64,176",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2022,Current Dollars,Level,6,"61,046",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2023,Current Dollars,Level,6,"67,666",T61200D,T61200D
+T61200D,N1812C,14,Finance and insurance,2024,Current Dollars,Level,6,"73,093",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,1998,Current Dollars,Level,6,"41,607",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,1999,Current Dollars,Level,6,"45,385",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2000,Current Dollars,Level,6,"43,608",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2001,Current Dollars,Level,6,"46,967",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2002,Current Dollars,Level,6,"46,865",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2003,Current Dollars,Level,6,"45,534",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2004,Current Dollars,Level,6,"39,715",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2005,Current Dollars,Level,6,"45,992",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2006,Current Dollars,Level,6,"36,379",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2007,Current Dollars,Level,6,"11,902",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2008,Current Dollars,Level,6,"-3,302",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2009,Current Dollars,Level,6,"-8,002",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2010,Current Dollars,Level,6,"5,581",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2011,Current Dollars,Level,6,"16,959",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2012,Current Dollars,Level,6,"47,252",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2013,Current Dollars,Level,6,"60,188",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2014,Current Dollars,Level,6,"62,433",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2015,Current Dollars,Level,6,"71,099",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2016,Current Dollars,Level,6,"79,906",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2017,Current Dollars,Level,6,"57,126",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2018,Current Dollars,Level,6,"51,370",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2019,Current Dollars,Level,6,"59,499",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2020,Current Dollars,Level,6,"36,515",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2021,Current Dollars,Level,6,"53,080",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2022,Current Dollars,Level,6,"32,244",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2023,Current Dollars,Level,6,"45,004",T61200D,T61200D
+T61200D,N1813C,15,Real estate and rental and leasing,2024,Current Dollars,Level,6,"45,834",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,1998,Current Dollars,Level,6,"122,613",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,1999,Current Dollars,Level,6,"130,054",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2000,Current Dollars,Level,6,"135,407",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2001,Current Dollars,Level,6,"159,439",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2002,Current Dollars,Level,6,"166,633",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2003,Current Dollars,Level,6,"166,597",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2004,Current Dollars,Level,6,"177,487",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2005,Current Dollars,Level,6,"180,354",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2006,Current Dollars,Level,6,"202,784",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2007,Current Dollars,Level,6,"224,229",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2008,Current Dollars,Level,6,"243,672",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2009,Current Dollars,Level,6,"233,294",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2010,Current Dollars,Level,6,"239,640",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2011,Current Dollars,Level,6,"261,333",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2012,Current Dollars,Level,6,"260,886",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2013,Current Dollars,Level,6,"253,287",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2014,Current Dollars,Level,6,"270,693",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2015,Current Dollars,Level,6,"271,215",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2016,Current Dollars,Level,6,"275,911",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2017,Current Dollars,Level,6,"286,142",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2018,Current Dollars,Level,6,"293,699",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2019,Current Dollars,Level,6,"311,392",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2020,Current Dollars,Level,6,"316,380",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2021,Current Dollars,Level,6,"339,105",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2022,Current Dollars,Level,6,"349,845",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2023,Current Dollars,Level,6,"381,204",T61200D,T61200D
+T61200D,N1814C,16,Professional and business services,2024,Current Dollars,Level,6,"404,668",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",1998,Current Dollars,Level,6,"107,351",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",1999,Current Dollars,Level,6,"112,052",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2000,Current Dollars,Level,6,"116,652",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2001,Current Dollars,Level,6,"129,016",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2002,Current Dollars,Level,6,"134,024",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2003,Current Dollars,Level,6,"133,103",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2004,Current Dollars,Level,6,"144,609",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2005,Current Dollars,Level,6,"149,348",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2006,Current Dollars,Level,6,"164,698",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2007,Current Dollars,Level,6,"181,690",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2008,Current Dollars,Level,6,"208,886",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2009,Current Dollars,Level,6,"185,873",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2010,Current Dollars,Level,6,"192,101",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2011,Current Dollars,Level,6,"206,884",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2012,Current Dollars,Level,6,"208,294",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2013,Current Dollars,Level,6,"200,988",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2014,Current Dollars,Level,6,"216,506",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2015,Current Dollars,Level,6,"224,175",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2016,Current Dollars,Level,6,"222,760",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2017,Current Dollars,Level,6,"229,899",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2018,Current Dollars,Level,6,"236,876",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2019,Current Dollars,Level,6,"247,248",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2020,Current Dollars,Level,6,"251,243",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2021,Current Dollars,Level,6,"279,411",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2022,Current Dollars,Level,6,"287,024",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2023,Current Dollars,Level,6,"310,397",T61200D,T61200D
+T61200D,N1815C,17,"Professional, scientific, and technical services",2024,Current Dollars,Level,6,"332,433",T61200D,T61200D
+T61200D,N1816C,18,Legal services,1998,Current Dollars,Level,6,"38,180",T61200D,T61200D
+T61200D,N1816C,18,Legal services,1999,Current Dollars,Level,6,"40,155",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2000,Current Dollars,Level,6,"39,984",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2001,Current Dollars,Level,6,"44,796",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2002,Current Dollars,Level,6,"45,390",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2003,Current Dollars,Level,6,"45,909",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2004,Current Dollars,Level,6,"50,184",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2005,Current Dollars,Level,6,"49,689",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2006,Current Dollars,Level,6,"50,723",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2007,Current Dollars,Level,6,"64,908",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2008,Current Dollars,Level,6,"85,839",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2009,Current Dollars,Level,6,"73,750",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2010,Current Dollars,Level,6,"70,635",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2011,Current Dollars,Level,6,"77,893",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2012,Current Dollars,Level,6,"76,153",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2013,Current Dollars,Level,6,"74,059",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2014,Current Dollars,Level,6,"78,507",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2015,Current Dollars,Level,6,"82,872",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2016,Current Dollars,Level,6,"87,900",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2017,Current Dollars,Level,6,"86,656",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2018,Current Dollars,Level,6,"89,664",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2019,Current Dollars,Level,6,"95,242",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2020,Current Dollars,Level,6,"88,665",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2021,Current Dollars,Level,6,"97,963",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2022,Current Dollars,Level,6,"110,886",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2023,Current Dollars,Level,6,"115,391",T61200D,T61200D
+T61200D,N1816C,18,Legal services,2024,Current Dollars,Level,6,"124,699",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,1998,Current Dollars,Level,6,"7,363",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,1999,Current Dollars,Level,6,"7,440",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2000,Current Dollars,Level,6,"8,577",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2001,Current Dollars,Level,6,"10,297",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2002,Current Dollars,Level,6,"14,126",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2003,Current Dollars,Level,6,"10,592",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2004,Current Dollars,Level,6,"11,779",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2005,Current Dollars,Level,6,"16,586",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2006,Current Dollars,Level,6,"19,082",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2007,Current Dollars,Level,6,"9,488",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2008,Current Dollars,Level,6,"7,367",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2009,Current Dollars,Level,6,"8,607",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2010,Current Dollars,Level,6,"9,843",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2011,Current Dollars,Level,6,"11,594",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2012,Current Dollars,Level,6,"11,257",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2013,Current Dollars,Level,6,"10,831",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2014,Current Dollars,Level,6,"10,841",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2015,Current Dollars,Level,6,"10,086",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2016,Current Dollars,Level,6,"10,909",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2017,Current Dollars,Level,6,"10,178",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2018,Current Dollars,Level,6,"11,622",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2019,Current Dollars,Level,6,"10,874",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2020,Current Dollars,Level,6,"14,215",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2021,Current Dollars,Level,6,"16,306",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2022,Current Dollars,Level,6,"13,695",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2023,Current Dollars,Level,6,"15,308",T61200D,T61200D
+T61200D,N1817C,19,Computer systems design and related services,2024,Current Dollars,Level,6,"16,706",T61200D,T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",1998,Current Dollars,Level,6,"61,807","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",1999,Current Dollars,Level,6,"64,457","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2000,Current Dollars,Level,6,"68,091","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2001,Current Dollars,Level,6,"73,923","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2002,Current Dollars,Level,6,"74,508","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2003,Current Dollars,Level,6,"76,602","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2004,Current Dollars,Level,6,"82,646","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2005,Current Dollars,Level,6,"83,073","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2006,Current Dollars,Level,6,"94,892","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2007,Current Dollars,Level,6,"107,295","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2008,Current Dollars,Level,6,"115,680","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2009,Current Dollars,Level,6,"103,516","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2010,Current Dollars,Level,6,"111,622","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2011,Current Dollars,Level,6,"117,398","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2012,Current Dollars,Level,6,"120,884","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2013,Current Dollars,Level,6,"116,098","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2014,Current Dollars,Level,6,"127,158","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2015,Current Dollars,Level,6,"131,217","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2016,Current Dollars,Level,6,"123,951","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2017,Current Dollars,Level,6,"133,064","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2018,Current Dollars,Level,6,"135,590","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2019,Current Dollars,Level,6,"141,133","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2020,Current Dollars,Level,6,"148,363","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2021,Current Dollars,Level,6,"165,142","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2022,Current Dollars,Level,6,"162,442","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2023,Current Dollars,Level,6,"179,698","T61200D,T61200D.1",T61200D
+T61200D,N1818C,20,"Miscellaneous professional, scientific, and technical services",2024,Current Dollars,Level,6,"191,028","T61200D,T61200D.1",T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,1998,Current Dollars,Level,6,"15,262",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,1999,Current Dollars,Level,6,"18,003",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2000,Current Dollars,Level,6,"18,755",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2001,Current Dollars,Level,6,"30,422",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2002,Current Dollars,Level,6,"32,609",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2003,Current Dollars,Level,6,"33,494",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2004,Current Dollars,Level,6,"32,878",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2005,Current Dollars,Level,6,"31,006",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2006,Current Dollars,Level,6,"38,086",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2007,Current Dollars,Level,6,"42,539",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2008,Current Dollars,Level,6,"34,786",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2009,Current Dollars,Level,6,"47,420",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2010,Current Dollars,Level,6,"47,540",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2011,Current Dollars,Level,6,"54,449",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2012,Current Dollars,Level,6,"52,592",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2013,Current Dollars,Level,6,"52,299",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2014,Current Dollars,Level,6,"54,187",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2015,Current Dollars,Level,6,"47,040",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2016,Current Dollars,Level,6,"53,151",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2017,Current Dollars,Level,6,"56,243",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2018,Current Dollars,Level,6,"56,823",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2019,Current Dollars,Level,6,"64,144",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2020,Current Dollars,Level,6,"65,137",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2021,Current Dollars,Level,6,"59,694",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2022,Current Dollars,Level,6,"62,822",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2023,Current Dollars,Level,6,"70,807",T61200D,T61200D
+T61200D,N1819C,21,Management of companies and enterprises; administrative and waste management services,2024,Current Dollars,Level,6,"72,235",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",1998,Current Dollars,Level,6,"64,333",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",1999,Current Dollars,Level,6,"66,783",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2000,Current Dollars,Level,6,"69,818",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2001,Current Dollars,Level,6,"81,997",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2002,Current Dollars,Level,6,"88,585",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2003,Current Dollars,Level,6,"85,300",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2004,Current Dollars,Level,6,"91,463",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2005,Current Dollars,Level,6,"90,354",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2006,Current Dollars,Level,6,"97,168",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2007,Current Dollars,Level,6,"103,708",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2008,Current Dollars,Level,6,"108,864",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2009,Current Dollars,Level,6,"110,249",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2010,Current Dollars,Level,6,"123,718",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2011,Current Dollars,Level,6,"130,821",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2012,Current Dollars,Level,6,"129,546",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2013,Current Dollars,Level,6,"129,612",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2014,Current Dollars,Level,6,"133,285",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2015,Current Dollars,Level,6,"137,561",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2016,Current Dollars,Level,6,"138,068",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2017,Current Dollars,Level,6,"132,580",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2018,Current Dollars,Level,6,"130,896",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2019,Current Dollars,Level,6,"131,255",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2020,Current Dollars,Level,6,"141,357",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2021,Current Dollars,Level,6,"156,298",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2022,Current Dollars,Level,6,"140,576",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2023,Current Dollars,Level,6,"163,590",T61200D,T61200D
+T61200D,N1820C,22,"Educational services, health care, and social assistance",2024,Current Dollars,Level,6,"176,038",T61200D,T61200D
+T61200D,N1821C,23,Educational services,1998,Current Dollars,Level,6,"2,352",T61200D,T61200D
+T61200D,N1821C,23,Educational services,1999,Current Dollars,Level,6,"2,878",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2000,Current Dollars,Level,6,"3,228",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2001,Current Dollars,Level,6,"3,425",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2002,Current Dollars,Level,6,"3,471",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2003,Current Dollars,Level,6,"3,846",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2004,Current Dollars,Level,6,"4,614",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2005,Current Dollars,Level,6,"4,344",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2006,Current Dollars,Level,6,"5,216",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2007,Current Dollars,Level,6,"8,000",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2008,Current Dollars,Level,6,"7,028",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2009,Current Dollars,Level,6,"7,174",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2010,Current Dollars,Level,6,"9,221",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2011,Current Dollars,Level,6,"9,708",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2012,Current Dollars,Level,6,"10,030",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2013,Current Dollars,Level,6,"9,515",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2014,Current Dollars,Level,6,"9,999",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2015,Current Dollars,Level,6,"10,262",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2016,Current Dollars,Level,6,"10,407",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2017,Current Dollars,Level,6,"10,784",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2018,Current Dollars,Level,6,"9,505",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2019,Current Dollars,Level,6,"10,047",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2020,Current Dollars,Level,6,"10,962",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2021,Current Dollars,Level,6,"13,035",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2022,Current Dollars,Level,6,"12,738",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2023,Current Dollars,Level,6,"13,975",T61200D,T61200D
+T61200D,N1821C,23,Educational services,2024,Current Dollars,Level,6,"14,662",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,1998,Current Dollars,Level,6,"61,981",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,1999,Current Dollars,Level,6,"63,905",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2000,Current Dollars,Level,6,"66,589",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2001,Current Dollars,Level,6,"78,571",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2002,Current Dollars,Level,6,"85,114",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2003,Current Dollars,Level,6,"81,454",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2004,Current Dollars,Level,6,"86,850",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2005,Current Dollars,Level,6,"86,010",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2006,Current Dollars,Level,6,"91,952",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2007,Current Dollars,Level,6,"95,708",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2008,Current Dollars,Level,6,"101,836",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2009,Current Dollars,Level,6,"103,074",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2010,Current Dollars,Level,6,"114,497",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2011,Current Dollars,Level,6,"121,113",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2012,Current Dollars,Level,6,"119,516",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2013,Current Dollars,Level,6,"120,097",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2014,Current Dollars,Level,6,"123,286",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2015,Current Dollars,Level,6,"127,300",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2016,Current Dollars,Level,6,"127,661",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2017,Current Dollars,Level,6,"121,797",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2018,Current Dollars,Level,6,"121,391",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2019,Current Dollars,Level,6,"121,208",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2020,Current Dollars,Level,6,"130,395",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2021,Current Dollars,Level,6,"143,262",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2022,Current Dollars,Level,6,"127,838",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2023,Current Dollars,Level,6,"149,616",T61200D,T61200D
+T61200D,N1822C,24,Health care and social assistance,2024,Current Dollars,Level,6,"161,376",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",1998,Current Dollars,Level,6,"27,370",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",1999,Current Dollars,Level,6,"28,920",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2000,Current Dollars,Level,6,"28,941",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2001,Current Dollars,Level,6,"29,169",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2002,Current Dollars,Level,6,"30,793",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2003,Current Dollars,Level,6,"32,153",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2004,Current Dollars,Level,6,"35,229",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2005,Current Dollars,Level,6,"36,649",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2006,Current Dollars,Level,6,"40,310",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2007,Current Dollars,Level,6,"40,783",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2008,Current Dollars,Level,6,"26,774",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2009,Current Dollars,Level,6,"26,584",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2010,Current Dollars,Level,6,"39,616",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2011,Current Dollars,Level,6,"44,761",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2012,Current Dollars,Level,6,"49,660",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2013,Current Dollars,Level,6,"53,193",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2014,Current Dollars,Level,6,"60,384",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2015,Current Dollars,Level,6,"59,092",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2016,Current Dollars,Level,6,"61,213",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2017,Current Dollars,Level,6,"55,123",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2018,Current Dollars,Level,6,"58,389",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2019,Current Dollars,Level,6,"61,906",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2020,Current Dollars,Level,6,"51,720",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2021,Current Dollars,Level,6,"105,420",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2022,Current Dollars,Level,6,"61,234",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2023,Current Dollars,Level,6,"92,460",T61200D,T61200D
+T61200D,N1823C,25,"Arts, entertainment, recreation, accommodation, and food services",2024,Current Dollars,Level,6,"99,560",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",1998,Current Dollars,Level,6,"12,562",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",1999,Current Dollars,Level,6,"13,449",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2000,Current Dollars,Level,6,"14,143",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2001,Current Dollars,Level,6,"14,591",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2002,Current Dollars,Level,6,"15,795",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2003,Current Dollars,Level,6,"16,832",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2004,Current Dollars,Level,6,"18,737",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2005,Current Dollars,Level,6,"18,902",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2006,Current Dollars,Level,6,"19,972",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2007,Current Dollars,Level,6,"28,269",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2008,Current Dollars,Level,6,"21,262",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2009,Current Dollars,Level,6,"21,770",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2010,Current Dollars,Level,6,"29,446",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2011,Current Dollars,Level,6,"30,770",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2012,Current Dollars,Level,6,"33,093",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2013,Current Dollars,Level,6,"35,711",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2014,Current Dollars,Level,6,"40,686",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2015,Current Dollars,Level,6,"36,733",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2016,Current Dollars,Level,6,"38,271",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2017,Current Dollars,Level,6,"36,673",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2018,Current Dollars,Level,6,"39,734",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2019,Current Dollars,Level,6,"42,579",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2020,Current Dollars,Level,6,"30,935",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2021,Current Dollars,Level,6,"42,633",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2022,Current Dollars,Level,6,"42,776",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2023,Current Dollars,Level,6,"55,093",T61200D,T61200D
+T61200D,N1824C,26,"Arts, entertainment, and recreation",2024,Current Dollars,Level,6,"59,982",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,1998,Current Dollars,Level,6,"14,808",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,1999,Current Dollars,Level,6,"15,471",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2000,Current Dollars,Level,6,"14,799",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2001,Current Dollars,Level,6,"14,577",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2002,Current Dollars,Level,6,"14,998",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2003,Current Dollars,Level,6,"15,321",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2004,Current Dollars,Level,6,"16,492",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2005,Current Dollars,Level,6,"17,747",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2006,Current Dollars,Level,6,"20,338",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2007,Current Dollars,Level,6,"12,514",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2008,Current Dollars,Level,6,"5,512",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2009,Current Dollars,Level,6,"4,814",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2010,Current Dollars,Level,6,"10,170",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2011,Current Dollars,Level,6,"13,991",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2012,Current Dollars,Level,6,"16,567",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2013,Current Dollars,Level,6,"17,482",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2014,Current Dollars,Level,6,"19,698",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2015,Current Dollars,Level,6,"22,359",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2016,Current Dollars,Level,6,"22,943",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2017,Current Dollars,Level,6,"18,451",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2018,Current Dollars,Level,6,"18,655",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2019,Current Dollars,Level,6,"19,328",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2020,Current Dollars,Level,6,"20,785",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2021,Current Dollars,Level,6,"62,787",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2022,Current Dollars,Level,6,"18,458",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2023,Current Dollars,Level,6,"37,367",T61200D,T61200D
+T61200D,N1825C,27,Accommodation and food services,2024,Current Dollars,Level,6,"39,578",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",1998,Current Dollars,Level,6,"74,994",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",1999,Current Dollars,Level,6,"83,080",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2000,Current Dollars,Level,6,"90,484",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2001,Current Dollars,Level,6,"70,817",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2002,Current Dollars,Level,6,"84,519",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2003,Current Dollars,Level,6,"79,344",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2004,Current Dollars,Level,6,"83,191",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2005,Current Dollars,Level,6,"97,330",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2006,Current Dollars,Level,6,"109,576",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2007,Current Dollars,Level,6,"97,905",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2008,Current Dollars,Level,6,"75,420",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2009,Current Dollars,Level,6,"80,465",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2010,Current Dollars,Level,6,"105,297",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2011,Current Dollars,Level,6,"109,088",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2012,Current Dollars,Level,6,"114,110",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2013,Current Dollars,Level,6,"112,048",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2014,Current Dollars,Level,6,"118,197",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2015,Current Dollars,Level,6,"118,393",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2016,Current Dollars,Level,6,"117,417",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2017,Current Dollars,Level,6,"117,682",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2018,Current Dollars,Level,6,"121,918",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2019,Current Dollars,Level,6,"122,509",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2020,Current Dollars,Level,6,"110,427",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2021,Current Dollars,Level,6,"125,616",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2022,Current Dollars,Level,6,"125,169",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2023,Current Dollars,Level,6,"134,873",T61200D,T61200D
+T61200D,N1826C,28,"Other services, except government",2024,Current Dollars,Level,6,"144,448",T61200D,T61200D

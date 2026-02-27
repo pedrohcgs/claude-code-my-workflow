@@ -4,22 +4,22 @@
 * Purpose: Create a comprehensive industry-year panel using:
 *          (1) BEA GDP-by-Industry VA components (primary)
 *          (2) NIPA supplementary data (prop income, self-employment)
-* Inputs:  inputs/bea_gdp_industry/bea_va_panel.dta     (VA, CE, GOS, TOPI)
-*          inputs/bea_gdp_industry/nipa_prop_income.dta  (proprietors' income)
-*          inputs/bea_gdp_industry/nipa_self_employed.dta
-*          inputs/bea_gdp_industry/nipa_fte_employees.dta
-*          inputs/bea_gdp_industry/nipa_natl_income.dta  (fallback)
-*          inputs/bea_gdp_industry/nipa_comp.dta         (fallback)
-* Outputs: outputs/nipa_industry_year_panel.dta
-*          outputs/naics_concordance.dta
+* Inputs:  ../input/bea_gdp_industry/bea_va_panel.dta     (VA, CE, GOS, TOPI)
+*          ../input/bea_gdp_industry/nipa_prop_income.dta  (proprietors' income)
+*          ../input/bea_gdp_industry/nipa_self_employed.dta
+*          ../input/bea_gdp_industry/nipa_fte_employees.dta
+*          ../input/bea_gdp_industry/nipa_natl_income.dta  (fallback)
+*          ../input/bea_gdp_industry/nipa_comp.dta         (fallback)
+* Outputs: ../output/nipa_industry_year_panel.dta
+*          ../output/naics_concordance.dta
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/build_nipa_shares.log", replace
+capture mkdir "../output"
+log using "build_nipa_shares.log", replace
 
 * --- 0. Setup ---
 // UChicago palette
@@ -50,18 +50,18 @@ label variable naics_code "NAICS industry code"
 label variable industry_group "Industry group label"
 label variable industry_label "Full industry description"
 compress
-save "output/naics_concordance.dta", replace
+save "../output/naics_concordance.dta", replace
 display "Target industries: " _N
 
 * --- 2. Check for BEA VA panel (primary data source) ---
-capture confirm file "input/bea_gdp_industry/bea_va_panel.dta"
+capture confirm file "../input/bea_gdp_industry/bea_va_panel.dta"
 local has_api_data = (_rc == 0)
 
 if `has_api_data' {
     display _n "=== Using BEA GDP-by-Industry VA data (primary) ==="
 
     * --- 3A. Load VA panel ---
-    use "input/bea_gdp_industry/bea_va_panel.dta", clear
+    use "../input/bea_gdp_industry/bea_va_panel.dta", clear
     display "BEA VA panel: " _N " observations"
     tab naics_code, missing
 
@@ -84,7 +84,7 @@ if `has_api_data' {
     * Proprietors' income (for Gollin adjustments)
     display _n "Merging NIPA proprietors' income..."
     capture {
-        use "input/bea_gdp_industry/nipa_prop_income.dta", clear
+        use "../input/bea_gdp_industry/nipa_prop_income.dta", clear
         keep naics_code year prop_income
         isid naics_code year
         merge 1:1 naics_code year using `panel'
@@ -102,7 +102,7 @@ if `has_api_data' {
     * Self-employed counts
     display _n "Merging NIPA self-employed..."
     capture {
-        use "input/bea_gdp_industry/nipa_self_employed.dta", clear
+        use "../input/bea_gdp_industry/nipa_self_employed.dta", clear
         keep naics_code year n_self_employed
         isid naics_code year
         merge 1:1 naics_code year using `panel'
@@ -120,7 +120,7 @@ if `has_api_data' {
     * FTE employees
     display _n "Merging NIPA FTE employees..."
     capture {
-        use "input/bea_gdp_industry/nipa_fte_employees.dta", clear
+        use "../input/bea_gdp_industry/nipa_fte_employees.dta", clear
         keep naics_code year fte_employees
         isid naics_code year
         merge 1:1 naics_code year using `panel'
@@ -138,7 +138,7 @@ if `has_api_data' {
     * National income (for reference / comparison)
     display _n "Merging NIPA national income..."
     capture {
-        use "input/bea_gdp_industry/nipa_natl_income.dta", clear
+        use "../input/bea_gdp_industry/nipa_natl_income.dta", clear
         keep naics_code year natl_income
         isid naics_code year
         merge 1:1 naics_code year using `panel'
@@ -161,14 +161,14 @@ else {
     display "WARNING: Factor shares limited to industries with national income data."
 
     * Load compensation
-    use "input/bea_gdp_industry/nipa_comp.dta", clear
+    use "../input/bea_gdp_industry/nipa_comp.dta", clear
     keep naics_code year comp_employees
     isid naics_code year
     tempfile panel
     save `panel'
 
     * Merge national income
-    use "input/bea_gdp_industry/nipa_natl_income.dta", clear
+    use "../input/bea_gdp_industry/nipa_natl_income.dta", clear
     keep naics_code year natl_income
     isid naics_code year
     merge 1:1 naics_code year using `panel'
@@ -177,7 +177,7 @@ else {
 
     * Merge prop income
     capture {
-        use "input/bea_gdp_industry/nipa_prop_income.dta", clear
+        use "../input/bea_gdp_industry/nipa_prop_income.dta", clear
         keep naics_code year prop_income
         isid naics_code year
         merge 1:1 naics_code year using `panel'
@@ -187,7 +187,7 @@ else {
 
     * Merge self-employed
     capture {
-        use "input/bea_gdp_industry/nipa_self_employed.dta", clear
+        use "../input/bea_gdp_industry/nipa_self_employed.dta", clear
         keep naics_code year n_self_employed
         isid naics_code year
         merge 1:1 naics_code year using `panel'
@@ -197,7 +197,7 @@ else {
 
     * Merge FTE employees
     capture {
-        use "input/bea_gdp_industry/nipa_fte_employees.dta", clear
+        use "../input/bea_gdp_industry/nipa_fte_employees.dta", clear
         keep naics_code year fte_employees
         isid naics_code year
         merge 1:1 naics_code year using `panel'
@@ -208,7 +208,7 @@ else {
     use `panel', clear
 
     * Merge concordance
-    merge m:1 naics_code using "output/naics_concordance.dta", keep(master match)
+    merge m:1 naics_code using "../output/naics_concordance.dta", keep(master match)
     drop _merge
 
     * Compute NIPA-based shares
@@ -284,7 +284,7 @@ order naics_code year industry_group industry_label ///
 
 label data "NIPA industry-year panel, target NAICS industries"
 compress
-save "output/nipa_industry_year_panel.dta", replace
+save "../output/nipa_industry_year_panel.dta", replace
 
 display _n "Panel built: " _N " observations"
 

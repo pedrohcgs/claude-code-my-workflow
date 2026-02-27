@@ -3,16 +3,16 @@
 * Project: Capital and Labor Shares in Healthcare
 * Purpose: Clean QCEW data into an industry-year panel of
 *          employment and wages for target industries
-* Inputs:  inputs/bls_qcew_raw/qcew_annual_national_raw.dta
-* Outputs: outputs/bls_employment_panel.dta
+* Inputs:  ../input/bls_qcew_raw/qcew_annual_national_raw.dta
+* Outputs: ../output/bls_employment_panel.dta
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/build_bls_employment.log", replace
+capture mkdir "../output"
+log using "build_bls_employment.log", replace
 
 * --- 0. Setup ---
 // UChicago palette
@@ -22,7 +22,7 @@ local phoenix   "255 163 25"
 
 * --- 1. Load raw QCEW ---
 display "Loading raw QCEW data..."
-use "input/bls_qcew_raw/qcew_annual_national_raw.dta", clear
+use "../input/bls_qcew_raw/qcew_annual_national_raw.dta", clear
 display "Raw observations: " _N
 
 * --- 2. Filter to target industries and aggregation level ---
@@ -135,7 +135,7 @@ list naics_code year annual_avg_emplvl avg_annual_pay ///
 * --- 8. Save ---
 label data "BLS QCEW employment panel, target NAICS industries, national"
 compress
-save "output/bls_employment_panel.dta", replace
+save "../output/bls_employment_panel.dta", replace
 
 display _n "=== Final Summary ==="
 display "Observations: " _N

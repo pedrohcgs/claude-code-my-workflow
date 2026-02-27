@@ -3,26 +3,26 @@
 * Project: Capital and Labor Shares in Healthcare
 * Purpose: Generate publication-ready figures for Beamer slides
 *          and summary LaTeX tables
-* Inputs:  inputs/factor_shares/factor_shares_adjusted.dta
-*          inputs/factor_shares/factor_shares_summary.dta
-*          inputs/sensitivity/sensitivity_results.dta
-*          inputs/bea_bls_merged/merged_bea_bls_panel.dta
-* Outputs: outputs/fig_labor_share_timeseries.png
-*          outputs/fig_capital_share_timeseries.png
-*          outputs/fig_healthcare_subsectors.png
-*          outputs/fig_labor_share_bar.png
-*          outputs/fig_sensitivity_range.png
-*          outputs/fig_employment_vs_share.png
-*          outputs/tab_factor_shares_summary.tex
-*          outputs/tab_sensitivity_summary.tex
+* Inputs:  ../input/factor_shares/factor_shares_adjusted.dta
+*          ../input/factor_shares/factor_shares_summary.dta
+*          ../input/sensitivity/sensitivity_results.dta
+*          ../input/bea_bls_merged/merged_bea_bls_panel.dta
+* Outputs: ../output/fig_labor_share_timeseries.png
+*          ../output/fig_capital_share_timeseries.png
+*          ../output/fig_healthcare_subsectors.png
+*          ../output/fig_labor_share_bar.png
+*          ../output/fig_sensitivity_range.png
+*          ../output/fig_employment_vs_share.png
+*          ../output/tab_factor_shares_summary.tex
+*          ../output/tab_sensitivity_summary.tex
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/figures_and_tables.log", replace
+capture mkdir "../output"
+log using "figures_and_tables.log", replace
 
 * --- 0. Setup: UChicago palette ---
 local maroon     "128 0 0"
@@ -45,7 +45,7 @@ local gheight 1600
 * ================================================================
 display _n "=== Figure 1: Labor Share Time Series ==="
 
-use "input/factor_shares/factor_shares_adjusted.dta", clear
+use "../input/factor_shares/factor_shares_adjusted.dta", clear
 
 * Use Gollin proportional adjustment as baseline
 * (falls back to raw if adjustment wasn't available)
@@ -74,7 +74,7 @@ twoway ///
     graphregion(color(white)) plotregion(color(white)) ///
     note("Source: BEA GDP-by-Industry accounts", size(vsmall) color(gs8))
 
-graph export "output/fig_labor_share_timeseries.png", ///
+graph export "../output/fig_labor_share_timeseries.png", ///
     width(`gwidth') height(`gheight') replace
 display "Saved: fig_labor_share_timeseries.png"
 
@@ -107,7 +107,7 @@ twoway ///
     graphregion(color(white)) plotregion(color(white)) ///
     note("Source: BEA GDP-by-Industry accounts", size(vsmall) color(gs8))
 
-graph export "output/fig_capital_share_timeseries.png", ///
+graph export "../output/fig_capital_share_timeseries.png", ///
     width(`gwidth') height(`gheight') replace
 display "Saved: fig_capital_share_timeseries.png"
 
@@ -134,7 +134,7 @@ twoway ///
     graphregion(color(white)) plotregion(color(white)) ///
     note("Source: BEA GDP-by-Industry accounts", size(vsmall) color(gs8))
 
-graph export "output/fig_healthcare_subsectors.png", ///
+graph export "../output/fig_healthcare_subsectors.png", ///
     width(`gwidth') height(`gheight') replace
 display "Saved: fig_healthcare_subsectors.png"
 
@@ -163,7 +163,7 @@ graph hbar (asis) labor_share, over(industry_group, sort(order) ///
     graphregion(color(white)) plotregion(color(white)) ///
     note("Source: BEA GDP-by-Industry accounts", size(vsmall) color(gs8))
 
-graph export "output/fig_labor_share_bar.png", ///
+graph export "../output/fig_labor_share_bar.png", ///
     width(`gwidth') height(`gheight') replace
 display "Saved: fig_labor_share_bar.png"
 
@@ -172,7 +172,7 @@ display "Saved: fig_labor_share_bar.png"
 * ================================================================
 display _n "=== Figure 5: Sensitivity Range ==="
 
-use "input/sensitivity/sensitivity_results.dta", clear
+use "../input/sensitivity/sensitivity_results.dta", clear
 
 * Collapse to range of estimates per industry
 collapse (min) min_labor=labor_share (max) max_labor=labor_share ///
@@ -201,12 +201,12 @@ twoway ///
 * (The order variable maps to industry_group)
 capture {
     labmask order, values(industry_group)
-    graph export "output/fig_sensitivity_range.png", ///
+    graph export "../output/fig_sensitivity_range.png", ///
         width(`gwidth') height(`gheight') replace
 }
 if _rc != 0 {
     * labmask not available — use basic export
-    graph export "output/fig_sensitivity_range.png", ///
+    graph export "../output/fig_sensitivity_range.png", ///
         width(`gwidth') height(`gheight') replace
 }
 display "Saved: fig_sensitivity_range.png"
@@ -218,7 +218,7 @@ display _n "=== Figure 6: Employment vs Share ==="
 
 * Load merged BEA-BLS data
 capture {
-    use "input/bea_bls_merged/merged_bea_bls_panel.dta", clear
+    use "../input/bea_bls_merged/merged_bea_bls_panel.dta", clear
 
     * Compute long-run changes
     * First and last year per industry
@@ -251,7 +251,7 @@ capture {
         graphregion(color(white)) plotregion(color(white)) ///
         note("Source: BEA GDP-by-Industry and BLS QCEW", size(vsmall) color(gs8))
 
-    graph export "output/fig_employment_vs_share.png", ///
+    graph export "../output/fig_employment_vs_share.png", ///
         width(`gwidth') height(`gheight') replace
     display "Saved: fig_employment_vs_share.png"
 }
@@ -266,7 +266,7 @@ if _rc != 0 {
 display _n "=== Table 1: Summary Factor Shares ==="
 
 capture {
-    use "input/factor_shares/factor_shares_adjusted.dta", clear
+    use "../input/factor_shares/factor_shares_adjusted.dta", clear
 
     * Compute means by industry
     collapse (mean) labor_share_raw capital_share_raw ///
@@ -283,7 +283,7 @@ capture {
 
     listtex naics_code industry_group labor_share_raw capital_share_raw ///
         labor_share_gollin_prop sd_ls n_years ///
-        using "output/tab_factor_shares_summary.tex", ///
+        using "../output/tab_factor_shares_summary.tex", ///
         rstyle(tabular) replace ///
         head("\begin{table}[htbp]" ///
             "\centering" ///
@@ -309,7 +309,7 @@ if _rc != 0 {
     display "listtex may not be installed. Try: ssc install listtex"
 
     * Fallback: manual LaTeX generation
-    file open tex using "output/tab_factor_shares_summary.tex", write replace
+    file open tex using "../output/tab_factor_shares_summary.tex", write replace
     file write tex "\begin{table}[htbp]" _n
     file write tex "\centering" _n
     file write tex "\caption{Factor Shares by Industry}" _n
@@ -330,10 +330,10 @@ if _rc != 0 {
 * TABLE 2: Copy sensitivity summary
 * ================================================================
 display _n "=== Table 2: Sensitivity Summary ==="
-capture confirm file "input/sensitivity/sensitivity_summary.tex"
+capture confirm file "../input/sensitivity/sensitivity_summary.tex"
 if _rc == 0 {
-    copy "input/sensitivity/sensitivity_summary.tex" ///
-        "output/tab_sensitivity_summary.tex", replace
+    copy "../input/sensitivity/sensitivity_summary.tex" ///
+        "../output/tab_sensitivity_summary.tex", replace
     display "Copied sensitivity summary table."
 }
 else {
@@ -349,7 +349,7 @@ local all_ok = 1
 foreach fig in fig_labor_share_timeseries fig_capital_share_timeseries ///
     fig_healthcare_subsectors fig_labor_share_bar fig_sensitivity_range {
 
-    capture confirm file "output/`fig'.png"
+    capture confirm file "../output/`fig'.png"
     if _rc == 0 {
         display "  `fig'.png: OK"
     }
@@ -359,7 +359,7 @@ foreach fig in fig_labor_share_timeseries fig_capital_share_timeseries ///
     }
 }
 
-capture confirm file "output/fig_employment_vs_share.png"
+capture confirm file "../output/fig_employment_vs_share.png"
 if _rc == 0 {
     display "  fig_employment_vs_share.png: OK"
 }
@@ -368,7 +368,7 @@ else {
 }
 
 foreach tab in tab_factor_shares_summary {
-    capture confirm file "output/`tab'.tex"
+    capture confirm file "../output/`tab'.tex"
     if _rc == 0 {
         display "  `tab'.tex: OK"
     }

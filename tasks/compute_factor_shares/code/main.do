@@ -3,18 +3,18 @@
 * Project: Capital and Labor Shares in Healthcare
 * Purpose: Compute raw and Gollin-adjusted capital/labor shares
 *          from industry-year panel
-* Inputs:  inputs/nipa_shares/nipa_industry_year_panel.dta
-* Outputs: outputs/factor_shares_raw.dta
-*          outputs/factor_shares_adjusted.dta
-*          outputs/factor_shares_summary.dta
+* Inputs:  ../input/nipa_shares/nipa_industry_year_panel.dta
+* Outputs: ../output/factor_shares_raw.dta
+*          ../output/factor_shares_adjusted.dta
+*          ../output/factor_shares_summary.dta
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/compute_factor_shares.log", replace
+capture mkdir "../output"
+log using "compute_factor_shares.log", replace
 
 * --- 0. Setup ---
 // UChicago palette
@@ -24,7 +24,7 @@ local phoenix   "255 163 25"
 
 * --- 1. Load clean panel ---
 display "Loading industry-year panel..."
-use "input/nipa_shares/nipa_industry_year_panel.dta", clear
+use "../input/nipa_shares/nipa_industry_year_panel.dta", clear
 display "Observations: " _N
 tab naics_code, missing
 
@@ -63,7 +63,7 @@ tabstat labor_share_raw, by(industry_group) stat(mean sd min max N) format(%5.3f
 
 * Save raw shares
 compress
-save "output/factor_shares_raw.dta", replace
+save "../output/factor_shares_raw.dta", replace
 
 * --- 3. Gollin (2002) mixed income adjustments ---
 display _n "=== Gollin (2002) Adjustments ==="
@@ -140,7 +140,7 @@ tabstat labor_share_gollin_alllabor, by(industry_group) stat(mean sd N) format(%
 
 * Save adjusted shares
 compress
-save "output/factor_shares_adjusted.dta", replace
+save "../output/factor_shares_adjusted.dta", replace
 
 * --- 4. Summary statistics by industry ---
 display _n "=== Summary Statistics ==="
@@ -162,7 +162,7 @@ preserve
         labor_share_gollin_alllabor n_years, noobs
 
     compress
-    save "output/factor_shares_summary.dta", replace
+    save "../output/factor_shares_summary.dta", replace
 restore
 
 * --- 5. Industries without data ---

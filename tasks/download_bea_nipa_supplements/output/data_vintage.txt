@@ -1,11 +1,11 @@
 Data Source: BEA NIPA Supplementary Tables
-Download Timestamp: 2026-02-26T10:27:42.248282
+Download Timestamp: 2026-02-27T15:09:13.342473
 API Endpoint: https://apps.bea.gov/api/data
 
 Proprietors' Income Tables:
   Tables attempted: T61200D, T61200C, T61200B, T61200A
-  Rows downloaded: 0
+  Rows downloaded: 756
 
 Consumption of Fixed Capital Tables:
   Tables attempted: FAAt602, FAAt604
-  Rows downloaded: 0
+  Rows downloaded: 2600

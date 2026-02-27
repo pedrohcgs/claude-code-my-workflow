@@ -3,18 +3,18 @@
 * Project: Capital and Labor Shares in Healthcare
 * Purpose: Cross-validate BEA compensation vs BLS wages;
 *          enrich factor share panel with employment data
-* Inputs:  inputs/nipa_shares/nipa_industry_year_panel.dta
-*          inputs/bls_employment/bls_employment_panel.dta
-* Outputs: outputs/merged_bea_bls_panel.dta
-*          outputs/cross_validation_report.txt
+* Inputs:  ../input/nipa_shares/nipa_industry_year_panel.dta
+*          ../input/bls_employment/bls_employment_panel.dta
+* Outputs: ../output/merged_bea_bls_panel.dta
+*          ../output/cross_validation_report.txt
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/merge_bea_bls.log", replace
+capture mkdir "../output"
+log using "merge_bea_bls.log", replace
 
 * --- 0. Setup ---
 // UChicago palette
@@ -24,7 +24,7 @@ local phoenix   "255 163 25"
 
 * --- 1. Load BEA panel ---
 display "Loading BEA NIPA panel..."
-use "input/nipa_shares/nipa_industry_year_panel.dta", clear
+use "../input/nipa_shares/nipa_industry_year_panel.dta", clear
 display "BEA observations: " _N
 
 * Keep key variables for merge
@@ -53,7 +53,7 @@ save `bea'
 
 * --- 2. Load BLS panel ---
 display _n "Loading BLS employment panel..."
-use "input/bls_employment/bls_employment_panel.dta", clear
+use "../input/bls_employment/bls_employment_panel.dta", clear
 display "BLS observations: " _N
 
 * Keep private ownership as primary
@@ -123,7 +123,7 @@ if _rc == 0 {
 
 * --- 5. Write cross-validation report ---
 capture file close report
-file open report using "output/cross_validation_report.txt", write replace
+file open report using "../output/cross_validation_report.txt", write replace
 
 file write report "Cross-Validation Report: BEA CE vs BLS QCEW Wages" _n
 file write report "=======================================================" _n
@@ -151,7 +151,7 @@ capture {
 }
 
 file close report
-display "Cross-validation report saved to outputs/cross_validation_report.txt"
+display "Cross-validation report saved to ../output/cross_validation_report.txt"
 
 * --- 6. Label and save ---
 capture label variable ce_wage_ratio "BEA CE / BLS total wages ratio"
@@ -160,7 +160,7 @@ capture label variable merge_status "BEA-BLS merge status"
 
 label data "Merged BEA-BLS panel, target NAICS industries, national"
 compress
-save "output/merged_bea_bls_panel.dta", replace
+save "../output/merged_bea_bls_panel.dta", replace
 
 * --- 7. Verification ---
 display _n "=== Verification ==="

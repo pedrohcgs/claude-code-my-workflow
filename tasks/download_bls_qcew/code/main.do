@@ -4,16 +4,16 @@
 * Purpose: Download QCEW CSVs via shell script, import and
 *          append all years, filter to national level, save .dta
 * Inputs:  None (downloads from BLS website)
-* Outputs: outputs/qcew_annual_national_raw.dta
-*          outputs/data_vintage.txt
+* Outputs: ../output/qcew_annual_national_raw.dta
+*          ../output/data_vintage.txt
 * ============================================================
 
 version 18
 clear all
 set seed 20260225
 
-capture mkdir "outputs"
-log using "output/download_bls_qcew.log", replace
+capture mkdir "../output"
+log using "download_bls_qcew.log", replace
 
 * --- 0. Setup ---
 local task_root = c(pwd)
@@ -22,17 +22,17 @@ local end_year = 2024
 
 * --- 1. Download raw CSVs ---
 * Check for files (BLS uses dot separator: YYYY.annual.singlefile.csv)
-capture confirm file "output/raw/`start_year'.annual.singlefile.csv"
+capture confirm file "../output/raw/`start_year'.annual.singlefile.csv"
 local need_download = _rc != 0
 
 if `need_download' {
     display "Running QCEW download script..."
     display "This may take several minutes (downloading ~28 years of data)."
-    shell bash code/download_qcew.sh
+    shell bash download_qcew.sh
 }
 else {
     display "Raw CSVs already exist. Skipping download."
-    display "Delete outputs/raw/ to force re-download."
+    display "Delete ../output/raw/ to force re-download."
 }
 
 * --- 2. Import and append all years ---
@@ -44,7 +44,7 @@ save `master', emptyok
 
 forvalues y = `start_year'/`end_year' {
     * BLS uses dot separator: YYYY.annual.singlefile.csv
-    local csv_file = "output/raw/`y'.annual.singlefile.csv"
+    local csv_file = "../output/raw/`y'.annual.singlefile.csv"
     capture confirm file "`csv_file'"
     if _rc == 0 {
         display "  Importing `y'..."
@@ -137,7 +137,7 @@ display "NAICS 623 (Nursing) rows: " r(N)
 
 * --- 5. Save ---
 compress
-save "output/qcew_annual_national_raw.dta", replace
+save "../output/qcew_annual_national_raw.dta", replace
 
 display _n "=== Verification ==="
 display "Observations: " _N
