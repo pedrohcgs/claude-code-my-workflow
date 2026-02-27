@@ -61,7 +61,7 @@ done
 
 # 3. Sync Beamer PDFs to docs/slides/
 echo "Syncing Beamer PDFs..."
-for pdf in "$REPO_ROOT/Slides/"*.pdf; do
+for pdf in "$REPO_ROOT/slides/"*.pdf; do
     if [ -f "$pdf" ]; then
         echo "  Copying $(basename "$pdf")..."
         cp "$pdf" "$DOCS_DIR/slides/"

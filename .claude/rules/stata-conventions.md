@@ -2,7 +2,7 @@
 paths:
   - "**/*.do"
   - "**/*.ado"
-  - "analysis/**/*"
+  - "tasks/**/*"
 ---
 
 # Stata Code Standards
@@ -16,14 +16,14 @@ paths:
 Every analysis task lives in its own directory:
 
 ```
-analysis/
+tasks/
 ├── task_name/
 │   ├── code/          # .do files (main.do is entry point)
-│   ├── inputs/        # Symlinks to other tasks' outputs/
-│   └── outputs/       # Results: .dta, .csv, .tex, .png
+│   ├── input/        # Symlinks to other tasks' output/
+│   └── output/       # Results: .dta, .csv, .tex, .png
 ```
 
-- `inputs/` contains ONLY symlinks to another task's `outputs/`
+- `input/` contains ONLY symlinks to another task's `output/`
 - `main.do` is the entry point for every task
 - Task names use snake_case: `build_nipa_shares`, `merge_cms_bls`
 - Never hardcode paths outside the task directory
@@ -37,7 +37,7 @@ analysis/
 - All paths relative to task root
 - `capture mkdir "outputs"` for output directories
 - `clear all` at script start
-- `log using "outputs/task_name.log", replace`
+- `log using "output/task_name.log", replace`
 
 ---
 
@@ -77,7 +77,7 @@ local negative  "185 28 28"
 ### Figure Export for Beamer
 
 ```stata
-graph export "outputs/figure_name.png", width(2400) height(1600) replace
+graph export "output/figure_name.png", width(2400) height(1600) replace
 ```
 
 - White background
@@ -108,7 +108,7 @@ graph export "outputs/figure_name.png", width(2400) height(1600) replace
 [ ] clear all at start
 [ ] log file opened
 [ ] All paths relative to task root
-[ ] inputs/ contains only symlinks
+[ ] input/ contains only symlinks
 [ ] Variables labeled with units
 [ ] merge checks complete
 [ ] Figures: explicit dimensions, UChicago palette

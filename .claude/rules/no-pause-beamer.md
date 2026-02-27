@@ -1,6 +1,6 @@
 ---
 paths:
-  - "Slides/**/*.tex"
+  - "slides/**/*.tex"
 ---
 
 # No \pause in Beamer Slides

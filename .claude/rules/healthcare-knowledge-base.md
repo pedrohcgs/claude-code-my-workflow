@@ -1,8 +1,8 @@
 ---
 paths:
-  - "Slides/**/*.tex"
+  - "slides/**/*.tex"
   - "Quarto/**/*.qmd"
-  - "analysis/**/*"
+  - "tasks/**/*"
   - "scripts/**/*"
 ---
 

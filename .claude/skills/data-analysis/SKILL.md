@@ -17,9 +17,9 @@ Run an end-to-end data analysis in Stata: construct data, explore, analyze, and 
 ## Constraints
 
 - **Follow Stata conventions** in `.claude/rules/stata-conventions.md`
-- **Use the task-based DAG** structure in `analysis/`
-- **Save all scripts** to `analysis/[task_name]/code/`
-- **Save all outputs** (data, figures, tables) to `analysis/[task_name]/outputs/`
+- **Use the task-based DAG** structure in `tasks/`
+- **Save all scripts** to `tasks/[task_name]/code/`
+- **Save all outputs** (data, figures, tables) to `tasks/[task_name]/outputs/`
 - **Use symlinks** for inputs from upstream tasks
 - **Use UChicago palette** for all figures (see Stata conventions)
 
@@ -30,7 +30,7 @@ Run an end-to-end data analysis in Stata: construct data, explore, analyze, and 
 ### Phase 1: Setup and Task Structure
 
 1. Read `.claude/rules/stata-conventions.md` for project standards
-2. Create task directory if it doesn't exist: `analysis/[task_name]/{code,inputs,outputs}`
+2. Create task directory if it doesn't exist: `tasks/[task_name]/{code,inputs,outputs}`
 3. Create `code/main.do` with proper header:
 
 ```stata

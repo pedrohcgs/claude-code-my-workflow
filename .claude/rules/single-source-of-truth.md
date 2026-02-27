@@ -2,7 +2,7 @@
 paths:
   - "Figures/**/*"
   - "Quarto/**/*.qmd"
-  - "Slides/**/*.tex"
+  - "slides/**/*.tex"
 ---
 
 # Single Source of Truth: Enforcement Protocol
@@ -15,7 +15,7 @@ paths:
 Beamer .tex (SOURCE OF TRUTH)
   ├── extract_tikz.tex → PDF → SVGs (derived)
   ├── Quarto .qmd → HTML (derived)
-  ├── Bibliography_base.bib (shared)
+  ├── bib/bib.bib (shared)
   └── Figures/LectureN/*.rds → plotly charts (data source)
 
 NEVER edit derived artifacts independently.

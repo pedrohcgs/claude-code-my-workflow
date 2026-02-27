@@ -36,11 +36,11 @@ Cross-reference all citations in lecture files against bibliography entries.
 
 ## Files to scan:
 ```
-Slides/*.tex
+slides/*.tex
 Quarto/*.qmd
 ```
 
 ## Bibliography location:
 ```
-Bibliography_base.bib  (repo root)
+bib/bib.bib  (repo root)
 ```

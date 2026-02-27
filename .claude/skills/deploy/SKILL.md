@@ -37,5 +37,5 @@ Render Quarto slides and sync all files to `docs/` for GitHub Pages deployment.
 ## What the sync script does:
 - Renders all `.qmd` files in `Quarto/` (skips `*_backup*` files)
 - Copies HTML and `_files/` directories to `docs/slides/`
-- Copies Beamer PDFs from `Slides/` to `docs/slides/`
+- Copies Beamer PDFs from `slides/` to `docs/slides/`
 - Syncs `Figures/` to `docs/Figures/` using rsync

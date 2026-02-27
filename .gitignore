@@ -61,4 +61,4 @@ bea_api_key.txt
 *.smcl
 
 # Large raw data downloads (regenerable)
-analysis/download_bls_qcew/outputs/raw/
+tasks/download_bls_qcew/output/raw/

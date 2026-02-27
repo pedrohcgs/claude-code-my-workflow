@@ -13,7 +13,7 @@ Run the mandatory proofreading protocol on lecture files. This produces a report
 
 1. **Identify files to review:**
    - If `$ARGUMENTS` is a specific filename: review that file only
-   - If `$ARGUMENTS` is "all": review all lecture files in `Slides/` and `Quarto/`
+   - If `$ARGUMENTS` is "all": review all lecture files in `slides/` and `Quarto/`
 
 2. **For each file, launch the proofreader agent** that checks for:
 

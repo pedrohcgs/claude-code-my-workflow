@@ -14,7 +14,7 @@ Run a comprehensive multi-dimensional review of lecture slides. Multiple agents 
 
 ### 1. Identify the File
 
-Parse `$ARGUMENTS` for the filename. Resolve path in `Quarto/` or `Slides/`.
+Parse `$ARGUMENTS` for the filename. Resolve path in `Quarto/` or `slides/`.
 
 ### 2. Run Review Agents in Parallel
 

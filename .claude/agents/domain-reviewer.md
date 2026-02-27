@@ -56,7 +56,7 @@ For every claim attributed to a specific paper:
 - [ ] Are "X (Year) show that..." statements actually things that paper shows?
 
 **Cross-reference with:**
-- `Bibliography_base.bib`
+- `bib/bib.bib`
 - Papers in `master_supporting_docs/supporting_papers/` (if available)
 - `.claude/rules/healthcare-knowledge-base.md` for notation and definitions
 

@@ -3,6 +3,7 @@
 **Project:** Capital and Labor Shares in Healthcare
 **Institution:** University of Chicago
 **Branch:** main
+**Template:** Based on [Dingel projecttemplate](https://github.com/jdingel/projecttemplate)
 
 ---
 
@@ -22,10 +23,11 @@
 capital-labor-healthcare/
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
-├── analysis/                    # Stata task-based DAG (code/inputs/outputs per task)
-├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Slides/                      # Beamer .tex files (preamble inline, metropolis theme)
+├── bib/                         # Bibliography (bib.bib + aer.bst)
+├── logbook/                     # Project logbook (LaTeX)
+├── paper/                       # Paper manuscript (LaTeX)
+├── slides/                      # Beamer .tex files (metropolis theme)
+├── tasks/                       # Task-based DAG (code/input/output per task)
 ├── Quarto/                      # RevealJS .qmd files + theme
 ├── docs/                        # GitHub Pages (auto-generated)
 ├── scripts/                     # Utility scripts
@@ -35,19 +37,42 @@ capital-labor-healthcare/
 └── master_supporting_docs/      # Papers and existing slides
 ```
 
+### Task Structure (Dingel Convention)
+
+Each task in `tasks/` follows:
+```
+tasks/task_name/
+├── code/
+│   ├── Makefile              # Build rules (include generic.make)
+│   └── main.do               # Entry point
+├── input/                    # Symlinks to upstream task output/
+└── output/                   # Task outputs (.dta, .csv, .png, .tex)
+```
+
+Shared build infrastructure:
+- `tasks/generic.make` — directory creation, upstream dependency rules
+- `tasks/shell_functions.sh` — Stata/Python/R execution wrappers
+- `tasks/shell_functions.make` — Make variables for language commands
+
 ---
 
 ## Commands
 
 ```bash
-# LaTeX (3-pass, XeLaTeX only)
-cd Slides && xelatex -interaction=nonstopmode slides.tex
-BIBINPUTS=..:$BIBINPUTS bibtex slides
+# LaTeX slides (3-pass, XeLaTeX)
+cd slides && xelatex -interaction=nonstopmode slides.tex
+BIBINPUTS=../bib:$BIBINPUTS bibtex slides
 xelatex -interaction=nonstopmode slides.tex
 xelatex -interaction=nonstopmode slides.tex
 
-# Stata (run a task)
-cd analysis/task_name && stata-mp -b do code/main.do
+# Or use Make:
+cd slides && make
+
+# Stata (run a task via Make)
+cd tasks/task_name/code && make
+
+# Stata (run a task directly)
+cd tasks/task_name && stata-mp -b do code/main.do
 
 # Deploy Quarto to GitHub Pages
 ./scripts/sync_to_docs.sh LectureN
@@ -123,4 +148,4 @@ python scripts/quality_score.py Quarto/file.qmd
 
 | Lecture | Beamer | Quarto | Key Content |
 |---------|--------|--------|-------------|
-| Main | `Slides/slides.tex` | -- | Metropolis theme; sections via `\input{sections/*.tex}` |
+| Main | `slides/slides.tex` | -- | Metropolis theme; sections via `\input{sections/*.tex}` |

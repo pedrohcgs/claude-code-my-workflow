@@ -11,7 +11,7 @@ Compile a Beamer slide deck using XeLaTeX with full citation resolution.
 
 ## Steps
 
-1. **Navigate to Slides/ directory** and compile with 3-pass sequence:
+1. **Navigate to slides/ directory** and compile with 3-pass sequence:
 
 ```bash
 cd Slides
@@ -34,7 +34,7 @@ TEXINPUTS=../Preambles:$TEXINPUTS BIBINPUTS=..:$BIBINPUTS latexmk -xelatex -inte
 
 3. **Open the PDF** for visual verification:
    ```bash
-   open Slides/$ARGUMENTS.pdf
+   open slides/$ARGUMENTS.pdf
    ```
 
 4. **Report results:**

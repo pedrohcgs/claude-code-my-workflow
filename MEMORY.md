@@ -81,6 +81,6 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 
 [LEARN:domain] Mixed income (proprietors' income) straddles labor and capital. Healthcare has many physician partnerships — must adjust for self-employment income.
 
-[LEARN:stata] Stata task DAG: each task has code/, inputs/, outputs/. inputs/ contains ONLY symlinks to another task's outputs/. main.do is always the entry point.
+[LEARN:stata] Stata task DAG (Dingel convention): each task has code/, input/, output/. input/ contains ONLY symlinks to another task's output/. main.do is always the entry point. Each code/ has a Makefile.
 
 [LEARN:data] Always document BEA data vintage (release date) and NAICS revision year. BEA revises NIPA tables; using mixed vintages produces inconsistent factor shares.
