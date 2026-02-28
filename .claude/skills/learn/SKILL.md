@@ -7,6 +7,7 @@ description: |
 author: Claude Code Academic Workflow
 version: 1.0.0
 argument-hint: "[skill-name (kebab-case)]"
+allowed-tools: ["Read", "Write", "Bash", "Glob", "Grep"]
 ---
 
 # /learn — Skill Extraction Workflow

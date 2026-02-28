@@ -39,6 +39,7 @@ Thumbs.db
 # Claude Code local files (not shared across machines)
 .claude/settings.local.json
 .claude/state/
+CLAUDE.local.md
 
 # IDE
 .vscode/

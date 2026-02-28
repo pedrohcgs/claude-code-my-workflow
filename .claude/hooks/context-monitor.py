@@ -8,11 +8,13 @@ Monitors context usage and provides progressive warnings:
 - At 90%: Caution-level warning (complete current task with full quality)
 
 Hook Event: PostToolUse (on common tools)
-Throttles to 30-second intervals when below warning threshold.
+Throttles to 60-second intervals when below warning threshold.
 
 Note: Since direct context % isn't available, this uses a heuristic based on
 conversation file size and tool call count.
 """
+
+from __future__ import annotations
 
 import json
 import os
@@ -199,7 +201,7 @@ def run_context_monitor() -> int:
     if percentage >= THRESHOLD_CRITICAL and not shown["warn_90"]:
         print(format_warn_90(percentage))
         mark_threshold_shown("warn_90", True)
-        return 2  # Exit code 2 = show message prominently
+        return 0  # Non-blocking warning (exit 2 would block Claude)
 
     # Check 80% threshold (info)
     if percentage >= THRESHOLD_WARN and not shown["warn_80"]:
@@ -216,4 +218,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception:
+        # Fail open — never block Claude due to a hook bug
+        sys.exit(0)

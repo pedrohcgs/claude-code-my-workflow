@@ -1,7 +1,6 @@
 ---
 name: create-lecture
 description: Create new Beamer lecture from papers and materials. Guided workflow with notation consistency.
-disable-model-invocation: true
 argument-hint: "[Topic name]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 context: fork

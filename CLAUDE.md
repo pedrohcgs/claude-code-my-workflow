@@ -93,6 +93,9 @@ python scripts/quality_score.py Quarto/file.qmd
 | `/interview-me [topic]` | Interactive research interview |
 | `/review-paper [file]` | Manuscript review |
 | `/data-analysis [dataset]` | End-to-end R analysis |
+| `/learn [skill-name]` | Extract discovery into persistent skill |
+| `/context-status` | Show session health + context usage |
+| `/deep-audit` | Repository-wide consistency audit |
 
 ---
 

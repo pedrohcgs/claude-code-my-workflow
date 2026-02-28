@@ -11,7 +11,7 @@ paths:
 
 ## For Quarto/HTML Slides:
 1. Run `./scripts/sync_to_docs.sh` (or `./scripts/sync_to_docs.sh LectureN`) to render and deploy
-2. Open the HTML in browser: `open docs/slides/LectureX.html`
+2. Open the HTML in browser: `open docs/slides/LectureX.html` (macOS) or `xdg-open` (Linux)
 3. Verify images display by reading 2-3 image files to confirm valid content
 4. Check HTML source for correct image paths
 5. Check for overflow by scanning dense slides
@@ -20,7 +20,7 @@ paths:
 
 ## For LaTeX/Beamer Slides:
 1. Compile with xelatex and check for errors
-2. Open the PDF to verify figures render
+2. Open the PDF to verify figures render (`open` on macOS, `xdg-open` on Linux)
 3. Check for overfull hbox warnings
 
 ## For TikZ Diagrams in HTML/Quarto:

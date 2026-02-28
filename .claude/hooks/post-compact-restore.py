@@ -2,13 +2,15 @@
 """
 Post-Compact Context Restoration Hook
 
-Fires after compaction (SessionStart with type="compact") to restore context.
+Fires after compaction (SessionStart with source="compact") to restore context.
 Reads saved state from the session directory and prints it so Claude knows
 where it left off.
 
-Hook Event: SessionStart (matcher: "compact")
+Hook Event: SessionStart (matcher: "compact|resume")
 Returns: Exit code 0 (output to stdout)
 """
+
+from __future__ import annotations
 
 import json
 import os
@@ -159,9 +161,9 @@ def main() -> int:
     except (json.JSONDecodeError, IOError):
         hook_input = {}
 
-    # Only run on compact sessions
-    session_type = hook_input.get("type", "")
-    if session_type != "compact":
+    # Only run on compact/resume sessions
+    session_source = hook_input.get("source", "")
+    if session_source not in ("compact", "resume"):
         return 0
 
     project_dir = os.environ.get("CLAUDE_PROJECT_DIR", "")
@@ -182,4 +184,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception:
+        # Fail open — never block Claude due to a hook bug
+        sys.exit(0)

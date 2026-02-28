@@ -34,7 +34,8 @@ TEXINPUTS=../Preambles:$TEXINPUTS BIBINPUTS=..:$BIBINPUTS latexmk -xelatex -inte
 
 3. **Open the PDF** for visual verification:
    ```bash
-   open Slides/$ARGUMENTS.pdf
+   open Slides/$ARGUMENTS.pdf          # macOS
+   # xdg-open Slides/$ARGUMENTS.pdf    # Linux
    ```
 
 4. **Report results:**

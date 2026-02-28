@@ -1,7 +1,6 @@
 ---
 name: data-analysis
 description: End-to-end R data analysis workflow from exploration through regression to publication-ready tables and figures
-disable-model-invocation: true
 argument-hint: "[dataset path or description of analysis goal]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 ---

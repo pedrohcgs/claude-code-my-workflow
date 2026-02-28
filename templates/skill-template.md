@@ -29,7 +29,6 @@ name: your-skill-name
 description: [What it does] + [When to use it] + [Key capabilities]. Use when user asks for "[trigger phrase 1]", "[trigger phrase 2]", or "[context]".
 argument-hint: "[brief hint for user]"
 allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash", "Task"]
-disable-model-invocation: true
 ---
 
 # [Skill Name]
@@ -328,7 +327,7 @@ Step 4: **Generate report**
 ### Step 1: Manual Test
 1. Create skill directory: `mkdir -p .claude/skills/your-skill-name`
 2. Copy SKILL.md template and customize
-3. Restart Claude Code or run `/reload` if available
+3. Skills hot-reload automatically --- changes are detected without restarting
 4. Trigger skill: Use one of your trigger phrases
 5. Verify: Skill loads, instructions are clear, output is correct
 
@@ -380,4 +379,4 @@ When adapting this template to your domain:
 - **Purpose:** Starter for domain-specific skills
 - **Usage:** Copy to `.claude/skills/[name]/SKILL.md`, customize for your field
 
-For existing skills examples, see `.claude/skills/` directory (19 skills for LaTeX, R, Quarto, and research workflows).
+For existing skills examples, see `.claude/skills/` directory (22 skills for LaTeX, R, Quarto, and research workflows).

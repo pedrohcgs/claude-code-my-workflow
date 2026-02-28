@@ -10,8 +10,10 @@ Fires before context compaction to capture the current state:
 This state is read by post-compact-restore.py after compaction.
 
 Hook Event: PreCompact
-Returns: Exit code 2 (message visible in transcript)
+Returns: Exit code 0 (message printed to stderr for visibility)
 """
+
+from __future__ import annotations
 
 import json
 import os
@@ -200,11 +202,15 @@ def main() -> int:
     # Append note to session log
     append_to_session_log(project_dir, trigger)
 
-    # Print message
-    print(format_compaction_message(plan_info, decisions))
+    # Print to stderr (PreCompact ignores stdout; stderr is shown to user)
+    print(format_compaction_message(plan_info, decisions), file=sys.stderr)
 
-    return 2  # Exit code 2 = message visible in transcript
+    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception:
+        # Fail open — never block Claude due to a hook bug
+        sys.exit(0)

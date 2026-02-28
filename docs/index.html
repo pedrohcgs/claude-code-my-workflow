@@ -166,10 +166,10 @@
   <div class="byline">Pedro H. C. Sant'Anna &middot; Emory University</div>
 
   <div class="wip">
-    <strong>Work in progress.</strong> This summarizes how I use Claude Code for academic work &mdash; lecture slides, R scripts, Beamer-to-Quarto pipelines. I keep learning and updating these files. Sharing what I've figured out so far with friends and colleagues.
+    <strong>Work in progress.</strong> This summarizes how I use Claude Code for academic work &mdash; slides, papers, data analysis, and more. I keep learning and updating these files. Sharing what I've figured out so far with friends and colleagues.
   </div>
 
-  <p>A starter kit for academics using <a href="https://code.claude.com/docs/en/overview">Claude Code</a> with LaTeX/Beamer, R, and Quarto. You describe what you want; Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results &mdash; like a contractor who handles the entire job. Extracted from a PhD course I developed (Econ 730 at Emory, 6 lectures, 800+ slides).</p>
+  <p>A foundation for AI-assisted academic work using <a href="https://code.claude.com/docs/en/overview">Claude Code</a>. You describe what you want &mdash; lecture slides, a research paper, a data analysis, a replication package &mdash; and Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results. Like a contractor who handles the entire job.</p>
 
   <p>
     <a class="guide-btn" href="workflow-guide.html">Read the full guide</a>
@@ -178,17 +178,19 @@
   <h2>What's in the template</h2>
 
   <ul class="overview-list">
+    <li><strong>Full academic lifecycle</strong> <span class="desc">&mdash; not just slides: research papers, data analysis, replication packages, proposals, and presentations</span></li>
     <li><strong>Contractor mode orchestrator</strong> <span class="desc">&mdash; you describe the task; Claude autonomously plans, implements, reviews with agents, fixes issues, and re-verifies until quality gates pass</span></li>
     <li><strong>Beamer &rarr; Quarto pipeline</strong> <span class="desc">&mdash; 11-phase translation with TikZ-to-SVG and ggplot-to-plotly conversion</span></li>
     <li><strong>10 specialized agents</strong> <span class="desc">&mdash; proofreader, slide auditor, pedagogy reviewer, R reviewer, TikZ critic, domain reviewer, adversarial QA pair, translator, verifier</span></li>
     <li><strong>Adversarial critic-fixer loop</strong> <span class="desc">&mdash; two agents that check each other's work across up to 5 rounds &mdash; the critic can't fix, the fixer can't approve</span></li>
     <li><strong>Quality scoring with mandatory verification</strong> <span class="desc">&mdash; every file scored 0&ndash;100; nothing ships below 80; the orchestrator verifies every output before reporting done</span></li>
-    <li><strong>19 slash commands + 17 context-aware rules</strong> <span class="desc">&mdash; <code>/compile-latex</code>, <code>/proofread</code>, <code>/deploy</code>, <code>/commit</code>, <code>/qa-quarto</code>, <code>/lit-review</code>, <code>/review-paper</code>, <code>/data-analysis</code>, and more &mdash; plus quality gates, notation consistency, and R conventions</span></li>
+    <li><strong>22 slash commands + 18 context-aware rules</strong> <span class="desc">&mdash; <code>/compile-latex</code>, <code>/proofread</code>, <code>/deploy</code>, <code>/commit</code>, <code>/qa-quarto</code>, <code>/lit-review</code>, <code>/review-paper</code>, <code>/data-analysis</code>, and more &mdash; plus quality gates, notation consistency, and R conventions</span></li>
     <li><strong>Research workflow skills</strong> <span class="desc">&mdash; <code>/lit-review</code> for literature synthesis, <code>/research-ideation</code> for hypothesis generation, <code>/interview-me</code> to formalize ideas, <code>/review-paper</code> for manuscript review, <code>/data-analysis</code> for end-to-end R analysis</span></li>
-    <li><strong>Smart hooks</strong> <span class="desc">&mdash; macOS desktop notifications, file protection for bibliography and settings, pre-compaction context snapshots to session logs</span></li>
+    <li><strong>Smart hooks</strong> <span class="desc">&mdash; Desktop notifications (macOS/Linux), file protection for bibliography and settings, pre-compaction context snapshots to session logs</span></li>
     <li><strong>Plan-first workflow with continuous learning</strong> <span class="desc">&mdash; non-trivial tasks start in plan mode; <code>[LEARN:tag]</code> corrections persist in MEMORY.md across sessions; plans survive context compression</span></li>
     <li><strong>Research exploration workflow</strong> <span class="desc">&mdash; structured <code>explorations/</code> sandbox with fast-track prototyping (60/100 threshold), simplified orchestrator for R/research, and merge-only quality reporting</span></li>
     <li><strong>Automated session log enforcement</strong> <span class="desc">&mdash; a lightweight Stop hook reminds Claude to keep session logs current; Beamer-Quarto sync enforced via auto-loaded rules</span></li>
+    <li><strong>Community ecosystem</strong> <span class="desc">&mdash; extended by <a href="https://github.com/hsantanna88/clo-author">clo-author</a> (paper-centric research), <a href="https://github.com/chrisblattman/claudeblattman">claudeblattman</a> (non-technical academics), and <a href="https://github.com/scunning1975/MixtapeTools">MixtapeTools</a> (presentation rhetoric)</span></li>
   </ul>
 
   <h2>Getting started</h2>

@@ -1,7 +1,6 @@
 ---
 name: interview-me
 description: Interactive interview to formalize a research idea into a structured specification with hypotheses and empirical strategy
-disable-model-invocation: true
 argument-hint: "[brief topic or 'start fresh']"
 allowed-tools: ["Read", "Write"]
 ---

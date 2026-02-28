@@ -14,6 +14,8 @@ Skips:
 - Test files and generated files
 """
 
+from __future__ import annotations
+
 import json
 import os
 import sys
@@ -173,4 +175,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception:
+        # Fail open — never block Claude due to a hook bug
+        sys.exit(0)

@@ -1,11 +1,11 @@
 # My Claude Code Setup
 
-> **Work in progress.** This is not meant to be a polished guide for everyone. It's mostly a summary of how I've been using Claude Code for academic work — creating lecture slides, writing R scripts, managing Beamer-to-Quarto workflows, and so on. I keep learning new things, and as I do, I keep updating these files. This is just a way for me to share what I've figured out with friends and colleagues.
+> **Work in progress.** This is not meant to be a polished guide for everyone. It's mostly a summary of how I've been using Claude Code for academic work — slides, papers, data analysis, and more. I keep learning new things, and as I do, I keep updating these files. This is just a way for me to share what I've figured out with friends and colleagues.
 
 **Live site:** [psantanna.com/claude-code-my-workflow](https://psantanna.com/claude-code-my-workflow/)
-**Last Updated:** 2026-02-15
+**Last Updated:** 2026-02-27
 
-A ready-to-fork starter kit for academics using [Claude Code](https://code.claude.com/docs/en/overview) with **LaTeX/Beamer + R + Quarto**. You describe what you want; Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results — like a contractor who handles the entire job. Extracted from a production PhD course (6 lectures, 800+ slides).
+A ready-to-fork foundation for AI-assisted academic work. You describe what you want — lecture slides, a research paper, a data analysis, a replication package — and Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results. Like a contractor who handles the entire job. Extracted from a production PhD course and extended by a growing [community](#community--extensions).
 
 ---
 
@@ -29,21 +29,13 @@ claude
 
 **Using VS Code?** Open the Claude Code panel instead. Everything works the same — see the [full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-setup) for details.
 
-Then paste the following, filling in your project details:
+Then paste the [starter prompt](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-first-session) from the guide, filling in your project details:
 
-> I am starting to work on **[PROJECT NAME]** in this repo. **[Describe your project in 2–3 sentences — what you're building, who it's for, what tools you use.]**
->
-> I want our collaboration to be structured, precise, and rigorous. When creating visuals, everything must be polished and publication-ready.
->
-> I've set up the Claude Code academic workflow (forked from `pedrohcgs/claude-code-my-workflow`). The configuration files are already in this repo. Please read them, understand the workflow, and then **update all configuration files to fit my project** — fill in placeholders in `CLAUDE.md`, adjust rules if needed, and propose any customizations specific to my use case.
->
-> After that, use the plan-first workflow for all non-trivial tasks. Once I approve a plan, switch to contractor mode — coordinate everything autonomously and only come back to me when there's ambiguity or a decision to make.
->
-> Enter plan mode and start by adapting the workflow configuration for this project.
+> I am starting to work on **[PROJECT NAME]** in this repo. **[Describe your project in 2–3 sentences.]** I've set up the Claude Code academic workflow... Please read the configuration files and adapt them for my project. Enter plan mode and start.
+
+The [full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-first-session) has the complete starter prompt with all the details.
 
 **What this does:** Claude reads all the configuration files, fills in your project name, institution, and preferences, then enters contractor mode — planning, implementing, reviewing, and verifying autonomously. You approve the plan and Claude handles the rest.
-
-**Prefer to configure manually?** See the [full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-setup) for step-by-step manual setup instructions.
 
 ---
 
@@ -63,7 +55,7 @@ Instead of one general-purpose reviewer, 10 focused agents each check one dimens
 - **r-reviewer** — R code quality
 - **domain-reviewer** — field-specific correctness (template — customize for your field)
 
-Each is better at its narrow task than a generalist would be. The `/slide-excellence` skill runs them all in parallel.
+Each is better at its narrow task than a generalist would be. The `/slide-excellence` skill runs them all in parallel. The same pattern extends to any academic artifact — manuscripts, data pipelines, proposals.
 
 ### Adversarial QA
 
@@ -91,15 +83,29 @@ It covers:
 2. **Getting Started** — fork, paste one prompt, and Claude sets up the rest
 3. **The System in Action** — specialized agents, adversarial QA, quality scoring
 4. **The Building Blocks** — CLAUDE.md, rules, skills, agents, hooks, memory
-5. **Workflow Patterns** — lecture creation, translation, replication, multi-agent review, research exploration
-6. **Customizing for Your Domain** — creating your own reviewers and knowledge bases
+5. **Workflow Patterns** — slides, research, reproducibility, presentation rhetoric, and more
+6. **The Ecosystem** — extensions by clo-author, claudeblattman, MixtapeTools, and others
+7. **Customizing for Your Domain** — creating your own reviewers and knowledge bases
+
+---
+
+## Use Cases
+
+| Academic Task | How This Workflow Helps |
+|---------------|----------------------|
+| Lecture slides (Beamer/Quarto) | Full creation, translation, multi-agent review, deployment |
+| Research papers | Literature review, manuscript review, simulated peer review |
+| Data analysis | End-to-end R pipelines, replication verification, publication-ready output |
+| Replication packages | AEA-compliant packaging, reproducibility audit trails |
+| Presentations | Rhetoric of decks principles, visual audit, cognitive load review |
+| Research proposals | Structured drafting with adversarial critique |
 
 ---
 
 ## What's Included
 
 <details>
-<summary><strong>10 agents, 21 skills, 17 rules, 7 hooks</strong> (click to expand)</summary>
+<summary><strong>10 agents, 22 skills, 18 rules, 7 hooks</strong> (click to expand)</summary>
 
 ### Agents (`.claude/agents/`)
 
@@ -141,6 +147,7 @@ It covers:
 | `/data-analysis` | End-to-end R analysis with publication-ready output |
 | `/learn` | Extract non-obvious discoveries into persistent skills |
 | `/context-status` | Show session health and context usage |
+| `/deep-audit` | Repository-wide consistency audit |
 
 ### Research Workflow
 
@@ -165,6 +172,7 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 | `plan-first-workflow` | Plan mode for non-trivial tasks + context preservation |
 | `orchestrator-protocol` | Contractor mode: implement → verify → review → fix → score |
 | `session-logging` | Three logging triggers: post-plan, incremental, end-of-session |
+| `meta-governance` | Template vs. working project distinctions |
 
 **Path-scoped** (load only when working on matching files):
 
@@ -237,10 +245,22 @@ Not all tools are needed — install only what your project uses. Claude Code is
 
 ## Origin
 
-This infrastructure was extracted from **Econ 730: Causal Panel Data** at Emory University, developed by Pedro Sant'Anna using Claude Code over 6+ sessions. The course produced 6 complete PhD lecture decks with 800+ slides, interactive Quarto versions with plotly charts, and full R replication packages — all managed through this multi-agent workflow.
+This infrastructure was extracted from **Econ 730: Causal Panel Data** at Emory University, developed by Pedro Sant'Anna using Claude Code over 6+ sessions. The course produced 6 complete PhD lecture decks with 800+ slides, interactive Quarto versions with plotly charts, and full R replication packages — all managed through this multi-agent workflow. The patterns are domain-agnostic: the same agents, rules, and orchestrator work for any academic project.
+
+---
+
+## Community & Extensions
+
+This repo is the foundation. Others have extended it for specific workflows:
+
+- **[clo-author](https://github.com/hsantanna88/clo-author)** by Hugo Sant'Anna (UAB) — Paper-centric research workflows with 15 adversarial worker-critic agent pairs, simulated blind peer review, AEA replication compliance, and full research lifecycle management
+- **[claudeblattman](https://github.com/chrisblattman/claudeblattman)** by Chris Blattman (U Chicago) — Comprehensive guide for non-technical academics: executive assistant workflows, proposal writing, agent debates, and self-improving configuration
+- **[MixtapeTools](https://github.com/scunning1975/MixtapeTools)** by Scott Cunningham (Baylor) — The Rhetoric of Decks: philosophy and practice of beautiful, rhetorically effective academic presentations
+
+See the [guide's ecosystem section](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-ecosystem) for detailed descriptions, design principles, and more resources.
 
 ---
 
 ## License
 
-MIT License. Use freely for teaching, research, or any academic purpose.
+MIT License. See [LICENSE](LICENSE).

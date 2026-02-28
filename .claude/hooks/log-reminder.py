@@ -12,6 +12,8 @@ Usage (in .claude/settings.json):
     "Stop": [{ "hooks": [{ "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/log-reminder.py" }] }]
 """
 
+from __future__ import annotations
+
 import json
 import sys
 import hashlib
@@ -19,7 +21,19 @@ from pathlib import Path
 from datetime import datetime
 
 THRESHOLD = 15
-STATE_DIR = Path("/tmp/claude-log-reminder")
+
+
+def get_state_dir() -> Path:
+    """Get state directory under ~/.claude/sessions/ keyed by project."""
+    import os
+    project_dir = os.environ.get("CLAUDE_PROJECT_DIR", "")
+    if not project_dir:
+        state_dir = Path.home() / ".claude" / "sessions" / "default"
+    else:
+        project_hash = hashlib.md5(project_dir.encode()).hexdigest()[:8]
+        state_dir = Path.home() / ".claude" / "sessions" / project_hash
+    state_dir.mkdir(parents=True, exist_ok=True)
+    return state_dir
 
 
 def get_project_dir():
@@ -37,10 +51,9 @@ def get_project_dir():
     return hook_input.get("cwd", ""), hook_input
 
 
-def get_state_path(project_dir: str) -> Path:
-    """Return a project-keyed state file path."""
-    project_hash = hashlib.md5(project_dir.encode()).hexdigest()[:12]
-    return STATE_DIR / f"{project_hash}.json"
+def get_state_path() -> Path:
+    """Return the state file path for the current project."""
+    return get_state_dir() / "log-reminder-state.json"
 
 
 def load_state(state_path: Path) -> dict:
@@ -53,7 +66,7 @@ def load_state(state_path: Path) -> dict:
 
 def save_state(state_path: Path, state: dict):
     """Persist state to disk."""
-    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    state_path.parent.mkdir(parents=True, exist_ok=True)
     state_path.write_text(json.dumps(state))
 
 
@@ -76,7 +89,7 @@ def main():
     if not project_dir:
         sys.exit(0)
 
-    state_path = get_state_path(project_dir)
+    state_path = get_state_path()
     state = load_state(state_path)
 
     latest_log, current_mtime = find_latest_log(project_dir)

@@ -36,6 +36,7 @@
       "Bash(./scripts/sync_to_docs.sh)",
       "Bash(chmod *)",
       "Bash(open *)",
+      "Bash(xdg-open *)",
       "Bash(ls *)",
       "Bash(wc *)",
       "Bash(sort *)",

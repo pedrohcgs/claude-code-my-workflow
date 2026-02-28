@@ -1,7 +1,6 @@
 ---
 name: commit
 description: Stage, commit, create PR, and merge to main. Use for the standard commit-PR-merge cycle.
-disable-model-invocation: true
 argument-hint: "[optional: commit message]"
 allowed-tools: ["Bash", "Read", "Glob"]
 ---
