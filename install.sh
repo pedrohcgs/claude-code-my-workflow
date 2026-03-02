@@ -35,7 +35,7 @@ mkdir -p "$USER_CLAUDE/skills"
 SKILLS=(
   commit compile-latex context-status create-lecture devils-advocate
   extract-tikz interview-me learn lit-review pedagogy-review proofread
-  research-ideation review-paper review-python review-stata
+  research-ideation review-paper review-plan review-python review-stata
   slide-excellence validate-bib visual-audit
 )
 

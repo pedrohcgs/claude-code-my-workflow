@@ -10,7 +10,7 @@ Generic infrastructure lives at **user level** (`~/.claude/`) and applies to eve
 
 | Level | Location | Contents |
 |-------|----------|----------|
-| User | `~/.claude/skills/` | 22 slash commands (compile-latex, review-stata, commit, etc.) |
+| User | `~/.claude/skills/` | 23 slash commands (compile-latex, review-stata, commit, etc.) |
 | User | `~/.claude/agents/` | 8 review agents (proofreader, domain-reviewer, etc.) |
 | User | `~/.claude/rules/` | 19 workflow rules (quality gates, code conventions, etc.) |
 | User | `~/.claude/hooks/` | Hook scripts (protect-files, context-monitor, etc.) |
@@ -199,6 +199,7 @@ All available via `/command` in any project.
 | `/research-ideation [topic]` | Research questions + strategies |
 | `/interview-me [topic]` | Interactive research interview |
 | `/review-paper [file]` | Manuscript review |
+| `/review-plan [file]` | Stress-test a plan with expert critique |
 | `/data-analysis [dataset]` | End-to-end Stata household survey analysis |
 | `/python-analysis [dataset]` | End-to-end Python analysis |
 | `/context-status` | Check context usage and session health |
