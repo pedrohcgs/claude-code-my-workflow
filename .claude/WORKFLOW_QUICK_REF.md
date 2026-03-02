@@ -48,26 +48,25 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Paths:** All code uses relative paths from repo root (`data/raw/`, `data/processed/`, `Figures/`)
+- **Seeds:** Python scripts set `random.seed(20260101)` + `np.random.seed(20260101)`; Stata do-files set `set seed 20260101` — once at top
+- **Figures:** White background, 300 DPI minimum, exported to `Figures/` as `.pdf` + `.png`; matplotlib or ggplot2 only (no default Stata graphs in paper)
+- **MRIO algebra:** All matrix operations in Python (numpy/scipy); Stata is for econometrics and descriptive tables only
+- **seg score:** Always the IPD-based formula from Bailey-Strezhnev-Voeten ideal points (St. Louis Fed 2025 formulation); UNGA-DM is robustness only
+- **Weight normalization:** Assert `abs(weights.sum() - 1.0) < 1e-6` before computing any Exposure index
+- **Standard errors:** Always `vce(cluster countrycode)` in Stata panel regressions — no exceptions
+- **Matrix verification:** Always verify ICIO row/col ordering against ReadMe annex before matrix operations
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** Economist-style — minimal gridlines, labeled axes, no chart junk, readable at 2-column journal width
+**Reporting:** Concise bullets; detailed prose only on request
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Replication:** Flag near-misses; tolerance 1e-6 for matrix algebra, 1e-4 for exposure indices
 
 ---
 

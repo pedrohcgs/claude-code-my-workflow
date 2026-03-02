@@ -43,7 +43,15 @@
       "Bash(for *)",
       "Bash(gs *)",
       "Bash(pdftk *)",
-      "Bash(mkdir *)"
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(python *)",
+      "Bash(pip install *)",
+      "Bash(pip3 *)",
+      "Bash(stata-mp -b do *)",
+      "Bash(stata-mp -e do *)",
+      "Bash(StataMP-64.exe *)"
     ]
   },
   "hooks": {

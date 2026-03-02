@@ -54,3 +54,27 @@ CLAUDE.local.md
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
+
+# ==============================================================================
+# Geopolitics-GVC project specific
+# ==============================================================================
+
+# Large raw data files (OECD ICIO CSVs can be 500MB+ each)
+data/raw/
+*.zip
+*.gz
+*.tar
+
+# Stata temporary and log files
+*.smcl
+*.stpr
+*.ster
+*.stsv
+
+# Jupyter / Python notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Processed large datasets (track with DVC or similar if needed)
+# data/processed/*.dta
+# data/processed/*.csv

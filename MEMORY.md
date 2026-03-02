@@ -70,3 +70,13 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:meta] Dogfooding principles must be enforced: plan-first, spec-then-plan, quality gates, session logs → we follow our own guide.
 
 [LEARN:meta] Template development work (building infrastructure, docs) doesn't create session logs in quality_reports/ → those are for user work (slides, analysis), not meta-work. Keeps template clean for users who fork.
+
+## Project Setup Patterns
+
+[LEARN:setup] For research-paper projects (not lecture-centric), change the "single source of truth" principle in CLAUDE.md from "Beamer .tex is authoritative" to "Paper/main.tex is authoritative". Add Paper/ to folder structure; keep Slides/ for working-paper decks.
+
+[LEARN:setup] For data-intensive projects with large raw files (OECD ICIO ~500MB/year), add data/raw/ to .gitignore immediately at project setup. Also gitignore Stata temp files (*.smcl, *.stpr, *.ster) and Python notebooks (.ipynb_checkpoints/).
+
+[LEARN:setup] For mixed-language pipelines, make language responsibility explicit in CLAUDE.md Non-Negotiables: matrix algebra → Python (numpy/scipy); econometrics → Stata; figures → matplotlib or ggplot2. Prevents accidental Stata use for tasks it cannot handle.
+
+[LEARN:setup] knowledge-base-template.md paths frontmatter should include all code file types for the project: .tex, .qmd, .R, .do, .py — so Claude reads conventions before touching any analysis file.
