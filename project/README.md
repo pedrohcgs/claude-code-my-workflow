@@ -47,7 +47,8 @@ bash sync-pull.sh
 
 # Work normally---commit as usual
 git add -A && git commit -m "update analysis"
-# post-commit hook automatically pushes to Dropbox and Overleaf
+# pre-commit hook checks for newer files on Dropbox (blocks if conflicts found)
+# post-commit hook pushes project/ to Dropbox and Overleaf
 ```
 
 ### If you don't use Dropbox or Overleaf
