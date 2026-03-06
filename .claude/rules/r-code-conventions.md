@@ -27,19 +27,21 @@ paths:
 
 ## 3. Domain Correctness
 
-<!-- Customize for your field's known pitfalls -->
-- Verify estimator implementations match slide formulas
-- Check known package bugs (document below in Common Pitfalls)
+- **Python is the primary empirical tool**; R is secondary (panel econometrics via `fixest`)
+- Use `fixest::feols()` for panel regressions with FE and clustered SEs — not `lm()` or `plm()`
+- Synchronicity: compute R² from annual OLS of r_i,t on r_m,t **per firm**, then apply log-odds transform
+- Cluster SEs at firm level minimum; two-way (firm + year) preferred
+- Winsorize continuous variables at 1%/99% before regression
 
 ## 4. Visual Identity
 
 ```r
-# --- Your institutional palette ---
-primary_blue  <- "#012169"
-primary_gold  <- "#f2a900"
-accent_gray   <- "#525252"
+# --- Publication-neutral palette (finance paper standards) ---
+primary_blue   <- "#2166ac"
+secondary_red  <- "#d6604d"
+accent_gray    <- "#525252"
 positive_green <- "#15803d"
-negative_red  <- "#b91c1c"
+negative_red   <- "#b91c1c"
 ```
 
 ### Custom Theme
@@ -53,9 +55,9 @@ theme_custom <- function(base_size = 14) {
 }
 ```
 
-### Figure Dimensions for Beamer
+### Figure Dimensions for Paper
 ```r
-ggsave(filepath, width = 12, height = 5, bg = "transparent")
+ggsave(filepath, width = 7, height = 5, dpi = 300, bg = "white")
 ```
 
 ## 5. RDS Data Pattern

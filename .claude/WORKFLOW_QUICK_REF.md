@@ -1,5 +1,6 @@
 # Workflow Quick Reference
 
+**Project:** AIGC and Stock Price Synchronicity
 **Model:** Contractor (you direct, Claude orchestrates)
 
 ---
@@ -26,16 +27,17 @@ Repeat
 - **Code ambiguity:** "Spec unclear on X. Assume Y?"
 - **Replication edge case:** "Just missed tolerance. Investigate?"
 - **Scope question:** "Also refactor Y while here, or focus on X?"
+- **Identification choice:** "Two valid IV approaches. Which fits your theory?"
 
 ---
 
 ## I Just Execute When
 
 - Code fix is obvious (bug, pattern application)
-- Verification (tolerance checks, tests, compilation)
+- Verification (tolerance checks, compilation)
 - Documentation (logs, commits)
-- Plotting (per established standards)
-- Deployment (after you approve, I ship automatically)
+- Plotting (per established figure standards)
+- Adding robustness checks from the standard list
 
 ---
 
@@ -48,26 +50,24 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Relative paths** — no hardcoded absolute paths in any script
+- **Reproducibility** — `random_state=42` in Python; `set.seed(YYYYMMDD)` once at top in R
+- **Figure standards** — white background, 300 DPI, tight layout, no decorative fonts
+- **Color palette** — neutral/publication-appropriate (no institutional colors); default: black, gray, `#2166ac` (blue), `#d6604d` (red)
+- **Tolerance thresholds** — point estimates ±1e-4; SEs ±1e-3; see knowledge base for full table
+- **Synchronicity** — always log-odds transform (ψ), never raw R²
+- **Panel SEs** — cluster at firm level minimum; two-way (firm + year) preferred
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** Publication-quality figures — white bg, 300 DPI, concise axis labels, no chart junk
+**Reporting:** Concise bullets first; details on request
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Replication:** Strict — flag any deviation from spec, including near-misses
 
 ---
 
