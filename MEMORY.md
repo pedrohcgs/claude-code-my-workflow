@@ -70,3 +70,12 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:meta] Dogfooding principles must be enforced: plan-first, spec-then-plan, quality gates, session logs → we follow our own guide.
 
 [LEARN:meta] Template development work (building infrastructure, docs) doesn't create session logs in quality_reports/ → those are for user work (slides, analysis), not meta-work. Keeps template clean for users who fork.
+
+## Project Context
+
+**Course:** ECN 152 — Economics of Education
+**Institution:** UC Davis
+**Audience:** Undergrads with intro econ + intro econometrics
+**Output format:** Beamer (.tex) only — Quarto not active, available later if needed
+**Phase:** Initial config setup (2026-03-07). Prior-year .tex slides pending; lecture topic list TBD.
+**To do when slides arrive:** Populate Beamer Custom Environments table, Current Project State table in CLAUDE.md.
