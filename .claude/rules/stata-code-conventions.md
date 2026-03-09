@@ -23,20 +23,39 @@ scripts/Stata/
 └── ado/                 # Personal ado-files
 ```
 
-**Rule:** One main script per phase. Numbered prefix ensures execution order.
-
+**Rule:** 
+- One main script per research phase
+- Scripts must run sequentially
+- Numbered prefixes enforce execution order
+- Raw data must never be overwritten. 
+- Derived datasets should be saved in a processed directory.
 ---
 
 ## Naming Conventions
 
 | Element | Convention | Example |
 |---------|------------|---------|
-| Variables | lowercase_underscore | `total_assets`, `roa` |
-| Globals | descriptive_caps | `$main_controls`, `$firm_fe` |
+| Variables | lowercase_underscore | `stkcd`, `year`, `total_asset` |
+| Globals | descriptive_caps | `$controls`, `$main_spec` |
 | Scalars | descriptive | `scalar N_main = 1234` |
 | Matrices | MAT_ descriptive | `matrix MAT_coefs = J(3,4,0)` |
-| Programs | camelCase | `program define myprogram` |
-| Files | descriptive.dta | `panel_clean.dta` |
+| Files | descriptive.dta | `clean.dta` |
+
+### Variable Suffix Patterns (from examples)
+
+| Suffix | Meaning | Example |
+|--------|---------|---------|
+| `_REV` | Scaled by revenue | `RPT_a_REV` = RPT / Revenue |
+| `_TA` | Scaled by total assets | `guarantee_TA` = Guarantee / Total Assets |
+| `_ln` | Log transformed | `ln_asset` = ln(assets) |
+| `_sd` | Standard deviation | `ROS_sd` = ROS standard deviation |
+
+### Indicator Variable Patterns
+
+| Prefix | Source | Example |
+|--------|--------|---------|
+| `d_` | Manual dummy | `d_soe` |
+| `_I` | From `tab` command | `_Iyear*`, `_Iind2*` |
 
 ---
 
@@ -53,15 +72,12 @@ Every .do file must begin with:
 * Output: [data files created, tables generated]
 ********************************************************************************
 
-version 18.0
-clear all
-set more off
+clear
 
 * Set working directory
 cd "/path/to/project"
 
 * Load required packages
-* ssc install [package]
 ```
 
 ---
@@ -138,3 +154,107 @@ if _rc != 0 {
 - Use relative paths via globals, not hardcoded absolute paths
 - Include all data dependencies in header comments
 - No interactive commands (browse, edit) in final scripts
+
+---
+
+## Control Variables
+
+Do not assume a fixed set of control variables.
+
+Control variables should always be specified by the researcher for each regression.
+
+Use globals only as containers when the researcher provides a control set.
+
+Example:
+
+global controls "var1 var2 var3"
+xtreg y x $controls, fe cluster(firm)
+
+---
+## Research Design Confirmation
+
+Before generating any regression code, always confirm the following with the researcher:
+
+- dependent variable
+- key independent variable(s)
+- control variables
+- whether panel data methods are required
+- panel identifier and time variable, if panel regression is used
+- fixed effects structure
+- clustering level
+- sample restrictions, if any
+
+Do not assume any of the above from previous examples.
+
+Do not choose an econometric model without researcher confirmation.
+
+If any of these are not explicitly provided, ask first before writing final code.
+
+---
+
+## Common Regression Commands (from examples)
+
+| Model | Command | SE Options |
+|-------|---------|------------|
+| OLS | `reg y x, vce(robust)` | cluster, robust |
+| Panel FE | `xtreg y x, fe vce(cluster)` | cluster(id), robust |
+| Probit | `probit y x, vce(cluster)` | cluster(id) |
+| DProbit | `dprobit y x, vce(cluster)` | Marginal effects |
+| IV | `ivreg2 y (x = z), first ivregress 2sls` | cluster, robust |
+| Cox | `stcox x, vce(cluster)` | hazard model |
+
+
+---
+
+## Output Export: outreg2 (from examples)
+
+Standard outreg2 patterns:
+
+```stata
+* Basic regression output
+outreg2 using "table1", replace word dec(4) ///
+    title("Table X: Title") ///
+    keep(var1 var2 var3) ///
+    addstat("Pseudo R2", e(r2_p))
+
+* With fixed effects
+outreg2 using "table1", replace word dec(4) ///
+    keep(var1 var2) ///
+    addstat("Adj R2", e(r2_a)) ///
+    addtext("Year FE", "YES", "Industry FE", "YES")
+
+* Clustered SE indication
+outreg2 using "table1", replace word dec(4) ///
+    ctitle(Column Title) ///
+    addtext(Controls, YES, Clustered SE, Firm)
+```
+
+### Common outreg2 Options
+
+| Option | Purpose | Example |
+|--------|---------|---------|
+| `dec(4)` | Decimal places | 4 decimals |
+| `replace` | Overwrite file | replace |
+| `word` | Word format | word |
+| `keep()` | Keep variables | keep(var1 var2) |
+| `drop()` | Drop variables | drop(_I*) |
+| `addstat()` | Add statistics | addstat("R2", e(r2)) |
+| `addtext()` | Add text notes | addtext("FE", "YES") |
+| `ctitle()` | Column title | ctitle(Main) |
+
+## Reproducibility Rules
+
+Scripts must run from start to finish without manual intervention.
+
+Avoid:
+
+browse
+edit
+pause
+display prompts requiring user input
+
+## Two-Step Regression Workflow
+
+1. propose regression specification
+2. wait for researcher confirmation
+3. generate final Stata code
