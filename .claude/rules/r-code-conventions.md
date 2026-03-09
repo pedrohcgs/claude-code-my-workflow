@@ -34,28 +34,29 @@ paths:
 ## 4. Visual Identity
 
 ```r
-# --- Your institutional palette ---
-primary_blue  <- "#012169"
-primary_gold  <- "#f2a900"
-accent_gray   <- "#525252"
-positive_green <- "#15803d"
-negative_red  <- "#b91c1c"
+# --- Colorblind-safe palette (viridis default) ---
+# Use scale_color_viridis_d() / scale_fill_viridis_d() for categorical
+# Use scale_color_viridis_c() / scale_fill_viridis_c() for continuous
+# ColorBrewer alternative: RColorBrewer::brewer.pal(n, "Set2")
 ```
 
 ### Custom Theme
 ```r
-theme_custom <- function(base_size = 14) {
-  theme_minimal(base_size = base_size) +
-    theme(
-      plot.title = element_text(face = "bold", color = primary_blue),
-      legend.position = "bottom"
+theme_energy <- function(base_size = 12) {
+  ggplot2::theme_minimal(base_size = base_size) +
+    ggplot2::theme(
+      plot.title    = ggplot2::element_text(face = "bold"),
+      plot.subtitle = ggplot2::element_text(color = "grey40"),
+      legend.position = "bottom",
+      panel.grid.minor = ggplot2::element_blank()
     )
 }
 ```
 
-### Figure Dimensions for Beamer
+### Figure Dimensions for Documents
 ```r
-ggsave(filepath, width = 12, height = 5, bg = "transparent")
+# Standard report figure (white bg for PDF output)
+ggsave(filepath, width = 8, height = 5, dpi = 300, bg = "white")
 ```
 
 ## 5. RDS Data Pattern
@@ -68,11 +69,23 @@ saveRDS(result, file.path(out_dir, "descriptive_name.rds"))
 
 ## 6. Common Pitfalls
 
-<!-- Add your field-specific pitfalls here -->
+### General
 | Pitfall | Impact | Prevention |
 |---------|--------|------------|
-| Missing `bg = "transparent"` | White boxes on slides | Always include in ggsave() |
-| Hardcoded paths | Breaks on other machines | Use relative paths |
+| Missing `bg = "white"` | Transparent/grey bg in PDF output | Always set `bg = "white"` in `ggsave()` |
+| Hardcoded paths | Breaks on other machines | Use `here::here()` for all paths |
+
+### Energy Economics (Domain-Specific)
+
+| Pitfall | Impact | Fix |
+|---------|--------|-----|
+| `WDI` package: omitting `extra = TRUE` | Misses metadata columns (region, income group) needed for subgroup analysis | `WDI(extra = TRUE, start = 2000, end = 2023)` — always specify `startdate`/`enddate` |
+| IEA manual data: mixing vintages (Mtoe vs. EJ) | Silent unit error; estimates off by factor ~41.87 | Pin one vintage; document year of download; check units in source metadata |
+| Panel energy regressions: skipping cross-sectional dependence test | Biased/inconsistent SE if CD present; wrong estimator choice | Run `pesaran.test()` (from `plm`) or `pcdtest()` first; if CD → use CCEP or AMG estimator |
+| `urca` ADF only (no KPSS) | ADF has low power; may accept H₀ of unit root incorrectly | Always pair ADF (`ur.df()`) + KPSS (`ur.kpss()`); report both; document conflict if found |
+| `vars` package: lag selection without stability check | Unstable VAR gives unreliable IRFs and Granger tests | Select lag by AIC (`VARselect()`), then check `roots()` — all eigenvalues must be < 1 |
+| Using nominal GDP in energy intensity | EI not comparable cross-country or across time | Use PPP-adjusted constant GDP from WDI (`NY.GDP.MKTP.PP.KD`) |
+| Granger causality → claiming structural causality | Granger tests forecast precedence, not mechanism | Write "Granger-causes" explicitly; note it is not structural identification |
 
 ## 7. Line Length & Mathematical Exceptions
 
