@@ -48,26 +48,22 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Path convention:** `here::here()` for all R scripts (no hardcoded paths)
+- **Seed convention:** `set.seed(42)` at top of every R script with stochastic elements
+- **Figure standards:** 300 DPI, white background (`bg = "white"`), `ggplot2::theme_minimal()`
+- **Color palette:** Colorblind-safe — viridis (`scale_color_viridis_d()`) or ColorBrewer palettes
+- **Tolerance thresholds:** 4 decimal places for energy intensities and elasticities (e.g., `round(ei, 4)`)
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** White background figures at 300 DPI; viridis/ColorBrewer for all categorical color scales
+**Reporting:** Structured bullets by default; detailed prose on request
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Proofreading:** Rigorous mode — flag all near-misses, not just clear errors
 
 ---
 

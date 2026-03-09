@@ -70,3 +70,13 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:meta] Dogfooding principles must be enforced: plan-first, spec-then-plan, quality gates, session logs → we follow our own guide.
 
 [LEARN:meta] Template development work (building infrastructure, docs) doesn't create session logs in quality_reports/ → those are for user work (slides, analysis), not meta-work. Keeps template clean for users who fork.
+
+## Project Setup (Nepal & Global Energy Economics)
+
+[LEARN:project] Project adapted from pedrohcgs/claude-code-my-workflow template on 2026-03-08. Primary artifacts are literature review documents and research proposals — NOT Beamer slides. Beamer/Quarto/TikZ rules preserved but inactive.
+
+[LEARN:project] Key directories: `literature/global/` (global energy papers), `literature/nepal/` (Nepal-specific), `proposals/` (3–5 student proposals). Paper notes follow `AUTHORLASTNAME_YEAR_keywords.md` naming.
+
+[LEARN:project] Primary skills for this project: `/lit-review`, `/research-ideation`, `/interview-me`, `/review-paper`. Quality gates (80/90/95) apply to proposals and synthesis docs. Domain reviewer agent customized for energy economics (6 lenses including Nepal-specificity).
+
+[LEARN:project] Energy economics R pitfalls logged in r-code-conventions.md: WDI `extra=TRUE`, IEA vintage consistency, Pesaran CD test before panel estimation, ADF+KPSS together, VAR stability check. Figure standards: white bg, 300 DPI, viridis palette, theme_minimal.
