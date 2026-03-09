@@ -105,7 +105,7 @@ It covers:
 ## What's Included
 
 <details>
-<summary><strong>10 agents, 22 skills, 18 rules, 7 hooks</strong> (click to expand)</summary>
+<summary><strong>10 agents, 24 skills, 20 rules, 7 hooks</strong> (click to expand)</summary>
 
 ### Agents (`.claude/agents/`)
 
@@ -204,6 +204,9 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 | `requirements-spec.md` | MUST/SHOULD/MAY requirements framework with clarity status |
 | `constitutional-governance.md` | Template for defining non-negotiable principles vs. preferences |
 | `skill-template.md` | Academic skill creation template with domain-specific examples |
+| `paper-readme.md` | Replication package README for empirical papers |
+| `table-spec.md` | Table specification for publication-ready tables |
+| `analysis-log.md` | Analysis decision log for research projects |
 
 </details>
 
