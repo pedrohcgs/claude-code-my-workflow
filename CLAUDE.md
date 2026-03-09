@@ -5,8 +5,8 @@
      Keep this file under ~150 lines — Claude loads it every session.
      See the guide at docs/workflow-guide.html for full documentation. -->
 
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
+**Project:** Accounting Research
+**Institution:** Xi'an Jiaotong University
 **Branch:** main
 
 ---
@@ -24,16 +24,22 @@
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
+Accounting_Research/
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
-├── Quarto/                      # RevealJS .qmd files + theme
+├── Figures/                     # Stata-generated figures
+├── Preambles/header.tex         # LaTeX headers (for tables)
+├── Slides/                      # Beamer .tex files (if presentations)
+├── Quarto/                      # RevealJS .qmd files (if slides)
 ├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
+├── scripts/
+│   ├── R/                       # R scripts (if needed)
+│   └── Stata/                   # Stata do-files and ado-files
+│       └── ado/                 # Personal Stata packages
+├── Data/                        # Raw and processed data
+├── Tables/                      # Publication-ready LaTeX tables
+├── Papers/                      # Working papers and drafts
 ├── quality_reports/             # Plans, session logs, merge reports
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates
@@ -45,6 +51,9 @@
 ## Commands
 
 ```bash
+# Stata (run do-file)
+stata-mp -b do file.do  # or stata-se, stata
+
 # LaTeX (3-pass, XeLaTeX only)
 cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
 BIBINPUTS=..:$BIBINPUTS bibtex file
@@ -80,7 +89,10 @@ python scripts/quality_score.py Quarto/file.qmd
 | `/proofread [file]` | Grammar/typo/overflow review |
 | `/visual-audit [file]` | Slide layout audit |
 | `/pedagogy-review [file]` | Narrative, notation, pacing review |
+| `/review-stata [file]` | Stata code quality review |
 | `/review-r [file]` | R code quality review |
+| `/tables-to-latex [table]` | Convert Stata output to LaTeX table |
+| `/reg-output [specs]` | Standardize regression output format |
 | `/qa-quarto [LectureN]` | Adversarial Quarto vs Beamer QA |
 | `/slide-excellence [file]` | Combined multi-agent review |
 | `/translate-to-quarto [file]` | Beamer → Quarto translation |
@@ -92,7 +104,7 @@ python scripts/quality_score.py Quarto/file.qmd
 | `/research-ideation [topic]` | Research questions + strategies |
 | `/interview-me [topic]` | Interactive research interview |
 | `/review-paper [file]` | Manuscript review |
-| `/data-analysis [dataset]` | End-to-end R analysis |
+| `/data-analysis [dataset]` | End-to-end Stata/R analysis |
 | `/learn [skill-name]` | Extract discovery into persistent skill |
 | `/context-status` | Show session health + context usage |
 | `/deep-audit` | Repository-wide consistency audit |
@@ -130,7 +142,9 @@ python scripts/quality_score.py Quarto/file.qmd
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
-|---------|--------|--------|-------------|
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
-| 2: [Topic] | `Lecture02_Topic.tex` | -- | [Brief description] |
+| Paper | Stage | Key Content |
+|-------|-------|-------------|
+| Paper 1 | [Stage] | [Research question] |
+| Paper 2 | [Stage] | [Research question] |
+
+*Infrastructure for empirical accounting research with Stata is being set up.*
