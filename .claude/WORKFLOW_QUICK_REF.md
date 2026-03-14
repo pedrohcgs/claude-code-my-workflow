@@ -48,26 +48,22 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Path convention:** All paths via `$root` global defined in `do/master.do`. No absolute paths anywhere in do-files.
+- **Seed convention:** `set seed XXXXX` once at the top of `do/master.do`; inherited by all sub-do-files (never re-set in sub-files).
+- **Figure standards:** White background, publication-ready, consistent font; use `scheme s2color` or project custom scheme. Export as `.pdf` or `.png` at ≥300 DPI.
+- **Tolerance thresholds:** 1e-4 for point estimate replication checks. Flag near-misses (within 1e-3), investigate before accepting.
+- **Data:** Never overwrite raw HILDA files. All analysis on copies. Raw data lives in `data/raw/` (gitignored).
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
-**Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Reporting:** Concise bullets; details on request.
+**Session logs:** Always (post-plan, incremental, end-of-session).
+**Replication:** Flag near-misses (within 1e-3), investigate before accepting. Exact match expected at 1e-4.
+**Stata output:** Always use `esttab`/`estout` with consistent formatting; never deliver raw `.log` as a result.
 
 ---
 

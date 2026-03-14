@@ -43,7 +43,11 @@
       "Bash(for *)",
       "Bash(gs *)",
       "Bash(pdftk *)",
-      "Bash(mkdir *)"
+      "Bash(mkdir *)",
+      "Bash(stata *)",
+      "Bash(stata-mp *)",
+      "Bash(stata-se *)",
+      "Bash(stata-be *)"
     ]
   },
   "hooks": {

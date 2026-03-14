@@ -1,27 +1,31 @@
 ---
 paths:
   - "Slides/**/*.tex"
-  - "Quarto/**/*.qmd"
 ---
 
-# Beamer → Quarto Auto-Sync Rule (MANDATORY)
+# Beamer → Quarto Sync Rule
 
-**Every edit to a Beamer `.tex` file MUST be immediately synced to the corresponding Quarto `.qmd` file — automatically, without the user asking.** This is non-negotiable.
+> **PROJECT NOTE (mh_layoff):** Quarto/RevealJS is NOT used in this project.
+> The mandatory sync rule below is **INACTIVE** — there are no `.qmd` counterparts.
+> This file is kept for future-proofing (if Quarto is added later, populate the
+> lecture mapping table and re-activate the rule).
 
-## The Rule
+---
 
-When you modify a Beamer `.tex` file, you MUST also apply the equivalent change to the Quarto `.qmd` (if it exists) **in the same task**, before reporting completion. Do NOT wait to be asked. Do NOT just "flag the drift." Just do it.
+## The Rule (Inactive — No Quarto in This Project)
+
+When a project uses both Beamer and Quarto, every edit to a Beamer `.tex` file
+MUST be immediately synced to the corresponding Quarto `.qmd` file, in the same
+task, before reporting completion.
 
 ## Lecture Mapping
 
-<!-- Customize this table for your lectures -->
+<!-- No Quarto files in this project. Add entries here if Quarto is introduced. -->
 | Lecture | Beamer | Quarto |
 |---------|--------|--------|
-| 1 | `Slides/Lecture1_Topic.tex` | `Quarto/Lecture1_Topic.qmd` |
-| 2 | `Slides/Lecture2_Topic.tex` | `Quarto/Lecture2_Topic.qmd` |
-<!-- Add rows as you create lectures -->
+| *(none yet)* | -- | -- (not used) |
 
-## Workflow (Every Time)
+## Workflow (When Quarto IS Used)
 
 1. Apply fix to Beamer `.tex`
 2. **Immediately** apply equivalent fix to Quarto `.qmd`
@@ -29,32 +33,20 @@ When you modify a Beamer `.tex` file, you MUST also apply the equivalent change 
 4. Render Quarto (`./scripts/sync_to_docs.sh LectureN`)
 5. Only then report task complete
 
+## When NOT to Sync
+
+- Quarto file doesn't exist yet (current state of this project)
+- Change is LaTeX-only infrastructure (preamble, theme files)
+- Explicitly told to skip Quarto sync
+- **This entire project** — Quarto not used; skip sync entirely
+
 ## LaTeX → Quarto Translation Reference
+
+*(Kept for reference if Quarto is added later)*
 
 | Beamer | Quarto Equivalent |
 | ------ | ----------------- |
 | `\muted{text}` | `[text]{style="color: #525252;"}` |
-| `\key{text}` | `[**text**]{.emorygold}` |
-| `\textcolor{positive}{text}` | `[text]{.positive}` |
-| `\textcolor{negative}{text}` | `[text]{.negative}` |
+| `\key{text}` | `[**text**]{.key}` |
 | `\item text` | `- text` |
-| `\begin{highlightbox}` | `::: {.highlightbox}` |
-| `\begin{methodbox}` | `::: {.methodbox}` |
 | `$formula$` | `$formula$` (same) |
-
-## When NOT to Sync
-
-- Quarto file doesn't exist yet
-- Change is LaTeX-only infrastructure (preamble, theme files)
-- Explicitly told to skip Quarto sync
-
-## Enforcement
-
-Before marking any Beamer editing task as complete, check:
-> "Did I also update the Quarto file?"
-
-If the answer is no and a Quarto file exists, **you are NOT done.**
-
-## When to Update This Table
-
-After creating a new Quarto translation, add it to the mapping table above.

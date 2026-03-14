@@ -54,3 +54,21 @@ CLAUDE.local.md
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
+
+# ==============================================================================
+# mh_layoff project-specific ignores
+# ==============================================================================
+
+# Licensed HILDA survey data — NEVER commit
+data/
+
+# Stata datasets (safety net — raw data must stay out of repo)
+*.dta
+
+# Stata log files (generated output — not source)
+# *.log   # NOTE: already covered above by LaTeX *.log; Stata logs also .log
+# Uncomment the line below if you want to TRACK Stata logs:
+# !do/output/*.log
+
+# Intermediate do-file outputs (if kept local)
+do/output/
