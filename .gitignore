@@ -1,56 +1,69 @@
 # ==============================================================================
-# .gitignore for Academic Claude Code Projects
+# .gitignore for China Innovation Tax Benefits Study
 # ==============================================================================
 
-# LaTeX build artifacts
-*.aux
-*.bbl
-*.blg
-*.fdb_latexmk
-*.fls
-*.log
-*.nav
-*.out
-*.snm
-*.toc
-*.vrb
-*.synctex.gz
-*.run.xml
-*-blx.bib
+# ==============================================================================
+# Data — proprietary CSMAR/CNRDS data cannot be committed
+# ==============================================================================
+data/raw/
+!data/raw/.gitkeep
 
-# Compiled PDFs (uncomment to track specific PDFs)
-# *.pdf
+# Large raw Stata datasets
+data/raw/*.dta
 
+# Literature PDFs (large files — store locally or in cloud)
+literature/
+!literature/.gitkeep
+
+# ==============================================================================
+# Stata
+# ==============================================================================
+# Log files (optional — uncomment to gitignore logs)
+# output/logs/
+# *.log
+
+# Stata temporary files
+*.stswp
+~*.dta
+
+# ==============================================================================
 # Python
+# ==============================================================================
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.venv/
+venv/
+env/
+.env
 
-# R
-.Rproj.user/
-.Rhistory
-.RData
-.Rdata
-
+# ==============================================================================
 # OS files
+# ==============================================================================
 .DS_Store
 Thumbs.db
+desktop.ini
 
+# ==============================================================================
 # Claude Code local files (not shared across machines)
+# ==============================================================================
 .claude/settings.local.json
 .claude/state/
 CLAUDE.local.md
 
+# ==============================================================================
 # IDE
+# ==============================================================================
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Quarto rendering artifacts
-/.quarto/
-
-# Output artifacts — uncomment lines below based on your preference
-# *.rds
-# output/**/*.rds
+# ==============================================================================
+# Office temporary files
+# ==============================================================================
+~$*.docx
+~$*.xlsx
+~$*.pptx

@@ -1,6 +1,7 @@
 # Workflow Quick Reference
 
 **Model:** Contractor (you direct, Claude orchestrates)
+**Project:** China Innovation Tax Benefits Study | USC | StataNow 19 + Python 3.13
 
 ---
 
@@ -22,20 +23,20 @@ Repeat
 
 ## I Ask You When
 
-- **Design forks:** "Option A (fast) vs. Option B (robust). Which?"
-- **Code ambiguity:** "Spec unclear on X. Assume Y?"
+- **Design forks:** "Option A (probit) vs. Option B (logit + LPM). Which?"
+- **Data ambiguity:** "CSMAR has two versions of this variable. Which?"
 - **Replication edge case:** "Just missed tolerance. Investigate?"
-- **Scope question:** "Also refactor Y while here, or focus on X?"
+- **Scope question:** "Also run robustness while here, or focus on main spec?"
 
 ---
 
 ## I Just Execute When
 
-- Code fix is obvious (bug, pattern application)
-- Verification (tolerance checks, tests, compilation)
+- Code fix is obvious (bug, path error, missing option)
+- Verification (log checks, output existence, tolerance checks)
 - Documentation (logs, commits)
-- Plotting (per established standards)
-- Deployment (after you approve, I ship automatically)
+- Table formatting (per booktabs standard)
+- Export (after you approve, I run and verify automatically)
 
 ---
 
@@ -48,26 +49,24 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Relative paths only** — no `C:\` or absolute paths in any script
+- **`set seed YYYYMMDD`** — all stochastic Stata commands must set seed in this format
+- **`version 19`** — all Stata do-files declare version
+- **Booktabs tables** — `\toprule / \midrule / \bottomrule`, no `\hline`, no vertical rules
+- **Stars: `* p<0.10 ** p<0.05 *** p<0.01`** — consistent across all tables
+- **300 DPI minimum** for all figures
+- **Never modify `data/raw/`** — read only
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Reporting:** Concise bullets; details on request
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Replication:** Strict — flag near-misses; investigate before proceeding
+**Stata batch:** Run via `"C:/Program Files/StataNow19/StataMP-64.exe" /e do [file]`
 
 ---
 
@@ -78,6 +77,21 @@ For experimental work, use the **Fast-Track** workflow:
 - 60/100 quality threshold (vs. 80/100 for production)
 - No plan needed — just a research value check (2 min)
 - See `.claude/rules/exploration-fast-track.md`
+
+---
+
+## Key File Locations
+
+| What | Where |
+|------|-------|
+| Analysis-ready data | `data/final/*.dta` |
+| Python cleaning scripts | `code/python/` |
+| Stata do-files | `code/stata/` |
+| Tables | `output/tables/` |
+| Figures | `output/figures/` |
+| Stata logs | `output/logs/` |
+| Manuscript | `manuscript/` |
+| Plans | `quality_reports/plans/` |
 
 ---
 

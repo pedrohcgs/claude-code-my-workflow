@@ -1,7 +1,7 @@
 ---
 paths:
-  - "scripts/**/*.R"
-  - "Figures/**/*.R"
+  - "code/**/*.do"
+  - "code/**/*.py"
 ---
 
 # Replication-First Protocol
@@ -12,9 +12,9 @@ paths:
 
 ## Phase 1: Inventory & Baseline
 
-Before writing any R code:
+Before writing any code:
 
-- [ ] Read the paper's replication README
+- [ ] Read the paper's replication README (if available)
 - [ ] Inventory replication package: language, data files, scripts, outputs
 - [ ] Record gold standard numbers from the paper:
 
@@ -23,30 +23,30 @@ Before writing any R code:
 
 | Target | Table/Figure | Value | SE/CI | Notes |
 |--------|-------------|-------|-------|-------|
-| Main ATT | Table 2, Col 3 | -1.632 | (0.584) | Primary specification |
+| Main coefficient | Table 2, Col 3 | 0.152 | (0.034) | Primary specification |
 ```
 
-- [ ] Store targets in `quality_reports/LectureNN_replication_targets.md` or as RDS
+- [ ] Store targets in `quality_reports/replication_targets_[paper].md`
 
 ---
 
 ## Phase 2: Translate & Execute
 
-- [ ] Follow `r-code-conventions.md` for all R coding standards
+- [ ] Follow `stata-conventions.md` and `python-conventions.md` for coding standards
 - [ ] Translate line-by-line initially -- don't "improve" during replication
 - [ ] Match original specification exactly (covariates, sample, clustering, SE computation)
-- [ ] Save all intermediate results as RDS
+- [ ] Save intermediate datasets as `.dta` in `data/processed/`
 
-### Stata to R Translation Pitfalls
+### Common Pitfalls in Accounting / Finance Empirical Work
 
-<!-- Customize: Add pitfalls specific to your field -->
-
-| Stata | R | Trap |
-|-------|---|------|
-| `reg y x, cluster(id)` | `feols(y ~ x, cluster = ~id)` | Stata clusters df-adjust differently from some R packages |
-| `areg y x, absorb(id)` | `feols(y ~ x \| id)` | Check demeaning method matches |
-| `probit` for PS | `glm(family=binomial(link="probit"))` | R default logit != Stata default in some commands |
-| `bootstrap, reps(999)` | Depends on method | Match seed, reps, and bootstrap type exactly |
+| Issue | Trap | Solution |
+|-------|------|----------|
+| Standard errors | Different clustering levels (firm vs. firm+year) | Match original exactly; document in do-file |
+| Sample period | Fiscal vs. calendar year cutoffs | Check paper footnotes carefully |
+| Variable construction | Winsorization level (1% vs. 1/99%) | Match original percentile convention |
+| Fixed effects | Industry × year vs. industry + year | Check reghdfe absorb() specification |
+| China data | CSMAR vs. CNRDS variable naming differs by vintage | Document data vintage in header |
+| Probit/Logit | Marginal effects at mean vs. average marginal effects | Match paper's reported quantity |
 
 ---
 
@@ -56,25 +56,25 @@ Before writing any R code:
 
 | Type | Tolerance | Rationale |
 |------|-----------|-----------|
-| Integers (N, counts) | Exact match | No reason for any difference |
-| Point estimates | < 0.01 | Rounding in paper display |
-| Standard errors | < 0.05 | Bootstrap/clustering variation |
+| Observation counts | Exact match | No reason for any difference |
+| Point estimates | < 0.001 | Rounding in paper display |
+| Standard errors | < 0.005 | Clustering variation |
 | P-values | Same significance level | Exact p may differ slightly |
 | Percentages | < 0.1pp | Display rounding |
 
 ### If Mismatch
 
-**Do NOT proceed to extensions.** Isolate which step introduces the difference, check common causes (sample size, SE computation, default options, variable definitions), and document the investigation even if unresolved.
+**Do NOT proceed to extensions.** Isolate which step introduces the difference, check common causes (sample restrictions, SE computation, variable definitions, data vintage), and document the investigation even if unresolved.
 
 ### Replication Report
 
-Save to `quality_reports/LectureNN_replication_report.md`:
+Save to `quality_reports/replication_report_[paper].md`:
 
 ```markdown
 # Replication Report: [Paper Author (Year)]
 **Date:** [YYYY-MM-DD]
 **Original language:** [Stata/R/etc.]
-**R translation:** [script path]
+**Our replication:** [do-file path]
 
 ## Summary
 - **Targets checked / Passed / Failed:** N / M / K
@@ -89,7 +89,7 @@ Save to `quality_reports/LectureNN_replication_report.md`:
 - **Target:** X | **Investigation:** ... | **Resolution:** ...
 
 ## Environment
-- R version, key packages (with versions), data source
+- StataNow 19, key packages (with versions), CSMAR/CNRDS vintage, date downloaded
 ```
 
 ---
@@ -98,6 +98,6 @@ Save to `quality_reports/LectureNN_replication_report.md`:
 
 After replication is verified (all targets PASS):
 
-- [ ] Commit replication script: "Replicate [Paper] Table X -- all targets match"
-- [ ] Now extend with course-specific modifications (different estimators, new figures, etc.)
+- [ ] Commit replication do-file: "Replicate [Paper] Table X -- all targets match"
+- [ ] Now extend with project-specific modifications (additional controls, subsamples, etc.)
 - [ ] Each extension builds on the verified baseline
