@@ -46,7 +46,9 @@ china-innovation-tax/
 ## Commands
 
 ```bash
-# Python (data collection / cleaning)
+# Python (data collection / cleaning) — via conda
+conda run -n usc2024 python code/python/script_name.py
+# Or with environment activated:
 python code/python/script_name.py
 
 # Stata (Windows — StataNow 19)

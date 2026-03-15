@@ -5,8 +5,16 @@ paths:
 
 # Python Conventions
 
-**Python version:** 3.13
+**Python version:** 3.13 (managed via conda)
 **Scope:** Data collection, cleaning, and preprocessing scripts in `code/python/`
+
+## Environment Management
+
+- Python is managed via **conda** — do not use `pip install` for packages that are available via conda
+- Activate the project environment before running scripts: `conda activate usc2024`
+- Run scripts via conda: `conda run -n usc2024 python code/python/script_name.py`
+- To add packages: `conda install -n usc2024 [package]` (preferred) or `pip install [package]` if conda doesn't have it
+- Keep an `environment.yml` in the repo root for reproducibility (create with `conda env export -n usc2024 > environment.yml`)
 
 ---
 

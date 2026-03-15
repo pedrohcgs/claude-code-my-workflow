@@ -22,6 +22,8 @@
       "Bash(gh pr merge *)",
       "Bash(gh pr create *)",
       "Bash(gh repo *)",
+      "Bash(conda *)",
+      "Bash(conda run *)",
       "Bash(python *)",
       "Bash(python3 *)",
       "Bash(python -m *)",
