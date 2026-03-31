@@ -1,12 +1,8 @@
 # CLAUDE.MD -- Academic Project Development with Claude Code
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
+**Project:** Climate, Coffee & Migration: Evidence from Hawassa Industrial Park, Ethiopia
 **Institution:** [YOUR INSTITUTION]
+**Stack:** Python (GEE + ML) · R (statistics) · LaTeX (thesis document)
 **Branch:** main
 
 ---
@@ -14,8 +10,8 @@
 ## Core Principles
 
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
-- **Verify after** -- compile/render and confirm output at the end of every task
-- **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
+- **Verify after** -- compile and confirm output at the end of every task
+- **Single source of truth** -- LaTeX chapters are authoritative; figures/tables derive from Python and R scripts
 - **Quality gates** -- nothing ships below 80/100
 - **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to MEMORY.md
 
@@ -24,20 +20,24 @@
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
-├── CLAUDE.MD                    # This file
+climate-coffee-migration/
+├── CLAUDE.md                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
-├── Quarto/                      # RevealJS .qmd files + theme
-├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
+├── Figures/                     # Generated figures, maps, plots (derived)
+├── Preambles/header.tex         # LaTeX thesis preamble/headers
+├── Chapters/                    # LaTeX .tex chapter files (source of truth)
+├── Data/                        # Satellite data docs, codebooks, metadata
+├── output/                      # Generated tables, model outputs, metrics
+│   ├── tables/                  # R-generated .tex tables
+│   └── models/                  # ML model checkpoints
+├── scripts/                     # Analysis code
+│   ├── python/                  # GEE scripts, image processing, ML
+│   └── R/                       # Statistical analysis, regression
 ├── quality_reports/             # Plans, session logs, merge reports
-├── explorations/                # Research sandbox (see rules)
+├── explorations/                # Research sandbox
 ├── templates/                   # Session log, quality report templates
-└── master_supporting_docs/      # Papers and existing slides
+└── master_supporting_docs/      # Reference papers and slides
 ```
 
 ---
@@ -45,17 +45,21 @@
 ## Commands
 
 ```bash
-# LaTeX (3-pass, XeLaTeX only)
-cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-BIBINPUTS=..:$BIBINPUTS bibtex file
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
+# LaTeX thesis (3-pass, XeLaTeX)
+cd Chapters && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode thesis.tex
+BIBINPUTS=..:$BIBINPUTS bibtex thesis
+TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode thesis.tex
+TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode thesis.tex
 
-# Deploy Quarto to GitHub Pages
-./scripts/sync_to_docs.sh LectureN
+# Python / GEE (run from project root)
+python scripts/python/gee_export.py          # Batch GEE export
+python scripts/python/classify_images.py     # ML classification
+
+# R analysis
+Rscript scripts/R/analysis.R                 # Main regression analysis
 
 # Quality score
-python scripts/quality_score.py Quarto/file.qmd
+python scripts/quality_score.py Chapters/chapter1.tex
 ```
 
 ---
@@ -65,7 +69,7 @@ python scripts/quality_score.py Quarto/file.qmd
 | Score | Gate | Meaning |
 |-------|------|---------|
 | 80 | Commit | Good enough to save |
-| 90 | PR | Ready for deployment |
+| 90 | PR | Ready for chapter draft |
 | 95 | Excellence | Aspirational |
 
 ---
@@ -75,62 +79,49 @@ python scripts/quality_score.py Quarto/file.qmd
 | Command | What It Does |
 |---------|-------------|
 | `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/deploy [LectureN]` | Render Quarto + sync to docs/ |
-| `/extract-tikz [LectureN]` | TikZ → PDF → SVG |
 | `/proofread [file]` | Grammar/typo/overflow review |
-| `/visual-audit [file]` | Slide layout audit |
-| `/pedagogy-review [file]` | Narrative, notation, pacing review |
 | `/review-r [file]` | R code quality review |
-| `/qa-quarto [LectureN]` | Adversarial Quarto vs Beamer QA |
-| `/slide-excellence [file]` | Combined multi-agent review |
-| `/translate-to-quarto [file]` | Beamer → Quarto translation |
-| `/validate-bib` | Cross-reference citations |
-| `/devils-advocate` | Challenge slide design |
-| `/create-lecture` | Full lecture creation |
-| `/commit [msg]` | Stage, commit, PR, merge |
+| `/review-paper [file]` | Manuscript/chapter review |
+| `/data-analysis [dataset]` | End-to-end R analysis |
 | `/lit-review [topic]` | Literature search + synthesis |
 | `/research-ideation [topic]` | Research questions + strategies |
 | `/interview-me [topic]` | Interactive research interview |
-| `/review-paper [file]` | Manuscript review |
-| `/data-analysis [dataset]` | End-to-end R analysis |
+| `/validate-bib` | Cross-reference citations |
+| `/commit [msg]` | Stage, commit, PR, merge |
 | `/learn [skill-name]` | Extract discovery into persistent skill |
 | `/context-status` | Show session health + context usage |
 | `/deep-audit` | Repository-wide consistency audit |
+| `/visual-audit [file]` | Slide layout audit *(presentations only)* |
+| `/compile-latex [file]` | Beamer slides *(presentations only)* |
+| `/translate-to-quarto [file]` | Beamer → Quarto *(presentations only)* |
 
 ---
 
-<!-- CUSTOMIZE: Replace the example entries below with your own
-     Beamer environments and Quarto CSS classes. These are examples
-     from the original project — delete them and add yours. -->
+## LaTeX Thesis Environments
 
-## Beamer Custom Environments
+| Environment | Effect | Use Case |
+|-------------|--------|----------|
+| *(add yours as you define them)* | | |
 
-| Environment       | Effect        | Use Case       |
-|-------------------|---------------|----------------|
-| `[your-env]`      | [Description] | [When to use]  |
+## Python / R Conventions
 
-<!-- Example entries (delete and replace with yours):
-| `keybox` | Gold background box | Key points |
-| `highlightbox` | Gold left-accent box | Highlights |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions |
--->
-
-## Quarto CSS Classes
-
-| Class              | Effect        | Use Case       |
-|--------------------|---------------|----------------|
-| `[.your-class]`    | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `.smaller` | 85% font | Dense content slides |
-| `.positive` | Green bold | Good annotations |
--->
+| Convention | Rule | Why |
+|-----------|------|-----|
+| GEE exports | Batch only; `.getInfo()` at export time | Avoid quota limits |
+| Random seeds | Always set (`np.random.seed`, `set.seed`) | Reproducibility |
+| Figure provenance | Every figure has a script in `scripts/` | Traceability |
+| Table provenance | Every table traces to an R script | Traceability |
+| CRS documentation | Document CRS + resolution in comments | Reproducibility |
 
 ---
 
-## Current Project State
+## Thesis Chapter State
 
-| Lecture | Beamer | Quarto | Key Content |
-|---------|--------|--------|-------------|
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
-| 2: [Topic] | `Lecture02_Topic.tex` | -- | [Brief description] |
+| Chapter | Topic | .tex File | Status | Key Content |
+|---------|-------|-----------|--------|-------------|
+| 1 | Introduction | `chapter1_intro.tex` | -- | Research question, motivation, preview |
+| 2 | Context & Data | `chapter2_data.tex` | -- | Ethiopia, Hawassa IP, GEE satellite data |
+| 3 | Climate & Coffee | `chapter3_climate.tex` | -- | NDVI, SPEI, arabica degradation |
+| 4 | Empirical Strategy | `chapter4_empirics.tex` | -- | Identification, estimands, ML pipeline |
+| 5 | Results | `chapter5_results.tex` | -- | Main results, robustness |
+| 6 | Conclusion | `chapter6_conclusion.tex` | -- | Contributions, policy implications |
