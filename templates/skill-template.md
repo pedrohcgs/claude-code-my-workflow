@@ -79,6 +79,30 @@ Step 3: [Final action and verification]
 
 ---
 
+## Advanced Frontmatter Fields
+
+Beyond the basic fields shown above, skills support additional YAML frontmatter for fine-grained control:
+
+| Field | Purpose | Example |
+|-------|---------|---------|
+| `effort` | Override reasoning effort level | `high` (for review skills), `low` (for formatting) |
+| `context` | Set to `fork` to run in an isolated subagent context | Protects main conversation from verbose output |
+| `agent` | Link to an agent definition in `.claude/agents/` | `proofreader` |
+| `hooks` | Skill-specific hooks (same syntax as settings.json) | Custom pre/post actions |
+| `model` | Force a specific model | `haiku` (cheaper), `opus` (smarter) |
+| `disable-model-invocation` | Prevent Claude from auto-triggering | `true` (only invoked via `/skill-name`) |
+
+**Dynamic content** — skills can include live data using string substitutions:
+
+- `$ARGUMENTS` — full argument string (e.g., `/skill-name Lecture01` → `Lecture01`)
+- `$0`, `$1` — positional arguments (0-based)
+- `${CLAUDE_SKILL_DIR}` — path to the skill's directory (for bundled supporting files)
+- `` `!git log --oneline -5` `` — dynamic command output injected when skill loads
+
+See the [guide's Skill Frontmatter Reference](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#skill-frontmatter) for details and examples.
+
+---
+
 ## Writing Effective Descriptions
 
 The `description` field determines when Claude loads your skill. Use this structure:

@@ -2,7 +2,7 @@
 title: "My Claude Code Setup"
 subtitle: "A Comprehensive Guide to AI-Assisted Academic Workflows: Slides, Papers, Analysis, and Beyond"
 author: "Pedro H. C. Sant'Anna"
-date: "2026-02-27"
+date: "2026-03-20"
 date-modified: last-modified
 format:
   html:
@@ -41,7 +41,7 @@ If you've ever done serious academic work --- built lecture slides, drafted a re
 - **Review is manual and exhausting.** You proofread 140 slides by hand. You re-read your paper for the fifth time looking for the same kinds of errors. You miss a typo in an equation. A student or referee catches it.
 - **No one checks the math.** Grammar checkers catch "teh" but not a flipped sign in a decomposition theorem, a misspecified regression, or a broken replication.
 
-This workflow solves all of these problems. You describe what you want --- "translate Lecture 5 to Quarto," "review my paper before submission," or "analyze this dataset and produce publication-ready tables" --- and Claude handles the rest: plans the approach, implements it, runs specialized reviewers, fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.
+This workflow solves all of these problems. You describe what you want --- "translate Lecture 5 to Quarto," "review my paper before submission," or "analyze this dataset and produce publication-ready tables" --- and Claude handles the rest: plans the approach, implements it, runs [specialized reviewers](#sec-system), fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.
 
 ## What Makes Claude Code Different
 
@@ -56,6 +56,8 @@ Claude Code runs on your computer with full access to your file system, terminal
 | Orchestrator mode | Claude autonomously plans, implements, reviews, fixes, and verifies |
 | Multi-agent workflows | 10 specialized agents for proofreading, layout, pedagogy, code review |
 | Quality gates | Automated scoring --- nothing ships below 80/100 |
+| CLI/headless mode | Run from scripts: `claude -p "compile all lectures"` |
+| Browser bridge | Continue sessions on your phone via `/remote-control` |
 
 ::: {.callout-tip}
 ## Case Study: Econ 730 at Emory
@@ -164,13 +166,42 @@ This guide describes the full system --- 10 agents, 22 skills, 18 rules. That is
 
 # Getting Started {#sec-setup}
 
-You need two things: fork the repo, and paste a prompt. Claude handles everything else.
+You need three things: install Claude Code, fork the repo, and paste a prompt. Claude handles everything else.
+
+## Prerequisites {#sec-prerequisites}
+
+| Requirement | What It Is | How to Get It |
+|-------------|-----------|---------------|
+| **Claude Code** | The AI tool that powers this workflow | `curl -fsSL https://claude.ai/install.sh | bash` ([docs](https://code.claude.com/docs/en/overview)) |
+| **Node.js 18+** | Required to run Claude Code | [nodejs.org](https://nodejs.org) |
+| **Claude account** | Authentication for Claude | [Claude Pro or Max subscription](https://claude.ai) or [Anthropic API key](https://console.anthropic.com) (pay per token) |
+| **git** | Version control (for fork/clone) | Pre-installed on Mac; `brew install git` or [git-scm.com](https://git-scm.com) |
+
+**Optional** (install only what your project uses):
+
+| Tool | Required For | Install |
+|------|-------------|---------|
+| XeLaTeX | LaTeX slides | [TeX Live](https://tug.org/texlive/) or [MacTeX](https://tug.org/mactex/) |
+| [Quarto](https://quarto.org) | Web slides | [quarto.org/docs/get-started](https://quarto.org/docs/get-started/) |
+| R | Figures & data analysis | [r-project.org](https://www.r-project.org/) |
+| [gh CLI](https://cli.github.com/) | PR workflow | `brew install gh` (macOS) |
+
+::: {.callout-note}
+## What Does This Cost?
+
+**Claude Pro or Max subscription**: Includes Claude Code usage with generous limits. Check [claude.ai](https://claude.ai) for current pricing and tier details. Best for most academics.
+
+**API access** (pay per token): For heavy users or CI/CD. Use [effort levels](#sec-effort) and the [multi-model strategy](#multi-model-strategy-cost-vs-quality) to control costs.
+
+Claude Code itself is free and open source. You pay only for the Claude model usage.
+:::
 
 ::: {.callout-tip}
 ## Day 1 Checklist
 
+- [ ] Install Claude Code: `curl -fsSL https://claude.ai/install.sh | bash`
 - [ ] Fork the repo and clone it locally
-- [ ] Run `claude` in the project directory
+- [ ] Run `claude` in the project directory (first run will prompt for authentication)
 - [ ] Paste the starter prompt (fill in your project details)
 - [ ] Wait for Claude to customize `CLAUDE.md` for your project
 - [ ] Approve the configuration plan
@@ -182,6 +213,8 @@ That's it. Everything else — agents, hooks, rules — runs automatically in th
 
 ::: {.callout-tip collapse="true"}
 ## Trouble on Day 1?
+
+**"command not found: claude":** Install Claude Code first: `curl -fsSL https://claude.ai/install.sh | bash`. Requires Node.js 18+ (`node --version` to check).
 
 **Claude seems to ignore the configuration files:** Make sure you ran `claude` from inside the project directory (not a parent folder). Claude reads `.claude/` and `CLAUDE.md` from the current working directory.
 
@@ -351,7 +384,7 @@ Now compare with specialized agents:
 
 Each agent reads the same file but examines a different dimension with full attention. The `/slide-excellence` skill runs them all in parallel.
 
-## The Adversarial Pattern: Critic + Fixer
+## The Adversarial Pattern: Critic + Fixer {#the-adversarial-pattern-critic-fixer}
 
 The single most powerful pattern in this system is the **adversarial QA loop**:
 
@@ -398,7 +431,7 @@ You never invoke the orchestrator manually --- it is the default mode of operati
 
 ## Quality Scoring: The 80/90/95 System {#sec-quality}
 
-Every file gets a quality score from 0 to 100:
+The [quality-gates rule](#sec-blocks) (`quality-gates.md`) defines scoring thresholds that the orchestrator enforces automatically. Every file gets a quality score from 0 to 100:
 
 | Score | Threshold | Meaning | Action |
 |-------|-----------|---------|--------|
@@ -430,9 +463,9 @@ The verification protocol (`.claude/rules/verification-protocol.md`) requires th
 In Econ 730, verification caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn't display, and R scripts with missing intercept terms that produced silently wrong estimates.
 :::
 
-## Creating Your Own Domain Reviewer
+## Creating Your Own Domain Reviewer {#sec-domain-reviewer}
 
-The template includes `domain-reviewer.md` --- a skeleton for building a substance reviewer specific to your field.
+The template includes `domain-reviewer.md` --- a skeleton for building a substance reviewer specific to your field. For example, in Econ 730, the domain reviewer caught that a slide claimed "$\hat{\beta}$ is consistent under parallel trends" while the cited paper (Callaway and Sant'Anna, 2021) actually requires a *conditional* parallel trends assumption --- a subtle but critical distinction that no grammar or layout checker would flag.
 
 ### The 5-Lens Framework
 
@@ -502,7 +535,7 @@ Move everything else into `.claude/rules/` files (with path-scoping so they only
 CLAUDE.md loads every session. If it exceeds ~150 lines, Claude starts ignoring rules silently. Put detailed standards in path-scoped rules (`.claude/rules/`) instead --- they only load when Claude works on matching files, so they don't compete for attention.
 :::
 
-## Rules --- Domain Knowledge That Auto-Loads
+## Rules --- Domain Knowledge That Auto-Loads {#rules---domain-knowledge-that-auto-loads}
 
 Rules are markdown files in `.claude/rules/` that Claude loads automatically. They encode your project's standards. The key design principle is **path-scoping**: rules with a `paths:` YAML frontmatter only load when Claude works on matching files.
 
@@ -584,7 +617,7 @@ Use constitutional governance **after** you've established 3-7 recurring pattern
 
 **Template:** `templates/constitutional-governance.md`
 
-## Skills --- Reusable Slash Commands
+## Skills --- Reusable Slash Commands {#skills---reusable-slash-commands}
 
 Skills are multi-step workflows invoked with `/command`. Each skill lives in `.claude/skills/[name]/SKILL.md`:
 
@@ -617,7 +650,13 @@ argument-hint: "[filename without .tex extension]"
 | `/create-lecture` | New lecture from scratch | Starting a new topic |
 | `/commit` | Stage, commit, PR, merge | After any completed task |
 
-## Agents --- Specialized Reviewers
+::: {.callout-note}
+## Built-In Skills
+
+Claude Code ships with built-in skills beyond this template's 22: `/batch` orchestrates parallel refactoring across your codebase (using git worktrees for isolation), `/simplify` runs 3-agent code review and applies fixes, and `/debug` helps troubleshoot sessions. These complement the academic skills above.
+:::
+
+## Agents --- Specialized Reviewers {#agents---specialized-reviewers}
 
 Agents are the real power of this system. Each agent is an expert in one dimension of quality:
 
@@ -669,9 +708,11 @@ Save findings to: quality_reports/[FILENAME]_report.md
 ## Why Specialized Agents?
 
 A single Claude prompt trying to check grammar, layout, math, and code simultaneously will do a mediocre job at all of them. Specialized agents focus on one dimension and do it thoroughly. The `/slide-excellence` skill runs them all in parallel, then synthesizes results.
+
+Claude Code also offers experimental **Agent Teams** --- multiple independent sessions that coordinate, share findings, and challenge each other's approaches. This is a research preview feature; the orchestrator + subagent pattern described here is more mature for academic workflows.
 :::
 
-### Multi-Model Strategy: Cost vs. Quality
+### Multi-Model Strategy: Cost vs. Quality {#multi-model-strategy-cost-vs-quality}
 
 Not all agents need the same model. Each agent file has a `model:` field in its YAML frontmatter. By default, all agents use `model: inherit` (they use whatever model your main session runs). But you can customize this to optimize cost:
 
@@ -698,7 +739,36 @@ model: opus   # was: inherit
 If you configure model-per-agent, a typical Beamer-to-Quarto translation runs the critic on Opus (2--4 rounds) while the fixer runs on Sonnet (same rounds). This can save roughly 40--60% compared to running everything on Opus, with no quality loss on the fixing step.
 :::
 
-## Settings --- Permissions and Hooks
+### Advanced Agent Configuration {#sec-agent-config}
+
+Beyond model selection, agent definitions support several configuration fields:
+
+| Field | Purpose | Example |
+|-------|---------|---------|
+| `model` | Force a specific model | `haiku`, `sonnet`, `opus` |
+| `maxTurns` | Limit agent iterations | `10` (prevents runaway loops) |
+| `isolation` | Run in a git worktree | `worktree` (see [Pattern 12](#pattern-12-branch-isolation)) |
+| `effort` | Override reasoning effort | `high` |
+| `permissionMode` | Restrict permissions | `plan` (read-only agent) |
+| `tools` | Whitelist specific tools | `["Read", "Grep", "Glob"]` |
+| `disallowedTools` | Blacklist specific tools | `["Write", "Edit"]` |
+| `skills` | Make specific skills available | `["compile-latex"]` |
+| `background` | Run concurrently | `true` |
+
+Example: a read-only proofreader that can't edit files:
+
+```yaml
+---
+name: proofreader
+model: sonnet
+maxTurns: 15
+tools: ["Read", "Grep", "Glob"]
+---
+```
+
+Use `maxTurns` to prevent review agents from looping indefinitely, and `tools` to enforce read-only behavior for agents that should only produce reports.
+
+## Settings --- Permissions and Hooks {#settings---permissions-and-hooks}
 
 `.claude/settings.json` controls what Claude is allowed to do. Here is a simplified excerpt --- the template includes additional permission entries for git, GitHub CLI, PDF tools, and more:
 
@@ -727,9 +797,58 @@ If you configure model-per-agent, a typical Beamer-to-Quarto translation runs th
 }
 ```
 
+**Permission modes.** Claude Code has five permission modes that control how much autonomy Claude gets:
+
+| Mode | Internal Name | Behavior | When to Use |
+|------|--------------|----------|-------------|
+| **Normal** | `default` | Asks before risky actions | Day-to-day work --- approve each edit |
+| **Auto-accept edits** | `acceptEdits` | Auto-approves file edits | Trusted batch operations (rename across 20 files) |
+| **Don't ask** | `dontAsk` | Auto-denies tools unless pre-approved in allowlist | Restricted environments where only allowlisted tools run |
+| **Plan** | `plan` | Read-only --- no edits allowed | Exploring code, reviewing before acting |
+| **Bypass** | `bypassPermissions` | Skips all permission prompts | CI/CD pipelines, headless scripts (still blocks `.git/`) |
+
+Set via CLI flag (`claude --permission-mode plan`), the `/config` command, or `permissions.defaultMode` in `settings.json`.
+
+::: {.callout-warning}
+## Plans Directory
+
+By default, Claude saves plans to a global directory (`~/.claude/plans/`), not your project. To keep plans with your project (and in git), add this to `.claude/settings.json`:
+
+```json
+{
+  "plansDirectory": "quality_reports/plans"
+}
+```
+:::
+
 The **Stop hook** runs a fast Python script after every response. No LLM call, no latency. It checks whether the session log is current and reminds Claude to update it if not. Behavioral rules like verification and Beamer-Quarto sync are enforced via auto-loaded rules in `.claude/rules/`, which is the right tool for nuanced judgment that Claude can evaluate in-context.
 
-## Memory --- Cross-Session Persistence
+## Effort Levels --- Cost vs. Thoroughness {#sec-effort}
+
+Claude Code lets you control how deeply it reasons about each task. Higher effort means more "thinking tokens" and better results --- but higher cost.
+
+| Level | Thinking Budget | Academic Use Case | Relative Cost |
+|-------|----------------|-------------------|---------------|
+| `low` | Minimal | Quick formatting, grep, file renames | $ |
+| `medium` | Standard | Most tasks (default for Opus) | $$ |
+| `high` | ~10k tokens | Complex derivations, paper reviews | $$$ |
+| `max` / ultrathink | ~32k tokens | Deep proofs, multi-step analysis | $$$$ |
+
+**How to set effort:**
+
+- **Per-session:** Type `/effort high` in the chat
+- **Per-skill:** Add `effort: high` to skill frontmatter (see [Skill Frontmatter Reference](#skill-frontmatter))
+- **Keyboard toggle:** `Option+T` (Mac) / `Alt+T` (Windows/Linux) toggles extended thinking
+- **In prompts:** Include "ultrathink" in your prompt to enable extended thinking for that turn. Note: phrases like "think hard" are treated as regular instructions and do *not* allocate extra thinking tokens
+- **Environment variable:** `CLAUDE_CODE_EFFORT_LEVEL=high` for all sessions
+
+::: {.callout-tip}
+## Composing Effort with Model Choice
+
+Effort levels compose with model selection for fine-grained cost control. For example, `Haiku + high effort` costs less than `Opus + low effort` but may produce comparable results for bounded tasks like formatting. Use `Opus + max` only for tasks that genuinely require deep multi-step reasoning --- complex proofs, intricate data pipeline debugging, or comprehensive paper critique.
+:::
+
+## Memory --- Cross-Session Persistence {#memory---cross-session-persistence}
 
 Claude Code has an auto-memory system at `~/.claude/projects/[project]/memory/MEMORY.md`. This file persists across sessions and is loaded into every conversation.
 
@@ -783,7 +902,7 @@ With CLAUDE.md, MEMORY.md, plans, and session logs, the system has four distinct
 
 The first four layers are your safety net. Anything written to disk survives indefinitely. The conversation context is ephemeral --- auto-compression will eventually discard details. The workflow's design ensures that anything worth keeping is written to one of the four persistent layers before compression can erase it.
 
-### Hooks --- Automated Enforcement
+### Hooks --- Automated Enforcement {#hooks---automated-enforcement}
 
 The session log reminder above is one example of a broader pattern: using **hooks** to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in `.claude/settings.json` and fire every time, regardless of context state.
 
@@ -801,9 +920,20 @@ The template includes hooks for logging, notifications, file protection, and con
 
 Verification and Beamer-Quarto sync are enforced via auto-loaded rules, which are the right tool for nuanced judgment. Hooks are reserved for enforcement that *must* survive context compression.
 
+**Hook handler types.** The examples above use `command` hooks (shell scripts), but Claude Code supports four handler types:
+
+| Type | How It Works | Best For |
+|------|-------------|----------|
+| **`command`** | Runs a shell script. Exit 0 = allow, exit 2 = block (PreToolUse only) | File protection, state capture, notifications |
+| **`prompt`** | Injects text into Claude's conversation --- no script needed | Soft reminders: "Check that equations compile before saving" |
+| **`http`** | POSTs to an external endpoint | CI/CD integration, logging to external services |
+| **`agent`** | Spawns a subagent that can use tools to verify conditions | Complex validation requiring multi-step checks |
+
+**PreToolUse input modification.** PreToolUse hooks can now **modify tool inputs**, not just block or allow. Your hook script can return modified JSON to rewrite parameters before the tool executes --- for example, auto-correcting file paths or enforcing naming conventions.
+
 ::: {.callout-tip}
 ## Hook Design Principle
-Use **command-based hooks** for fast, mechanical checks (file exists? counter threshold?). Use **rules** for nuanced judgment (did Claude verify correctly?). Avoid prompt-based hooks that trigger an LLM call on every response --- the latency adds up fast.
+Use **command hooks** for fast, mechanical checks (file exists? counter threshold?). Use **prompt hooks** for soft guidance that doesn't need a script. Use **rules** for nuanced judgment (did Claude verify correctly?). Avoid prompt hooks that fire on high-frequency events --- the injected text adds up in context.
 :::
 
 ### Context Survival System (Advanced) {#context-survival-system-advanced}
@@ -866,6 +996,12 @@ You can also manually point Claude to the right context:
 
 > "We just had compaction. Read `quality_reports/plans/2026-02-06_translate-lecture5.md` and continue from where we left off."
 
+::: {.callout-note}
+## 2026 Feature Coverage
+
+Now that you understand the building blocks, here's what's new: Claude Code has added [effort levels](#sec-effort) for cost control, [expanded hook events](#hooks---automated-enforcement), [skill frontmatter fields](#skill-frontmatter) for fine-grained skill configuration, [permission modes](#settings---permissions-and-hooks) for controlling Claude's autonomy, [advanced agent configuration](#sec-agent-config), plugins, `/batch` for parallel refactoring, and headless CLI mode. Each is covered in its respective section above.
+:::
+
 ---
 
 # Workflow Patterns {#sec-patterns}
@@ -878,7 +1014,7 @@ The plan-first pattern ensures that non-trivial tasks begin with thinking, not t
 
 ### Why Planning Matters
 
-The most common failure mode in AI-assisted development is not bad code --- it is solving the wrong problem, or solving the right problem in a fragile order. Plan-first development forces an explicit design step before any file is touched.
+The most common failure mode in AI-assisted development is not bad code --- it is solving the wrong problem, or solving the right problem in a fragile order. Plan-first development forces an explicit design step before any file is touched. Plans are saved to `quality_reports/plans/` on disk, so they survive [context compaction](#context-survival-system-advanced).
 
 Without a plan:
 
@@ -1096,7 +1232,7 @@ In one course, we discovered that a widely-used R package silently produced **in
 
 ## Pattern 6: Multi-Agent Review {#pattern-6-multi-agent-review}
 
-The `/slide-excellence` skill runs up to 6 agents in parallel:
+The `/slide-excellence` skill runs up to 6 [specialized agents](#agents---specialized-reviewers) in parallel:
 
 ```
 /slide-excellence Lecture5_Topic.tex
@@ -1350,7 +1486,7 @@ A research project is not a waterfall --- it is a **dependency graph**. Some pha
 ::: {.callout-note collapse="true"}
 ## For a Production-Grade Paper Pipeline
 
-For a production-grade paper pipeline, a dedicated fork takes these same skills and wraps them in full research infrastructure: 15 adversarial worker-critic agent pairs, simulated blind peer review, weighted aggregate scoring, journal targeting, and R&R response routing. If your primary output is research papers, see [The Ecosystem](#sec-ecosystem) for details.
+For a production-grade paper pipeline, a dedicated fork takes these same skills and wraps them in full research infrastructure: 6 worker-critic agent pairs plus specialized agents (data-engineer, referees, verifier), simulated blind peer review, weighted aggregate scoring, journal targeting, and R&R response routing. If your primary output is research papers, see [The Ecosystem](#sec-ecosystem) for details.
 :::
 
 ### Pattern 12: Branch Isolation with Git Worktrees (Advanced) {#pattern-12-branch-isolation}
@@ -1360,7 +1496,7 @@ For a production-grade paper pipeline, a dedicated fork takes these same skills 
 This pattern is optional and primarily useful for major translations, risky refactors, or multi-day projects. Most day-to-day work doesn't need it.
 :::
 
-Git worktrees create a **separate working directory** linked to the same repository. Each directory has its own branch but shares commit history.
+Git worktrees create a **separate working directory** linked to the same repository. Each directory has its own branch but shares commit history. Subagents can use worktrees via the `isolation: worktree` field (see [Advanced Agent Configuration](#sec-agent-config)).
 
 ```
 your-project/                     ← main branch (stays clean)
@@ -1431,6 +1567,8 @@ git commit -m "feat: description of changes"
 | Beamer → Quarto translation | Yes --- many intermediate states |
 | Major refactor | Yes --- safe rollback |
 | Experimenting with new approach | Yes --- easy discard |
+
+For example, translating Lecture 5 from Beamer to Quarto involves extracting TikZ diagrams, converting ggplot to plotly, and rewriting environments --- dozens of intermediate files over multiple sessions. A worktree keeps main clean while you iterate.
 
 #### Complexity Cost
 
@@ -1582,6 +1720,37 @@ The `/slide-excellence` skill already invokes the pedagogy-reviewer and slide-au
 For the complete philosophical treatment --- from Aristotle's three modes of persuasion through neuroaesthetics and the Netflix analogy --- see [The Rhetoric of Decks](https://github.com/scunning1975/MixtapeTools/tree/main/presentations). The repository includes a full essay, example Beamer decks with professional color palettes, a `theme_rhetoric()` ggplot2 theme, and a tested deck generation prompt for Claude Code.
 :::
 
+### Pattern 15: Sequential Adversarial Audits {#pattern-15-sequential-audits}
+
+**Principle:** Run N independent audit passes, each focused on ONE dimension. Each auditor sees only the artifact --- not previous audits --- to prevent groupthink and anchoring bias.
+
+This pattern differs from the parallel multi-agent review in [Pattern 6](#pattern-6-multi-agent-review). There, agents run simultaneously and findings are merged. Here, audits run **sequentially**, each producing an independent report. The independence is the point: a citation auditor shouldn't be influenced by what the prose auditor flagged.
+
+#### The Seven-Audit Protocol (for Papers)
+
+Inspired by [ClaudeCodeTools "The Editor"](https://github.com/aspi6246/ClaudeCodeTools), this protocol runs seven sequential passes before submission:
+
+1. **Abstract audit** --- Does the abstract accurately reflect findings? Is it a compelling "storefront"?
+2. **Introduction structure** --- Does the intro follow a recognized template (classic, puzzle-first, contribution-first)?
+3. **Section-by-section audit** --- Data description, identification, results, robustness --- each checked independently
+4. **Argumentation audit** --- Logical gaps, alternative explanations, missing qualifications
+5. **Prose quality** --- Passive voice, hedging, jargon density, paragraph flow
+6. **Citation fidelity** --- Every claim has a citation? Every citation is real and correctly referenced?
+7. **"So What" test** --- Five questions: What's the question? Why does it matter? What did you find? How do you know? What does it mean?
+
+#### How to Implement
+
+Use `/review-paper` for a comprehensive single-pass review. When you need deeper, independent audits (e.g., before journal submission), run each audit as a separate skill invocation with `context: fork` to ensure isolation:
+
+```
+You: "Run the seven-audit protocol on my paper"
+Claude: [Runs 7 sequential forked reviews, each blind to the others]
+       → Produces 7 independent reports
+       → Synthesizes into prioritized revision checklist
+```
+
+**Adapting for other artifacts:** The same principle works for replication packages (7 passes: code, data, documentation, licensing, runtime, outputs, README) or grant proposals (significance, approach, innovation, environment, budget).
+
 ---
 
 # The Ecosystem: What Others Have Built {#sec-ecosystem}
@@ -1590,7 +1759,7 @@ This repository provides the foundation --- the infrastructure patterns (plan-fi
 
 | Principle | Source | How to Implement Here |
 |-----------|--------|----------------------|
-| Adversarial review (not self-review) | All | Use fresh-context critique (Pattern 8) or worker-critic pairs |
+| Adversarial review (not self-review) | All | Use fresh-context critique ([Pattern 8](#pattern-8-devils-advocate)) or worker-critic pairs |
 | Structured intermediate files | Xu & Yang | Save every computed object to disk; agents communicate via files |
 | Phase-appropriate rigor | clo-author | Light review for exploration (60/100), full adversarial for submission (95/100) |
 | Voice preservation | claudeblattman | Maintain a reference doc with your writing style; load as context |
@@ -1598,6 +1767,14 @@ This repository provides the foundation --- the infrastructure patterns (plan-fi
 | Self-improving configuration | claudeblattman | Use `/learn` to capture discoveries; review MEMORY.md periodically |
 | Human judgment, AI execution | Xu & Yang | You design the diagnostic; Claude runs it |
 | Beauty is function | MixtapeTools | Every visual element earns its presence; decoration without function is noise |
+| Constraint-based autonomy | autoresearch | Define boundaries in Markdown (what CAN/CANNOT change); let Claude explore within |
+| Sequential independent audits | ClaudeCodeTools | Run N blind audit passes; independence prevents groupthink ([Pattern 15](#pattern-15-sequential-audits)) |
+
+::: {.callout-tip}
+## Which Ecosystem Project Should I Start With?
+
+If you write **papers**: start with clo-author (adversarial review pairs) or ClaudeCodeTools (seven-audit protocol, see [Pattern 15](#pattern-15-sequential-audits)). If you give **presentations**: MixtapeTools. If you run **computational experiments**: autoresearch. If you're a **non-technical academic**: claudeblattman. All of them build on the same foundation patterns from this template — the [orchestrator](#sec-system), [quality gates](#sec-quality), and [adversarial review](#the-adversarial-pattern-critic-fixer).
+:::
 
 Here is what each project does and when you should use it.
 
@@ -1611,7 +1788,7 @@ clo-author reorients the entire workflow from slides to **research papers**. The
 
 **What it adds:**
 
-- **15 specialized agents** organized as worker-critic pairs: Librarian ↔ Editor, Explorer ↔ Surveyor, Strategist ↔ Econometrician, Coder ↔ Debugger, Writer ↔ Proofreader, Storyteller ↔ Discussant, plus Referee and Verifier
+- **17 specialized agents** organized as 6 worker-critic pairs (Librarian, Explorer, Strategist, Coder, Writer, Storyteller --- each with a dedicated critic) plus standalone agents (data-engineer, domain-referee, methods-referee, orchestrator, verifier)
 - **Phase-based severity gradient** --- critics are encouraging during Discovery, constructive during Strategy, strict during Execution, and adversarial during Peer Review
 - **Weighted aggregate scoring** with component minimums: Literature 10%, Data 10%, Identification 25%, Code 15%, Paper 25%, Polish 10%, Replication 5%. Submission gate (≥ 95) requires every component independently ≥ 80
 - **Simulated blind peer review** --- two independent Referee agents plus an Editor making an editorial decision (Accept / Minor / Major / Reject)
@@ -1644,7 +1821,7 @@ claudeblattman is a comprehensive guide for academics who do not write code, bui
 
 ## Xu & Yang (2026): Reproducibility as Architecture
 
-**Paper:** Yiqing Xu and Leo Yang Yang, "[Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis](https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf)," Stanford University, 2026.
+**Paper:** Yiqing Xu (Stanford) and Leo Yang Yang (HKBU), "[Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis](https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf)," 2026.
 
 This paper formalizes many principles that this workflow uses intuitively. It demonstrates an AI-assisted pipeline that achieved **100% reproducibility** across 92 papers (215 specifications) --- conditional on accessible data and code --- with each paper processed in under four minutes.
 
@@ -1682,13 +1859,67 @@ The compliance standard for replication packages at 5+ major economics journals 
 
 **When to use it:** You are preparing a replication package for journal submission and need the exact template that data editors will check against.
 
+## autoresearch: Constraint-Based Autonomous Research
+
+**Repository:** [karpathy/autoresearch](https://github.com/karpathy/autoresearch)
+**Author:** Andrej Karpathy
+
+An autonomous research agent that runs continuous experiments --- modifying code, training models, and evaluating results --- without human intervention. The key insight for academic workflows:
+
+- **`program.md` as a constitutional document** --- a single Markdown file defines what the agent CAN modify (architecture, hyperparameters), what it CANNOT (data pipeline, evaluation metric), and what success looks like (validation metric, lower is better)
+- **Structured results logging** --- every experiment is recorded in a TSV file with branch name, metric, and status
+- **Time-budgeted iterations** --- fixed training windows make experiments comparable
+
+**When to use it:** You are running iterative computational experiments (Monte Carlo simulations, hyperparameter searches, model comparisons) and want Claude to explore the space semi-autonomously within defined constraints.
+
+**Example:** Adapting the `program.md` pattern for a Monte Carlo study:
+
+```markdown
+# program.md — Monte Carlo Experiment Constraints
+
+## What You CAN Modify
+- DGP parameters (sample sizes, effect sizes, correlation structures)
+- Estimator implementations (new methods, tuning parameters)
+- Number of replications (up to 10,000)
+
+## What You CANNOT Modify
+- prepare_data.R (data generation is frozen)
+- evaluation metric (RMSE of ATT, lower is better)
+- Output format (results.tsv with columns: method, n, rmse, coverage)
+
+## Success Metric
+RMSE of ATT estimate. Lower is better. Report coverage rate alongside.
+```
+
+## ClaudeCodeTools: The Editor Persona
+
+**Repository:** [aspi6246/ClaudeCodeTools](https://github.com/aspi6246/ClaudeCodeTools)
+
+A collection of Claude Code personas, including "The Editor" --- a deeply structured academic paper reviewer that runs seven sequential audit passes (see [Pattern 15](#pattern-15-sequential-audits)). Notable features:
+
+- **R&R mode** --- tracks referee reports and cross-references each concern against revisions
+- **Blunt, specific feedback** --- "This paragraph is incoherent" not "might benefit from clarity"
+- **"So What" litmus test** --- five questions every paper must answer clearly
+
+**When to use it:** You want a structured pre-submission paper review, or you're responding to referee reports and need systematic tracking of which concerns have been addressed.
+
+## Community Adoption {#sec-community}
+
+As of March 2026, **15+ research groups** across multiple disciplines have forked and adapted this workflow for their own projects:
+
+- **Economics** --- China innovation policy, mental health and layoffs, AIGC and stock prices, capital/labor shares in healthcare
+- **Energy** --- Nepal and global energy economics, PV module reliability
+- **Teaching** --- ECN 152 course development, Econ 730 causal panel data
+
+Each adaptation follows the same pattern: fork the template, fill in `CLAUDE.md` placeholders, customize the domain reviewer, and add field-specific skills. The infrastructure (orchestrator, hooks, quality gates) transfers without modification.
+
 ---
 
 # Customizing for Your Domain {#sec-customize}
 
 ## Step 1: Build Your Knowledge Base
 
-The knowledge base (`.claude/rules/knowledge-base-template.md`) is the most domain-specific component. It provides skeleton tables for notation conventions, lecture progression, applications, design principles, anti-patterns, and R code pitfalls. Fill them in as you develop your project --- you don't need everything upfront.
+The knowledge base (`.claude/rules/knowledge-base-template.md`) is the most domain-specific component — it's a [path-scoped rule](#rules---domain-knowledge-that-auto-loads) that loads automatically when Claude works on your content files. It provides skeleton tables for notation conventions, lecture progression, applications, design principles, anti-patterns, and R code pitfalls. Fill them in as you develop your project --- you don't need everything upfront.
 
 ### Notation Registry
 
@@ -1718,7 +1949,7 @@ The knowledge base (`.claude/rules/knowledge-base-template.md`) is the most doma
 
 ## Step 2: Create Your Domain Reviewer
 
-Copy `.claude/agents/domain-reviewer.md` and customize the 5 lenses for your field. The template provides the structure; you fill in domain-specific checks.
+Copy `.claude/agents/domain-reviewer.md` and customize the [5-lens framework](#sec-domain-reviewer) for your field. The template provides the structure; you fill in domain-specific checks.
 
 ## Step 3: Adapt Your Theme
 
@@ -1730,7 +1961,7 @@ The template includes an example Quarto theme SCSS file. To customize:
 
 ## Step 4: Creating Custom Skills {#sec-create-skills}
 
-The guide includes 22 skills for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.
+The guide includes 22 [skills](#skills---reusable-slash-commands) for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.
 
 ### When to Create a Skill
 
@@ -1772,6 +2003,56 @@ Example 1: [Common scenario]
 Error: [Common error]
 Solution: [How to fix]
 ```
+
+### Complete Frontmatter Reference {#skill-frontmatter}
+
+The YAML frontmatter controls how your skill behaves. Here are all available fields:
+
+| Field | Purpose | Example |
+|-------|---------|---------|
+| `name` | Display name in `/` menu | `compile-latex` |
+| `description` | **Most important.** Controls when Claude auto-loads the skill | `Compile Beamer slides...` |
+| `argument-hint` | Placeholder shown after `/skill-name` | `<filename>` |
+| `allowed-tools` | Restrict which tools the skill can use | `["Read", "Bash", "Glob"]` |
+| `effort` | Override reasoning effort level | `high` |
+| `context` | Set to `fork` to run in an isolated subagent | `fork` |
+| `agent` | Link to an agent definition in `.claude/agents/` | `proofreader` |
+| `hooks` | Skill-specific hooks (same syntax as settings.json) | `{PreToolUse: [...]}` |
+| `model` | Force a specific model | `haiku` |
+| `disable-model-invocation` | Prevent Claude from auto-triggering | `true` |
+| `user-invocable` | Whether it appears in the `/` menu | `true` (default) |
+
+::: {.callout-note}
+## Key Design Choices
+
+- **`effort: high`** is useful for review skills that need deep reasoning (e.g., paper critique). Use `effort: low` for simple formatting skills to save tokens.
+- **`context: fork`** runs the skill in a fresh subagent context, protecting your main conversation from large outputs. Good for skills that produce verbose reports.
+- **`allowed-tools`** prevents skills from accidentally using destructive tools. A read-only review skill should use `["Read", "Grep", "Glob"]`.
+:::
+
+### Dynamic Content in Skills {#skill-dynamic-content}
+
+Skills can include dynamic values using string substitutions and live command output:
+
+**String substitutions:**
+
+| Syntax | Expands To | Example Use |
+|--------|-----------|-------------|
+| `$ARGUMENTS` | Full argument string after `/skill-name` | `/compile-latex Lecture01` → `$ARGUMENTS` = `Lecture01` |
+| `$0`, `$1`, `$N` | Positional arguments (0-based, space-separated) | `/deploy Lecture01 draft` → `$0` = `Lecture01`, `$1` = `draft` |
+| `${CLAUDE_SESSION_ID}` | Current session identifier | Unique log file names |
+| `${CLAUDE_SKILL_DIR}` | Path to the skill's directory | Reference supporting files bundled with the skill |
+
+**Dynamic context injection** with `` `!command` `` syntax:
+
+```markdown
+## Context
+Current git status: `!git status --short`
+Recent changes: `!git log --oneline -5`
+Available lectures: `!ls Slides/*.tex`
+```
+
+When Claude loads the skill, it runs these commands and injects the live output into the skill text. This is powerful for skills that need to adapt to the current project state.
 
 ### Writing Effective Trigger Descriptions
 
@@ -1877,6 +2158,10 @@ This is the `/learn` lifecycle in action: discover a repeating workflow → extr
 ## Extending with MCP Servers
 
 For capabilities beyond file editing and shell commands --- web search during literature review, database queries for replication, or reference manager integration (Zotero, Mendeley) --- Claude Code supports [MCP servers](https://modelcontextprotocol.io). Configure them in `.claude/settings.json` under `"mcpServers"`. Start with skills and agents first; add MCP when you need external integrations.
+
+## Extending with Plugins
+
+Claude Code supports **plugins** --- bundled collections of skills, agents, hooks, and MCP servers that can be installed from git repositories. Use `/plugin` to browse and manage plugins (it has a Discover tab for finding new ones). Plugins are a newer extension point; start with skills and rules (which you control entirely) before adopting third-party plugins.
 :::
 
 ---
@@ -1961,11 +2246,27 @@ For capabilities beyond file editing and shell commands --- web search during li
 |------|------|--------------|
 | Session log reminder | Stop (command) | `.claude/hooks/log-reminder.py` |
 | Desktop notification | Notification (command) | `.claude/hooks/notify.sh` |
-| File protection | PreToolUse (command) | `.claude/hooks/protect-files.sh` |
+| File protection | PreToolUse[Edit\|Write] (command) | `.claude/hooks/protect-files.sh` |
 | Context state capture | PreCompact (command) | `.claude/hooks/pre-compact.py` |
 | Context restoration | SessionStart[compact\|resume] (command) | `.claude/hooks/post-compact-restore.py` |
 | Context monitor | PostToolUse[Bash\|Task] (command) | `.claude/hooks/context-monitor.py` |
 | Verification reminder | PostToolUse[Write\|Edit] (command) | `.claude/hooks/verify-reminder.py` |
+
+**Additional hook events** available in Claude Code (not used in this template but available for custom hooks):
+
+| Event | When It Fires | Use Case |
+|-------|--------------|----------|
+| `UserPromptSubmit` | Before user message is processed | Input validation, auto-routing |
+| `PermissionRequest` | When permission dialog appears | Auto-approve patterns, logging |
+| `PostToolUseFailure` | When a tool call fails | Error tracking, retry logic |
+| `SubagentStart` | When a subagent spawns | Resource tracking |
+| `SubagentStop` | When a subagent completes | Result aggregation |
+| `PostCompact` | After context compaction | Post-compaction cleanup |
+| `SessionEnd` | When session closes | Final state saving, cleanup |
+| `WorktreeCreate` | When a git worktree is created | Branch tracking |
+| `WorktreeRemove` | When a git worktree is removed | Cleanup verification |
+| `TaskCompleted` | When a background task finishes | Progress notifications |
+| `ConfigChange` | When settings are modified | Audit logging |
 
 ## Troubleshooting {#troubleshooting}
 
@@ -2032,6 +2333,21 @@ For capabilities beyond file editing and shell commands --- web search during li
 2. Check skill has auto-invocation enabled (no `disable-model-invocation: true`)
 3. Skill descriptions help Claude know when to use them — check they're clear
 
+### Plans Saved to Wrong Directory
+
+**Symptom:** Plans save to `~/.claude/plans/` instead of your project directory. Can't track plans in git.
+
+**Fix:**
+Add to `.claude/settings.json`:
+
+```json
+{
+  "plansDirectory": "quality_reports/plans"
+}
+```
+
+This tells Claude Code to save plans inside your project where they can be version-controlled.
+
 ---
 
 # Standing on Shoulders {#sec-acknowledgments}
@@ -2049,13 +2365,15 @@ This guide builds on the work of many. We are grateful to these projects and the
 
 **Reproducibility & Data Management:**
 
-- Yiqing Xu and Leo Yang Yang (2026), "[Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis](https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf)," Stanford University --- the template-executor architecture and principles of reproducible AI-assisted research
+- Yiqing Xu (Stanford) and Leo Yang Yang (HKBU), "[Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis](https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf)," 2026 --- the template-executor architecture and principles of reproducible AI-assisted research
 - [Template README for Social Science Replication Packages](https://social-science-data-editors.github.io/template_README/) by Lars Vilhuber et al. (Cornell) --- the AEA Data Editor compliance standard adopted by major economics journals
 
-**Presentation Design:**
+**Presentation Design & Tools:**
 
 - [MixtapeTools / The Rhetoric of Decks](https://github.com/scunning1975/MixtapeTools/tree/main/presentations) by Scott Cunningham (Baylor) --- the philosophical and practical framework for beautiful, rhetorically effective academic presentations
 - Scott Cunningham, *[Causal Inference: The Mixtape](https://mixtape.scunning.com)* --- the textbook whose author developed the presentation framework above
+- [autoresearch](https://github.com/karpathy/autoresearch) by Andrej Karpathy --- constraint-based autonomous research with `program.md` as constitutional document
+- [ClaudeCodeTools](https://github.com/aspi6246/ClaudeCodeTools) --- "The Editor" persona for seven-audit sequential paper review
 
 **Origin:**
 

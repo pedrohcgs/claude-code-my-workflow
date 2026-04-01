@@ -49,7 +49,7 @@ CLAUDE.local.md
 *~
 
 # Quarto rendering artifacts
-/.quarto/
+.quarto/
 
 # Output artifacts — uncomment lines below based on your preference
 # *.rds

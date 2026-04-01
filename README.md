@@ -3,7 +3,7 @@
 > **Work in progress.** This is not meant to be a polished guide for everyone. It's mostly a summary of how I've been using Claude Code for academic work — slides, papers, data analysis, and more. I keep learning new things, and as I do, I keep updating these files. This is just a way for me to share what I've figured out with friends and colleagues.
 
 **Live site:** [psantanna.com/claude-code-my-workflow](https://psantanna.com/claude-code-my-workflow/)
-**Last Updated:** 2026-02-27
+**Last Updated:** 2026-03-20
 
 A ready-to-fork foundation for AI-assisted academic work. You describe what you want — lecture slides, a research paper, a data analysis, a replication package — and Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results. Like a contractor who handles the entire job. Extracted from a production PhD course and extended by a growing [community](#community--extensions).
 
@@ -83,9 +83,21 @@ It covers:
 2. **Getting Started** — fork, paste one prompt, and Claude sets up the rest
 3. **The System in Action** — specialized agents, adversarial QA, quality scoring
 4. **The Building Blocks** — CLAUDE.md, rules, skills, agents, hooks, memory
-5. **Workflow Patterns** — slides, research, reproducibility, presentation rhetoric, and more
-6. **The Ecosystem** — extensions by clo-author, claudeblattman, MixtapeTools, and others
+5. **Workflow Patterns** — slides, research, reproducibility, presentation rhetoric, sequential adversarial audits, and more
+6. **The Ecosystem** — extensions by clo-author, claudeblattman, MixtapeTools, autoresearch, ClaudeCodeTools, and a growing community
 7. **Customizing for Your Domain** — creating your own reviewers and knowledge bases
+
+### 2026 Features
+
+The guide covers Claude Code's latest capabilities:
+
+- **Effort levels** — `/effort` command for cost vs. thoroughness tradeoffs (low/medium/high/max)
+- **Skill frontmatter** — `effort`, `context: fork`, `agent`, `hooks`, and dynamic content (`$ARGUMENTS`, `!command` syntax)
+- **Permission modes** — Normal, Auto-accept, Plan, Bypass for different workflows
+- **Hook handler types** — command, prompt, and HTTP handlers with 20+ hook events
+- **Advanced agent configuration** — model, maxTurns, isolation, tool restrictions
+- **Built-in skills** — `/batch` for parallel refactoring, `/simplify` for code review, `/remote-control` for browser bridge
+- **Plugins** — `/discover-plugins` for third-party extensions
 
 ---
 
@@ -251,11 +263,15 @@ This infrastructure was extracted from **Econ 730: Causal Panel Data** at Emory 
 
 ## Community & Extensions
 
-This repo is the foundation. Others have extended it for specific workflows:
+As of March 2026, **15+ research groups** across economics, energy, political science, and engineering have forked and adapted this workflow. The infrastructure (orchestrator, hooks, quality gates) transfers without modification.
 
-- **[clo-author](https://github.com/hsantanna88/clo-author)** by Hugo Sant'Anna (UAB) — Paper-centric research workflows with 15 adversarial worker-critic agent pairs, simulated blind peer review, AEA replication compliance, and full research lifecycle management
+**Extended workflows:**
+
+- **[clo-author](https://github.com/hsantanna88/clo-author)** by Hugo Sant'Anna (UAB) — Paper-centric research workflows with 17 specialized agents (6 worker-critic pairs plus referees, data-engineer, verifier), simulated blind peer review, AEA replication compliance, and full research lifecycle management
 - **[claudeblattman](https://github.com/chrisblattman/claudeblattman)** by Chris Blattman (U Chicago) — Comprehensive guide for non-technical academics: executive assistant workflows, proposal writing, agent debates, and self-improving configuration
 - **[MixtapeTools](https://github.com/scunning1975/MixtapeTools)** by Scott Cunningham (Baylor) — The Rhetoric of Decks: philosophy and practice of beautiful, rhetorically effective academic presentations
+- **[autoresearch](https://github.com/karpathy/autoresearch)** by Andrej Karpathy — Constraint-based autonomous research with `program.md` as constitutional document
+- **[ClaudeCodeTools](https://github.com/aspi6246/ClaudeCodeTools)** — "The Editor" persona: seven-audit sequential paper review protocol
 
 See the [guide's ecosystem section](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-ecosystem) for detailed descriptions, design principles, and more resources.
 

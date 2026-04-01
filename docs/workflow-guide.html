@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Pedro H. C. Sant’Anna">
-<meta name="dcterms.date" content="2026-02-27">
+<meta name="dcterms.date" content="2026-03-20">
 
 <title>My Claude Code Setup</title>
 <style>
@@ -2370,10 +2370,11 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-setup" id="toc-sec-setup" class="nav-link" data-scroll-target="#sec-setup"><span class="header-section-number">2</span> Getting Started</a>
   <ul class="collapse">
-  <li><a href="#step-1-fork-clone" id="toc-step-1-fork-clone" class="nav-link" data-scroll-target="#step-1-fork-clone"><span class="header-section-number">2.1</span> Step 1: Fork &amp; Clone</a></li>
-  <li><a href="#sec-first-session" id="toc-sec-first-session" class="nav-link" data-scroll-target="#sec-first-session"><span class="header-section-number">2.2</span> Step 2: Start Claude Code and Paste This Prompt</a></li>
-  <li><a href="#optional-manual-setup" id="toc-optional-manual-setup" class="nav-link" data-scroll-target="#optional-manual-setup"><span class="header-section-number">2.3</span> Optional: Manual Setup</a></li>
-  <li><a href="#sec-spec-then-plan" id="toc-sec-spec-then-plan" class="nav-link" data-scroll-target="#sec-spec-then-plan"><span class="header-section-number">2.4</span> Requirements Specification (For Complex Tasks)</a></li>
+  <li><a href="#sec-prerequisites" id="toc-sec-prerequisites" class="nav-link" data-scroll-target="#sec-prerequisites"><span class="header-section-number">2.1</span> Prerequisites</a></li>
+  <li><a href="#step-1-fork-clone" id="toc-step-1-fork-clone" class="nav-link" data-scroll-target="#step-1-fork-clone"><span class="header-section-number">2.2</span> Step 1: Fork &amp; Clone</a></li>
+  <li><a href="#sec-first-session" id="toc-sec-first-session" class="nav-link" data-scroll-target="#sec-first-session"><span class="header-section-number">2.3</span> Step 2: Start Claude Code and Paste This Prompt</a></li>
+  <li><a href="#optional-manual-setup" id="toc-optional-manual-setup" class="nav-link" data-scroll-target="#optional-manual-setup"><span class="header-section-number">2.4</span> Optional: Manual Setup</a></li>
+  <li><a href="#sec-spec-then-plan" id="toc-sec-spec-then-plan" class="nav-link" data-scroll-target="#sec-spec-then-plan"><span class="header-section-number">2.5</span> Requirements Specification (For Complex Tasks)</a></li>
   </ul></li>
   <li><a href="#sec-system" id="toc-sec-system" class="nav-link" data-scroll-target="#sec-system"><span class="header-section-number">3</span> The System in Action</a>
   <ul class="collapse">
@@ -2385,7 +2386,7 @@ window.Quarto = {
   <li><a href="#how-scores-are-calculated" id="toc-how-scores-are-calculated" class="nav-link" data-scroll-target="#how-scores-are-calculated"><span class="header-section-number">3.4.1</span> How Scores Are Calculated</a></li>
   <li><a href="#mandatory-verification" id="toc-mandatory-verification" class="nav-link" data-scroll-target="#mandatory-verification"><span class="header-section-number">3.4.2</span> Mandatory Verification</a></li>
   </ul></li>
-  <li><a href="#creating-your-own-domain-reviewer" id="toc-creating-your-own-domain-reviewer" class="nav-link" data-scroll-target="#creating-your-own-domain-reviewer"><span class="header-section-number">3.5</span> Creating Your Own Domain Reviewer</a>
+  <li><a href="#sec-domain-reviewer" id="toc-sec-domain-reviewer" class="nav-link" data-scroll-target="#sec-domain-reviewer"><span class="header-section-number">3.5</span> Creating Your Own Domain Reviewer</a>
   <ul class="collapse">
   <li><a href="#the-5-lens-framework" id="toc-the-5-lens-framework" class="nav-link" data-scroll-target="#the-5-lens-framework"><span class="header-section-number">3.5.1</span> The 5-Lens Framework</a></li>
   </ul></li>
@@ -2393,7 +2394,7 @@ window.Quarto = {
   <li><a href="#sec-blocks" id="toc-sec-blocks" class="nav-link" data-scroll-target="#sec-blocks"><span class="header-section-number">4</span> The Building Blocks</a>
   <ul class="collapse">
   <li><a href="#claude.md-your-projects-constitution" id="toc-claude.md-your-projects-constitution" class="nav-link" data-scroll-target="#claude.md-your-projects-constitution"><span class="header-section-number">4.1</span> CLAUDE.md — Your Project’s Constitution</a></li>
-  <li><a href="#rules-domain-knowledge-that-auto-loads" id="toc-rules-domain-knowledge-that-auto-loads" class="nav-link" data-scroll-target="#rules-domain-knowledge-that-auto-loads"><span class="header-section-number">4.2</span> Rules — Domain Knowledge That Auto-Loads</a>
+  <li><a href="#rules---domain-knowledge-that-auto-loads" id="toc-rules---domain-knowledge-that-auto-loads" class="nav-link" data-scroll-target="#rules---domain-knowledge-that-auto-loads"><span class="header-section-number">4.2</span> Rules — Domain Knowledge That Auto-Loads</a>
   <ul class="collapse">
   <li><a href="#example-path-scoped-r-code-conventions-rule" id="toc-example-path-scoped-r-code-conventions-rule" class="nav-link" data-scroll-target="#example-path-scoped-r-code-conventions-rule"><span class="header-section-number">4.2.1</span> Example: Path-Scoped R Code Conventions Rule</a></li>
   </ul></li>
@@ -2401,20 +2402,22 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#example-articles-you-might-define" id="toc-example-articles-you-might-define" class="nav-link" data-scroll-target="#example-articles-you-might-define"><span class="header-section-number">4.3.1</span> Example Articles You Might Define</a></li>
   </ul></li>
-  <li><a href="#skills-reusable-slash-commands" id="toc-skills-reusable-slash-commands" class="nav-link" data-scroll-target="#skills-reusable-slash-commands"><span class="header-section-number">4.4</span> Skills — Reusable Slash Commands</a></li>
-  <li><a href="#agents-specialized-reviewers" id="toc-agents-specialized-reviewers" class="nav-link" data-scroll-target="#agents-specialized-reviewers"><span class="header-section-number">4.5</span> Agents — Specialized Reviewers</a>
+  <li><a href="#skills---reusable-slash-commands" id="toc-skills---reusable-slash-commands" class="nav-link" data-scroll-target="#skills---reusable-slash-commands"><span class="header-section-number">4.4</span> Skills — Reusable Slash Commands</a></li>
+  <li><a href="#agents---specialized-reviewers" id="toc-agents---specialized-reviewers" class="nav-link" data-scroll-target="#agents---specialized-reviewers"><span class="header-section-number">4.5</span> Agents — Specialized Reviewers</a>
   <ul class="collapse">
   <li><a href="#agent-anatomy" id="toc-agent-anatomy" class="nav-link" data-scroll-target="#agent-anatomy"><span class="header-section-number">4.5.1</span> Agent Anatomy</a></li>
-  <li><a href="#multi-model-strategy-cost-vs.-quality" id="toc-multi-model-strategy-cost-vs.-quality" class="nav-link" data-scroll-target="#multi-model-strategy-cost-vs.-quality"><span class="header-section-number">4.5.2</span> Multi-Model Strategy: Cost vs. Quality</a></li>
+  <li><a href="#multi-model-strategy-cost-vs-quality" id="toc-multi-model-strategy-cost-vs-quality" class="nav-link" data-scroll-target="#multi-model-strategy-cost-vs-quality"><span class="header-section-number">4.5.2</span> Multi-Model Strategy: Cost vs. Quality</a></li>
+  <li><a href="#sec-agent-config" id="toc-sec-agent-config" class="nav-link" data-scroll-target="#sec-agent-config"><span class="header-section-number">4.5.3</span> Advanced Agent Configuration</a></li>
   </ul></li>
-  <li><a href="#settings-permissions-and-hooks" id="toc-settings-permissions-and-hooks" class="nav-link" data-scroll-target="#settings-permissions-and-hooks"><span class="header-section-number">4.6</span> Settings — Permissions and Hooks</a></li>
-  <li><a href="#memory-cross-session-persistence" id="toc-memory-cross-session-persistence" class="nav-link" data-scroll-target="#memory-cross-session-persistence"><span class="header-section-number">4.7</span> Memory — Cross-Session Persistence</a>
+  <li><a href="#settings---permissions-and-hooks" id="toc-settings---permissions-and-hooks" class="nav-link" data-scroll-target="#settings---permissions-and-hooks"><span class="header-section-number">4.6</span> Settings — Permissions and Hooks</a></li>
+  <li><a href="#sec-effort" id="toc-sec-effort" class="nav-link" data-scroll-target="#sec-effort"><span class="header-section-number">4.7</span> Effort Levels — Cost vs. Thoroughness</a></li>
+  <li><a href="#memory---cross-session-persistence" id="toc-memory---cross-session-persistence" class="nav-link" data-scroll-target="#memory---cross-session-persistence"><span class="header-section-number">4.8</span> Memory — Cross-Session Persistence</a>
   <ul class="collapse">
-  <li><a href="#plans-compression-resistant-task-memory" id="toc-plans-compression-resistant-task-memory" class="nav-link" data-scroll-target="#plans-compression-resistant-task-memory"><span class="header-section-number">4.7.1</span> Plans — Compression-Resistant Task Memory</a></li>
-  <li><a href="#session-logs-why-not-just-what-history-with-automated-reminders" id="toc-session-logs-why-not-just-what-history-with-automated-reminders" class="nav-link" data-scroll-target="#session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.7.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</a></li>
-  <li><a href="#how-it-all-fits-together" id="toc-how-it-all-fits-together" class="nav-link" data-scroll-target="#how-it-all-fits-together"><span class="header-section-number">4.7.3</span> How It All Fits Together</a></li>
-  <li><a href="#hooks-automated-enforcement" id="toc-hooks-automated-enforcement" class="nav-link" data-scroll-target="#hooks-automated-enforcement"><span class="header-section-number">4.7.4</span> Hooks — Automated Enforcement</a></li>
-  <li><a href="#context-survival-system-advanced" id="toc-context-survival-system-advanced" class="nav-link" data-scroll-target="#context-survival-system-advanced"><span class="header-section-number">4.7.5</span> Context Survival System (Advanced)</a></li>
+  <li><a href="#plans-compression-resistant-task-memory" id="toc-plans-compression-resistant-task-memory" class="nav-link" data-scroll-target="#plans-compression-resistant-task-memory"><span class="header-section-number">4.8.1</span> Plans — Compression-Resistant Task Memory</a></li>
+  <li><a href="#session-logs-why-not-just-what-history-with-automated-reminders" id="toc-session-logs-why-not-just-what-history-with-automated-reminders" class="nav-link" data-scroll-target="#session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.8.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</a></li>
+  <li><a href="#how-it-all-fits-together" id="toc-how-it-all-fits-together" class="nav-link" data-scroll-target="#how-it-all-fits-together"><span class="header-section-number">4.8.3</span> How It All Fits Together</a></li>
+  <li><a href="#hooks---automated-enforcement" id="toc-hooks---automated-enforcement" class="nav-link" data-scroll-target="#hooks---automated-enforcement"><span class="header-section-number">4.8.4</span> Hooks — Automated Enforcement</a></li>
+  <li><a href="#context-survival-system-advanced" id="toc-context-survival-system-advanced" class="nav-link" data-scroll-target="#context-survival-system-advanced"><span class="header-section-number">4.8.5</span> Context Survival System (Advanced)</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-patterns" id="toc-sec-patterns" class="nav-link" data-scroll-target="#sec-patterns"><span class="header-section-number">5</span> Workflow Patterns</a>
@@ -2455,6 +2458,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#pattern-13-reproducibility" id="toc-pattern-13-reproducibility" class="nav-link" data-scroll-target="#pattern-13-reproducibility"><span class="header-section-number">5.10.1</span> Pattern 13: Reproducibility &amp; Replication Compliance</a></li>
   <li><a href="#pattern-14-rhetoric-of-decks" id="toc-pattern-14-rhetoric-of-decks" class="nav-link" data-scroll-target="#pattern-14-rhetoric-of-decks"><span class="header-section-number">5.10.2</span> Pattern 14: The Rhetoric of Decks</a></li>
+  <li><a href="#pattern-15-sequential-audits" id="toc-pattern-15-sequential-audits" class="nav-link" data-scroll-target="#pattern-15-sequential-audits"><span class="header-section-number">5.10.3</span> Pattern 15: Sequential Adversarial Audits</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-ecosystem" id="toc-sec-ecosystem" class="nav-link" data-scroll-target="#sec-ecosystem"><span class="header-section-number">6</span> The Ecosystem: What Others Have Built</a>
@@ -2464,6 +2468,9 @@ window.Quarto = {
   <li><a href="#xu-yang-2026-reproducibility-as-architecture" id="toc-xu-yang-2026-reproducibility-as-architecture" class="nav-link" data-scroll-target="#xu-yang-2026-reproducibility-as-architecture"><span class="header-section-number">6.3</span> Xu &amp; Yang (2026): Reproducibility as Architecture</a></li>
   <li><a href="#mixtapetools-the-rhetoric-of-decks" id="toc-mixtapetools-the-rhetoric-of-decks" class="nav-link" data-scroll-target="#mixtapetools-the-rhetoric-of-decks"><span class="header-section-number">6.4</span> MixtapeTools: The Rhetoric of Decks</a></li>
   <li><a href="#aea-data-editor-template" id="toc-aea-data-editor-template" class="nav-link" data-scroll-target="#aea-data-editor-template"><span class="header-section-number">6.5</span> AEA Data Editor Template</a></li>
+  <li><a href="#autoresearch-constraint-based-autonomous-research" id="toc-autoresearch-constraint-based-autonomous-research" class="nav-link" data-scroll-target="#autoresearch-constraint-based-autonomous-research"><span class="header-section-number">6.6</span> autoresearch: Constraint-Based Autonomous Research</a></li>
+  <li><a href="#claudecodetools-the-editor-persona" id="toc-claudecodetools-the-editor-persona" class="nav-link" data-scroll-target="#claudecodetools-the-editor-persona"><span class="header-section-number">6.7</span> ClaudeCodeTools: The Editor Persona</a></li>
+  <li><a href="#sec-community" id="toc-sec-community" class="nav-link" data-scroll-target="#sec-community"><span class="header-section-number">6.8</span> Community Adoption</a></li>
   </ul></li>
   <li><a href="#sec-customize" id="toc-sec-customize" class="nav-link" data-scroll-target="#sec-customize"><span class="header-section-number">7</span> Customizing for Your Domain</a>
   <ul class="collapse">
@@ -2479,9 +2486,11 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#when-to-create-a-skill" id="toc-when-to-create-a-skill" class="nav-link" data-scroll-target="#when-to-create-a-skill"><span class="header-section-number">7.4.1</span> When to Create a Skill</a></li>
   <li><a href="#skill-structure" id="toc-skill-structure" class="nav-link" data-scroll-target="#skill-structure"><span class="header-section-number">7.4.2</span> Skill Structure</a></li>
-  <li><a href="#writing-effective-trigger-descriptions" id="toc-writing-effective-trigger-descriptions" class="nav-link" data-scroll-target="#writing-effective-trigger-descriptions"><span class="header-section-number">7.4.3</span> Writing Effective Trigger Descriptions</a></li>
-  <li><a href="#domain-specific-examples" id="toc-domain-specific-examples" class="nav-link" data-scroll-target="#domain-specific-examples"><span class="header-section-number">7.4.4</span> Domain-Specific Examples</a></li>
-  <li><a href="#quick-start" id="toc-quick-start" class="nav-link" data-scroll-target="#quick-start"><span class="header-section-number">7.4.5</span> Quick Start</a></li>
+  <li><a href="#skill-frontmatter" id="toc-skill-frontmatter" class="nav-link" data-scroll-target="#skill-frontmatter"><span class="header-section-number">7.4.3</span> Complete Frontmatter Reference</a></li>
+  <li><a href="#skill-dynamic-content" id="toc-skill-dynamic-content" class="nav-link" data-scroll-target="#skill-dynamic-content"><span class="header-section-number">7.4.4</span> Dynamic Content in Skills</a></li>
+  <li><a href="#writing-effective-trigger-descriptions" id="toc-writing-effective-trigger-descriptions" class="nav-link" data-scroll-target="#writing-effective-trigger-descriptions"><span class="header-section-number">7.4.5</span> Writing Effective Trigger Descriptions</a></li>
+  <li><a href="#domain-specific-examples" id="toc-domain-specific-examples" class="nav-link" data-scroll-target="#domain-specific-examples"><span class="header-section-number">7.4.6</span> Domain-Specific Examples</a></li>
+  <li><a href="#quick-start" id="toc-quick-start" class="nav-link" data-scroll-target="#quick-start"><span class="header-section-number">7.4.7</span> Quick Start</a></li>
   </ul></li>
   <li><a href="#tips-from-6-sessions-of-iteration" id="toc-tips-from-6-sessions-of-iteration" class="nav-link" data-scroll-target="#tips-from-6-sessions-of-iteration"><span class="header-section-number">7.5</span> Tips from 6+ Sessions of Iteration</a></li>
   </ul></li>
@@ -2500,6 +2509,7 @@ window.Quarto = {
   <li><a href="#context-lost-after-compaction" id="toc-context-lost-after-compaction" class="nav-link" data-scroll-target="#context-lost-after-compaction"><span class="header-section-number">8.5.5</span> Context Lost After Compaction</a></li>
   <li><a href="#quality-score-too-low" id="toc-quality-score-too-low" class="nav-link" data-scroll-target="#quality-score-too-low"><span class="header-section-number">8.5.6</span> Quality Score Too Low</a></li>
   <li><a href="#skills-not-auto-invoked" id="toc-skills-not-auto-invoked" class="nav-link" data-scroll-target="#skills-not-auto-invoked"><span class="header-section-number">8.5.7</span> Skills Not Auto-Invoked</a></li>
+  <li><a href="#plans-saved-to-wrong-directory" id="toc-plans-saved-to-wrong-directory" class="nav-link" data-scroll-target="#plans-saved-to-wrong-directory"><span class="header-section-number">8.5.8</span> Plans Saved to Wrong Directory</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#sec-acknowledgments" id="toc-sec-acknowledgments" class="nav-link" data-scroll-target="#sec-acknowledgments"><span class="header-section-number">9</span> Standing on Shoulders</a></li>
@@ -2530,14 +2540,14 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 27, 2026</p>
+      <p class="date">March 20, 2026</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 28, 2026</p>
+      <p class="date-modified">March 20, 2026</p>
     </div>
   </div>
     
@@ -2559,7 +2569,7 @@ window.Quarto = {
 <li><strong>Review is manual and exhausting.</strong> You proofread 140 slides by hand. You re-read your paper for the fifth time looking for the same kinds of errors. You miss a typo in an equation. A student or referee catches it.</li>
 <li><strong>No one checks the math.</strong> Grammar checkers catch “teh” but not a flipped sign in a decomposition theorem, a misspecified regression, or a broken replication.</li>
 </ul>
-<p>This workflow solves all of these problems. You describe what you want — “translate Lecture 5 to Quarto,” “review my paper before submission,” or “analyze this dataset and produce publication-ready tables” — and Claude handles the rest: plans the approach, implements it, runs specialized reviewers, fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.</p>
+<p>This workflow solves all of these problems. You describe what you want — “translate Lecture 5 to Quarto,” “review my paper before submission,” or “analyze this dataset and produce publication-ready tables” — and Claude handles the rest: plans the approach, implements it, runs <a href="#sec-system">specialized reviewers</a>, fixes issues, verifies quality, and presents results. Like a contractor who manages the entire job.</p>
 </section>
 <section id="what-makes-claude-code-different" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="what-makes-claude-code-different"><span class="header-section-number">1.2</span> What Makes Claude Code Different</h2>
@@ -2603,6 +2613,14 @@ window.Quarto = {
 <tr class="odd">
 <td>Quality gates</td>
 <td>Automated scoring — nothing ships below 80/100</td>
+</tr>
+<tr class="even">
+<td>CLI/headless mode</td>
+<td>Run from scripts: <code>claude -p &quot;compile all lectures&quot;</code></td>
+</tr>
+<tr class="odd">
+<td>Browser bridge</td>
+<td>Continue sessions on your phone via <code>/remote-control</code></td>
 </tr>
 </tbody>
 </table>
@@ -2749,7 +2767,87 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </section>
 <section id="sec-setup" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Getting Started</h1>
-<p>You need two things: fork the repo, and paste a prompt. Claude handles everything else.</p>
+<p>You need three things: install Claude Code, fork the repo, and paste a prompt. Claude handles everything else.</p>
+<section id="sec-prerequisites" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-prerequisites"><span class="header-section-number">2.1</span> Prerequisites</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Requirement</th>
+<th>What It Is</th>
+<th>How to Get It</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Claude Code</strong></td>
+<td>The AI tool that powers this workflow</td>
+<td><code>curl -fsSL https://claude.ai/install.sh | bash</code> (<a href="https://code.claude.com/docs/en/overview">docs</a>)</td>
+</tr>
+<tr class="even">
+<td><strong>Node.js 18+</strong></td>
+<td>Required to run Claude Code</td>
+<td><a href="https://nodejs.org">nodejs.org</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Claude account</strong></td>
+<td>Authentication for Claude</td>
+<td><a href="https://claude.ai">Claude Pro or Max subscription</a> or <a href="https://console.anthropic.com">Anthropic API key</a> (pay per token)</td>
+</tr>
+<tr class="even">
+<td><strong>git</strong></td>
+<td>Version control (for fork/clone)</td>
+<td>Pre-installed on Mac; <code>brew install git</code> or <a href="https://git-scm.com">git-scm.com</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Optional</strong> (install only what your project uses):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>Required For</th>
+<th>Install</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>XeLaTeX</td>
+<td>LaTeX slides</td>
+<td><a href="https://tug.org/texlive/">TeX Live</a> or <a href="https://tug.org/mactex/">MacTeX</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://quarto.org">Quarto</a></td>
+<td>Web slides</td>
+<td><a href="https://quarto.org/docs/get-started/">quarto.org/docs/get-started</a></td>
+</tr>
+<tr class="odd">
+<td>R</td>
+<td>Figures &amp; data analysis</td>
+<td><a href="https://www.r-project.org/">r-project.org</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://cli.github.com/">gh CLI</a></td>
+<td>PR workflow</td>
+<td><code>brew install gh</code> (macOS)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What Does This Cost?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Claude Pro or Max subscription</strong>: Includes Claude Code usage with generous limits. Check <a href="https://claude.ai">claude.ai</a> for current pricing and tier details. Best for most academics.</p>
+<p><strong>API access</strong> (pay per token): For heavy users or CI/CD. Use <a href="#sec-effort">effort levels</a> and the <a href="#multi-model-strategy-cost-vs-quality">multi-model strategy</a> to control costs.</p>
+<p>Claude Code itself is free and open source. You pay only for the Claude model usage.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2761,8 +2859,9 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 <div class="callout-body-container callout-body">
 <ul class="task-list">
+<li><label><input type="checkbox">Install Claude Code: <code>curl -fsSL https://claude.ai/install.sh | bash</code></label></li>
 <li><label><input type="checkbox">Fork the repo and clone it locally</label></li>
-<li><label><input type="checkbox">Run <code>claude</code> in the project directory</label></li>
+<li><label><input type="checkbox">Run <code>claude</code> in the project directory (first run will prompt for authentication)</label></li>
 <li><label><input type="checkbox">Paste the starter prompt (fill in your project details)</label></li>
 <li><label><input type="checkbox">Wait for Claude to customize <code>CLAUDE.md</code> for your project</label></li>
 <li><label><input type="checkbox">Approve the configuration plan</label></li>
@@ -2773,7 +2872,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2782,8 +2881,9 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p><strong>“command not found: claude”:</strong> Install Claude Code first: <code>curl -fsSL https://claude.ai/install.sh | bash</code>. Requires Node.js 18+ (<code>node --version</code> to check).</p>
 <p><strong>Claude seems to ignore the configuration files:</strong> Make sure you ran <code>claude</code> from inside the project directory (not a parent folder). Claude reads <code>.claude/</code> and <code>CLAUDE.md</code> from the current working directory.</p>
 <p><strong>Hooks not firing (no notifications, no reminders):</strong> Check that Python 3 is installed (<code>python3 --version</code>) and hook files are executable (<code>chmod +x .claude/hooks/*</code>).</p>
 <p><strong>“What does plan approval look like?”</strong> Claude presents a numbered plan and asks for your input. Say “approved”, “looks good”, or “revise step 3”. That’s it — no special commands needed.</p>
@@ -2791,18 +2891,19 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 </div>
 </div>
-<section id="step-1-fork-clone" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="step-1-fork-clone"><span class="header-section-number">2.1</span> Step 1: Fork &amp; Clone</h2>
+</section>
+<section id="step-1-fork-clone" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="step-1-fork-clone"><span class="header-section-number">2.2</span> Step 1: Fork &amp; Clone</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fork this repo on GitHub (click &quot;Fork&quot; on the repo page), then:</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Replace <code>YOUR_USERNAME</code> with your GitHub username.</p>
 </section>
-<section id="sec-first-session" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="sec-first-session"><span class="header-section-number">2.2</span> Step 2: Start Claude Code and Paste This Prompt</h2>
+<section id="sec-first-session" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-first-session"><span class="header-section-number">2.3</span> Step 2: Start Claude Code and Paste This Prompt</h2>
 <p>Open your terminal in the project directory, run <code>claude</code>, and paste the following. Fill in the <strong>bolded placeholders</strong> with your project details:</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2811,7 +2912,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Everything in this guide works the same in any Claude Code interface. In <strong>VS Code</strong>, open the Claude Code panel (click the Claude icon in the sidebar or press Cmd+Shift+P → “Claude Code: Open”). In <strong>Claude Desktop</strong>, open your project folder and start a local session. Then paste the starter prompt below.</p>
 <p>The guide shows terminal commands because they are the most universal way to explain things, but every skill, agent, hook, and rule works identically regardless of which interface you use.</p>
@@ -2837,11 +2938,11 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 <p><strong>What this does:</strong> Claude will read <code>CLAUDE.md</code> and all the rules, fill in your project name, institution, Beamer environments, CSS classes, and project state table, then propose any rule adjustments for your specific use case. You approve the plan, and Claude handles the rest. From there, you just describe what you want to build.</p>
 </section>
-<section id="optional-manual-setup" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="optional-manual-setup"><span class="header-section-number">2.3</span> Optional: Manual Setup</h2>
+<section id="optional-manual-setup" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="optional-manual-setup"><span class="header-section-number">2.4</span> Optional: Manual Setup</h2>
 <p>If you prefer to configure things yourself instead of letting Claude handle it:</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2850,7 +2951,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Customize CLAUDE.md</strong> — Open <code>CLAUDE.md</code> and replace all <code>[BRACKETED PLACEHOLDERS]</code>:</p>
 <ol type="1">
@@ -2877,8 +2978,8 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 <p>You don’t need to fill everything in upfront. Start with 5–10 notation entries and add more as you develop lectures. The starter prompt will set up the essentials — you can always refine later.</p>
 </section>
-<section id="sec-spec-then-plan" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="sec-spec-then-plan"><span class="header-section-number">2.4</span> Requirements Specification (For Complex Tasks)</h2>
+<section id="sec-spec-then-plan" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-spec-then-plan"><span class="header-section-number">2.5</span> Requirements Specification (For Complex Tasks)</h2>
 <p>For complex or ambiguous tasks, Claude may ask 3-5 clarifying questions to create a requirements specification before planning. This catches ambiguity early and reduces rework.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href>Slide Creation</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href>Data Analysis</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href>Code Refactoring</a></li></ul>
@@ -3035,7 +3136,7 @@ APPROVED   NEEDS WORK
 </section>
 <section id="sec-quality" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="sec-quality"><span class="header-section-number">3.4</span> Quality Scoring: The 80/90/95 System</h2>
-<p>Every file gets a quality score from 0 to 100:</p>
+<p>The <a href="#sec-blocks">quality-gates rule</a> (<code>quality-gates.md</code>) defines scoring thresholds that the orchestrator enforces automatically. Every file gets a quality score from 0 to 100:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 20%">
@@ -3141,9 +3242,9 @@ APPROVED   NEEDS WORK
 </div>
 </section>
 </section>
-<section id="creating-your-own-domain-reviewer" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="creating-your-own-domain-reviewer"><span class="header-section-number">3.5</span> Creating Your Own Domain Reviewer</h2>
-<p>The template includes <code>domain-reviewer.md</code> — a skeleton for building a substance reviewer specific to your field.</p>
+<section id="sec-domain-reviewer" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sec-domain-reviewer"><span class="header-section-number">3.5</span> Creating Your Own Domain Reviewer</h2>
+<p>The template includes <code>domain-reviewer.md</code> — a skeleton for building a substance reviewer specific to your field. For example, in Econ 730, the domain reviewer caught that a slide claimed “<span class="math inline">\(\hat{\beta}\)</span> is consistent under parallel trends” while the cited paper (Callaway and Sant’Anna, 2021) actually requires a <em>conditional</em> parallel trends assumption — a subtle but critical distinction that no grammar or layout checker would flag.</p>
 <section id="the-5-lens-framework" class="level3" data-number="3.5.1">
 <h3 data-number="3.5.1" class="anchored" data-anchor-id="the-5-lens-framework"><span class="header-section-number">3.5.1</span> The 5-Lens Framework</h3>
 <p>Every domain can benefit from these five review lenses:</p>
@@ -3255,8 +3356,8 @@ APPROVED   NEEDS WORK
 </div>
 </div>
 </section>
-<section id="rules-domain-knowledge-that-auto-loads" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="rules-domain-knowledge-that-auto-loads"><span class="header-section-number">4.2</span> Rules — Domain Knowledge That Auto-Loads</h2>
+<section id="rules---domain-knowledge-that-auto-loads" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="rules---domain-knowledge-that-auto-loads"><span class="header-section-number">4.2</span> Rules — Domain Knowledge That Auto-Loads</h2>
 <p>Rules are markdown files in <code>.claude/rules/</code> that Claude loads automatically. They encode your project’s standards. The key design principle is <strong>path-scoping</strong>: rules with a <code>paths:</code> YAML frontmatter only load when Claude works on matching files.</p>
 <p><strong>Always-on rules</strong> (no <code>paths:</code> frontmatter) load every session. Keep these few and focused:</p>
 <pre><code>.claude/rules/
@@ -3319,8 +3420,8 @@ APPROVED   NEEDS WORK
 <p><strong>Template:</strong> <code>templates/constitutional-governance.md</code></p>
 </section>
 </section>
-<section id="skills-reusable-slash-commands" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="skills-reusable-slash-commands"><span class="header-section-number">4.4</span> Skills — Reusable Slash Commands</h2>
+<section id="skills---reusable-slash-commands" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="skills---reusable-slash-commands"><span class="header-section-number">4.4</span> Skills — Reusable Slash Commands</h2>
 <p>Skills are multi-step workflows invoked with <code>/command</code>. Each skill lives in <code>.claude/skills/[name]/SKILL.md</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> compile-latex</span></span>
@@ -3388,9 +3489,22 @@ APPROVED   NEEDS WORK
 </tr>
 </tbody>
 </table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Built-In Skills
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Claude Code ships with built-in skills beyond this template’s 22: <code>/batch</code> orchestrates parallel refactoring across your codebase (using git worktrees for isolation), <code>/simplify</code> runs 3-agent code review and applies fixes, and <code>/debug</code> helps troubleshoot sessions. These complement the academic skills above.</p>
+</div>
+</div>
 </section>
-<section id="agents-specialized-reviewers" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="agents-specialized-reviewers"><span class="header-section-number">4.5</span> Agents — Specialized Reviewers</h2>
+<section id="agents---specialized-reviewers" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="agents---specialized-reviewers"><span class="header-section-number">4.5</span> Agents — Specialized Reviewers</h2>
 <p>Agents are the real power of this system. Each agent is an expert in one dimension of quality:</p>
 <pre><code>.claude/agents/
 +-- proofreader.md        # Grammar, typos, consistency
@@ -3440,11 +3554,12 @@ APPROVED   NEEDS WORK
 </div>
 <div class="callout-body-container callout-body">
 <p>A single Claude prompt trying to check grammar, layout, math, and code simultaneously will do a mediocre job at all of them. Specialized agents focus on one dimension and do it thoroughly. The <code>/slide-excellence</code> skill runs them all in parallel, then synthesizes results.</p>
+<p>Claude Code also offers experimental <strong>Agent Teams</strong> — multiple independent sessions that coordinate, share findings, and challenge each other’s approaches. This is a research preview feature; the orchestrator + subagent pattern described here is more mature for academic workflows.</p>
 </div>
 </div>
 </section>
-<section id="multi-model-strategy-cost-vs.-quality" class="level3" data-number="4.5.2">
-<h3 data-number="4.5.2" class="anchored" data-anchor-id="multi-model-strategy-cost-vs.-quality"><span class="header-section-number">4.5.2</span> Multi-Model Strategy: Cost vs. Quality</h3>
+<section id="multi-model-strategy-cost-vs-quality" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="multi-model-strategy-cost-vs-quality"><span class="header-section-number">4.5.2</span> Multi-Model Strategy: Cost vs. Quality</h3>
 <p>Not all agents need the same model. Each agent file has a <code>model:</code> field in its YAML frontmatter. By default, all agents use <code>model: inherit</code> (they use whatever model your main session runs). But you can customize this to optimize cost:</p>
 <table class="caption-top table">
 <colgroup>
@@ -3502,50 +3617,246 @@ APPROVED   NEEDS WORK
 </div>
 </div>
 </section>
+<section id="sec-agent-config" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="sec-agent-config"><span class="header-section-number">4.5.3</span> Advanced Agent Configuration</h3>
+<p>Beyond model selection, agent definitions support several configuration fields:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>model</code></td>
+<td>Force a specific model</td>
+<td><code>haiku</code>, <code>sonnet</code>, <code>opus</code></td>
+</tr>
+<tr class="even">
+<td><code>maxTurns</code></td>
+<td>Limit agent iterations</td>
+<td><code>10</code> (prevents runaway loops)</td>
+</tr>
+<tr class="odd">
+<td><code>isolation</code></td>
+<td>Run in a git worktree</td>
+<td><code>worktree</code> (see <a href="#pattern-12-branch-isolation">Pattern 12</a>)</td>
+</tr>
+<tr class="even">
+<td><code>effort</code></td>
+<td>Override reasoning effort</td>
+<td><code>high</code></td>
+</tr>
+<tr class="odd">
+<td><code>permissionMode</code></td>
+<td>Restrict permissions</td>
+<td><code>plan</code> (read-only agent)</td>
+</tr>
+<tr class="even">
+<td><code>tools</code></td>
+<td>Whitelist specific tools</td>
+<td><code>[&quot;Read&quot;, &quot;Grep&quot;, &quot;Glob&quot;]</code></td>
+</tr>
+<tr class="odd">
+<td><code>disallowedTools</code></td>
+<td>Blacklist specific tools</td>
+<td><code>[&quot;Write&quot;, &quot;Edit&quot;]</code></td>
+</tr>
+<tr class="even">
+<td><code>skills</code></td>
+<td>Make specific skills available</td>
+<td><code>[&quot;compile-latex&quot;]</code></td>
+</tr>
+<tr class="odd">
+<td><code>background</code></td>
+<td>Run concurrently</td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<p>Example: a read-only proofreader that can’t edit files:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> proofreader</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">model</span><span class="kw">:</span><span class="at"> sonnet</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">maxTurns</span><span class="kw">:</span><span class="at"> </span><span class="dv">15</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tools</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;Read&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;Grep&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;Glob&quot;</span><span class="kw">]</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use <code>maxTurns</code> to prevent review agents from looping indefinitely, and <code>tools</code> to enforce read-only behavior for agents that should only produce reports.</p>
 </section>
-<section id="settings-permissions-and-hooks" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="settings-permissions-and-hooks"><span class="header-section-number">4.6</span> Settings — Permissions and Hooks</h2>
+</section>
+<section id="settings---permissions-and-hooks" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="settings---permissions-and-hooks"><span class="header-section-number">4.6</span> Settings — Permissions and Hooks</h2>
 <p><code>.claude/settings.json</code> controls what Claude is allowed to do. Here is a simplified excerpt — the template includes additional permission entries for git, GitHub CLI, PDF tools, and more:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;allow&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git status *)&quot;</span><span class="ot">,</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(xelatex *)&quot;</span><span class="ot">,</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(Rscript *)&quot;</span><span class="ot">,</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(quarto render *)&quot;</span><span class="ot">,</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(./scripts/sync_to_docs.sh *)&quot;</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR</span><span class="ch">\&quot;</span><span class="st">/.claude/hooks/log-reminder.py&quot;</span><span class="fu">,</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;allow&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git status *)&quot;</span><span class="ot">,</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(xelatex *)&quot;</span><span class="ot">,</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(Rscript *)&quot;</span><span class="ot">,</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(quarto render *)&quot;</span><span class="ot">,</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(./scripts/sync_to_docs.sh *)&quot;</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR</span><span class="ch">\&quot;</span><span class="st">/.claude/hooks/log-reminder.py&quot;</span><span class="fu">,</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Permission modes.</strong> Claude Code has five permission modes that control how much autonomy Claude gets:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 32%">
+<col style="width: 23%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>Internal Name</th>
+<th>Behavior</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Normal</strong></td>
+<td><code>default</code></td>
+<td>Asks before risky actions</td>
+<td>Day-to-day work — approve each edit</td>
+</tr>
+<tr class="even">
+<td><strong>Auto-accept edits</strong></td>
+<td><code>acceptEdits</code></td>
+<td>Auto-approves file edits</td>
+<td>Trusted batch operations (rename across 20 files)</td>
+</tr>
+<tr class="odd">
+<td><strong>Don’t ask</strong></td>
+<td><code>dontAsk</code></td>
+<td>Auto-denies tools unless pre-approved in allowlist</td>
+<td>Restricted environments where only allowlisted tools run</td>
+</tr>
+<tr class="even">
+<td><strong>Plan</strong></td>
+<td><code>plan</code></td>
+<td>Read-only — no edits allowed</td>
+<td>Exploring code, reviewing before acting</td>
+</tr>
+<tr class="odd">
+<td><strong>Bypass</strong></td>
+<td><code>bypassPermissions</code></td>
+<td>Skips all permission prompts</td>
+<td>CI/CD pipelines, headless scripts (still blocks <code>.git/</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Set via CLI flag (<code>claude --permission-mode plan</code>), the <code>/config</code> command, or <code>permissions.defaultMode</code> in <code>settings.json</code>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Plans Directory
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By default, Claude saves plans to a global directory (<code>~/.claude/plans/</code>), not your project. To keep plans with your project (and in git), add this to <code>.claude/settings.json</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;plansDirectory&quot;</span><span class="fu">:</span> <span class="st">&quot;quality_reports/plans&quot;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
 <p>The <strong>Stop hook</strong> runs a fast Python script after every response. No LLM call, no latency. It checks whether the session log is current and reminds Claude to update it if not. Behavioral rules like verification and Beamer-Quarto sync are enforced via auto-loaded rules in <code>.claude/rules/</code>, which is the right tool for nuanced judgment that Claude can evaluate in-context.</p>
 </section>
-<section id="memory-cross-session-persistence" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="memory-cross-session-persistence"><span class="header-section-number">4.7</span> Memory — Cross-Session Persistence</h2>
+<section id="sec-effort" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="sec-effort"><span class="header-section-number">4.7</span> Effort Levels — Cost vs. Thoroughness</h2>
+<p>Claude Code lets you control how deeply it reasons about each task. Higher effort means more “thinking tokens” and better results — but higher cost.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 28%">
+<col style="width: 33%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Thinking Budget</th>
+<th>Academic Use Case</th>
+<th>Relative Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>low</code></td>
+<td>Minimal</td>
+<td>Quick formatting, grep, file renames</td>
+<td>$</td>
+</tr>
+<tr class="even">
+<td><code>medium</code></td>
+<td>Standard</td>
+<td>Most tasks (default for Opus)</td>
+<td><span class="math display">\[ |
+| `high` | ~10k tokens | Complex derivations, paper reviews | \]</span>$</td>
+</tr>
+<tr class="odd">
+<td><code>max</code> / ultrathink</td>
+<td>~32k tokens</td>
+<td>Deep proofs, multi-step analysis</td>
+<td>$$$$</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How to set effort:</strong></p>
+<ul>
+<li><strong>Per-session:</strong> Type <code>/effort high</code> in the chat</li>
+<li><strong>Per-skill:</strong> Add <code>effort: high</code> to skill frontmatter (see <a href="#skill-frontmatter">Skill Frontmatter Reference</a>)</li>
+<li><strong>Keyboard toggle:</strong> <code>Option+T</code> (Mac) / <code>Alt+T</code> (Windows/Linux) toggles extended thinking</li>
+<li><strong>In prompts:</strong> Include “ultrathink” in your prompt to enable extended thinking for that turn. Note: phrases like “think hard” are treated as regular instructions and do <em>not</em> allocate extra thinking tokens</li>
+<li><strong>Environment variable:</strong> <code>CLAUDE_CODE_EFFORT_LEVEL=high</code> for all sessions</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Composing Effort with Model Choice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Effort levels compose with model selection for fine-grained cost control. For example, <code>Haiku + high effort</code> costs less than <code>Opus + low effort</code> but may produce comparable results for bounded tasks like formatting. Use <code>Opus + max</code> only for tasks that genuinely require deep multi-step reasoning — complex proofs, intricate data pipeline debugging, or comprehensive paper critique.</p>
+</div>
+</div>
+</section>
+<section id="memory---cross-session-persistence" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="memory---cross-session-persistence"><span class="header-section-number">4.8</span> Memory — Cross-Session Persistence</h2>
 <p>Claude Code has an auto-memory system at <code>~/.claude/projects/[project]/memory/MEMORY.md</code>. This file persists across sessions and is loaded into every conversation.</p>
 <p>Use it for: - Key project facts that never change - Corrections you don’t want repeated (<code>[LEARN:tag]</code> format) - Current plan status</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Auto Memory</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Facts</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Project uses XeLaTeX, not pdflatex</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Bibliography file: Bibliography_base.bib</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X drops obs silently when covariate is missing</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="plans-compression-resistant-task-memory" class="level3" data-number="4.7.1">
-<h3 data-number="4.7.1" class="anchored" data-anchor-id="plans-compression-resistant-task-memory"><span class="header-section-number">4.7.1</span> Plans — Compression-Resistant Task Memory</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Auto Memory</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Facts</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Project uses XeLaTeX, not pdflatex</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Bibliography file: Bibliography_base.bib</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X drops obs silently when covariate is missing</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="plans-compression-resistant-task-memory" class="level3" data-number="4.8.1">
+<h3 data-number="4.8.1" class="anchored" data-anchor-id="plans-compression-resistant-task-memory"><span class="header-section-number">4.8.1</span> Plans — Compression-Resistant Task Memory</h3>
 <p>While MEMORY.md stores long-lived project facts, <strong>plans</strong> store task-specific strategy. Every non-trivial plan is saved to <code>quality_reports/plans/</code> with a timestamp. This means:</p>
 <ul>
 <li>Plans survive auto-compression (they are on disk, not just in context)</li>
@@ -3554,14 +3865,14 @@ APPROVED   NEEDS WORK
 </ul>
 <p>See Pattern 1 in <a href="#sec-patterns">Workflow Patterns</a> for the full protocol.</p>
 </section>
-<section id="session-logs-why-not-just-what-history-with-automated-reminders" class="level3" data-number="4.7.2">
-<h3 data-number="4.7.2" class="anchored" data-anchor-id="session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.7.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</h3>
+<section id="session-logs-why-not-just-what-history-with-automated-reminders" class="level3" data-number="4.8.2">
+<h3 data-number="4.8.2" class="anchored" data-anchor-id="session-logs-why-not-just-what-history-with-automated-reminders"><span class="header-section-number">4.8.2</span> Session Logs — Why-Not-Just-What History (with Automated Reminders)</h3>
 <p>Git commits record what changed, but not <em>why</em>. Session logs fill this gap. Claude writes to <code>quality_reports/session_logs/</code> at three points: right after plan approval, incrementally during implementation (as decisions happen), and at session end. This means the log captures reasoning <em>as it happens</em>, before auto-compression can discard it.</p>
 <p>Because relying on instructions alone is fragile (Claude forgets during long sessions), a <strong>Stop hook</strong> (<code>.claude/hooks/log-reminder.py</code>) fires after every response. It tracks how many responses have passed since the session log was last updated. After a threshold, it blocks Claude from stopping until the log is current. This turns a best practice into an enforced behavior.</p>
 <p>New sessions can read these logs to understand not just the current state of the project, but the reasoning behind it. See Pattern 1 in <a href="#sec-patterns">Workflow Patterns</a> for the full protocol.</p>
 </section>
-<section id="how-it-all-fits-together" class="level3" data-number="4.7.3">
-<h3 data-number="4.7.3" class="anchored" data-anchor-id="how-it-all-fits-together"><span class="header-section-number">4.7.3</span> How It All Fits Together</h3>
+<section id="how-it-all-fits-together" class="level3" data-number="4.8.3">
+<h3 data-number="4.8.3" class="anchored" data-anchor-id="how-it-all-fits-together"><span class="header-section-number">4.8.3</span> How It All Fits Together</h3>
 <p>With CLAUDE.md, MEMORY.md, plans, and session logs, the system has four distinct memory layers. Here is what each one does and when it matters:</p>
 <table class="caption-top table">
 <colgroup>
@@ -3620,8 +3931,8 @@ APPROVED   NEEDS WORK
 </table>
 <p>The first four layers are your safety net. Anything written to disk survives indefinitely. The conversation context is ephemeral — auto-compression will eventually discard details. The workflow’s design ensures that anything worth keeping is written to one of the four persistent layers before compression can erase it.</p>
 </section>
-<section id="hooks-automated-enforcement" class="level3" data-number="4.7.4">
-<h3 data-number="4.7.4" class="anchored" data-anchor-id="hooks-automated-enforcement"><span class="header-section-number">4.7.4</span> Hooks — Automated Enforcement</h3>
+<section id="hooks---automated-enforcement" class="level3" data-number="4.8.4">
+<h3 data-number="4.8.4" class="anchored" data-anchor-id="hooks---automated-enforcement"><span class="header-section-number">4.8.4</span> Hooks — Automated Enforcement</h3>
 <p>The session log reminder above is one example of a broader pattern: using <strong>hooks</strong> to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in <code>.claude/settings.json</code> and fire every time, regardless of context state.</p>
 <p>The template includes hooks for logging, notifications, file protection, and context survival:</p>
 <table class="caption-top table">
@@ -3676,6 +3987,44 @@ APPROVED   NEEDS WORK
 </tbody>
 </table>
 <p>Verification and Beamer-Quarto sync are enforced via auto-loaded rules, which are the right tool for nuanced judgment. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
+<p><strong>Hook handler types.</strong> The examples above use <code>command</code> hooks (shell scripts), but Claude Code supports four handler types:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 44%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>How It Works</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><code>command</code></strong></td>
+<td>Runs a shell script. Exit 0 = allow, exit 2 = block (PreToolUse only)</td>
+<td>File protection, state capture, notifications</td>
+</tr>
+<tr class="even">
+<td><strong><code>prompt</code></strong></td>
+<td>Injects text into Claude’s conversation — no script needed</td>
+<td>Soft reminders: “Check that equations compile before saving”</td>
+</tr>
+<tr class="odd">
+<td><strong><code>http</code></strong></td>
+<td>POSTs to an external endpoint</td>
+<td>CI/CD integration, logging to external services</td>
+</tr>
+<tr class="even">
+<td><strong><code>agent</code></strong></td>
+<td>Spawns a subagent that can use tools to verify conditions</td>
+<td>Complex validation requiring multi-step checks</td>
+</tr>
+</tbody>
+</table>
+<p><strong>PreToolUse input modification.</strong> PreToolUse hooks can now <strong>modify tool inputs</strong>, not just block or allow. Your hook script can return modified JSON to rewrite parameters before the tool executes — for example, auto-correcting file paths or enforcing naming conventions.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3686,15 +4035,15 @@ APPROVED   NEEDS WORK
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Use <strong>command-based hooks</strong> for fast, mechanical checks (file exists? counter threshold?). Use <strong>rules</strong> for nuanced judgment (did Claude verify correctly?). Avoid prompt-based hooks that trigger an LLM call on every response — the latency adds up fast.</p>
+<p>Use <strong>command hooks</strong> for fast, mechanical checks (file exists? counter threshold?). Use <strong>prompt hooks</strong> for soft guidance that doesn’t need a script. Use <strong>rules</strong> for nuanced judgment (did Claude verify correctly?). Avoid prompt hooks that fire on high-frequency events — the injected text adds up in context.</p>
 </div>
 </div>
 </section>
-<section id="context-survival-system-advanced" class="level3" data-number="4.7.5">
-<h3 data-number="4.7.5" class="anchored" data-anchor-id="context-survival-system-advanced"><span class="header-section-number">4.7.5</span> Context Survival System (Advanced)</h3>
+<section id="context-survival-system-advanced" class="level3" data-number="4.8.5">
+<h3 data-number="4.8.5" class="anchored" data-anchor-id="context-survival-system-advanced"><span class="header-section-number">4.8.5</span> Context Survival System (Advanced)</h3>
 <p>When context compaction happens, Claude loses working memory. The <strong>context survival system</strong> ensures you can recover seamlessly.</p>
-<section id="how-it-works" class="level4" data-number="4.7.5.1">
-<h4 data-number="4.7.5.1" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">4.7.5.1</span> How It Works</h4>
+<section id="how-it-works" class="level4" data-number="4.8.5.1">
+<h4 data-number="4.8.5.1" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">4.8.5.1</span> How It Works</h4>
 <p>Two hooks work together to preserve and restore state:</p>
 <pre><code>Session running → context fills up → PreCompact fires
                                            ↓
@@ -3712,8 +4061,8 @@ APPROVED   NEEDS WORK
                                     • Prints context summary
                                     • Claude knows where it left off</code></pre>
 </section>
-<section id="what-gets-saved" class="level4" data-number="4.7.5.2">
-<h4 data-number="4.7.5.2" class="anchored" data-anchor-id="what-gets-saved"><span class="header-section-number">4.7.5.2</span> What Gets Saved</h4>
+<section id="what-gets-saved" class="level4" data-number="4.8.5.2">
+<h4 data-number="4.8.5.2" class="anchored" data-anchor-id="what-gets-saved"><span class="header-section-number">4.8.5.2</span> What Gets Saved</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 26%">
@@ -3751,8 +4100,8 @@ APPROVED   NEEDS WORK
 </tbody>
 </table>
 </section>
-<section id="context-monitoring" class="level4" data-number="4.7.5.3">
-<h4 data-number="4.7.5.3" class="anchored" data-anchor-id="context-monitoring"><span class="header-section-number">4.7.5.3</span> Context Monitoring</h4>
+<section id="context-monitoring" class="level4" data-number="4.8.5.3">
+<h4 data-number="4.8.5.3" class="anchored" data-anchor-id="context-monitoring"><span class="header-section-number">4.8.5.3</span> Context Monitoring</h4>
 <p>The <code>context-monitor.py</code> hook tracks approximate context usage and provides progressive warnings:</p>
 <table class="caption-top table">
 <colgroup>
@@ -3788,8 +4137,8 @@ APPROVED   NEEDS WORK
 <p>Use <code>/context-status</code> to check current session health at any time.</p>
 <p>Note: the monitor uses tool call count as a proxy for context usage, so warnings may appear earlier or later than actual compaction.</p>
 </section>
-<section id="recovery-after-compaction" class="level4" data-number="4.7.5.4">
-<h4 data-number="4.7.5.4" class="anchored" data-anchor-id="recovery-after-compaction"><span class="header-section-number">4.7.5.4</span> Recovery After Compaction</h4>
+<section id="recovery-after-compaction" class="level4" data-number="4.8.5.4">
+<h4 data-number="4.8.5.4" class="anchored" data-anchor-id="recovery-after-compaction"><span class="header-section-number">4.8.5.4</span> Recovery After Compaction</h4>
 <p>If compaction happens mid-task, Claude will automatically see:</p>
 <ol type="1">
 <li><strong>Restoration message</strong> — what plan was active, what task was in progress</li>
@@ -3799,6 +4148,19 @@ APPROVED   NEEDS WORK
 <blockquote class="blockquote">
 <p>“We just had compaction. Read <code>quality_reports/plans/2026-02-06_translate-lecture5.md</code> and continue from where we left off.”</p>
 </blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>2026 Feature Coverage
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now that you understand the building blocks, here’s what’s new: Claude Code has added <a href="#sec-effort">effort levels</a> for cost control, <a href="#hooks---automated-enforcement">expanded hook events</a>, <a href="#skill-frontmatter">skill frontmatter fields</a> for fine-grained skill configuration, <a href="#settings---permissions-and-hooks">permission modes</a> for controlling Claude’s autonomy, <a href="#sec-agent-config">advanced agent configuration</a>, plugins, <code>/batch</code> for parallel refactoring, and headless CLI mode. Each is covered in its respective section above.</p>
+</div>
+</div>
 <hr>
 </section>
 </section>
@@ -3812,7 +4174,7 @@ APPROVED   NEEDS WORK
 <p>The plan-first pattern ensures that non-trivial tasks begin with thinking, not typing.</p>
 <section id="why-planning-matters" class="level3" data-number="5.1.1">
 <h3 data-number="5.1.1" class="anchored" data-anchor-id="why-planning-matters"><span class="header-section-number">5.1.1</span> Why Planning Matters</h3>
-<p>The most common failure mode in AI-assisted development is not bad code — it is solving the wrong problem, or solving the right problem in a fragile order. Plan-first development forces an explicit design step before any file is touched.</p>
+<p>The most common failure mode in AI-assisted development is not bad code — it is solving the wrong problem, or solving the right problem in a fragile order. Plan-first development forces an explicit design step before any file is touched. Plans are saved to <code>quality_reports/plans/</code> on disk, so they survive <a href="#context-survival-system-advanced">context compaction</a>.</p>
 <p>Without a plan:</p>
 <ul>
 <li>Claude starts editing immediately, discovers a dependency on slide 3 that changes the approach, and has to undo work</li>
@@ -3851,7 +4213,7 @@ APPROVED   NEEDS WORK
 <p><strong>During implementation</strong> — append to the log as you work. Every time a design decision is made, a problem is discovered, or the approach deviates from the plan, write a 1-3 line entry immediately. This is the most important behavior: context gets compressed as the session progresses, and decisions that live only in the conversation will be lost.</p>
 <p><strong>At session end</strong> — add a final section with what was accomplished, open questions, and unresolved issues.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3860,7 +4222,7 @@ APPROVED   NEEDS WORK
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Git records what; session logs record why.</strong> A commit message says “Update Lecture 5 TikZ diagrams.” A session log says “Redesigned the TWFE decomposition diagram because the DA challenge revealed students couldn’t trace the path from weights to bias. Considered a table format but chose a flow diagram because it shows directionality.”</p>
 <p><strong>Incremental logging is the key.</strong> A 4-hour session that only logs at the start and end loses everything in the middle. Appending decisions as they happen means auto-compression can never erase them — they are already on disk.</p>
@@ -3869,7 +4231,7 @@ APPROVED   NEEDS WORK
 </div>
 <p>Claude writes all three log entries automatically — no need to ask.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3878,7 +4240,7 @@ APPROVED   NEEDS WORK
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For multi-project academics, start each week by asking Claude to read all session logs from the past week and synthesize a status report with priorities and open questions. The session log infrastructure already captures what you need — the weekly review is just a synthesis prompt: <em>“Read all session logs from this week. Summarize: what was accomplished, what’s blocked, what should I prioritize next?”</em></p>
 </div>
@@ -3991,7 +4353,7 @@ APPROVED   NEEDS WORK
 </ul>
 <p>The difference: when you invoke a skill directly, it runs its specific workflow. When the orchestrator is active, it decides which agents to invoke based on context. The orchestrator is the default; skills are for targeted use.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4000,7 +4362,7 @@ APPROVED   NEEDS WORK
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Orchestrator</strong> (automatic): “Translate Lecture 5 to Quarto” — the orchestrator figures out the agents.</p>
 <p><strong>Skill</strong> (explicit): “/qa-quarto Lecture5” — you specifically want the adversarial critic-fixer loop, nothing else.</p>
@@ -4074,7 +4436,7 @@ Phase 4: Only then extend
 </section>
 <section id="pattern-6-multi-agent-review" class="level2" data-number="5.6">
 <h2 data-number="5.6" class="anchored" data-anchor-id="pattern-6-multi-agent-review"><span class="header-section-number">5.6</span> Pattern 6: Multi-Agent Review</h2>
-<p>The <code>/slide-excellence</code> skill runs up to 6 agents in parallel:</p>
+<p>The <code>/slide-excellence</code> skill runs up to 6 <a href="#agents---specialized-reviewers">specialized agents</a> in parallel:</p>
 <pre><code>/slide-excellence Lecture5_Topic.tex
   |
   +-- Agent 1: Visual Audit (slide-auditor)
@@ -4092,11 +4454,11 @@ Phase 4: Only then extend
 <section id="quick-corrections-learn-tags" class="level3" data-number="5.7.1">
 <h3 data-number="5.7.1" class="anchored" data-anchor-id="quick-corrections-learn-tags"><span class="header-section-number">5.7.1</span> Quick Corrections: [LEARN] Tags</h3>
 <p>Every correction gets tagged for future reference in MEMORY.md:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:notation</span><span class="co">]</span> T_t = 1{t=2} is deterministic -&gt; use T_i in {1,2}</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X: ALWAYS include intercept in design matrix</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Corrections Log</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:notation</span><span class="co">]</span> T_t = 1{t=2} is deterministic -&gt; use T_i in {1,2}</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:citation</span><span class="co">]</span> Post-LASSO is Belloni (2013), NOT Belloni (2014)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:r-code</span><span class="co">]</span> Package X: ALWAYS include intercept in design matrix</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">LEARN:workflow</span><span class="co">]</span> Every Beamer edit must auto-sync to Quarto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>These tags are searchable and persist across sessions. When Claude encounters a similar situation, it checks memory first.</p>
 </section>
 <section id="automated-skill-capture-learn" class="level3" data-number="5.7.2">
@@ -4213,7 +4575,7 @@ Phase 4: QUALITY GATE
 <li>Cognitive load issues</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4222,7 +4584,7 @@ Phase 4: QUALITY GATE
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A stronger variant: when Claude reviews its own work in the same conversation, it suffers <strong>confirmation bias</strong> — it has internalized its own reasoning and will systematically find the work acceptable. The fix: spawn a new agent via the Task tool with NO access to the original conversation. Give it only the artifact and a critique prompt. The fresh agent has no sunk cost in the work and will be ruthless.</p>
 <blockquote class="blockquote">
@@ -4451,7 +4813,7 @@ Decision point (1-2 hours):
                            work backwards)</code></pre>
 <p><strong>Enter mid-pipeline.</strong> You do not have to start from ideation. If you already have data, start with <code>/data-analysis</code> and work backwards to the research question. If you already have a draft, start with <code>/review-paper</code>. The skills are modular — use what you need, skip what you don’t.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4460,9 +4822,9 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>For a production-grade paper pipeline, a dedicated fork takes these same skills and wraps them in full research infrastructure: 15 adversarial worker-critic agent pairs, simulated blind peer review, weighted aggregate scoring, journal targeting, and R&amp;R response routing. If your primary output is research papers, see <a href="#sec-ecosystem">The Ecosystem</a> for details.</p>
+<p>For a production-grade paper pipeline, a dedicated fork takes these same skills and wraps them in full research infrastructure: 6 worker-critic agent pairs plus specialized agents (data-engineer, referees, verifier), simulated blind peer review, weighted aggregate scoring, journal targeting, and R&amp;R response routing. If your primary output is research papers, see <a href="#sec-ecosystem">The Ecosystem</a> for details.</p>
 </div>
 </div>
 </div>
@@ -4483,7 +4845,7 @@ Decision point (1-2 hours):
 <p>This pattern is optional and primarily useful for major translations, risky refactors, or multi-day projects. Most day-to-day work doesn’t need it.</p>
 </div>
 </div>
-<p>Git worktrees create a <strong>separate working directory</strong> linked to the same repository. Each directory has its own branch but shares commit history.</p>
+<p>Git worktrees create a <strong>separate working directory</strong> linked to the same repository. Each directory has its own branch but shares commit history. Subagents can use worktrees via the <code>isolation: worktree</code> field (see <a href="#sec-agent-config">Advanced Agent Configuration</a>).</p>
 <pre><code>your-project/                     ← main branch (stays clean)
 .worktrees/lecture-06-quarto/     ← isolated branch (Claude works here)</code></pre>
 <section id="why-use-worktrees" class="level4" data-number="5.9.4.1">
@@ -4547,22 +4909,22 @@ Decision point (1-2 hours):
 </section>
 <section id="commands-reference" class="level4" data-number="5.9.4.3">
 <h4 data-number="5.9.4.3" class="anchored" data-anchor-id="commands-reference"><span class="header-section-number">5.9.4.3</span> Commands Reference</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a worktree with new branch</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span> <span class="at">-b</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List active worktrees</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree list</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove a worktree (after merging or abandoning)</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete the branch (after removal)</span></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-d</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Squash-merge into main</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge <span class="at">--squash</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;feat: description of changes&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a worktree with new branch</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree add .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span> <span class="at">-b</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List active worktrees</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree list</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove a worktree (after merging or abandoning)</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> worktree remove .worktrees/<span class="pp">[</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete the branch (after removal)</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-d</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Squash-merge into main</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge <span class="at">--squash</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;feat: description of changes&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="when-to-use" class="level4" data-number="5.9.4.4">
 <h4 data-number="5.9.4.4" class="anchored" data-anchor-id="when-to-use"><span class="header-section-number">5.9.4.4</span> When to Use</h4>
@@ -4596,6 +4958,7 @@ Decision point (1-2 hours):
 </tr>
 </tbody>
 </table>
+<p>For example, translating Lecture 5 from Beamer to Quarto involves extracting TikZ diagrams, converting ggplot to plotly, and rewriting environments — dozens of intermediate files over multiple sessions. A worktree keeps main clean while you iterate.</p>
 </section>
 <section id="complexity-cost" class="level4" data-number="5.9.4.5">
 <h4 data-number="5.9.4.5" class="anchored" data-anchor-id="complexity-cost"><span class="header-section-number">5.9.4.5</span> Complexity Cost</h4>
@@ -4667,7 +5030,7 @@ Decision point (1-2 hours):
 <section id="pre-submission-checklist" class="level4" data-number="5.10.1.2">
 <h4 data-number="5.10.1.2" class="anchored" data-anchor-id="pre-submission-checklist"><span class="header-section-number">5.10.1.2</span> Pre-Submission Checklist</h4>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4676,7 +5039,7 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Documentation:</strong></p>
 <ul class="task-list">
@@ -4725,7 +5088,7 @@ Decision point (1-2 hours):
 └── results/                # Output tables, figures</code></pre>
 <p>The orchestrator applies these standards automatically: ask Claude to <em>“prepare a replication package”</em> and the <code>replication-protocol</code> rule activates, enforcing the directory structure and checklist above. No manual invocation needed — the path-scoped rule fires whenever Claude works on replication-related files.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4734,7 +5097,7 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A key principle that maps directly to this workflow: <strong>separate scientific reasoning from computational execution.</strong> Humans design diagnostic templates (what to measure); AI handles execution (how to run it).</p>
 <p>This is the template-executor architecture — and you are already using it:</p>
@@ -4830,7 +5193,7 @@ Decision point (1-2 hours):
 <h4 data-number="5.10.2.4" class="anchored" data-anchor-id="how-existing-agents-support-this"><span class="header-section-number">5.10.2.4</span> How Existing Agents Support This</h4>
 <p>The <code>/slide-excellence</code> skill already invokes the pedagogy-reviewer and slide-auditor, which enforce many of these principles automatically. To enforce <em>all</em> of them — including title-as-assertion and MB/MC smoothness — customize the <strong>domain-reviewer</strong> agent (<code>.claude/agents/domain-reviewer.md</code>) with rhetoric-of-decks lenses. The orchestrator will then apply them during every review cycle without manual invocation.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4839,12 +5202,39 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div id="callout-30" class="callout-30-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For the complete philosophical treatment — from Aristotle’s three modes of persuasion through neuroaesthetics and the Netflix analogy — see <a href="https://github.com/scunning1975/MixtapeTools/tree/main/presentations">The Rhetoric of Decks</a>. The repository includes a full essay, example Beamer decks with professional color palettes, a <code>theme_rhetoric()</code> ggplot2 theme, and a tested deck generation prompt for Claude Code.</p>
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="pattern-15-sequential-audits" class="level3" data-number="5.10.3">
+<h3 data-number="5.10.3" class="anchored" data-anchor-id="pattern-15-sequential-audits"><span class="header-section-number">5.10.3</span> Pattern 15: Sequential Adversarial Audits</h3>
+<p><strong>Principle:</strong> Run N independent audit passes, each focused on ONE dimension. Each auditor sees only the artifact — not previous audits — to prevent groupthink and anchoring bias.</p>
+<p>This pattern differs from the parallel multi-agent review in <a href="#pattern-6-multi-agent-review">Pattern 6</a>. There, agents run simultaneously and findings are merged. Here, audits run <strong>sequentially</strong>, each producing an independent report. The independence is the point: a citation auditor shouldn’t be influenced by what the prose auditor flagged.</p>
+<section id="the-seven-audit-protocol-for-papers" class="level4" data-number="5.10.3.1">
+<h4 data-number="5.10.3.1" class="anchored" data-anchor-id="the-seven-audit-protocol-for-papers"><span class="header-section-number">5.10.3.1</span> The Seven-Audit Protocol (for Papers)</h4>
+<p>Inspired by <a href="https://github.com/aspi6246/ClaudeCodeTools">ClaudeCodeTools “The Editor”</a>, this protocol runs seven sequential passes before submission:</p>
+<ol type="1">
+<li><strong>Abstract audit</strong> — Does the abstract accurately reflect findings? Is it a compelling “storefront”?</li>
+<li><strong>Introduction structure</strong> — Does the intro follow a recognized template (classic, puzzle-first, contribution-first)?</li>
+<li><strong>Section-by-section audit</strong> — Data description, identification, results, robustness — each checked independently</li>
+<li><strong>Argumentation audit</strong> — Logical gaps, alternative explanations, missing qualifications</li>
+<li><strong>Prose quality</strong> — Passive voice, hedging, jargon density, paragraph flow</li>
+<li><strong>Citation fidelity</strong> — Every claim has a citation? Every citation is real and correctly referenced?</li>
+<li><strong>“So What” test</strong> — Five questions: What’s the question? Why does it matter? What did you find? How do you know? What does it mean?</li>
+</ol>
+</section>
+<section id="how-to-implement" class="level4" data-number="5.10.3.2">
+<h4 data-number="5.10.3.2" class="anchored" data-anchor-id="how-to-implement"><span class="header-section-number">5.10.3.2</span> How to Implement</h4>
+<p>Use <code>/review-paper</code> for a comprehensive single-pass review. When you need deeper, independent audits (e.g., before journal submission), run each audit as a separate skill invocation with <code>context: fork</code> to ensure isolation:</p>
+<pre><code>You: &quot;Run the seven-audit protocol on my paper&quot;
+Claude: [Runs 7 sequential forked reviews, each blind to the others]
+       → Produces 7 independent reports
+       → Synthesizes into prioritized revision checklist</code></pre>
+<p><strong>Adapting for other artifacts:</strong> The same principle works for replication packages (7 passes: code, data, documentation, licensing, runtime, outputs, README) or grant proposals (significance, approach, innovation, environment, budget).</p>
 <hr>
 </section>
 </section>
@@ -4854,11 +5244,6 @@ Decision point (1-2 hours):
 <h1 data-number="6"><span class="header-section-number">6</span> The Ecosystem: What Others Have Built</h1>
 <p>This repository provides the foundation — the infrastructure patterns (plan-first, orchestrator, quality gates, adversarial review, context survival) that work for any academic task. Others have taken these patterns further, building specialized workflows for specific needs. Here are the principles these projects share and how to apply them:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 26%">
-<col style="width: 19%">
-<col style="width: 53%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Principle</th>
@@ -4870,7 +5255,7 @@ Decision point (1-2 hours):
 <tr class="odd">
 <td>Adversarial review (not self-review)</td>
 <td>All</td>
-<td>Use fresh-context critique (Pattern 8) or worker-critic pairs</td>
+<td>Use fresh-context critique (<a href="#pattern-8-devils-advocate">Pattern 8</a>) or worker-critic pairs</td>
 </tr>
 <tr class="even">
 <td>Structured intermediate files</td>
@@ -4907,8 +5292,31 @@ Decision point (1-2 hours):
 <td>MixtapeTools</td>
 <td>Every visual element earns its presence; decoration without function is noise</td>
 </tr>
+<tr class="odd">
+<td>Constraint-based autonomy</td>
+<td>autoresearch</td>
+<td>Define boundaries in Markdown (what CAN/CANNOT change); let Claude explore within</td>
+</tr>
+<tr class="even">
+<td>Sequential independent audits</td>
+<td>ClaudeCodeTools</td>
+<td>Run N blind audit passes; independence prevents groupthink (<a href="#pattern-15-sequential-audits">Pattern 15</a>)</td>
+</tr>
 </tbody>
 </table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Which Ecosystem Project Should I Start With?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you write <strong>papers</strong>: start with clo-author (adversarial review pairs) or ClaudeCodeTools (seven-audit protocol, see <a href="#pattern-15-sequential-audits">Pattern 15</a>). If you give <strong>presentations</strong>: MixtapeTools. If you run <strong>computational experiments</strong>: autoresearch. If you’re a <strong>non-technical academic</strong>: claudeblattman. All of them build on the same foundation patterns from this template — the <a href="#sec-system">orchestrator</a>, <a href="#sec-quality">quality gates</a>, and <a href="#the-adversarial-pattern-critic-fixer">adversarial review</a>.</p>
+</div>
+</div>
 <p>Here is what each project does and when you should use it.</p>
 <section id="clo-author-paper-centric-research-workflows" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="clo-author-paper-centric-research-workflows"><span class="header-section-number">6.1</span> clo-author: Paper-Centric Research Workflows</h2>
@@ -4916,7 +5324,7 @@ Decision point (1-2 hours):
 <p>clo-author reorients the entire workflow from slides to <strong>research papers</strong>. The paper (<code>Paper/main.tex</code>) becomes the single source of truth; talks and supplements derive from it. The key architectural innovation is <strong>adversarial worker-critic agent pairs</strong>: every creative agent is paired with a dedicated critic agent, with strict separation of powers (critics never create, creators never self-score).</p>
 <p><strong>What it adds:</strong></p>
 <ul>
-<li><strong>15 specialized agents</strong> organized as worker-critic pairs: Librarian ↔︎ Editor, Explorer ↔︎ Surveyor, Strategist ↔︎ Econometrician, Coder ↔︎ Debugger, Writer ↔︎ Proofreader, Storyteller ↔︎ Discussant, plus Referee and Verifier</li>
+<li><strong>17 specialized agents</strong> organized as 6 worker-critic pairs (Librarian, Explorer, Strategist, Coder, Writer, Storyteller — each with a dedicated critic) plus standalone agents (data-engineer, domain-referee, methods-referee, orchestrator, verifier)</li>
 <li><strong>Phase-based severity gradient</strong> — critics are encouraging during Discovery, constructive during Strategy, strict during Execution, and adversarial during Peer Review</li>
 <li><strong>Weighted aggregate scoring</strong> with component minimums: Literature 10%, Data 10%, Identification 25%, Code 15%, Paper 25%, Polish 10%, Replication 5%. Submission gate (≥ 95) requires every component independently ≥ 80</li>
 <li><strong>Simulated blind peer review</strong> — two independent Referee agents plus an Editor making an editorial decision (Accept / Minor / Major / Reject)</li>
@@ -4945,7 +5353,7 @@ Decision point (1-2 hours):
 </section>
 <section id="xu-yang-2026-reproducibility-as-architecture" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="xu-yang-2026-reproducibility-as-architecture"><span class="header-section-number">6.3</span> Xu &amp; Yang (2026): Reproducibility as Architecture</h2>
-<p><strong>Paper:</strong> Yiqing Xu and Leo Yang Yang, “<a href="https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf">Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis</a>,” Stanford University, 2026.</p>
+<p><strong>Paper:</strong> Yiqing Xu (Stanford) and Leo Yang Yang (HKBU), “<a href="https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf">Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis</a>,” 2026.</p>
 <p>This paper formalizes many principles that this workflow uses intuitively. It demonstrates an AI-assisted pipeline that achieved <strong>100% reproducibility</strong> across 92 papers (215 specifications) — conditional on accessible data and code — with each paper processed in under four minutes.</p>
 <p><strong>Key principles:</strong></p>
 <ul>
@@ -4974,6 +5382,53 @@ Decision point (1-2 hours):
 <p><strong>Website:</strong> <a href="https://social-science-data-editors.github.io/template_README/">social-science-data-editors.github.io/template_README</a> <strong>Repository:</strong> <a href="https://github.com/social-science-data-editors/template_README">social-science-data-editors/template_README</a> <strong>Maintainer:</strong> Lars Vilhuber (Cornell University) and editors from REStat, EJ, CJE</p>
 <p>The compliance standard for replication packages at 5+ major economics journals (see Pattern 13). Available in Markdown, Word, LaTeX, and PDF formats.</p>
 <p><strong>When to use it:</strong> You are preparing a replication package for journal submission and need the exact template that data editors will check against.</p>
+</section>
+<section id="autoresearch-constraint-based-autonomous-research" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="autoresearch-constraint-based-autonomous-research"><span class="header-section-number">6.6</span> autoresearch: Constraint-Based Autonomous Research</h2>
+<p><strong>Repository:</strong> <a href="https://github.com/karpathy/autoresearch">karpathy/autoresearch</a> <strong>Author:</strong> Andrej Karpathy</p>
+<p>An autonomous research agent that runs continuous experiments — modifying code, training models, and evaluating results — without human intervention. The key insight for academic workflows:</p>
+<ul>
+<li><strong><code>program.md</code> as a constitutional document</strong> — a single Markdown file defines what the agent CAN modify (architecture, hyperparameters), what it CANNOT (data pipeline, evaluation metric), and what success looks like (validation metric, lower is better)</li>
+<li><strong>Structured results logging</strong> — every experiment is recorded in a TSV file with branch name, metric, and status</li>
+<li><strong>Time-budgeted iterations</strong> — fixed training windows make experiments comparable</li>
+</ul>
+<p><strong>When to use it:</strong> You are running iterative computational experiments (Monte Carlo simulations, hyperparameter searches, model comparisons) and want Claude to explore the space semi-autonomously within defined constraints.</p>
+<p><strong>Example:</strong> Adapting the <code>program.md</code> pattern for a Monte Carlo study:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># program.md — Monte Carlo Experiment Constraints</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## What You CAN Modify</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>DGP parameters (sample sizes, effect sizes, correlation structures)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Estimator implementations (new methods, tuning parameters)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Number of replications (up to 10,000)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">## What You CANNOT Modify</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>prepare_data.R (data generation is frozen)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>evaluation metric (RMSE of ATT, lower is better)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Output format (results.tsv with columns: method, n, rmse, coverage)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Success Metric</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>RMSE of ATT estimate. Lower is better. Report coverage rate alongside.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="claudecodetools-the-editor-persona" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="claudecodetools-the-editor-persona"><span class="header-section-number">6.7</span> ClaudeCodeTools: The Editor Persona</h2>
+<p><strong>Repository:</strong> <a href="https://github.com/aspi6246/ClaudeCodeTools">aspi6246/ClaudeCodeTools</a></p>
+<p>A collection of Claude Code personas, including “The Editor” — a deeply structured academic paper reviewer that runs seven sequential audit passes (see <a href="#pattern-15-sequential-audits">Pattern 15</a>). Notable features:</p>
+<ul>
+<li><strong>R&amp;R mode</strong> — tracks referee reports and cross-references each concern against revisions</li>
+<li><strong>Blunt, specific feedback</strong> — “This paragraph is incoherent” not “might benefit from clarity”</li>
+<li><strong>“So What” litmus test</strong> — five questions every paper must answer clearly</li>
+</ul>
+<p><strong>When to use it:</strong> You want a structured pre-submission paper review, or you’re responding to referee reports and need systematic tracking of which concerns have been addressed.</p>
+</section>
+<section id="sec-community" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="sec-community"><span class="header-section-number">6.8</span> Community Adoption</h2>
+<p>As of March 2026, <strong>15+ research groups</strong> across multiple disciplines have forked and adapted this workflow for their own projects:</p>
+<ul>
+<li><strong>Economics</strong> — China innovation policy, mental health and layoffs, AIGC and stock prices, capital/labor shares in healthcare</li>
+<li><strong>Energy</strong> — Nepal and global energy economics, PV module reliability</li>
+<li><strong>Teaching</strong> — ECN 152 course development, Econ 730 causal panel data</li>
+</ul>
+<p>Each adaptation follows the same pattern: fork the template, fill in <code>CLAUDE.md</code> placeholders, customize the domain reviewer, and add field-specific skills. The infrastructure (orchestrator, hooks, quality gates) transfers without modification.</p>
 <hr>
 </section>
 </section>
@@ -4981,31 +5436,31 @@ Decision point (1-2 hours):
 <h1 data-number="7"><span class="header-section-number">7</span> Customizing for Your Domain</h1>
 <section id="step-1-build-your-knowledge-base" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="step-1-build-your-knowledge-base"><span class="header-section-number">7.1</span> Step 1: Build Your Knowledge Base</h2>
-<p>The knowledge base (<code>.claude/rules/knowledge-base-template.md</code>) is the most domain-specific component. It provides skeleton tables for notation conventions, lecture progression, applications, design principles, anti-patterns, and R code pitfalls. Fill them in as you develop your project — you don’t need everything upfront.</p>
+<p>The knowledge base (<code>.claude/rules/knowledge-base-template.md</code>) is the most domain-specific component — it’s a <a href="#rules---domain-knowledge-that-auto-loads">path-scoped rule</a> that loads automatically when Claude works on your content files. It provides skeleton tables for notation conventions, lecture progression, applications, design principles, anti-patterns, and R code pitfalls. Fill them in as you develop your project — you don’t need everything upfront.</p>
 <section id="notation-registry" class="level3" data-number="7.1.1">
 <h3 data-number="7.1.1" class="anchored" data-anchor-id="notation-registry"><span class="header-section-number">7.1.1</span> Notation Registry</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Meaning <span class="pp">|</span> Introduced <span class="pp">|</span> Anti-Pattern <span class="pp">|</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|---------|------------|-------------|</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\beta$ <span class="pp">|</span> Regression coefficient <span class="pp">|</span> Lecture 1 <span class="pp">|</span> Don&#39;t use $b$ <span class="pp">|</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\hat{\theta}$ <span class="pp">|</span> Estimator <span class="pp">|</span> Lecture 2 <span class="pp">|</span> Don&#39;t use $\hat{\beta}$ for different estimand <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Meaning <span class="pp">|</span> Introduced <span class="pp">|</span> Anti-Pattern <span class="pp">|</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|---------|------------|-------------|</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\beta$ <span class="pp">|</span> Regression coefficient <span class="pp">|</span> Lecture 1 <span class="pp">|</span> Don&#39;t use $b$ <span class="pp">|</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\hat{\theta}$ <span class="pp">|</span> Estimator <span class="pp">|</span> Lecture 2 <span class="pp">|</span> Don&#39;t use $\hat{\beta}$ for different estimand <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="applications-database" class="level3" data-number="7.1.2">
 <h3 data-number="7.1.2" class="anchored" data-anchor-id="applications-database"><span class="header-section-number">7.1.2</span> Applications Database</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Application <span class="pp">|</span> Paper <span class="pp">|</span> Dataset <span class="pp">|</span> Package <span class="pp">|</span> Lecture <span class="pp">|</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|------------|-------|---------|---------|--------|</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Minimum Wage <span class="pp">|</span> Card &amp; Krueger (1994) <span class="pp">|</span> NJ/PA fast food <span class="pp">|</span> <span class="in">`fixest`</span> <span class="pp">|</span> 3 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Application <span class="pp">|</span> Paper <span class="pp">|</span> Dataset <span class="pp">|</span> Package <span class="pp">|</span> Lecture <span class="pp">|</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|------------|-------|---------|---------|--------|</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Minimum Wage <span class="pp">|</span> Card &amp; Krueger (1994) <span class="pp">|</span> NJ/PA fast food <span class="pp">|</span> <span class="in">`fixest`</span> <span class="pp">|</span> 3 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="validated-design-principles" class="level3" data-number="7.1.3">
 <h3 data-number="7.1.3" class="anchored" data-anchor-id="validated-design-principles"><span class="header-section-number">7.1.3</span> Validated Design Principles</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Principle <span class="pp">|</span> Evidence <span class="pp">|</span> Lectures Applied <span class="pp">|</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------|-----------------|</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Motivation before formalism <span class="pp">|</span> DA challenge: &quot;students lost&quot; <span class="pp">|</span> All <span class="pp">|</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Max 3 new symbols per slide <span class="pp">|</span> Pedagogy review caught overload <span class="pp">|</span> 2, 4 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Principle <span class="pp">|</span> Evidence <span class="pp">|</span> Lectures Applied <span class="pp">|</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|----------|-----------------|</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Motivation before formalism <span class="pp">|</span> DA challenge: &quot;students lost&quot; <span class="pp">|</span> All <span class="pp">|</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Max 3 new symbols per slide <span class="pp">|</span> Pedagogy review caught overload <span class="pp">|</span> 2, 4 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="step-2-create-your-domain-reviewer" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="step-2-create-your-domain-reviewer"><span class="header-section-number">7.2</span> Step 2: Create Your Domain Reviewer</h2>
-<p>Copy <code>.claude/agents/domain-reviewer.md</code> and customize the 5 lenses for your field. The template provides the structure; you fill in domain-specific checks.</p>
+<p>Copy <code>.claude/agents/domain-reviewer.md</code> and customize the <a href="#sec-domain-reviewer">5-lens framework</a> for your field. The template provides the structure; you fill in domain-specific checks.</p>
 </section>
 <section id="step-3-adapt-your-theme" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="step-3-adapt-your-theme"><span class="header-section-number">7.3</span> Step 3: Adapt Your Theme</h2>
@@ -5018,7 +5473,7 @@ Decision point (1-2 hours):
 </section>
 <section id="sec-create-skills" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="sec-create-skills"><span class="header-section-number">7.4</span> Step 4: Creating Custom Skills</h2>
-<p>The guide includes 22 skills for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.</p>
+<p>The guide includes 22 <a href="#skills---reusable-slash-commands">skills</a> for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.</p>
 <section id="when-to-create-a-skill" class="level3" data-number="7.4.1">
 <h3 data-number="7.4.1" class="anchored" data-anchor-id="when-to-create-a-skill"><span class="header-section-number">7.4.1</span> When to Create a Skill</h3>
 <p>Create a skill when: - You repeatedly explain the same 3+ step workflow to Claude - You need domain-specific quality checks (citation style, notation consistency, lab protocols) - You enforce field-specific output formats (thesis structure, journal templates) - You coordinate multi-tool workflows (data → analysis → manuscript)</p>
@@ -5027,40 +5482,179 @@ Decision point (1-2 hours):
 <section id="skill-structure" class="level3" data-number="7.4.2">
 <h3 data-number="7.4.2" class="anchored" data-anchor-id="skill-structure"><span class="header-section-number">7.4.2</span> Skill Structure</h3>
 <p>Each skill is a directory in <code>.claude/skills/</code> with a <code>SKILL.md</code> file:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> your-skill-name</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> [What it does] + [When to use] + [Key capabilities]</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> &quot;[brief hint for user]&quot;</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="an">allowed-tools:</span><span class="co"> [&quot;Read&quot;, &quot;Write&quot;, &quot;Edit&quot;, &quot;Bash&quot;, &quot;Task&quot;]</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Your Skill Name</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Instructions</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>Step 1: <span class="co">[</span><span class="ot">First action with details</span><span class="co">]</span></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>Step 2: <span class="co">[</span><span class="ot">Second action</span><span class="co">]</span></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Examples</span></span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>Example 1: <span class="co">[</span><span class="ot">Common scenario</span><span class="co">]</span></span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Troubleshooting</span></span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>Error: <span class="co">[</span><span class="ot">Common error</span><span class="co">]</span></span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>Solution: <span class="co">[</span><span class="ot">How to fix</span><span class="co">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> your-skill-name</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> [What it does] + [When to use] + [Key capabilities]</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> &quot;[brief hint for user]&quot;</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="an">allowed-tools:</span><span class="co"> [&quot;Read&quot;, &quot;Write&quot;, &quot;Edit&quot;, &quot;Bash&quot;, &quot;Task&quot;]</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Your Skill Name</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Instructions</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>Step 1: <span class="co">[</span><span class="ot">First action with details</span><span class="co">]</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>Step 2: <span class="co">[</span><span class="ot">Second action</span><span class="co">]</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Examples</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>Example 1: <span class="co">[</span><span class="ot">Common scenario</span><span class="co">]</span></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Troubleshooting</span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>Error: <span class="co">[</span><span class="ot">Common error</span><span class="co">]</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>Solution: <span class="co">[</span><span class="ot">How to fix</span><span class="co">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="writing-effective-trigger-descriptions" class="level3" data-number="7.4.3">
-<h3 data-number="7.4.3" class="anchored" data-anchor-id="writing-effective-trigger-descriptions"><span class="header-section-number">7.4.3</span> Writing Effective Trigger Descriptions</h3>
+<section id="skill-frontmatter" class="level3" data-number="7.4.3">
+<h3 data-number="7.4.3" class="anchored" data-anchor-id="skill-frontmatter"><span class="header-section-number">7.4.3</span> Complete Frontmatter Reference</h3>
+<p>The YAML frontmatter controls how your skill behaves. Here are all available fields:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 36%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>name</code></td>
+<td>Display name in <code>/</code> menu</td>
+<td><code>compile-latex</code></td>
+</tr>
+<tr class="even">
+<td><code>description</code></td>
+<td><strong>Most important.</strong> Controls when Claude auto-loads the skill</td>
+<td><code>Compile Beamer slides...</code></td>
+</tr>
+<tr class="odd">
+<td><code>argument-hint</code></td>
+<td>Placeholder shown after <code>/skill-name</code></td>
+<td><code>&lt;filename&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>allowed-tools</code></td>
+<td>Restrict which tools the skill can use</td>
+<td><code>[&quot;Read&quot;, &quot;Bash&quot;, &quot;Glob&quot;]</code></td>
+</tr>
+<tr class="odd">
+<td><code>effort</code></td>
+<td>Override reasoning effort level</td>
+<td><code>high</code></td>
+</tr>
+<tr class="even">
+<td><code>context</code></td>
+<td>Set to <code>fork</code> to run in an isolated subagent</td>
+<td><code>fork</code></td>
+</tr>
+<tr class="odd">
+<td><code>agent</code></td>
+<td>Link to an agent definition in <code>.claude/agents/</code></td>
+<td><code>proofreader</code></td>
+</tr>
+<tr class="even">
+<td><code>hooks</code></td>
+<td>Skill-specific hooks (same syntax as settings.json)</td>
+<td><code>{PreToolUse: [...]}</code></td>
+</tr>
+<tr class="odd">
+<td><code>model</code></td>
+<td>Force a specific model</td>
+<td><code>haiku</code></td>
+</tr>
+<tr class="even">
+<td><code>disable-model-invocation</code></td>
+<td>Prevent Claude from auto-triggering</td>
+<td><code>true</code></td>
+</tr>
+<tr class="odd">
+<td><code>user-invocable</code></td>
+<td>Whether it appears in the <code>/</code> menu</td>
+<td><code>true</code> (default)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Key Design Choices
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong><code>effort: high</code></strong> is useful for review skills that need deep reasoning (e.g., paper critique). Use <code>effort: low</code> for simple formatting skills to save tokens.</li>
+<li><strong><code>context: fork</code></strong> runs the skill in a fresh subagent context, protecting your main conversation from large outputs. Good for skills that produce verbose reports.</li>
+<li><strong><code>allowed-tools</code></strong> prevents skills from accidentally using destructive tools. A read-only review skill should use <code>[&quot;Read&quot;, &quot;Grep&quot;, &quot;Glob&quot;]</code>.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="skill-dynamic-content" class="level3" data-number="7.4.4">
+<h3 data-number="7.4.4" class="anchored" data-anchor-id="skill-dynamic-content"><span class="header-section-number">7.4.4</span> Dynamic Content in Skills</h3>
+<p>Skills can include dynamic values using string substitutions and live command output:</p>
+<p><strong>String substitutions:</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Syntax</th>
+<th>Expands To</th>
+<th>Example Use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>$ARGUMENTS</code></td>
+<td>Full argument string after <code>/skill-name</code></td>
+<td><code>/compile-latex Lecture01</code> → <code>$ARGUMENTS</code> = <code>Lecture01</code></td>
+</tr>
+<tr class="even">
+<td><code>$0</code>, <code>$1</code>, <code>$N</code></td>
+<td>Positional arguments (0-based, space-separated)</td>
+<td><code>/deploy Lecture01 draft</code> → <code>$0</code> = <code>Lecture01</code>, <code>$1</code> = <code>draft</code></td>
+</tr>
+<tr class="odd">
+<td><code>${CLAUDE_SESSION_ID}</code></td>
+<td>Current session identifier</td>
+<td>Unique log file names</td>
+</tr>
+<tr class="even">
+<td><code>${CLAUDE_SKILL_DIR}</code></td>
+<td>Path to the skill’s directory</td>
+<td>Reference supporting files bundled with the skill</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dynamic context injection</strong> with <code>`!command`</code> syntax:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Context</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>Current git status: <span class="in">`!git status --short`</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>Recent changes: <span class="in">`!git log --oneline -5`</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>Available lectures: <span class="in">`!ls Slides/*.tex`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>When Claude loads the skill, it runs these commands and injects the live output into the skill text. This is powerful for skills that need to adapt to the current project state.</p>
+</section>
+<section id="writing-effective-trigger-descriptions" class="level3" data-number="7.4.5">
+<h3 data-number="7.4.5" class="anchored" data-anchor-id="writing-effective-trigger-descriptions"><span class="header-section-number">7.4.5</span> Writing Effective Trigger Descriptions</h3>
 <p>The <code>description</code> field determines when Claude loads your skill. Use specific trigger phrases users would actually say:</p>
 <p><strong>Good (Citation Style Enforcement):</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Enforces APA 7th edition citation format. Use when user asks to &quot;check citations&quot;, &quot;fix references&quot;, &quot;apply APA style&quot;, or when reviewing .tex/.qmd files with bibliographies.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Enforces APA 7th edition citation format. Use when user asks to &quot;check citations&quot;, &quot;fix references&quot;, &quot;apply APA style&quot;, or when reviewing .tex/.qmd files with bibliographies.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Good (Lab Notebook Entry):</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Generates structured lab notebook entries from experimental notes. Use when user provides &quot;experiment notes&quot;, &quot;protocol results&quot;, or asks to &quot;format lab entry&quot;.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Generates structured lab notebook entries from experimental notes. Use when user provides &quot;experiment notes&quot;, &quot;protocol results&quot;, or asks to &quot;format lab entry&quot;.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Bad (Too Vague):</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Helps with citations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Helps with citations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="domain-specific-examples" class="level3" data-number="7.4.4">
-<h3 data-number="7.4.4" class="anchored" data-anchor-id="domain-specific-examples"><span class="header-section-number">7.4.4</span> Domain-Specific Examples</h3>
+<section id="domain-specific-examples" class="level3" data-number="7.4.6">
+<h3 data-number="7.4.6" class="anchored" data-anchor-id="domain-specific-examples"><span class="header-section-number">7.4.6</span> Domain-Specific Examples</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href>Econometrics</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href>Experimental Sciences</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href>Literature Review</a></li></ul>
 <div class="tab-content">
@@ -5085,12 +5679,12 @@ Decision point (1-2 hours):
 </div>
 </div>
 </section>
-<section id="quick-start" class="level3" data-number="7.4.5">
-<h3 data-number="7.4.5" class="anchored" data-anchor-id="quick-start"><span class="header-section-number">7.4.5</span> Quick Start</h3>
+<section id="quick-start" class="level3" data-number="7.4.7">
+<h3 data-number="7.4.7" class="anchored" data-anchor-id="quick-start"><span class="header-section-number">7.4.7</span> Quick Start</h3>
 <ol type="1">
 <li><p><strong>Copy the template:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> .claude/skills/your-skill-name</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> templates/skill-template.md .claude/skills/your-skill-name/SKILL.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> .claude/skills/your-skill-name</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> templates/skill-template.md .claude/skills/your-skill-name/SKILL.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Customize for your domain:</strong></p>
 <ul>
 <li>Replace trigger phrases with your field’s terminology</li>
@@ -5141,7 +5735,7 @@ Decision point (1-2 hours):
 <li><strong>Use <code>CLAUDE.local.md</code> for personal overrides.</strong> This file is automatically gitignored and loaded alongside <code>CLAUDE.md</code>. Put machine-specific paths, personal preferences, and local tool versions here — they won’t pollute the shared repo.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-34-contents" aria-controls="callout-34" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5150,9 +5744,13 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div id="callout-34" class="callout-34-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For capabilities beyond file editing and shell commands — web search during literature review, database queries for replication, or reference manager integration (Zotero, Mendeley) — Claude Code supports <a href="https://modelcontextprotocol.io">MCP servers</a>. Configure them in <code>.claude/settings.json</code> under <code>&quot;mcpServers&quot;</code>. Start with skills and agents first; add MCP when you need external integrations.</p>
+<section id="extending-with-plugins" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="extending-with-plugins"><span class="header-section-number">7.6</span> Extending with Plugins</h2>
+<p>Claude Code supports <strong>plugins</strong> — bundled collections of skills, agents, hooks, and MCP servers that can be installed from git repositories. Use <code>/plugin</code> to browse and manage plugins (it has a Discover tab for finding new ones). Plugins are a newer extension point; start with skills and rules (which you control entirely) before adopting third-party plugins.</p>
+</section>
 </div>
 </div>
 </div>
@@ -5514,7 +6112,7 @@ Decision point (1-2 hours):
 </tr>
 <tr class="odd">
 <td>File protection</td>
-<td>PreToolUse (command)</td>
+<td>PreToolUse[Edit|Write] (command)</td>
 <td><code>.claude/hooks/protect-files.sh</code></td>
 </tr>
 <tr class="even">
@@ -5536,6 +6134,78 @@ Decision point (1-2 hours):
 <td>Verification reminder</td>
 <td>PostToolUse[Write|Edit] (command)</td>
 <td><code>.claude/hooks/verify-reminder.py</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Additional hook events</strong> available in Claude Code (not used in this template but available for custom hooks):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 45%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Event</th>
+<th>When It Fires</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>UserPromptSubmit</code></td>
+<td>Before user message is processed</td>
+<td>Input validation, auto-routing</td>
+</tr>
+<tr class="even">
+<td><code>PermissionRequest</code></td>
+<td>When permission dialog appears</td>
+<td>Auto-approve patterns, logging</td>
+</tr>
+<tr class="odd">
+<td><code>PostToolUseFailure</code></td>
+<td>When a tool call fails</td>
+<td>Error tracking, retry logic</td>
+</tr>
+<tr class="even">
+<td><code>SubagentStart</code></td>
+<td>When a subagent spawns</td>
+<td>Resource tracking</td>
+</tr>
+<tr class="odd">
+<td><code>SubagentStop</code></td>
+<td>When a subagent completes</td>
+<td>Result aggregation</td>
+</tr>
+<tr class="even">
+<td><code>PostCompact</code></td>
+<td>After context compaction</td>
+<td>Post-compaction cleanup</td>
+</tr>
+<tr class="odd">
+<td><code>SessionEnd</code></td>
+<td>When session closes</td>
+<td>Final state saving, cleanup</td>
+</tr>
+<tr class="even">
+<td><code>WorktreeCreate</code></td>
+<td>When a git worktree is created</td>
+<td>Branch tracking</td>
+</tr>
+<tr class="odd">
+<td><code>WorktreeRemove</code></td>
+<td>When a git worktree is removed</td>
+<td>Cleanup verification</td>
+</tr>
+<tr class="even">
+<td><code>TaskCompleted</code></td>
+<td>When a background task finishes</td>
+<td>Progress notifications</td>
+</tr>
+<tr class="odd">
+<td><code>ConfigChange</code></td>
+<td>When settings are modified</td>
+<td>Audit logging</td>
 </tr>
 </tbody>
 </table>
@@ -5576,6 +6246,15 @@ Decision point (1-2 hours):
 <h3 data-number="8.5.7" class="anchored" data-anchor-id="skills-not-auto-invoked"><span class="header-section-number">8.5.7</span> Skills Not Auto-Invoked</h3>
 <p><strong>Symptom:</strong> Claude doesn’t use skills when you describe a task.</p>
 <p><strong>Fix:</strong> 1. Be explicit in your request: <em>“Review my slides for grammar and layout issues”</em> 2. Check skill has auto-invocation enabled (no <code>disable-model-invocation: true</code>) 3. Skill descriptions help Claude know when to use them — check they’re clear</p>
+</section>
+<section id="plans-saved-to-wrong-directory" class="level3" data-number="8.5.8">
+<h3 data-number="8.5.8" class="anchored" data-anchor-id="plans-saved-to-wrong-directory"><span class="header-section-number">8.5.8</span> Plans Saved to Wrong Directory</h3>
+<p><strong>Symptom:</strong> Plans save to <code>~/.claude/plans/</code> instead of your project directory. Can’t track plans in git.</p>
+<p><strong>Fix:</strong> Add to <code>.claude/settings.json</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;plansDirectory&quot;</span><span class="fu">:</span> <span class="st">&quot;quality_reports/plans&quot;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This tells Claude Code to save plans inside your project where they can be version-controlled.</p>
 <hr>
 </section>
 </section>
@@ -5594,13 +6273,15 @@ Decision point (1-2 hours):
 </ul>
 <p><strong>Reproducibility &amp; Data Management:</strong></p>
 <ul>
-<li>Yiqing Xu and Leo Yang Yang (2026), “<a href="https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf">Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis</a>,” Stanford University — the template-executor architecture and principles of reproducible AI-assisted research</li>
+<li>Yiqing Xu (Stanford) and Leo Yang Yang (HKBU), “<a href="https://yiqingxu.org/papers/2026_ai/AI_reproducibility.pdf">Scaling Reproducibility: An AI-Assisted Workflow for Large-Scale Reanalysis</a>,” 2026 — the template-executor architecture and principles of reproducible AI-assisted research</li>
 <li><a href="https://social-science-data-editors.github.io/template_README/">Template README for Social Science Replication Packages</a> by Lars Vilhuber et al. (Cornell) — the AEA Data Editor compliance standard adopted by major economics journals</li>
 </ul>
-<p><strong>Presentation Design:</strong></p>
+<p><strong>Presentation Design &amp; Tools:</strong></p>
 <ul>
 <li><a href="https://github.com/scunning1975/MixtapeTools/tree/main/presentations">MixtapeTools / The Rhetoric of Decks</a> by Scott Cunningham (Baylor) — the philosophical and practical framework for beautiful, rhetorically effective academic presentations</li>
 <li>Scott Cunningham, <em><a href="https://mixtape.scunning.com">Causal Inference: The Mixtape</a></em> — the textbook whose author developed the presentation framework above</li>
+<li><a href="https://github.com/karpathy/autoresearch">autoresearch</a> by Andrej Karpathy — constraint-based autonomous research with <code>program.md</code> as constitutional document</li>
+<li><a href="https://github.com/aspi6246/ClaudeCodeTools">ClaudeCodeTools</a> — “The Editor” persona for seven-audit sequential paper review</li>
 </ul>
 <p><strong>Origin:</strong></p>
 <ul>

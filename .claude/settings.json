@@ -126,5 +126,6 @@
         ]
       }
     ]
-  }
+  },
+  "plansDirectory": "quality_reports/plans"
 }
