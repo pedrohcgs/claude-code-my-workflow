@@ -1,15 +1,14 @@
 ---
 name: review-paper
 description: Comprehensive manuscript review covering argument structure, econometric specification, citation completeness, and potential referee objections
-argument-hint: "[paper filename in master_supporting_docs/ or path to .tex/.pdf]"
-allowed-tools: ["Read", "Grep", "Glob", "Write", "Task"]
+argument-hint: "[paper filename in master_supporting_docs/ or path to .pdf]"
 ---
 
 # Manuscript Review
 
 Produce a thorough, constructive review of an academic manuscript — the kind of report a top-journal referee would write.
 
-**Input:** `$ARGUMENTS` — path to a paper (.tex, .pdf, or .qmd), or a filename in `master_supporting_docs/`.
+**Input:** `$ARGUMENTS` — path to a paper (.pdf) or a filename in `master_supporting_docs/`.
 
 ---
 

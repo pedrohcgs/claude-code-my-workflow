@@ -8,13 +8,13 @@
 
 ```
 Your instruction
-    ↓
-[PLAN] (if multi-file or unclear) → Show plan → Your approval
-    ↓
+    |
+[PLAN] (if multi-file or unclear) -> Show plan -> Your approval
+    |
 [EXECUTE] Implement, verify, done
-    ↓
+    |
 [REPORT] Summary + what's ready
-    ↓
+    |
 Repeat
 ```
 
@@ -23,19 +23,18 @@ Repeat
 ## I Ask You When
 
 - **Design forks:** "Option A (fast) vs. Option B (robust). Which?"
-- **Code ambiguity:** "Spec unclear on X. Assume Y?"
-- **Replication edge case:** "Just missed tolerance. Investigate?"
-- **Scope question:** "Also refactor Y while here, or focus on X?"
+- **Data ambiguity:** "Partner name format unclear. Assume Y?"
+- **Threshold decisions:** "Match rate is X% at this cutoff. Lower threshold or accept?"
+- **Scope question:** "Also clean Y while here, or focus on X?"
 
 ---
 
 ## I Just Execute When
 
 - Code fix is obvious (bug, pattern application)
-- Verification (tolerance checks, tests, compilation)
+- Verification (script runs, data outputs exist, match rates reported)
 - Documentation (logs, commits)
 - Plotting (per established standards)
-- Deployment (after you approve, I ship automatically)
 
 ---
 
@@ -48,26 +47,22 @@ Repeat
 
 ---
 
-## Non-Negotiables (Customize These)
+## Non-Negotiables
 
-<!-- Replace with YOUR project's locked-in preferences -->
-
-- [YOUR PATH CONVENTION] (e.g., `here::here()` for R, relative paths for LaTeX)
-- [YOUR SEED CONVENTION] (e.g., `set.seed()` once at top for stochastic code)
-- [YOUR FIGURE STANDARDS] (e.g., white bg, 300 DPI, custom theme)
-- [YOUR COLOR PALETTE] (e.g., institutional colors)
-- [YOUR TOLERANCE THRESHOLDS] (e.g., 1e-6 for point estimates)
+- **Paths:** `pathlib.Path` in Python, `global root` in Stata -- always relative, never absolute
+- **Merge diagnostics:** Log row counts and match rates at every merge/join
+- **Raw data protection:** Never modify files in `data/raw/` -- all processing creates new files
+- **Thresholds documented:** Every matching cutoff has a stated justification
+- **Validation before output:** Manual review sample before finalizing any match dataset
 
 ---
 
 ## Preferences
 
-<!-- Fill in as you discover your working style -->
-
-**Visual:** [How you want figures/plots handled]
-**Reporting:** [Concise bullets? Detailed prose? Details on request?]
+**Visual:** Publication-ready, polished, consistent color palette, 300 DPI
+**Reporting:** Concise bullets with key metrics; details on request
 **Session logs:** Always (post-plan, incremental, end-of-session)
-**Replication:** [How strict? Flag near-misses?]
+**Matching rigor:** High -- flag uncertain matches for review rather than auto-accepting
 
 ---
 
@@ -76,11 +71,11 @@ Repeat
 For experimental work, use the **Fast-Track** workflow:
 - Work in `explorations/` folder
 - 60/100 quality threshold (vs. 80/100 for production)
-- No plan needed — just a research value check (2 min)
+- No plan needed -- just a research value check (2 min)
 - See `.claude/rules/exploration-fast-track.md`
 
 ---
 
 ## Next Step
 
-You provide task → I plan (if needed) → Your approval → Execute → Done.
+You provide task -> I plan (if needed) -> Your approval -> Execute -> Done.

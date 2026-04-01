@@ -1,26 +1,24 @@
 ---
 name: data-analysis
-description: End-to-end R data analysis workflow from exploration through regression to publication-ready tables and figures
+description: End-to-end Python data analysis workflow from exploration through analysis to publication-ready tables and figures
 argument-hint: "[dataset path or description of analysis goal]"
-allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 ---
 
 # Data Analysis Workflow
 
-Run an end-to-end data analysis in R: load, explore, analyze, and produce publication-ready output.
+Run an end-to-end data analysis in Python: load, explore, analyze, and produce publication-ready output.
 
-**Input:** `$ARGUMENTS` — a dataset path (e.g., `data/county_panel.csv`) or a description of the analysis goal (e.g., "regress wages on education with state fixed effects using CPS data").
+**Input:** `$ARGUMENTS` -- a dataset path (e.g., `data/processed/matched_partners.parquet`) or a description of the analysis goal (e.g., "summarize match rates by audit firm size").
 
 ---
 
 ## Constraints
 
-- **Follow R code conventions** in `.claude/rules/r-code-conventions.md`
-- **Save all scripts** to `scripts/R/` with descriptive names
-- **Save all outputs** (figures, tables, RDS) to `output/`
-- **Use `saveRDS()`** for every computed object — Quarto slides may need them
-- **Use project theme** for all figures (check for custom theme in `.claude/rules/`)
-- **Run r-reviewer** on the generated script before presenting results
+- **Follow Python code conventions** in `.claude/rules/python-code-conventions.md`
+- **Save all scripts** to `scripts/python/` with descriptive names
+- **Save all outputs** (figures, tables, data) to `output/`
+- **Use logging** for all status messages
+- **Run review-python** on the generated script before presenting results
 
 ---
 
@@ -28,104 +26,98 @@ Run an end-to-end data analysis in R: load, explore, analyze, and produce public
 
 ### Phase 1: Setup and Data Loading
 
-1. Read `.claude/rules/r-code-conventions.md` for project standards
-2. Create R script with proper header (title, author, purpose, inputs, outputs)
-3. Load required packages at top (`library()`, never `require()`)
-4. Set seed once at top: `set.seed(42)`
+1. Read `.claude/rules/python-code-conventions.md` for project standards
+2. Create Python script with proper header (purpose, author, inputs, outputs)
+3. Import packages at top
+4. Set random seed if needed: `random.seed(42)` / `np.random.seed(42)`
 5. Load and inspect the dataset
 
 ### Phase 2: Exploratory Data Analysis
 
 Generate diagnostic outputs:
-- **Summary statistics:** `summary()`, missingness rates, variable types
+- **Summary statistics:** `.describe()`, missingness rates, variable types
 - **Distributions:** Histograms for key continuous variables
-- **Relationships:** Scatter plots, correlation matrices
-- **Time patterns:** If panel data, plot trends over time
-- **Group comparisons:** If treatment/control, compare pre-treatment means
+- **Relationships:** Cross-tabulations, correlation matrices
+- **Coverage:** Match rate breakdowns by firm, year, location
+- **Quality:** Duplicate checks, null patterns
 
-Save all diagnostic figures to `output/diagnostics/`.
+Save all diagnostic figures to `output/figures/diagnostics/`.
 
 ### Phase 3: Main Analysis
 
 Based on the research question:
-- **Regression analysis:** Use `fixest` for panel data, `lm`/`glm` for cross-section
+- **Descriptive analysis:** Summary tables, cross-tabs, trend analysis
+- **Match quality analysis:** Precision, recall, F1 by matching tier
+- **Regression analysis:** If applicable, use `statsmodels` or `linearmodels`
 - **Standard errors:** Cluster at the appropriate level (document why)
-- **Multiple specifications:** Start simple, progressively add controls
-- **Effect sizes:** Report standardized effects alongside raw coefficients
 
 ### Phase 4: Publication-Ready Output
 
 **Tables:**
-- Use `modelsummary` for regression tables (preferred) or `stargazer`
-- Include all standard elements: coefficients, SEs, significance stars, N, R-squared
-- Export as `.tex` for LaTeX inclusion and `.html` for quick viewing
+- Use `pandas` `.to_latex()` or `stargazer` equivalent for formatted tables
+- Include all standard elements: sample sizes, means, SDs
+- Export as `.csv` for quick viewing and `.tex` if LaTeX tables needed
 
 **Figures:**
-- Use `ggplot2` with project theme
-- Set `bg = "transparent"` for Beamer compatibility
-- Include proper axis labels (sentence case, units)
-- Export with explicit dimensions: `ggsave(width = X, height = Y)`
-- Save as both `.pdf` and `.png`
+- Use `matplotlib` / `seaborn` with consistent style
+- Set explicit figure dimensions: `fig, ax = plt.subplots(figsize=(10, 6))`
+- Include proper axis labels, titles, legends
+- Save as both `.pdf` and `.png` with `dpi=300`
+- Use a consistent color palette
 
 ### Phase 5: Save and Review
 
-1. `saveRDS()` for all key objects (regression results, summary tables, processed data)
-2. Create `output/` subdirectories as needed with `dir.create(..., recursive = TRUE)`
-3. Run the r-reviewer agent on the generated script:
-
-```
-Delegate to the r-reviewer agent:
-"Review the script at scripts/R/[script_name].R"
-```
-
-4. Address any Critical or High issues from the review.
+1. Save all key objects (DataFrames, results) as `.parquet` or `.pkl`
+2. Create `output/` subdirectories as needed
+3. Run the review-python skill on the generated script
+4. Address any Critical or Major issues from the review
 
 ---
 
 ## Script Structure
 
-Follow this template:
+```python
+"""
+Script: descriptive_title.py
+Purpose: What this script does
+Inputs: data/processed/input_file.parquet
+Outputs: output/figures/plot.pdf, output/tables/summary.csv
+Author: [name]
+Date: YYYY-MM-DD
+"""
 
-```r
-# ============================================================
-# [Descriptive Title]
-# Author: [from project context]
-# Purpose: [What this script does]
-# Inputs: [Data files]
-# Outputs: [Figures, tables, RDS files]
-# ============================================================
+import logging
+from pathlib import Path
 
-# 0. Setup ----
-library(tidyverse)
-library(fixest)
-library(modelsummary)
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
-set.seed(42)
+# -- Setup --
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger(__name__)
 
-dir.create("output/analysis", recursive = TRUE, showWarnings = FALSE)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-# 1. Data Loading ----
-# [Load and clean data]
+# -- Functions --
 
-# 2. Exploratory Analysis ----
-# [Summary stats, diagnostic plots]
+def main():
+    # 1. Load data
+    # 2. Explore
+    # 3. Analyze
+    # 4. Output tables and figures
+    pass
 
-# 3. Main Analysis ----
-# [Regressions, estimation]
-
-# 4. Tables and Figures ----
-# [Publication-ready output]
-
-# 5. Export ----
-# [saveRDS for all objects, ggsave for all figures]
+if __name__ == "__main__":
+    main()
 ```
 
 ---
 
 ## Important
 
-- **Reproduce, don't guess.** If the user specifies a regression, run exactly that.
-- **Show your work.** Print summary statistics before jumping to regression.
-- **Check for issues.** Look for multicollinearity, outliers, perfect prediction.
+- **Show your work.** Print summary statistics before jumping to analysis.
+- **Check for issues.** Look for duplicates, missing values, outliers.
 - **Use relative paths.** All paths relative to repository root.
 - **No hardcoded values.** Use variables for sample restrictions, date ranges, etc.
+- **Log everything.** Row counts, match rates, key metrics.

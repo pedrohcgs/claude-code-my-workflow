@@ -1,103 +1,72 @@
 ---
 paths:
-  - "scripts/**/*.R"
-  - "Figures/**/*.R"
+  - "scripts/**/*.py"
+  - "scripts/**/*.do"
+  - "data/**"
 ---
 
-# Replication-First Protocol
+# Data Linkage Verification Protocol
 
-**Core principle:** Replicate original results to the dot BEFORE extending.
+**Core principle:** Verify match quality systematically before declaring linkage complete.
 
 ---
 
 ## Phase 1: Inventory & Baseline
 
-Before writing any R code:
+Before running any matching:
 
-- [ ] Read the paper's replication README
-- [ ] Inventory replication package: language, data files, scripts, outputs
-- [ ] Record gold standard numbers from the paper:
+- [ ] Document source datasets (Form AP, Revelio) with variable definitions
+- [ ] Record baseline statistics:
 
-```markdown
-## Replication Targets: [Paper Author (Year)]
+| Metric | Form AP | Revelio | Notes |
+|--------|---------|---------|-------|
+| Total records | | | |
+| Unique partners | | | |
+| Unique firms | | | |
+| Date range | | | |
+| Missing name rate | | | |
 
-| Target | Table/Figure | Value | SE/CI | Notes |
-|--------|-------------|-------|-------|-------|
-| Main ATT | Table 2, Col 3 | -1.632 | (0.584) | Primary specification |
-```
-
-- [ ] Store targets in `quality_reports/LectureNN_replication_targets.md` or as RDS
-
----
-
-## Phase 2: Translate & Execute
-
-- [ ] Follow `r-code-conventions.md` for all R coding standards
-- [ ] Translate line-by-line initially -- don't "improve" during replication
-- [ ] Match original specification exactly (covariates, sample, clustering, SE computation)
-- [ ] Save all intermediate results as RDS
-
-### Stata to R Translation Pitfalls
-
-<!-- Customize: Add pitfalls specific to your field -->
-
-| Stata | R | Trap |
-|-------|---|------|
-| `reg y x, cluster(id)` | `feols(y ~ x, cluster = ~id)` | Stata clusters df-adjust differently from some R packages |
-| `areg y x, absorb(id)` | `feols(y ~ x \| id)` | Check demeaning method matches |
-| `probit` for PS | `glm(family=binomial(link="probit"))` | R default logit != Stata default in some commands |
-| `bootstrap, reps(999)` | Depends on method | Match seed, reps, and bootstrap type exactly |
+- [ ] Store baseline in `quality_reports/data_baseline.md`
 
 ---
 
-## Phase 3: Verify Match
+## Phase 2: Match Quality Targets
 
-### Tolerance Thresholds
+Define success criteria before matching:
 
-| Type | Tolerance | Rationale |
-|------|-----------|-----------|
-| Integers (N, counts) | Exact match | No reason for any difference |
-| Point estimates | < 0.01 | Rounding in paper display |
-| Standard errors | < 0.05 | Bootstrap/clustering variation |
-| P-values | Same significance level | Exact p may differ slightly |
-| Percentages | < 0.1pp | Display rounding |
-
-### If Mismatch
-
-**Do NOT proceed to extensions.** Isolate which step introduces the difference, check common causes (sample size, SE computation, default options, variable definitions), and document the investigation even if unresolved.
-
-### Replication Report
-
-Save to `quality_reports/LectureNN_replication_report.md`:
-
-```markdown
-# Replication Report: [Paper Author (Year)]
-**Date:** [YYYY-MM-DD]
-**Original language:** [Stata/R/etc.]
-**R translation:** [script path]
-
-## Summary
-- **Targets checked / Passed / Failed:** N / M / K
-- **Overall:** [REPLICATED / PARTIAL / FAILED]
-
-## Results Comparison
-
-| Target | Paper | Ours | Diff | Status |
-|--------|-------|------|------|--------|
-
-## Discrepancies (if any)
-- **Target:** X | **Investigation:** ... | **Resolution:** ...
-
-## Environment
-- R version, key packages (with versions), data source
-```
+| Metric | Target | Rationale |
+|--------|--------|-----------|
+| Overall match rate | >= X% | Based on data coverage |
+| Precision (manual review) | >= 95% | High-stakes linkage |
+| Unique match rate | >= X% | Minimize ambiguity |
 
 ---
 
-## Phase 4: Only Then Extend
+## Phase 3: Validation
 
-After replication is verified (all targets PASS):
+After each matching round:
 
-- [ ] Commit replication script: "Replicate [Paper] Table X -- all targets match"
-- [ ] Now extend with course-specific modifications (different estimators, new figures, etc.)
-- [ ] Each extension builds on the verified baseline
+1. Report match rate breakdown by tier (exact, fuzzy, supplementary)
+2. Draw random sample for manual review (min 100 per tier)
+3. Calculate precision from manual review
+4. Identify patterns in unmatched records (firm size, time period, name complexity)
+5. Document findings in session log
+
+### If Quality Below Target
+
+**Do NOT finalize output.** Investigate:
+- What record types are failing? (rare names, small firms, old records)
+- Is the cleaning step adequate?
+- Are thresholds too strict or too lenient?
+- Document investigation even if unresolved
+
+---
+
+## Phase 4: Finalize
+
+After validation confirms quality:
+
+- [ ] Produce final matched dataset with confidence scores
+- [ ] Generate summary statistics report
+- [ ] Archive validation sample and review notes
+- [ ] Commit with descriptive message: "Match Form AP to Revelio -- X% match rate, Y% precision"

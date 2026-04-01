@@ -1,45 +1,39 @@
 ---
 paths:
-  - "Slides/**/*.tex"
-  - "Quarto/**/*.qmd"
-  - "scripts/**/*.R"
+  - "scripts/**/*.py"
+  - "scripts/**/*.do"
+  - "data/**"
 ---
 
-# Course Knowledge Base: [YOUR COURSE NAME]
+# Project Knowledge Base: RetPartner
 
-<!-- Fill in the tables below with YOUR domain-specific content.
-     Claude reads this before creating/modifying any lecture content. -->
+<!-- Fill in the tables below as the project develops.
+     Claude reads this before creating/modifying data linkage code. -->
 
-## Notation Registry
+## Variable Registry
 
-| Rule | Convention | Example | Anti-Pattern |
-|------|-----------|---------|-------------|
+| Variable | Source | Definition | Notes |
+|----------|--------|-----------|-------|
 | | | | |
 
-## Symbol Reference
+## Data Source Reference
 
-| Symbol | Meaning | Introduced |
-|--------|---------|------------|
-| | | |
+| Dataset | Source | Format | Key Variables | Date Range |
+|---------|--------|--------|---------------|------------|
+| Form AP | PCAOB | | partner name, firm, engagement | |
+| Revelio | Revelio Labs | | LinkedIn ID, name, employer | |
 
-## Lecture Progression
+## Matching Strategy Log
 
-| # | Title | Core Question | Key Notation | Key Method |
-|---|-------|--------------|-------------|------------|
-| 1 | | | | |
-| 2 | | | | |
+| Tier | Method | Threshold | Match Rate | Precision | Date |
+|------|--------|-----------|------------|-----------|------|
+| | | | | | |
 
-## Empirical Applications
+## Known Data Issues
 
-| Application | Paper | Dataset | Lecture(s) | Purpose |
-|------------|-------|---------|------------|---------|
-| | | | | |
-
-## Design Principles
-
-| Principle | Evidence | Lectures Applied |
-|-----------|----------|-----------------|
-| | | |
+| Issue | Dataset | Impact | Workaround |
+|-------|---------|--------|------------|
+| | | | |
 
 ## Anti-Patterns (Don't Do This)
 
@@ -47,10 +41,10 @@ paths:
 |-------------|---------------|-----------|
 | | | |
 
-## R Code Pitfalls
+## Python/Stata Pitfalls
 
 | Bug | Impact | Fix |
 |-----|--------|-----|
 | | | |
 
-<!-- For research projects, add: Estimand Registry, DGP Configs, Tolerance Thresholds -->
+<!-- Add entries as discoveries are made during the project -->

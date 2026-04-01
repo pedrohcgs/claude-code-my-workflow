@@ -1,43 +1,57 @@
-# CLAUDE.MD -- Academic Project Development with Claude Code
+# CLAUDE.MD -- RetPartner: PCAOB Engagement Partner-Revelio LinkedIn Linkage
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
+**Project:** RetPartner
+**Institution:** MIT
 **Branch:** main
+**Languages:** Python, Stata
 
 ---
 
 ## Core Principles
 
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
-- **Verify after** -- compile/render and confirm output at the end of every task
-- **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
+- **Verify after** -- run scripts and confirm outputs at the end of every task
+- **Single source of truth** -- raw data in `data/raw/` is authoritative; all processed data derives from it via reproducible scripts
 - **Quality gates** -- nothing ships below 80/100
-- **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to MEMORY.md
+- **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong -> right` to MEMORY.md
+
+---
+
+## Project Goal
+
+Link engagement partners in PCAOB Form AP filings to their Revelio Labs LinkedIn IDs. Maximize the number of matched partners with high confidence.
+
+### Data Pipeline Stages
+
+1. **Ingest** -- parse/clean Form AP data from PCAOB
+2. **Standardize** -- normalize partner names, firm names, locations
+3. **Match** -- link partners to Revelio LinkedIn profiles (fuzzy matching, firm+name combos)
+4. **Validate** -- manual review of uncertain matches, quality metrics
+5. **Output** -- final linked dataset for downstream analysis
 
 ---
 
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
-├── CLAUDE.MD                    # This file
-├── .claude/                     # Rules, skills, agents, hooks
-├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
-├── Quarto/                      # RevealJS .qmd files + theme
-├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
-├── quality_reports/             # Plans, session logs, merge reports
-├── explorations/                # Research sandbox (see rules)
-├── templates/                   # Session log, quality report templates
-└── master_supporting_docs/      # Papers and existing slides
+RetPartner/
++-- CLAUDE.MD                    # This file
++-- .claude/                     # Rules, skills, agents, hooks
++-- data/
+|   +-- raw/                     # Original Form AP + Revelio data (never modify)
+|   +-- processed/               # Cleaned/intermediate datasets
+|   +-- output/                  # Final matched datasets
++-- scripts/
+|   +-- python/                  # Python scripts (.py)
+|   +-- stata/                   # Stata do-files (.do)
++-- output/
+|   +-- figures/                 # Publication-ready figures
+|   +-- tables/                  # Publication-ready tables
++-- explorations/                # Research sandbox (see rules)
++-- quality_reports/             # Plans, session logs, merge reports
++-- templates/                   # Session log, quality report templates
++-- master_supporting_docs/      # Reference papers and documentation
++-- docs/                        # Project documentation
 ```
 
 ---
@@ -45,17 +59,14 @@
 ## Commands
 
 ```bash
-# LaTeX (3-pass, XeLaTeX only)
-cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-BIBINPUTS=..:$BIBINPUTS bibtex file
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
+# Python
+python scripts/python/script_name.py
 
-# Deploy Quarto to GitHub Pages
-./scripts/sync_to_docs.sh LectureN
+# Stata (adjust binary name for your installation)
+stata-mp -b do scripts/stata/script_name.do
 
 # Quality score
-python scripts/quality_score.py Quarto/file.qmd
+python scripts/quality_score.py scripts/python/file.py
 ```
 
 ---
@@ -65,7 +76,7 @@ python scripts/quality_score.py Quarto/file.qmd
 | Score | Gate | Meaning |
 |-------|------|---------|
 | 80 | Commit | Good enough to save |
-| 90 | PR | Ready for deployment |
+| 90 | PR | Ready for review |
 | 95 | Excellence | Aspirational |
 
 ---
@@ -74,63 +85,48 @@ python scripts/quality_score.py Quarto/file.qmd
 
 | Command | What It Does |
 |---------|-------------|
-| `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/deploy [LectureN]` | Render Quarto + sync to docs/ |
-| `/extract-tikz [LectureN]` | TikZ → PDF → SVG |
-| `/proofread [file]` | Grammar/typo/overflow review |
-| `/visual-audit [file]` | Slide layout audit |
-| `/pedagogy-review [file]` | Narrative, notation, pacing review |
-| `/review-r [file]` | R code quality review |
-| `/qa-quarto [LectureN]` | Adversarial Quarto vs Beamer QA |
-| `/slide-excellence [file]` | Combined multi-agent review |
-| `/translate-to-quarto [file]` | Beamer → Quarto translation |
-| `/validate-bib` | Cross-reference citations |
-| `/devils-advocate` | Challenge slide design |
-| `/create-lecture` | Full lecture creation |
 | `/commit [msg]` | Stage, commit, PR, merge |
+| `/data-analysis [dataset]` | End-to-end Python analysis |
+| `/data-linkage [task]` | Run matching pipeline, report match rates |
+| `/review-python [file]` | Python code quality review |
+| `/review-stata [file]` | Stata code quality review |
+| `/deep-audit` | Repository-wide consistency audit |
 | `/lit-review [topic]` | Literature search + synthesis |
 | `/research-ideation [topic]` | Research questions + strategies |
 | `/interview-me [topic]` | Interactive research interview |
 | `/review-paper [file]` | Manuscript review |
-| `/data-analysis [dataset]` | End-to-end R analysis |
 | `/learn [skill-name]` | Extract discovery into persistent skill |
 | `/context-status` | Show session health + context usage |
-| `/deep-audit` | Repository-wide consistency audit |
 
 ---
 
-<!-- CUSTOMIZE: Replace the example entries below with your own
-     Beamer environments and Quarto CSS classes. These are examples
-     from the original project — delete them and add yours. -->
+## Python Conventions (Summary)
 
-## Beamer Custom Environments
+- PEP 8 style, `snake_case` naming
+- Type hints for public function signatures
+- Docstrings for all public functions (Google style)
+- `pathlib.Path` for all file paths, relative to project root
+- Logging via `logging` module (not `print()` for status messages)
+- All packages imported at top of file
+- `if __name__ == "__main__":` guard for executable scripts
+- See `.claude/rules/python-code-conventions.md` for full standards
 
-| Environment       | Effect        | Use Case       |
-|-------------------|---------------|----------------|
-| `[your-env]`      | [Description] | [When to use]  |
+## Stata Conventions (Summary)
 
-<!-- Example entries (delete and replace with yours):
-| `keybox` | Gold background box | Key points |
-| `highlightbox` | Gold left-accent box | Highlights |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions |
--->
-
-## Quarto CSS Classes
-
-| Class              | Effect        | Use Case       |
-|--------------------|---------------|----------------|
-| `[.your-class]`    | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `.smaller` | 85% font | Dense content slides |
-| `.positive` | Green bold | Good annotations |
--->
+- Standard header block (purpose, author, date, inputs, outputs)
+- `log using` at start, `log close` at end
+- Relative paths only (no hardcoded absolute paths)
+- `set seed` for any randomized operations
+- See `.claude/rules/stata-code-conventions.md` for full standards
 
 ---
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
-|---------|--------|--------|-------------|
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
-| 2: [Topic] | `Lecture02_Topic.tex` | -- | [Brief description] |
+| Stage | Status | Key Files | Notes |
+|-------|--------|-----------|-------|
+| 1: Ingest | Not started | -- | Form AP data already downloaded |
+| 2: Standardize | Not started | -- | Name/firm normalization |
+| 3: Match | Not started | -- | Core linkage logic |
+| 4: Validate | Not started | -- | Quality review |
+| 5: Output | Not started | -- | Final dataset |

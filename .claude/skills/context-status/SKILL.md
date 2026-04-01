@@ -6,7 +6,6 @@ description: |
   approaching, and what state will be preserved.
 author: Claude Code Academic Workflow
 version: 1.0.0
-allowed-tools: ["Read", "Bash", "Glob"]
 ---
 
 # /context-status — Check Session Health
