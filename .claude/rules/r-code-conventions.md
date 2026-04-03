@@ -34,26 +34,32 @@ paths:
 ## 4. Visual Identity
 
 ```r
-# --- Your institutional palette ---
-primary_blue  <- "#012169"
-primary_gold  <- "#f2a900"
-accent_gray   <- "#525252"
-positive_green <- "#15803d"
-negative_red  <- "#b91c1c"
+# --- Boston College palette ---
+bc_maroon     <- "#872034"
+bc_gold       <- "#EAAA00"
+accent_gray   <- "#666666"
+positive_green <- "#2E7D32"
+negative_red  <- "#D32F2F"
 ```
 
 ### Custom Theme
 ```r
-theme_custom <- function(base_size = 14) {
+theme_regfrag <- function(base_size = 11) {
   theme_minimal(base_size = base_size) +
     theme(
-      plot.title = element_text(face = "bold", color = primary_blue),
-      legend.position = "bottom"
+      plot.title = element_text(face = "bold", color = bc_maroon),
+      legend.position = "bottom",
+      panel.grid.minor = element_blank()
     )
 }
 ```
 
-### Figure Dimensions for Beamer
+### Figure Dimensions for Manuscript (single-column journal)
+```r
+ggsave(filepath, width = 6.5, height = 4, dpi = 300, bg = "white")
+```
+
+### Figure Dimensions for Beamer (conference presentations)
 ```r
 ggsave(filepath, width = 12, height = 5, bg = "transparent")
 ```
@@ -68,11 +74,15 @@ saveRDS(result, file.path(out_dir, "descriptive_name.rds"))
 
 ## 6. Common Pitfalls
 
-<!-- Add your field-specific pitfalls here -->
 | Pitfall | Impact | Prevention |
 |---------|--------|------------|
-| Missing `bg = "transparent"` | White boxes on slides | Always include in ggsave() |
+| Missing `bg = "transparent"` | White boxes on slides | Include in ggsave() for presentations |
 | Hardcoded paths | Breaks on other machines | Use relative paths |
+| Winsorization at wrong level | Biased estimates | Winsorize at 1%/99% by default; document choice |
+| Clustering SEs at wrong level | Incorrect inference | Cluster at firm level unless theory dictates otherwise |
+| `fixest::feols` vs `lm` defaults | Different SE computation | Use `feols` with explicit `vcov` argument |
+| Not logging skewed variables | Non-normal residuals | Log-transform size, assets, revenue |
+| Missing industry/year FE | Omitted variable bias | Always include unless theoretically motivated |
 
 ## 7. Line Length & Mathematical Exceptions
 

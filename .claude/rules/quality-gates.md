@@ -58,10 +58,13 @@ Save to `quality_reports/merges/YYYY-MM-DD_[branch-name].md`.
 
 ## Tolerance Thresholds (Research)
 
-<!-- Customize for your domain -->
+<!-- Accounting/Finance research tolerances -->
 
 | Quantity | Tolerance | Rationale |
 |----------|-----------|-----------|
-| Point estimates | [e.g., 1e-6] | [Numerical precision] |
-| Standard errors | [e.g., 1e-4] | [MC variability] |
-| Coverage rates | [e.g., +/- 0.01] | [MC with B reps] |
+| Point estimates | < 0.001 | Accounting studies report 3 decimal places |
+| Standard errors | < 0.01 | Clustered SEs can vary slightly across implementations |
+| Sample sizes (N) | Exact match | No reason for difference |
+| t-statistics | < 0.05 | Rounding from SE differences |
+| R-squared | < 0.001 | Display rounding |
+| Percentages | < 0.1pp | Display rounding |

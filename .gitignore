@@ -54,3 +54,32 @@ CLAUDE.local.md
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
+
+# ==============================================================================
+# Research Data (large, sensitive, or generated)
+# ==============================================================================
+
+# Raw and processed data (large files, not committed)
+Data/raw/**
+!Data/raw/.gitkeep
+!Data/raw/README.md
+Data/processed/**
+!Data/processed/.gitkeep
+!Data/processed/README.md
+
+# Large R objects
+*.rds
+
+# SLURM job outputs
+slurm-*.out
+
+# Unblinded manuscripts
+Manuscript/*_unblinded.*
+Manuscript/*_with_authors.*
+
+# Python virtual environments
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
