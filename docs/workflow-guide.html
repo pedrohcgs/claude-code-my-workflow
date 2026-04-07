@@ -3321,7 +3321,13 @@ APPROVED   NEEDS WORK
 </section>
 <section id="skills-reusable-slash-commands" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="skills-reusable-slash-commands"><span class="header-section-number">4.4</span> Skills — Reusable Slash Commands</h2>
-<p>Skills are multi-step workflows invoked with <code>/command</code>. Each skill lives in <code>.claude/skills/[name]/SKILL.md</code>:</p>
+<p>Skills are multi-step workflows invoked with <code>/command</code>.</p>
+<ul>
+<li><strong>Core academic workflow skills</strong> live in <code>.claude/skills/[name]/SKILL.md</code></li>
+<li><strong>Project-local Codex skills</strong> live in <code>.agents/skills/[name]/SKILL.md</code></li>
+<li>When a project-local skill should also appear in Claude-style discovery, it can be bridged back into <code>.claude/skills/</code> as a symlink</li>
+</ul>
+<p>The core template skills follow this structure:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> compile-latex</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">description</span><span class="kw">:</span><span class="at"> Compile LaTeX with 3-pass XeLaTeX + bibtex</span></span>
@@ -4109,11 +4115,13 @@ Phase 4: Only then extend
   → If YES to any, continue
          ↓
 Phase 2: CHECK EXISTING
-  Search .claude/skills/ for related skills
+  Search .claude/skills/ and .agents/skills/ for related skills
   → Nothing related? Create new. Overlap? Update existing.
          ↓
 Phase 3: CREATE SKILL
-  Write to .claude/skills/[name]/SKILL.md
+  Write to the matching layer:
+  • .claude/skills/[name]/SKILL.md for core slash-command workflow
+  • .agents/skills/[name]/SKILL.md for project-local Codex extensions
   • Problem statement
   • Trigger conditions (exact errors, symptoms)
   • Step-by-step solution
@@ -4194,7 +4202,7 @@ Phase 4: QUALITY GATE
 </tr>
 </tbody>
 </table>
-<p>Skills saved to <code>.claude/skills/</code> survive compaction and session boundaries — if you discover something valuable late in a session, extract it with <code>/learn</code> before compaction erases the details.</p>
+<p>Skills committed under <code>.claude/skills/</code> or <code>.agents/skills/</code> survive compaction and session boundaries — if you discover something valuable late in a session, extract it with <code>/learn</code> before compaction erases the details.</p>
 </section>
 </section>
 </section>
@@ -4381,7 +4389,7 @@ Decision point (1-2 hours):
   ├── Graduate → Move to R/, scripts/, tests/ (upgrade to 80/100)
   ├── Keep exploring → Stay in explorations/
   └── Abandon → Archive with brief explanation</code></pre>
-<p>The <strong>kill switch</strong> is explicit: at any point, you can stop, archive with a one-paragraph explanation, and move on. No guilt, no sunk cost. See <code>.claude/rules/exploration-folder-protocol.md</code> and <code>.claude/rules/exploration-fast-track.md</code> for the full protocols.</p>
+<p>The <strong>kill switch</strong> is explicit: at any point, you can stop, archive with a one-paragraph explanation, and move on. No guilt, no sunk cost. Work that stays entirely inside <code>explorations/</code> uses the fast-track rule as the explicit exception to the repo’s general plan-first workflow. See <code>.claude/rules/exploration-folder-protocol.md</code> and <code>.claude/rules/exploration-fast-track.md</code> for the full protocols.</p>
 </section>
 <section id="simplified-orchestrator-for-research" class="level4" data-number="5.9.2.5">
 <h4 data-number="5.9.2.5" class="anchored" data-anchor-id="simplified-orchestrator-for-research"><span class="header-section-number">5.9.2.5</span> Simplified Orchestrator for Research</h4>
@@ -5026,7 +5034,8 @@ Decision point (1-2 hours):
 </section>
 <section id="skill-structure" class="level3" data-number="7.4.2">
 <h3 data-number="7.4.2" class="anchored" data-anchor-id="skill-structure"><span class="header-section-number">7.4.2</span> Skill Structure</h3>
-<p>Each skill is a directory in <code>.claude/skills/</code> with a <code>SKILL.md</code> file:</p>
+<p>Core template skills are directories in <code>.claude/skills/</code> with a <code>SKILL.md</code> file. Project-local Codex skills follow the same structure under <code>.agents/skills/</code>.</p>
+<p>The file format is the same in both places:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> your-skill-name</span></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> [What it does] + [When to use] + [Key capabilities]</span></span>
@@ -5088,9 +5097,16 @@ Decision point (1-2 hours):
 <section id="quick-start" class="level3" data-number="7.4.5">
 <h3 data-number="7.4.5" class="anchored" data-anchor-id="quick-start"><span class="header-section-number">7.4.5</span> Quick Start</h3>
 <ol type="1">
+<li><p><strong>Choose the skill layer:</strong></p>
+<ul>
+<li>Use <code>.claude/skills/</code> for core reusable slash-command workflow</li>
+<li>Use <code>.agents/skills/</code> for project-local Codex extensions that should travel with the repo</li>
+</ul></li>
 <li><p><strong>Copy the template:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> .claude/skills/your-skill-name</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> templates/skill-template.md .claude/skills/your-skill-name/SKILL.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> .agents/skills/your-skill-name</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> templates/skill-template.md .agents/skills/your-skill-name/SKILL.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If you want the same project-local skill visible in <code>.claude/skills/</code>, add a bridge symlink:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45a"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45a-1"><a href="#cb45a-1" aria-hidden="true" tabindex="-1"></a><span class="bu">ln</span> <span class="at">-s</span> ../../.agents/skills/your-skill-name .claude/skills/your-skill-name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Customize for your domain:</strong></p>
 <ul>
 <li>Replace trigger phrases with your field’s terminology</li>
@@ -5232,6 +5248,7 @@ Decision point (1-2 hours):
 </section>
 <section id="all-skills" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="all-skills"><span class="header-section-number">8.2</span> All Skills</h2>
+<p>This table lists the <strong>core academic workflow skills</strong> that live in <code>.claude/skills/</code>. Project-local Codex skills in <code>.agents/skills/</code> are intentionally repo-specific and may be bridged into <code>.claude/skills/</code> when shared discovery is useful.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">

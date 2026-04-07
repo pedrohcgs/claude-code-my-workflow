@@ -1,0 +1,23 @@
+{
+  "skill_name": "price-comparison-data-hygiene",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "底表里一行 Walmart 商品标题写的是 20 fl oz，但规格列写的是 1 qt，片子里的倍率正好继承了这个 1 qt 口径。请判断这是单位换算问题、候选选择问题，还是源数据冲突，并说明后续应该怎么处理。",
+      "expected_output": "Should classify the issue as a source conflict, explain that the slide inherited the formula basis rather than the title basis, and recommend documenting the contradiction instead of silently forcing a fix.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "用户给了一批 oat milk 候选，最接近的 clean candidate 只能到 0.96x，但片子写的是 1.02x。请说明能不能支持片子、应该保留什么候选、以及备注应该怎么写。",
+      "expected_output": "Should say the provided evidence does not support 1.02x, keep the closest comparable candidate, and draft a concise workbook note explaining the gap.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Whole Foods 和 Trader Joe's 的工作表里，一些行显示规格还是 lb 或 qt，但单价已经是按 oz 或 fl oz 算的，导致 0.08x 这种异常倍率。请给出修正步骤。",
+      "expected_output": "Should require unit normalization first, update visible specs to match the formula basis, and warn against trusting existing multipliers until the sheet is recalculated.",
+      "files": []
+    }
+  ]
+}

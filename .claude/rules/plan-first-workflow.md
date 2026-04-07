@@ -2,9 +2,14 @@
 
 **For any non-trivial task, enter plan mode before writing code.**
 
+**Exception:** work that stays entirely inside `explorations/**` follows `exploration-fast-track.md` and does not need a formal plan unless:
+- the user explicitly asks for one
+- the work is leaving `explorations/`
+- the task spans production folders in the same change
+
 ## The Protocol
 
-1. **Enter Plan Mode** — use `EnterPlanMode`
+1. **Enter Plan Mode** — use the current runtime's planning flow
 2. **Check MEMORY.md** — read any `[LEARN]` entries relevant to this task
 3. **Requirements Specification (for complex/ambiguous tasks)** — see below
 4. **Draft the plan** — what changes, which files, in what order
@@ -27,7 +32,7 @@
 - User has already provided detailed requirements
 
 **Protocol:**
-1. Use AskUserQuestion to clarify ambiguities (max 3-5 questions)
+1. Ask the user directly to clarify ambiguities (max 3-5 questions)
 2. Create `quality_reports/specs/YYYY-MM-DD_description.md` using `templates/requirements-spec.md`
 3. Mark each requirement:
    - **MUST** (non-negotiable)

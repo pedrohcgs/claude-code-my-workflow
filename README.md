@@ -105,7 +105,17 @@ It covers:
 ## What's Included
 
 <details>
-<summary><strong>10 agents, 22 skills, 18 rules, 7 hooks</strong> (click to expand)</summary>
+<summary><strong>10 agents, 22 core academic skills, 18 rules, 7 hooks</strong> (click to expand)</summary>
+
+### Skill Layout
+
+This repo uses a two-layer skill layout:
+
+- **Core academic workflow skills** live in `.claude/skills/` and are part of the shared template
+- **Project-local Codex skills** live in `.agents/skills/` and are also meant to be versioned
+- Selected `.agents/skills/` are exposed into `.claude/skills/` as checked-in symlinks so Claude-style discovery and Codex can share the same project-local skills
+- Machine-local files remain `.claude/settings.local.json`, `.claude/state/`, `CLAUDE.local.md`, and optional scratch skills in `.claude/skills/local/`
+- `scripts/sync_codex_skills.sh` installs `.agents/skills/` into Codex's auto-discovery directory when needed
 
 ### Agents (`.claude/agents/`)
 

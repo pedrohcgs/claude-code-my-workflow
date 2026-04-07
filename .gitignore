@@ -25,6 +25,8 @@
 __pycache__/
 *.pyc
 *.pyo
+**/__pycache__/
+**/*.py[cod]
 
 # R
 .Rproj.user/
@@ -35,11 +37,38 @@ __pycache__/
 # OS files
 .DS_Store
 Thumbs.db
+**/.DS_Store
 
-# Claude Code local files (not shared across machines)
+# Claude/Codex machine-local files (not shared across machines)
 .claude/settings.local.json
 .claude/state/
 CLAUDE.local.md
+.claude/skills/local/
+
+# Local AI tooling directories
+.codebuddy/
+.commandcode/
+.continue/
+.crush/
+.factory/
+.goose/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.minimax/
+.mux/
+.neovate/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.windsurf/
+.zencoder/
 
 # IDE
 .vscode/
@@ -50,6 +79,16 @@ CLAUDE.local.md
 
 # Quarto rendering artifacts
 /.quarto/
+
+# Local environments and package installs
+**/.venv*/
+**/node_modules/
+
+# Local scratch and intake area
+.tmp_pptx/
+workspace-local/*
+!workspace-local/
+!workspace-local/README.md
 
 # Output artifacts — uncomment lines below based on your preference
 # *.rds

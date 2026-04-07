@@ -223,7 +223,9 @@ As this repository evolves, meta-governance may need updates.
 | Workflow patterns (generic) | ✅ Yes | MEMORY.md | ✅ Yes (via git) |
 | Machine-specific setup | ❌ No | .claude/state/personal-memory.md | ❌ No (gitignored) |
 | Templates (generic) | ✅ Yes | templates/ | ✅ Yes |
-| Skills (generic) | ✅ Yes | .claude/skills/ | ✅ Yes |
+| Core workflow skills | ✅ Yes | .claude/skills/ | ✅ Yes |
+| Project-local Codex skills | ✅ Yes | .agents/skills/ | ✅ Yes |
+| Skill bridge symlinks | ✅ Yes | .claude/skills/[linked-skill] | ✅ Yes |
 | Rules (path-scoped, generic) | ✅ Yes | .claude/rules/ | ✅ Yes |
 | Agents (generic) | ✅ Yes | .claude/agents/ | ✅ Yes |
 | Hooks (generic behavior) | ✅ Yes | .claude/hooks/ | ✅ Yes |
@@ -243,6 +245,7 @@ As this repository evolves, meta-governance may need updates.
 
 **The solution:**
 - Commit generic patterns that help all users (MEMORY.md, templates, infrastructure)
+- Commit project-local skills that should travel with the repo (`.agents/skills/` plus any checked-in bridge symlinks in `.claude/skills/`)
 - Keep specific learnings local (.claude/state/personal-memory.md, gitignored)
 - Dogfood our own workflow (plan-first, spec-then-plan, quality gates)
 - Document with examples from multiple domains (not just our use case)

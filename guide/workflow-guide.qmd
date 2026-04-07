@@ -586,7 +586,15 @@ Use constitutional governance **after** you've established 3-7 recurring pattern
 
 ## Skills --- Reusable Slash Commands
 
-Skills are multi-step workflows invoked with `/command`. Each skill lives in `.claude/skills/[name]/SKILL.md`:
+Skills are multi-step workflows invoked with `/command`.
+
+In this repo, there are two skill layers:
+
+- **Core academic workflow skills** live in `.claude/skills/[name]/SKILL.md`
+- **Project-local Codex skills** live in `.agents/skills/[name]/SKILL.md`
+- When a project-local skill should also appear in Claude-style discovery, it can be bridged back into `.claude/skills/` as a symlink
+
+The core template skills follow this structure:
 
 ```yaml
 ---
@@ -1145,11 +1153,13 @@ Phase 1: EVALUATE
   → If YES to any, continue
          ↓
 Phase 2: CHECK EXISTING
-  Search .claude/skills/ for related skills
+  Search .claude/skills/ and .agents/skills/ for related skills
   → Nothing related? Create new. Overlap? Update existing.
          ↓
 Phase 3: CREATE SKILL
-  Write to .claude/skills/[name]/SKILL.md
+  Write to the matching layer:
+  • .claude/skills/[name]/SKILL.md for core slash-command workflow
+  • .agents/skills/[name]/SKILL.md for project-local Codex extensions
   • Problem statement
   • Trigger conditions (exact errors, symptoms)
   • Step-by-step solution
@@ -1184,7 +1194,7 @@ The context monitor suggests `/learn` at 40%, 55%, and 65% context usage. Consid
 | Error + root cause + solution | `/learn` if reusable, `[LEARN]` if not |
 | Package quirk | `/learn` if affects multiple projects |
 
-Skills saved to `.claude/skills/` survive compaction and session boundaries --- if you discover something valuable late in a session, extract it with `/learn` before compaction erases the details.
+Skills committed under `.claude/skills/` or `.agents/skills/` survive compaction and session boundaries --- if you discover something valuable late in a session, extract it with `/learn` before compaction erases the details.
 
 ## Pattern 8: Devil's Advocate {#pattern-8-devils-advocate}
 
@@ -1305,7 +1315,7 @@ Decision point (1-2 hours):
   └── Abandon → Archive with brief explanation
 ```
 
-The **kill switch** is explicit: at any point, you can stop, archive with a one-paragraph explanation, and move on. No guilt, no sunk cost. See `.claude/rules/exploration-folder-protocol.md` and `.claude/rules/exploration-fast-track.md` for the full protocols.
+The **kill switch** is explicit: at any point, you can stop, archive with a one-paragraph explanation, and move on. No guilt, no sunk cost. Work that stays entirely inside `explorations/` uses the fast-track rule as the explicit exception to the repo's general plan-first workflow. See `.claude/rules/exploration-folder-protocol.md` and `.claude/rules/exploration-fast-track.md` for the full protocols.
 
 #### Simplified Orchestrator for Research
 
@@ -1747,7 +1757,9 @@ Create a skill when:
 
 ### Skill Structure
 
-Each skill is a directory in `.claude/skills/` with a `SKILL.md` file:
+Core template skills are directories in `.claude/skills/` with a `SKILL.md` file. Project-local Codex skills follow the same structure under `.agents/skills/`.
+
+The file format is the same in both places:
 
 ```markdown
 ---
@@ -1830,23 +1842,32 @@ Cross-references in-text citations against bibliography entries. Identifies miss
 
 ### Quick Start
 
-1. **Copy the template:**
+1. **Choose the skill layer:**
+   - Use `.claude/skills/` for core reusable slash-command workflow
+   - Use `.agents/skills/` for project-local Codex extensions that should travel with the repo
+
+2. **Copy the template:**
    ```bash
-   mkdir -p .claude/skills/your-skill-name
-   cp templates/skill-template.md .claude/skills/your-skill-name/SKILL.md
+   mkdir -p .agents/skills/your-skill-name
+   cp templates/skill-template.md .agents/skills/your-skill-name/SKILL.md
    ```
 
-2. **Customize for your domain:**
+   If you want the same project-local skill visible in `.claude/skills/`, add a bridge symlink:
+   ```bash
+   ln -s ../../.agents/skills/your-skill-name .claude/skills/your-skill-name
+   ```
+
+3. **Customize for your domain:**
    - Replace trigger phrases with your field's terminology
    - Add domain-specific file types and tools
    - Include field conventions and common errors
 
-3. **Test the skill:**
+4. **Test the skill:**
    - Skills hot-reload automatically --- changes are detected without restarting
    - Use one of your trigger phrases
    - Verify the skill loads and produces correct output
 
-4. **Iterate:**
+5. **Iterate:**
    - If skill doesn't trigger: Revise description with more specific phrases
    - If instructions unclear: Add more examples
    - If output wrong: Add validation steps
@@ -1899,6 +1920,8 @@ For capabilities beyond file editing and shell commands --- web search during li
 | Domain Reviewer | `.claude/agents/domain-reviewer.md` | Your domain-specific review |
 
 ## All Skills
+
+This table lists the **core academic workflow skills** that live in `.claude/skills/`. Project-local Codex skills in `.agents/skills/` are intentionally repo-specific and may be bridged into `.claude/skills/` when shared discovery is useful.
 
 | Skill | Directory | Purpose |
 |-------|-----------|---------|
