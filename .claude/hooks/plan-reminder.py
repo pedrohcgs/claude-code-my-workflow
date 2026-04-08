@@ -6,6 +6,9 @@ A Stop hook that checks whether a plan file exists in quality_reports/plans/
 when Claude has been in plan mode. If a plan was discussed but not saved to
 disk, blocks once with a reminder.
 
+State is tracked per session ID (not project-wide) to prevent one session's
+plan activity from suppressing reminders in a different session.
+
 Usage (in .claude/settings.json):
     "Stop": [{ "hooks": [{ "type": "command",
         "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/plan-reminder.py" }] }]
@@ -44,12 +47,18 @@ def get_hook_input():
     return hook_input
 
 
+def get_state_path(state_dir: Path, session_id: str) -> Path:
+    """Return a session-keyed state file path."""
+    safe_id = session_id.replace("/", "_")[:64]
+    return state_dir / f"plan-reminder-{safe_id}.json"
+
+
 def load_state(state_path: Path) -> dict:
     """Load persisted state, or return defaults."""
     try:
         return json.loads(state_path.read_text())
     except (FileNotFoundError, json.JSONDecodeError):
-        return {"reminded": False}
+        return {"reminded": False, "plan_mode_entered_at": None}
 
 
 def save_state(state_path: Path, state: dict):
@@ -58,28 +67,46 @@ def save_state(state_path: Path, state: dict):
     state_path.write_text(json.dumps(state))
 
 
-def has_plan_file_today(project_dir: str) -> bool:
-    """Check if any plan file in quality_reports/plans/ was modified today."""
+def find_plan_file_after(project_dir: str, after_ts: str | None) -> bool:
+    """Check if any plan file was created/modified after the given timestamp.
+
+    If after_ts is None, falls back to checking for any plan file modified today.
+    """
     plans_dir = Path(project_dir) / "quality_reports" / "plans"
     if not plans_dir.is_dir():
         return False
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    if after_ts:
+        try:
+            cutoff = datetime.fromisoformat(after_ts)
+        except (ValueError, TypeError):
+            cutoff = None
+    else:
+        cutoff = None
+
     for md_file in plans_dir.glob("*.md"):
-        if md_file.name.startswith(today):
-            return True
         mtime = datetime.fromtimestamp(md_file.stat().st_mtime)
-        if mtime.strftime("%Y-%m-%d") == today:
+        if cutoff and mtime >= cutoff:
             return True
+        elif not cutoff:
+            # Fallback: check if modified today
+            today = datetime.now().strftime("%Y-%m-%d")
+            if md_file.name.startswith(today):
+                return True
+            if mtime.strftime("%Y-%m-%d") == today:
+                return True
 
     return False
 
 
-def conversation_mentions_plan(hook_input: dict) -> bool:
-    """Check if the conversation transcript mentions plan-related activity."""
+def conversation_mentions_plan(hook_input: dict) -> tuple[bool, str | None]:
+    """Check if the conversation transcript mentions plan-related activity.
+
+    Returns (mentions_plan, earliest_plan_timestamp).
+    """
     transcript = hook_input.get("transcript", [])
     if not transcript:
-        return False
+        return False, None
 
     plan_keywords = [
         "EnterPlanMode", "ExitPlanMode", "plan mode",
@@ -87,46 +114,65 @@ def conversation_mentions_plan(hook_input: dict) -> bool:
         "quality_reports/plans/",
     ]
 
-    recent = transcript[-5:] if len(transcript) >= 5 else transcript
+    earliest_ts = None
+    found = False
+
+    # Check last 10 messages for plan-related content
+    recent = transcript[-10:] if len(transcript) >= 10 else transcript
     for msg in recent:
         content = ""
+        msg_ts = None
         if isinstance(msg, dict):
             content = str(msg.get("content", ""))
+            msg_ts = msg.get("timestamp")
         elif isinstance(msg, str):
             content = msg
 
         for keyword in plan_keywords:
             if keyword.lower() in content.lower():
-                return True
+                found = True
+                if msg_ts and (earliest_ts is None or msg_ts < earliest_ts):
+                    earliest_ts = msg_ts
+                break
 
-    return False
+    return found, earliest_ts
 
 
 def main():
     hook_input = get_hook_input()
     project_dir = hook_input.get("cwd", "")
+    session_id = hook_input.get("session_id", "unknown")
     if not project_dir:
         sys.exit(0)
 
     state_dir = get_session_dir()
-    state_path = state_dir / "plan-reminder-state.json"
+    state_path = get_state_path(state_dir, session_id)
     state = load_state(state_path)
 
     # If already reminded this session, don't block again
     if state.get("reminded", False):
         sys.exit(0)
 
-    # If a plan file was saved today, everything is fine
-    if has_plan_file_today(project_dir):
+    # Check if the conversation involved plan-related activity
+    mentions_plan, plan_ts = conversation_mentions_plan(hook_input)
+    if not mentions_plan:
+        sys.exit(0)
+
+    # Record when plan mode was first detected in this session
+    if not state.get("plan_mode_entered_at") and plan_ts:
+        state["plan_mode_entered_at"] = plan_ts
+        save_state(state_path, state)
+
+    # Check if a plan file was created/modified AFTER plan mode was entered
+    after_ts = state.get("plan_mode_entered_at") or plan_ts
+    if find_plan_file_after(project_dir, after_ts):
+        # Plan was saved — clear state for this session
         state["reminded"] = False
+        state["plan_mode_entered_at"] = None
         save_state(state_path, state)
         sys.exit(0)
 
-    # Check if the conversation involved plan-related activity
-    if not conversation_mentions_plan(hook_input):
-        sys.exit(0)
-
-    # Plan was discussed but not saved — remind once
+    # Plan was discussed but not saved — remind once per session
     today = datetime.now().strftime("%Y-%m-%d")
     state["reminded"] = True
     save_state(state_path, state)

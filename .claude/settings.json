@@ -2,7 +2,6 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "showThinkingSummaries": true,
   "permissions": {
-    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(git status *)",
       "Bash(git diff *)",
@@ -46,9 +45,11 @@
       "Bash(gs *)",
       "Bash(pdftk *)",
       "Bash(mkdir *)",
-      "Bash(npx *)",
-      "Bash(npm *)",
-      "Bash(lit *)"
+      "Bash(npx -y @steipete/oracle *)",
+      "Bash(npx -y @llamaindex/liteparse *)",
+      "Bash(lit parse *)",
+      "Bash(lit screenshot *)",
+      "Bash(lit batch-parse *)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -104,6 +105,11 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/bash-safety.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/enforce-isolation.sh",
             "timeout": 5
           }
         ]
