@@ -34,6 +34,7 @@
 ├── Slides/                      # Beamer .tex files
 ├── Quarto/                      # RevealJS .qmd files + theme
 ├── docs/                        # GitHub Pages (auto-generated)
+├── guide/                       # Workflow guide (Quarto source)
 ├── scripts/                     # Utility scripts + R code
 ├── quality_reports/             # Plans, session logs, merge reports
 ├── explorations/                # Research sandbox (see rules)

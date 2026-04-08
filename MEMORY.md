@@ -39,7 +39,7 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 
 [LEARN:files] Specifications go in `quality_reports/specs/YYYY-MM-DD_description.md`, not scattered in root or other directories. Maintains structure.
 
-[LEARN:files] Templates belong in `templates/` directory with descriptive names. Currently have: session-log.md, quality-report.md, exploration-readme.md, archive-readme.md, requirements-spec.md, constitutional-governance.md.
+[LEARN:files] Templates belong in `templates/` directory with descriptive names. Currently have: session-log.md, quality-report.md, exploration-readme.md, archive-readme.md, requirements-spec.md, constitutional-governance.md, skill-template.md, research-program.md.
 
 ## Constitutional Governance
 
@@ -97,7 +97,7 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 
 ## Anthropic Best Practices
 
-[LEARN:anthropic] Keep CLAUDE.md under ~100 lines. Domain knowledge belongs in skills (loaded on-demand) not CLAUDE.md (loaded every session). Boris Cherny tests: "Would removing this line cause mistakes?"
+[LEARN:anthropic] Keep CLAUDE.md under ~150 lines. Domain knowledge belongs in skills (loaded on-demand) not CLAUDE.md (loaded every session). Boris Cherny tests: "Would removing this line cause mistakes?"
 
 [LEARN:anthropic] Use `context: fork` on investigation skills (lit-review, research-ideation, review-paper) to prevent context pollution. Use `effort: max` on complex analytical skills.
 

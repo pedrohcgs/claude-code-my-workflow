@@ -543,10 +543,12 @@ Rules are markdown files in `.claude/rules/` that Claude loads automatically. Th
 
 ```
 .claude/rules/
-├── plan-first-workflow.md       # ~83 lines — plan before you build
-├── orchestrator-protocol.md     # ~42 lines — contractor mode loop
-├── session-logging.md           # ~23 lines — three logging triggers
-└── meta-governance.md           # ~251 lines — template vs working project
+├── plan-first-workflow.md         # ~100 lines — plan before you build
+├── orchestrator-protocol.md       # ~42 lines — contractor mode loop
+├── session-logging.md             # ~23 lines — three logging triggers
+├── meta-governance.md             # ~251 lines — template vs working project
+├── pipeline-isolation.md          # ~50 lines — critics never create
+└── inter-agent-communication.md   # ~30 lines — mailbox protocol
 ```
 
 **Path-scoped rules** load only when relevant:
@@ -846,6 +848,18 @@ Claude Code lets you control how deeply it reasons about each task. Higher effor
 ## Composing Effort with Model Choice
 
 Effort levels compose with model selection for fine-grained cost control. For example, `Haiku + high effort` costs less than `Opus + low effort` but may produce comparable results for bounded tasks like formatting. Use `Opus + max` only for tasks that genuinely require deep multi-step reasoning --- complex proofs, intricate data pipeline debugging, or comprehensive paper critique.
+:::
+
+::: {.callout-warning}
+## Effort Regression Fix
+
+If Claude seems to skip research and jump straight to editing, the default `medium` effort may not be enough for complex multi-file work. Three fixes:
+
+1. `/effort high` (or `/effort max` on Opus for hard debugging)
+2. Add `"showThinkingSummaries": true` to `settings.json` --- this lets you verify Claude is actually thinking before acting
+3. Add "Research the codebase before editing. Never change code you haven't read." to your `CLAUDE.md` Core Principles
+
+The template already includes `showThinkingSummaries: true` in `settings.json` and the research-before-editing principle in `CLAUDE.md`. Skills like `/data-analysis` use `effort: max` in their frontmatter to ensure thorough analysis.
 :::
 
 ## Memory --- Cross-Session Persistence {#memory---cross-session-persistence}
@@ -1365,7 +1379,7 @@ Like handing your draft to a colleague who wasn't in the room when you wrote it.
 
 ## Research Workflows {#sec-research-workflows}
 
-Patterns 1--8 apply broadly, with course materials as the primary example. The next four patterns are designed for **research projects** --- papers, simulations, and empirical analysis --- where the rhythm is different: ideas are uncertain, experiments may fail, and code is often written to answer a question rather than to ship. Patterns 13--14 then extend the foundation to reproducibility standards and presentation rhetoric.
+Patterns 1--8 apply broadly, with course materials as the primary example. Patterns 9--12 are designed for **research projects** --- papers, simulations, and empirical analysis --- where the rhythm is different: ideas are uncertain, experiments may fail, and code is often written to answer a question rather than to ship. Patterns 13--15 extend the foundation to reproducibility standards, presentation rhetoric, and multi-audit protocols. Patterns 16--19 integrate **external tools and advanced automation**: second-opinion reasoning (Oracle), PDF preprocessing (LiteParse), autonomous experiment loops (autoresearch), and pipeline isolation for review integrity.
 
 ### Pattern 9: Parallel Agents for Research Tasks {#pattern-9-parallel-agents}
 
@@ -1595,9 +1609,9 @@ For example, translating Lecture 5 from Beamer to Quarto involves extracting Tik
 
 For most novice users, working directly on main with frequent commits is simpler and sufficient. Use worktrees when the benefits of isolation outweigh the added complexity.
 
-## Advanced Patterns: Reproducibility and Presentation Design {#sec-beyond-slides}
+## Advanced Patterns {#sec-beyond-slides}
 
-The patterns above use slides as the primary example, but the infrastructure is domain-agnostic. The next two patterns address dimensions no existing pattern covers: reproducibility standards and presentation rhetoric.
+The patterns above use slides and research as primary examples, but the infrastructure is domain-agnostic. The following patterns address reproducibility, presentation design, multi-audit protocols, external tool integration, and pipeline quality assurance.
 
 ### Pattern 13: Reproducibility & Replication Compliance {#pattern-13-reproducibility}
 
@@ -1782,13 +1796,21 @@ Oracle bundles your project context + prompt into a single rich query. Browser m
 
 ### Pattern 17: PDF Preprocessing Pipeline {#pattern-17-pdf-preprocessing}
 
-Before feeding papers to `/lit-review`, `/review-paper`, or `/oracle`, preprocess them with LiteParse:
+Before feeding papers to `/lit-review`, `/review-paper`, or `/oracle`, preprocess them with [LiteParse](https://github.com/run-llama/liteparse) --- a local-first PDF parser that runs entirely on your machine (no data leaves your computer).
+
+**Install:** `npm i -g @llamaindex/liteparse` (requires Node.js) or `brew install llamaindex-liteparse`
 
 ```
 /parse-paper master_supporting_docs/angrist_pischke_2009.pdf
 ```
 
-Use text extraction for prose and references. Use screenshots for tables and equations (text extraction mangles math). Batch-process your entire reading list for a literature review.
+**Text extraction** works well for prose, abstracts, and references from modern digital PDFs. **Screenshots** (generated via `lit screenshot paper.pdf --dpi 300`) are better for tables, figures, and equations --- text extraction mangles mathematical notation. For a full literature review, batch-process your reading list:
+
+```bash
+lit batch-parse ./reading_list/ ./parsed_texts/ --recursive --extension .pdf
+```
+
+The parsed output goes to `/tmp/` by default (exploratory, not committed). Move to `master_supporting_docs/parsed/` if you want to keep it.
 
 ### Pattern 18: Autonomous Research Loops (Autoresearch) {#pattern-18-autoresearch}
 
@@ -2022,7 +2044,7 @@ The template includes an example Quarto theme SCSS file. To customize:
 
 ## Step 4: Creating Custom Skills {#sec-create-skills}
 
-The guide includes 22 [skills](#skills---reusable-slash-commands) for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.
+The template includes 28 [skills](#skills---reusable-slash-commands) for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.
 
 ### When to Create a Skill
 
@@ -2283,10 +2305,12 @@ Claude Code supports **plugins** --- bundled collections of skills, agents, hook
 
 | Rule | File | Purpose |
 |------|------|---------|
-| Plan-First Workflow | `plan-first-workflow.md` | Plan mode + context preservation |
+| Plan-First Workflow | `plan-first-workflow.md` | Plan mode + deep comprehension + context preservation |
 | Orchestrator Protocol | `orchestrator-protocol.md` | Contractor mode loop |
 | Session Logging | `session-logging.md` | Three logging triggers |
 | Meta-Governance | `meta-governance.md` | Template vs working project distinctions |
+| Pipeline Isolation | `pipeline-isolation.md` | Critics never create, creators never self-score |
+| Inter-Agent Communication | `inter-agent-communication.md` | Mailbox protocol for agent coordination |
 
 **Path-scoped** (load only when working on matching files):
 
