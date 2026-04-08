@@ -13,6 +13,7 @@
 
 ## Core Principles
 
+- **Research before editing** -- never change code you haven't read; explore the codebase first
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
 - **Verify after** -- compile/render and confirm output at the end of every task
 - **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
@@ -33,6 +34,7 @@
 ├── Slides/                      # Beamer .tex files
 ├── Quarto/                      # RevealJS .qmd files + theme
 ├── docs/                        # GitHub Pages (auto-generated)
+├── guide/                       # Workflow guide (Quarto source)
 ├── scripts/                     # Utility scripts + R code
 ├── quality_reports/             # Plans, session logs, merge reports
 ├── explorations/                # Research sandbox (see rules)
@@ -96,6 +98,23 @@ python scripts/quality_score.py Quarto/file.qmd
 | `/learn [skill-name]` | Extract discovery into persistent skill |
 | `/context-status` | Show session health + context usage |
 | `/deep-audit` | Repository-wide consistency audit |
+| `/oracle [question]` | Cross-validate with ChatGPT Pro via Oracle CLI |
+| `/parse-paper [file]` | Extract structured content from academic PDFs |
+| `/ship [description]` | One-command commit-push-PR-merge |
+| `/simulation-study [name]` | Monte Carlo simulation scaffold |
+| `/mailbox` | Structured inter-agent communication |
+| `/progress` | Visual progress tracking |
+
+---
+
+## Compaction Directives
+
+When context is compacted, preserve:
+- Current plan path and status
+- Active task description and progress
+- Key decisions made this session
+- Any `[LEARN]` entries not yet saved to MEMORY.md
+- List of files modified in this session
 
 ---
 

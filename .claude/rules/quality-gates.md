@@ -65,3 +65,14 @@ Save to `quality_reports/merges/YYYY-MM-DD_[branch-name].md`.
 | Point estimates | [e.g., 1e-6] | [Numerical precision] |
 | Standard errors | [e.g., 1e-4] | [MC variability] |
 | Coverage rates | [e.g., +/- 0.01] | [MC with B reps] |
+
+## Tolerance Integrity
+
+**NEVER relax tolerances to make failing tests pass.** This is the most common form of false convergence in computational research.
+
+If a test fails against its tolerance:
+1. Investigate the root cause (code bug, numerical instability, wrong specification)
+2. Fix the underlying issue
+3. Document why the original tolerance was correct
+
+A test that passes only with relaxed tolerances has not actually passed. Relaxing tolerances to achieve a passing result is validation fraud -- it hides real problems behind artificial agreement.
