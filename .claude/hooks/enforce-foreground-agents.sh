@@ -4,22 +4,19 @@
 # Background agents cannot prompt for user permissions, causing silent failures.
 # This hook denies any Agent tool call with run_in_background=true.
 #
+# Fails CLOSED on errors (consistent with other PreToolUse enforcement hooks).
+#
 # Hook event: PreToolUse (matcher: "Agent")
 
-trap 'jq -n "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"enforce-foreground-agents hook encountered an unexpected error\"}}" 2>/dev/null; exit 0' ERR
+trap 'echo "BLOCKED by enforce-foreground-agents: unexpected error in safety check" >&2; exit 2' ERR
 
 INPUT=$(cat)
 
 RUN_IN_BG=$(echo "$INPUT" | jq -r '.tool_input.run_in_background // empty' 2>/dev/null) || RUN_IN_BG=""
 
 if [ "$RUN_IN_BG" = "true" ]; then
-  jq -n '{
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Background agents are not permitted. Background agents cannot prompt for user permissions, causing silent tool call failures. Remove run_in_background or set it to false."
-    }
-  }'
+    echo "BLOCKED by enforce-foreground-agents: Background agents are not permitted. Background agents cannot prompt for user permissions, causing silent tool call failures. Remove run_in_background or set it to false." >&2
+    exit 2
 fi
 
 exit 0

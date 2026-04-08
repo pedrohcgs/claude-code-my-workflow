@@ -2322,8 +2322,8 @@ Claude Code supports **plugins** --- bundled collections of skills, agents, hook
 | Output scanner | PostToolUse (command) | `.claude/hooks/output-scanner.sh` |
 | Audit log | PostToolUse (command) | `.claude/hooks/audit-log.sh` |
 | Pipeline isolation | PreToolUse[Edit\|Write] (command) | `.claude/hooks/enforce-isolation.sh` |
-| Foreground agents | PreToolUse[Agent] (command) | `.claude/hooks/foreground-agents.sh` |
-| Plan persistence | Stop (command) | `.claude/hooks/plan-persistence.sh` |
+| Foreground agents | PreToolUse[Agent] (command) | `.claude/hooks/enforce-foreground-agents.sh` |
+| Plan persistence | Stop (command) | `.claude/hooks/plan-reminder.py` |
 
 **Additional hook events** available in Claude Code (not used in this template but available for custom hooks):
 

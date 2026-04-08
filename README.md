@@ -226,10 +226,17 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 | `skill-template.md` | Academic skill creation template with domain-specific examples |
 | `research-program.md` | Karpathy-style constraint document for autonomous research loops |
 
-### Hooks (`.claude/hooks/`)
+### 13 Hooks (`.claude/hooks/`)
 
 | Hook | What It Does |
 |------|-------------|
+| `notify.sh` | Cross-platform desktop notifications |
+| `protect-files.sh` | Blocks accidental edits to protected files |
+| `pre-compact.py` | Saves state before context compression |
+| `post-compact-restore.py` | Restores state after compression |
+| `context-monitor.py` | Progressive context usage warnings |
+| `verify-reminder.py` | Reminds to compile/render after edits |
+| `log-reminder.py` | Blocks stop if session log not updated |
 | `bash-safety.sh` | Blocks dangerous bash commands (rm -rf, force push, sudo) |
 | `output-scanner.sh` | Warns if tool output contains leaked secrets |
 | `audit-log.sh` | Append-only JSONL audit trail |
@@ -239,7 +246,7 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 
 ### Security Layer
 
-Defense-in-depth security: static deny list (17 patterns in settings.json) + dynamic bash-safety hook + post-execution secret scanning + append-only audit trail.
+Defense-in-depth security: static deny list (17 patterns in settings.json) + dynamic bash-safety hook + post-execution secret scanning + append-only audit trail. Safety hooks fail closed (block on error), monitoring hooks fail open.
 
 </details>
 
