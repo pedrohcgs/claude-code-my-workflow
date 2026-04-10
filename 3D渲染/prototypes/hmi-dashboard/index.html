@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HMI 三维组态监控面板</title>
+  <meta name="description" content="基于 CAD 线稿的三维交互式 HMI 仪表盘原型" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+        }
+      }
+    </script>
+</head>
+
+<body>
+  <div class="page-shell">
+    <section class="embed-shell">
+      <div class="hmi-dashboard" id="hmiDashboard">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+          <header class="sidebar-brand">
+            <svg class="sidebar-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <div>
+              <h1 class="sidebar-title">组态监控</h1>
+              <p class="sidebar-subtitle">HMI Dashboard</p>
+            </div>
+          </header>
+
+          <nav class="sidebar-stats">
+            <div class="stat-card">
+              <span class="stat-label">设备在线</span>
+              <span class="stat-value">124</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">待办告警</span>
+              <span class="stat-value stat-warn">3</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">今日吞吐</span>
+              <span class="stat-value">8,942</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">管线路段</span>
+              <span class="stat-value stat-ok" id="routeCount">—</span>
+            </div>
+          </nav>
+
+          <section class="sidebar-detail" id="detailPanel">
+            <p class="detail-eyebrow">当前选中</p>
+            <h2 class="detail-title" id="objectTitle">全景视图</h2>
+            <p class="detail-copy" id="objectCopy">点击右侧 3D 模型中的高亮区块或管线节点，此处将显示对应说明信息。</p>
+            <button class="detail-action" id="openDrawerBtn" type="button">展开对象数据</button>
+          </section>
+
+          <section class="route-map-card">
+            <p class="detail-eyebrow">路线图与文字</p>
+            <img class="route-map-image" src="./layer_routes.png" alt="提取后的路线图层" />
+            <ul class="route-map-list" id="routeLegend"></ul>
+          </section>
+
+          <footer class="sidebar-footer">
+            <p>Container-ready · On-Demand Rendering · ResizeObserver</p>
+          </footer>
+        </aside>
+
+        <!-- MAIN VIEWER -->
+        <main class="main-viewer" id="mainViewer">
+          <section class="viewer-container" id="viewer">
+            <canvas id="sceneCanvas"></canvas>
+
+            <header class="viewer-hud">
+              <div>
+                <p class="hud-eyebrow">三维空间组态 &middot; Route-A 管线数据叠加</p>
+                <h2 class="hud-title" id="viewer-title">车间全景模型</h2>
+              </div>
+              <button class="hud-reset" type="button" id="resetView">恢复默认机位</button>
+            </header>
+
+            <aside class="data-drawer" id="dataDrawer" aria-live="polite" aria-label="对象详细数据">
+              <header class="drawer-header">
+                <div>
+                  <p class="detail-eyebrow">对象数据</p>
+                  <h3 class="drawer-title" id="drawerTitle">未选中对象</h3>
+                </div>
+                <button class="drawer-close" id="drawerCloseBtn" type="button">关闭</button>
+              </header>
+              <div class="drawer-body" id="drawerBody">
+                <p class="drawer-empty">点击对象后会在这里显示更多数据。</p>
+              </div>
+            </aside>
+
+            <p class="viewer-loading" id="loadingState">装载 3D 物理资产与管线数据中…</p>
+          </section>
+        </main>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>

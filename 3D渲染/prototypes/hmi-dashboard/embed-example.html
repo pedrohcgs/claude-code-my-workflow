@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HMI Container Embed Demo</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+      }
+    }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #0b1017;
+      font-family: "Segoe UI", "PingFang SC", sans-serif;
+      color: #d7e1ea;
+    }
+
+    .demo-shell {
+      width: min(1280px, 95vw);
+      height: min(760px, 88vh);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 24px 38px rgba(0, 0, 0, 0.42);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="demo-shell" id="embedContainer"></div>
+
+  <script type="module">
+    import { mountHMIDashboard } from "./main.js";
+
+    const app = mountHMIDashboard(document.getElementById("embedContainer"));
+    window.embedApp = app;
+  </script>
+</body>
+
+</html>
