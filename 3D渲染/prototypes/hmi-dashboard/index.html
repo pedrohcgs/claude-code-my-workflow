@@ -63,7 +63,31 @@
 
           <section class="route-map-card">
             <p class="detail-eyebrow">路线图与文字</p>
-            <img class="route-map-image" src="./layer_routes.png" alt="提取后的路线图层" />
+            <div class="route-mini-map" aria-label="手工建模路线示意图">
+              <svg viewBox="0 0 360 190" role="img" aria-label="路线箭头与站点文字">
+                <defs>
+                  <marker id="routeArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                    <path d="M0,0 L8,4 L0,8 z" fill="#37c6ff"></path>
+                  </marker>
+                </defs>
+                <rect x="1.5" y="1.5" width="357" height="187" rx="8" fill="#122030" stroke="#24526b"></rect>
+                <path d="M32 130 L108 130 L108 92 L195 92" stroke="#37c6ff" stroke-width="4" fill="none" marker-end="url(#routeArrow)"></path>
+                <path d="M195 92 L258 92 L300 116 L334 126" stroke="#37c6ff" stroke-width="4" fill="none" marker-end="url(#routeArrow)"></path>
+                <path d="M195 92 L160 112 L126 112" stroke="#37c6ff" stroke-width="4" fill="none" marker-end="url(#routeArrow)"></path>
+                <path d="M108 152 L108 130 L134 108 L195 92" stroke="#37c6ff" stroke-width="4" fill="none" marker-end="url(#routeArrow)"></path>
+                <path d="M126 112 L172 126 L258 126 L334 126" stroke="#37c6ff" stroke-width="4" fill="none" marker-end="url(#routeArrow)"></path>
+                <circle cx="32" cy="130" r="10" fill="#1cb6df"></circle>
+                <circle cx="108" cy="152" r="10" fill="#1cb6df"></circle>
+                <circle cx="195" cy="92" r="10" fill="#1cb6df"></circle>
+                <circle cx="160" cy="112" r="10" fill="#1cb6df"></circle>
+                <circle cx="334" cy="126" r="10" fill="#1cb6df"></circle>
+                <text x="24" y="82">给煤机系统</text>
+                <text x="74" y="174">#1角二次风门、油枪</text>
+                <text x="214" y="80">吹灰器</text>
+                <text x="150" y="138">减温水系统</text>
+                <text x="282" y="150">脱硝系统</text>
+              </svg>
+            </div>
             <ul class="route-map-list" id="routeLegend"></ul>
           </section>
 

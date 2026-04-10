@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TRACE_HEIGHT, TRACE_SEGMENTS, TRACE_WIDTH } from "./map-trace-data.js";
-import { ROUTE_IMG_WIDTH, ROUTE_IMG_HEIGHT, ROUTE_PATHS, ROUTE_NODES } from "./route-data.js";
+import { MINI_ROUTE_LABELS, ROUTE_LINKS, ROUTE_NODES } from "./route-data.js";
 
 const DASHBOARD_TEMPLATE = `
   <div class="hmi-dashboard">
@@ -73,14 +73,6 @@ function cadPx(x, y, elev = 0.08) {
   );
 }
 
-function routePx(x, y, elev = 0.38) {
-  return new THREE.Vector3(
-    (x / ROUTE_IMG_WIDTH - 0.5) * MAP_W,
-    elev,
-    (0.5 - y / ROUTE_IMG_HEIGHT) * MAP_D
-  );
-}
-
 function pctToWorld(px, py, elev = 0.22) {
   return cadPx((px / 100) * TRACE_WIDTH, (py / 100) * TRACE_HEIGHT, elev);
 }
@@ -125,6 +117,37 @@ function numberLabel(text, position, scene, options = {}) {
   );
   sprite.position.copy(position);
   sprite.scale.set(options.width || 0.5, options.height || 0.5, 1);
+  scene.add(sprite);
+}
+
+function routeTag(text, position, scene, options = {}) {
+  const element = document.createElement("canvas");
+  element.width = 512;
+  element.height = 128;
+  const context = element.getContext("2d");
+
+  context.clearRect(0, 0, 512, 128);
+  context.fillStyle = "rgba(14, 28, 40, 0.82)";
+  context.fillRect(10, 20, 492, 88);
+  context.strokeStyle = "rgba(77, 210, 255, 0.72)";
+  context.lineWidth = 3;
+  context.strokeRect(10, 20, 492, 88);
+  context.fillStyle = "#8ee8ff";
+  context.font = "700 34px Segoe UI, PingFang SC, sans-serif";
+  context.textBaseline = "middle";
+  context.fillText(text, 28, 64);
+
+  const texture = new THREE.CanvasTexture(element);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const sprite = new THREE.Sprite(
+    new THREE.SpriteMaterial({
+      map: texture,
+      transparent: true,
+      depthTest: false,
+    })
+  );
+  sprite.position.copy(position);
+  sprite.scale.set(options.width || 1.85, options.height || 0.42, 1);
   scene.add(sprite);
 }
 
@@ -346,49 +369,54 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
   }
 
   const routeLineMat = new THREE.MeshStandardMaterial({
-    color: 0x0077b6,
-    roughness: 0.28,
-    metalness: 0.35,
+    color: 0x1e90ff,
+    roughness: 0.24,
+    metalness: 0.36,
     transparent: true,
-    opacity: 0.82,
-    emissive: 0x0077b6,
-    emissiveIntensity: 0.55,
+    opacity: 0.9,
+    emissive: 0x1e90ff,
+    emissiveIntensity: 0.62,
   });
 
   const routeNodeMat = new THREE.MeshStandardMaterial({
-    color: 0x00b4d8,
+    color: 0x22c1e8,
     roughness: 0.2,
     metalness: 0.4,
     transparent: true,
-    opacity: 0.88,
-    emissive: 0x00b4d8,
-    emissiveIntensity: 0.6,
+    opacity: 0.92,
+    emissive: 0x22c1e8,
+    emissiveIntensity: 0.64,
   });
 
-  function buildRouteTextureLayer() {
-    const loader = new THREE.TextureLoader();
-    loader.load("./layer_routes.png", (texture) => {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      const routeLayer = new THREE.Mesh(
-        new THREE.PlaneGeometry(MAP_W, MAP_D),
-        new THREE.MeshBasicMaterial({
-          map: texture,
-          transparent: true,
-          opacity: 0.25,
-          depthWrite: false,
-        })
+  function addFlowArrows(points, color) {
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const start = points[index];
+      const end = points[index + 1];
+      const direction = new THREE.Vector3().subVectors(end, start);
+      const segmentLength = direction.length();
+      if (segmentLength < 0.45) {
+        continue;
+      }
+      direction.normalize();
+      const origin = start.clone().lerp(end, 0.62);
+      origin.y += 0.02;
+      const arrow = new THREE.ArrowHelper(
+        direction,
+        origin,
+        Math.min(0.62, segmentLength * 0.45),
+        color,
+        0.24,
+        0.14
       );
-      routeLayer.rotation.x = -Math.PI / 2;
-      routeLayer.position.y = 0.096;
-      scene.add(routeLayer);
-      invalidate();
-    });
+      scene.add(arrow);
+    }
   }
 
   function buildRouteTubes() {
+    const nodeMap = new Map(ROUTE_NODES.map((node) => [node.id, node]));
     let count = 0;
-    ROUTE_PATHS.filter((path) => path.length >= 3).forEach((path) => {
-      const worldPoints = path.map(([x, y]) => routePx(x, y, 0.38));
+    ROUTE_LINKS.forEach((link) => {
+      const worldPoints = link.points.map(([x, y]) => pctToWorld(x, y, 0.4));
       const xs = worldPoints.map((point) => point.x);
       const zs = worldPoints.map((point) => point.z);
       const span = Math.max(
@@ -403,19 +431,25 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
         const curve = new THREE.CatmullRomCurve3(worldPoints, false, "catmullrom", 0.3);
         const geometry = new THREE.TubeGeometry(
           curve,
-          Math.max(24, path.length * 4),
-          0.032,
-          8,
+          Math.max(48, worldPoints.length * 20),
+          0.043,
+          12,
           false
         );
         const tube = new THREE.Mesh(geometry, routeLineMat.clone());
         tube.userData.haloSize = 0.8;
+        const fromNode = nodeMap.get(link.from);
+        const toNode = nodeMap.get(link.to);
         registerClickable(
           tube,
-          `管线路段 #${count + 1}`,
-          `该路段由 ${path.length} 个控制点生成，覆盖跨度 ${span.toFixed(1)}m。`,
+          `${link.name} (${link.id})`,
+          `流向：${fromNode?.label || link.from} → ${toNode?.label || link.to}，覆盖跨度 ${span.toFixed(1)}m。`,
           "route"
         );
+        addFlowArrows(worldPoints, 0x3ac7ff);
+        const middle = worldPoints[Math.floor(worldPoints.length / 2)].clone();
+        middle.y = 0.86;
+        routeTag(link.name, middle, scene, { width: 1.72, height: 0.34 });
         count += 1;
       } catch {
         // Skip degenerate curves.
@@ -425,21 +459,21 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
   }
 
   function buildRouteNodes() {
-    ROUTE_NODES.forEach(([id, px, py, label]) => {
+    ROUTE_NODES.forEach((nodeMeta) => {
       const node = new THREE.Mesh(
         new THREE.CylinderGeometry(0.18, 0.18, 0.5, 32),
         routeNodeMat.clone()
       );
-      const position = routePx(px, py, 0);
+      const position = pctToWorld(nodeMeta.x, nodeMeta.y, 0);
       node.position.set(position.x, 0.33, position.z);
       node.userData.haloSize = 0.45;
       registerClickable(
         node,
-        `站点 ${id} · ${label}`,
-        `编号 ${id}，归属区域：${label}。`,
+        `站点 ${nodeMeta.id} · ${nodeMeta.label}`,
+        `编号 ${nodeMeta.id}，归属区域：${nodeMeta.label}。`,
         "route"
       );
-      numberLabel(String(id), routePx(px, py, 0.75), scene, {
+      numberLabel(String(nodeMeta.id), pctToWorld(nodeMeta.x, nodeMeta.y, 0.75), scene, {
         width: 0.4,
         height: 0.4,
       });
@@ -491,7 +525,6 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
 
   buildLinework(0.08, 0x3a4248, 0.25);
   buildLinework(0.145, 0x8b9298, 0.65);
-  buildRouteTextureLayer();
   const routeCount = buildRouteTubes();
   buildRouteNodes();
 
@@ -531,8 +564,7 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
     routeCountEl.textContent = String(routeCount);
   }
   if (routeLegendEl) {
-    routeLegendEl.innerHTML = ROUTE_NODES.slice(0, 4)
-      .map((node) => `<li>站点 ${node[0]}：${node[3]}</li>`)
+    routeLegendEl.innerHTML = MINI_ROUTE_LABELS.map((text) => `<li>${text}</li>`)
       .join("");
   }
   loadingEl.classList.add("is-hidden");

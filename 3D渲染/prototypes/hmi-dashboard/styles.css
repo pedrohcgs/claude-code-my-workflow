@@ -172,13 +172,24 @@ body {
   cursor: pointer;
 }
 
-.route-map-image {
+.route-mini-map {
   margin-top: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.route-mini-map svg {
   display: block;
   width: 100%;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.2);
+  height: auto;
+}
+
+.route-mini-map text {
+  fill: #9fe6ff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 .route-map-list {
