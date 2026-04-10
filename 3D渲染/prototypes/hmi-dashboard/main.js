@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TRACE_HEIGHT, TRACE_SEGMENTS, TRACE_WIDTH } from "./map-trace-data.js";
-import { MINI_ROUTE_LABELS, ROUTE_LINKS, ROUTE_NODES } from "./route-data.js";
+import { MINI_ROUTE_LABELS, ROUTE_LINKS, ROUTE_NODES, ROUTE_SCENE_LABELS } from "./route-data.js";
 
 const DASHBOARD_TEMPLATE = `
   <div class="hmi-dashboard">
@@ -145,21 +145,38 @@ function numberLabel(text, position, scene, options = {}) {
 }
 
 function routeTag(text, position, scene, options = {}) {
+  const vertical = Boolean(options.vertical);
+  const fontSize = options.fontSize || (vertical ? 58 : 54);
   const element = document.createElement("canvas");
-  element.width = 512;
-  element.height = 128;
+  const glyphCount = [...text].length;
+  element.width = vertical ? 256 : Math.max(520, glyphCount * 62 + 80);
+  element.height = vertical ? Math.max(420, glyphCount * 64 + 68) : 170;
   const context = element.getContext("2d");
 
-  context.clearRect(0, 0, 512, 128);
-  context.fillStyle = "rgba(14, 28, 40, 0.82)";
-  context.fillRect(10, 20, 492, 88);
-  context.strokeStyle = "rgba(77, 210, 255, 0.72)";
-  context.lineWidth = 3;
-  context.strokeRect(10, 20, 492, 88);
-  context.fillStyle = "#8ee8ff";
-  context.font = "700 34px Segoe UI, PingFang SC, sans-serif";
+  context.clearRect(0, 0, element.width, element.height);
+  context.font = `700 ${fontSize}px Segoe UI, PingFang SC, Microsoft YaHei, sans-serif`;
+  context.lineJoin = "round";
+  context.strokeStyle = "rgba(0, 52, 130, 0.92)";
+  context.lineWidth = 14;
+  context.fillStyle = "#8be8ff";
   context.textBaseline = "middle";
-  context.fillText(text, 28, 64);
+  context.textAlign = "center";
+
+  if (vertical) {
+    const chars = [...text];
+    const step = (element.height - 52) / Math.max(chars.length, 1);
+    chars.forEach((char, index) => {
+      const x = element.width * 0.5;
+      const y = 28 + step * (index + 0.5);
+      context.strokeText(char, x, y);
+      context.fillText(char, x, y);
+    });
+  } else {
+    const x = element.width * 0.5;
+    const y = element.height * 0.56;
+    context.strokeText(text, x, y);
+    context.fillText(text, x, y);
+  }
 
   const texture = new THREE.CanvasTexture(element);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -171,8 +188,13 @@ function routeTag(text, position, scene, options = {}) {
     })
   );
   sprite.position.copy(position);
-  sprite.scale.set(options.width || 1.85, options.height || 0.42, 1);
+  sprite.scale.set(
+    options.width || (vertical ? 0.38 : 1.8),
+    options.height || (vertical ? 1.52 : 0.3),
+    1
+  );
   scene.add(sprite);
+  return sprite;
 }
 
 function formatNumber(value, digits = 1) {
@@ -364,9 +386,30 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
     return mesh;
   }
 
-  function buildLinework(elev, color, opacity) {
-    const vertices = new Float32Array(TRACE_SEGMENTS.length * 6);
-    TRACE_SEGMENTS.forEach(([x1, y1, x2, y2], index) => {
+  function buildLinework(elev, color, opacity, options = {}) {
+    const minLengthPx = options.minLengthPx || 0;
+    const maxSegments = options.maxSegments || TRACE_SEGMENTS.length;
+
+    const candidates = TRACE_SEGMENTS.filter(([x1, y1, x2, y2]) => {
+      const length = Math.hypot(x2 - x1, y2 - y1);
+      return length >= minLengthPx;
+    });
+
+    if (!candidates.length) {
+      return;
+    }
+
+    const stride = Math.max(1, Math.ceil(candidates.length / maxSegments));
+    const selected = [];
+    for (let index = 0; index < candidates.length; index += stride) {
+      selected.push(candidates[index]);
+      if (selected.length >= maxSegments) {
+        break;
+      }
+    }
+
+    const vertices = new Float32Array(selected.length * 6);
+    selected.forEach(([x1, y1, x2, y2], index) => {
       const a = cadPx(x1, y1, elev);
       const b = cadPx(x2, y2, elev);
       const offset = index * 6;
@@ -471,9 +514,6 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
           "route"
         );
         addFlowArrows(worldPoints, 0x3ac7ff);
-        const middle = worldPoints[Math.floor(worldPoints.length / 2)].clone();
-        middle.y = 0.86;
-        routeTag(link.name, middle, scene, { width: 1.72, height: 0.34 });
         count += 1;
       } catch {
         // Skip degenerate curves.
@@ -500,6 +540,17 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
       numberLabel(String(nodeMeta.id), pctToWorld(nodeMeta.x, nodeMeta.y, 0.75), scene, {
         width: 0.4,
         height: 0.4,
+      });
+    });
+  }
+
+  function buildRouteSceneLabels() {
+    ROUTE_SCENE_LABELS.forEach((meta) => {
+      routeTag(meta.text, pctToWorld(meta.x, meta.y, 1.04), scene, {
+        width: meta.width || 1.4,
+        height: meta.height || 0.3,
+        vertical: meta.vertical,
+        fontSize: meta.fontSize,
       });
     });
   }
@@ -547,10 +598,11 @@ export function mountHMIDashboard(rootOrSelector = "#hmiDashboard") {
   edge.position.y = -0.13;
   scene.add(edge);
 
-  buildLinework(0.08, 0x3a4248, 0.25);
-  buildLinework(0.145, 0x8b9298, 0.65);
+  buildLinework(0.08, 0x38444e, 0.2, { minLengthPx: 44, maxSegments: 900 });
+  buildLinework(0.145, 0x8e98a2, 0.62, { minLengthPx: 92, maxSegments: 480 });
   const routeCount = buildRouteTubes();
   buildRouteNodes();
+  buildRouteSceneLabels();
 
   addZone({
     x: 55,
