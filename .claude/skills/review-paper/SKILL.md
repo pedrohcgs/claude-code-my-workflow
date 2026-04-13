@@ -3,6 +3,7 @@ name: review-paper
 description: Comprehensive manuscript review covering argument structure, econometric specification, citation completeness, and potential referee objections
 argument-hint: "[paper filename in master_supporting_docs/ or path to .tex/.pdf]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Task"]
+context: fork
 ---
 
 # Manuscript Review

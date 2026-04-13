@@ -39,7 +39,7 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 
 [LEARN:files] Specifications go in `quality_reports/specs/YYYY-MM-DD_description.md`, not scattered in root or other directories. Maintains structure.
 
-[LEARN:files] Templates belong in `templates/` directory with descriptive names. Currently have: session-log.md, quality-report.md, exploration-readme.md, archive-readme.md, requirements-spec.md, constitutional-governance.md.
+[LEARN:files] Templates belong in `templates/` directory with descriptive names. Currently have: session-log.md, quality-report.md, exploration-readme.md, archive-readme.md, requirements-spec.md, constitutional-governance.md, skill-template.md, research-program.md.
 
 ## Constitutional Governance
 
@@ -70,3 +70,35 @@ When a mistake is corrected, append a `[LEARN:category]` entry below.
 [LEARN:meta] Dogfooding principles must be enforced: plan-first, spec-then-plan, quality gates, session logs → we follow our own guide.
 
 [LEARN:meta] Template development work (building infrastructure, docs) doesn't create session logs in quality_reports/ → those are for user work (slides, analysis), not meta-work. Keeps template clean for users who fork.
+
+## Security Patterns
+
+[LEARN:security] Defense-in-depth: deny list (static, fast) + hook scripts (dynamic, rich patterns) + output scanner (post-hoc detection). Each layer catches what others miss.
+
+[LEARN:security] Safety hooks should fail CLOSED (exit 2 on error) unlike monitoring hooks which fail OPEN (exit 0). A safety check that crashes should block, not allow.
+
+[LEARN:security] Pipeline isolation (critics never create, creators never self-score) prevents false convergence where a reviewer/fixer finds only easily fixable issues.
+
+## Inter-Agent Patterns
+
+[LEARN:agents] Mailbox protocol (append-only JSONL) gives agents structured communication without polluting quality_reports/ with ad-hoc files. Backward-compatible with existing report files.
+
+[LEARN:agents] Background agents cannot prompt for permissions, causing silent failures. Always enforce foreground-only via hook.
+
+## Research Automation
+
+[LEARN:research] Oracle (steipete/oracle) bridges to ChatGPT Pro for second-opinion on hard problems. Best for plan reviews, theorem proving, structural estimation -- not for iterative applied micro work.
+
+[LEARN:research] LiteParse (run-llama/liteparse) preprocesses PDFs locally. Use text extraction for prose, screenshots for tables/equations. Batch-process reading lists before lit reviews.
+
+[LEARN:research] Karpathy autoresearch pattern: single editable file + single scalar metric + fixed time budget + keep/revert with git. Maps to Monte Carlo simulations in economics.
+
+[LEARN:research] Effort regression fix: use `/effort high` or `max` for complex work. Add `showThinkingSummaries: true` to settings.json. When thinking depth drops, model shifts from research-first to edit-first.
+
+## Anthropic Best Practices
+
+[LEARN:anthropic] Keep CLAUDE.md under ~150 lines. Domain knowledge belongs in skills (loaded on-demand) not CLAUDE.md (loaded every session). Boris Cherny tests: "Would removing this line cause mistakes?"
+
+[LEARN:anthropic] Use `context: fork` on investigation skills (lit-review, research-ideation, review-paper) to prevent context pollution. Use `effort: max` on complex analytical skills.
+
+[LEARN:anthropic] Use `/compact Focus on [topic]` for directed compaction. Add compaction directives to CLAUDE.md so key state survives.

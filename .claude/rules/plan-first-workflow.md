@@ -75,6 +75,23 @@ The pre-compact hook will remind you of this checklist.
 **After Compression:**
 First message should be: "Resuming after compression. Last task: [read most recent plan + git log]. Status: [next step]."
 
+## Deep Comprehension Protocol
+
+**For complex/unfamiliar tasks, demonstrate understanding before specifying.**
+
+Before writing a plan for a task that involves:
+- A new method, package, or tool you haven't used in this project
+- A paper or technique the user referenced
+- Domain-specific conventions you're uncertain about
+
+**Protocol:**
+1. Read the relevant source material (paper, documentation, examples)
+2. State what you understand the method/tool does in your own words
+3. Identify any assumptions or edge cases
+4. Only THEN proceed to write the plan
+
+If anything is unclear, raise HOLD with specific questions rather than proceeding from partial understanding. Plans that look plausible but miss critical details waste more time than asking upfront.
+
 ## Session Recovery
 
 After compression or new session:

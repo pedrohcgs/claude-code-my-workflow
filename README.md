@@ -3,7 +3,7 @@
 > **Work in progress.** This is not meant to be a polished guide for everyone. It's mostly a summary of how I've been using Claude Code for academic work — slides, papers, data analysis, and more. I keep learning new things, and as I do, I keep updating these files. This is just a way for me to share what I've figured out with friends and colleagues.
 
 **Live site:** [psantanna.com/claude-code-my-workflow](https://psantanna.com/claude-code-my-workflow/)
-**Last Updated:** 2026-03-20
+**Last Updated:** 2026-04-08
 
 A ready-to-fork foundation for AI-assisted academic work. You describe what you want — lecture slides, a research paper, a data analysis, a replication package — and Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results. Like a contractor who handles the entire job. Extracted from a production PhD course and extended by a growing [community](#community--extensions).
 
@@ -134,7 +134,7 @@ The guide covers Claude Code's latest capabilities:
 ## What's Included
 
 <details>
-<summary><strong>10 agents, 22 skills, 18 rules, 7 hooks</strong> (click to expand)</summary>
+<summary><strong>10 agents, 28 skills, 20 rules, 13 hooks</strong> (click to expand)</summary>
 
 ### Agents (`.claude/agents/`)
 
@@ -177,6 +177,12 @@ The guide covers Claude Code's latest capabilities:
 | `/learn` | Extract non-obvious discoveries into persistent skills |
 | `/context-status` | Show session health and context usage |
 | `/deep-audit` | Repository-wide consistency audit |
+| `/oracle` | Cross-validate with ChatGPT Pro via Oracle CLI |
+| `/parse-paper` | Extract structured content from academic PDFs |
+| `/mailbox` | Structured inter-agent communication |
+| `/progress` | Visual progress tracking |
+| `/ship` | One-command commit-push-PR-merge |
+| `/simulation-study` | Monte Carlo simulation scaffold |
 
 ### Research Workflow
 
@@ -202,6 +208,8 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 | `orchestrator-protocol` | Contractor mode: implement → verify → review → fix → score |
 | `session-logging` | Three logging triggers: post-plan, incremental, end-of-session |
 | `meta-governance` | Template vs. working project distinctions |
+| `pipeline-isolation` | Critic-fixer separation (reviewers read-only) |
+| `inter-agent-communication` | Mailbox protocol for agent coordination |
 
 **Path-scoped** (load only when working on matching files):
 
@@ -233,6 +241,29 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 | `requirements-spec.md` | MUST/SHOULD/MAY requirements framework with clarity status |
 | `constitutional-governance.md` | Template for defining non-negotiable principles vs. preferences |
 | `skill-template.md` | Academic skill creation template with domain-specific examples |
+| `research-program.md` | Karpathy-style constraint document for autonomous research loops |
+
+### 13 Hooks (`.claude/hooks/`)
+
+| Hook | What It Does |
+|------|-------------|
+| `notify.sh` | Cross-platform desktop notifications |
+| `protect-files.sh` | Blocks accidental edits to protected files |
+| `pre-compact.py` | Saves state before context compression |
+| `post-compact-restore.py` | Restores state after compression |
+| `context-monitor.py` | Progressive context usage warnings |
+| `verify-reminder.py` | Reminds to compile/render after edits |
+| `log-reminder.py` | Blocks stop if session log not updated |
+| `bash-safety.sh` | Blocks dangerous bash commands (rm -rf, force push, sudo) |
+| `output-scanner.sh` | Warns if tool output contains leaked secrets |
+| `audit-log.sh` | Append-only JSONL audit trail |
+| `enforce-isolation.sh` | Reviewer agents read-only outside quality_reports/ |
+| `enforce-foreground-agents.sh` | Blocks background agents |
+| `plan-reminder.py` | Blocks stop if plan discussed but not saved |
+
+### Security Layer
+
+Defense-in-depth security: static deny list (17 patterns in settings.json) + dynamic bash-safety hook + post-execution secret scanning + append-only audit trail. Safety hooks fail closed (block on error), monitoring hooks fail open.
 
 </details>
 
@@ -248,6 +279,8 @@ Rules use path-scoped loading: **always-on** rules load every session (~100 line
 | R | Figures & analysis | [r-project.org](https://www.r-project.org/) |
 | pdf2svg | TikZ to SVG | `brew install pdf2svg` (macOS) |
 | [gh CLI](https://cli.github.com/) | PR workflow | `brew install gh` (macOS) |
+| Oracle CLI | Second-opinion reasoning | `npm install -g @steipete/oracle` |
+| LiteParse | PDF preprocessing | `npm i -g @llamaindex/liteparse` |
 
 Not all tools are needed — install only what your project uses. Claude Code is the only hard requirement.
 

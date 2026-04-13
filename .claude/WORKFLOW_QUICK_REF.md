@@ -48,6 +48,17 @@ Repeat
 
 ---
 
+## Security Layer
+
+- **Deny list** blocks 17 dangerous patterns statically (rm -rf, force push, sudo, credential reads)
+- **bash-safety.sh** blocks destructive commands dynamically (curl|bash, file uploads)
+- **output-scanner.sh** warns if secrets appear in tool output (AWS keys, API tokens)
+- **audit-log.sh** records every tool invocation to `.claude/logs/audit.jsonl`
+- **enforce-isolation.sh** keeps reviewer agents read-only
+- **enforce-foreground-agents.sh** blocks background agents that can't prompt
+
+---
+
 ## Non-Negotiables (Customize These)
 
 <!-- Replace with YOUR project's locked-in preferences -->
@@ -78,6 +89,17 @@ For experimental work, use the **Fast-Track** workflow:
 - 60/100 quality threshold (vs. 80/100 for production)
 - No plan needed — just a research value check (2 min)
 - See `.claude/rules/exploration-fast-track.md`
+
+---
+
+## New Capabilities
+
+- `/oracle [question]` -- Second-opinion via ChatGPT Pro
+- `/parse-paper [pdf]` -- Extract structured content from PDFs
+- `/ship [description]` -- One-command commit-push-PR-merge
+- `/simulation-study [name]` -- Monte Carlo scaffold
+- `/mailbox` -- Structured inter-agent communication
+- `/progress` -- Visual progress tracking
 
 ---
 
