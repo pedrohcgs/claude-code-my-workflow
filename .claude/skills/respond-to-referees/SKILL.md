@@ -105,6 +105,10 @@ If everything is covered, the final message should say `All concerns addressed o
 - `response-to-referees.md` — the deliverable (filename matches `templates/response-to-referees.md`)
 - (Optional) `response-to-referees-matrix.csv` — machine-readable concern-to-response mapping for tracking across revisions
 
+## Pre-submission rehearsal
+
+**Tip.** Before drafting your response, consider running `/review-paper --peer --r2 <journal>` on the *revised* manuscript first. It simulates the next referee round against your revisions — catching the "Resolved / Partial / Not addressed" classification mistakes before the real referee does. See [`.claude/skills/review-paper/SKILL.md`](../review-paper/SKILL.md).
+
 ## Cross-References
 
 - For first-pass manuscript review **before** receiving referee comments, use `/review-paper`.
