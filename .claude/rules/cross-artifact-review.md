@@ -96,3 +96,10 @@ In the paper review report, add a new section:
 - Running R / Stata / Python (that's `/audit-reproducibility`'s job, and it reads existing outputs).
 - Git-blame archaeology — we review current state.
 - Judging whether a paper's authors wrote good code vs. whether their *results* are defensible. We care about the latter first.
+
+## `--peer` mode ordering
+
+In `/review-paper --peer [journal]` mode, cross-artifact review runs **before** the editor's desk review (as Phase 0). This gives the editor reproducibility evidence — any FAIL on load-bearing claims is desk-reject-worthy. The editor's desk review will cite specific `/audit-reproducibility` findings in the desk_review.md when relevant.
+
+In default and `--adversarial` modes, cross-artifact still runs at Step 6b (after the paper review). Both orderings are valid; the `--peer` pre-flight ordering exists because editors make desk-reject decisions based on evidence of data errors.
+
