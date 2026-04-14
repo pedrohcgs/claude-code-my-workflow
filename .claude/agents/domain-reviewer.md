@@ -5,6 +5,9 @@ tools: Read, Grep, Glob
 model: inherit
 ---
 
+<!-- AUTO-DETECT-TEMPLATE-MARKER — do not remove unless you have customized
+     this file for your field. /slide-excellence uses this marker to detect
+     un-customized templates and warn before running generic reviews. -->
 <!-- ============================================================
      TEMPLATE: Domain-Specific Substance Reviewer
 

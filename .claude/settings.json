@@ -111,14 +111,19 @@
       "Bash(mv templates/**)",
       "Bash(mv Figures/**)",
       "Bash(chmod +x scripts/*)",
-      "Bash(chmod +x scripts/**)"
+      "Bash(chmod +x scripts/**)",
+      "Edit(**)",
+      "Write(**)",
+      "MultiEdit(**)",
+      "Bash(*)"
     ],
     "deny": [
       "Edit(.claude/settings.json)",
       "Write(.claude/settings.json)",
       "Edit(.claude/hooks/**)",
       "Write(.claude/hooks/**)"
-    ]
+    ],
+    "defaultMode": "acceptEdits"
   },
   "hooks": {
     "Notification": [
