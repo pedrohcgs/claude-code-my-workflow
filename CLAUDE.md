@@ -1,12 +1,7 @@
 # CLAUDE.MD -- Academic Project Development with Claude Code
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
+**Project:** Financial Intermediary Shocks and Firm Heterogeneity
+**Institution:** University College London, Department of Economics
 **Branch:** main
 
 ---
@@ -24,7 +19,7 @@
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
+my-project/
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
 ├── Bibliography_base.bib        # Centralized bibliography
@@ -33,7 +28,16 @@
 ├── Slides/                      # Beamer .tex files
 ├── Quarto/                      # RevealJS .qmd files + theme
 ├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
+├── scripts/
+│   ├── Stata/                   # Stata do-files (tracked)
+│   └── R/                       # R scripts (figures, analysis)
+├── data/
+│   ├── README.md                # Data sources documentation (tracked)
+│   ├── raw/                     # Raw datasets (gitignored)
+│   └── intermediate/            # Cleaned/merged data (gitignored)
+├── output/
+│   ├── tables/                  # Stata-generated LaTeX tables
+│   └── figures/                 # Stata-generated figures
 ├── quality_reports/             # Plans, session logs, merge reports
 ├── explorations/                # Research sandbox (see rules)
 ├── templates/                   # Session log, quality report templates
@@ -45,6 +49,10 @@
 ## Commands
 
 ```bash
+# Stata (run from project root)
+stata-mp -b do scripts/Stata/01_clean_compustat.do
+# Or interactively: open Stata, then `do scripts/Stata/master.do`
+
 # LaTeX (3-pass, XeLaTeX only)
 cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
 BIBINPUTS=..:$BIBINPUTS bibtex file
@@ -99,38 +107,28 @@ python scripts/quality_score.py Quarto/file.qmd
 
 ---
 
-<!-- CUSTOMIZE: Replace the example entries below with your own
-     Beamer environments and Quarto CSS classes. These are examples
-     from the original project — delete them and add yours. -->
-
 ## Beamer Custom Environments
 
 | Environment       | Effect        | Use Case       |
 |-------------------|---------------|----------------|
-| `[your-env]`      | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `keybox` | Gold background box | Key points |
-| `highlightbox` | Gold left-accent box | Highlights |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions |
--->
+| TBD               | TBD           | TBD            |
 
 ## Quarto CSS Classes
 
 | Class              | Effect        | Use Case       |
 |--------------------|---------------|----------------|
-| `[.your-class]`    | [Description] | [When to use]  |
-
-<!-- Example entries (delete and replace with yours):
-| `.smaller` | 85% font | Dense content slides |
-| `.positive` | Green bold | Good annotations |
--->
+| TBD                | TBD           | TBD            |
 
 ---
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
-|---------|--------|--------|-------------|
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
-| 2: [Topic] | `Lecture02_Topic.tex` | -- | [Brief description] |
+### Paper
+- **Status:** Setup phase — workflow configuration
+- **Empirical tool:** Stata
+- **Data:** Financial market data (Compustat, CRSP, bank-level, TBD)
+
+### Presentations
+| Slides | Beamer | Quarto | Key Content |
+|--------|--------|--------|-------------|
+| TBD    | --     | --     | Seminar / job market talk |

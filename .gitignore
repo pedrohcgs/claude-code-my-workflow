@@ -51,6 +51,17 @@ CLAUDE.local.md
 # Quarto rendering artifacts
 .quarto/
 
+# Stata
+*.dta
+*.smcl
+*.gph
+*.sthlp
+*.ster
+
+# Data (too large or sensitive for git)
+data/raw/
+data/intermediate/
+
 # Output artifacts — uncomment lines below based on your preference
 # *.rds
 # output/**/*.rds
