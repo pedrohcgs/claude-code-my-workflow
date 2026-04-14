@@ -1,7 +1,7 @@
 ---
 name: review-paper
-description: Comprehensive manuscript review covering argument structure, econometric specification, citation completeness, and potential referee objections. Single-pass by default; supports adversarial critic-fixer mode for iterative revision.
-argument-hint: "[paper path] [--adversarial]"
+description: Comprehensive manuscript review covering argument structure, econometric specification, citation completeness, and potential referee objections. Single-pass by default; supports adversarial critic-fixer mode for iterative revision; auto-invokes /review-r + /audit-reproducibility on referenced scripts unless --no-cross-artifact.
+argument-hint: "[paper path] [--adversarial] [--no-cross-artifact]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 ---
 
@@ -45,6 +45,12 @@ Use when: preparing a pre-submission draft, responding to a journal-desk rejecti
 5. **Produce the review report.**
 
 6. **Save to** `quality_reports/paper_review_[sanitized_name]_round[N].md` (N=1 in default mode; N increments in adversarial mode).
+
+6b. **Cross-artifact integration.** Unless `$ARGUMENTS` contains `--no-cross-artifact`, and if the manuscript references analysis scripts (detected via `\input{scripts/...}`, `%% source:` comments, or matching `scripts/R/_outputs/` filenames), auto-invoke:
+   - `/review-r` on each referenced script (forked subagent, results to `quality_reports/cross_artifact_[paper]/review_r_*.md`)
+   - `/audit-reproducibility` on the manuscript + outputs dir (results to `quality_reports/cross_artifact_[paper]/reproducibility.md`)
+
+   Merge critical cross-artifact findings (code bug invalidates paper claim, reproducibility FAIL) into a new "Cross-Artifact Findings" section at the top of the paper review report. See [`.claude/rules/cross-artifact-review.md`](../../rules/cross-artifact-review.md) for the full protocol.
 
 7. **If `--adversarial` is in `$ARGUMENTS`:** invoke the critic-fixer loop defined in the next section. Otherwise stop here.
 
