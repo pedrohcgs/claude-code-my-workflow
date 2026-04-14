@@ -97,8 +97,8 @@ For each matched claim, apply the thresholds from `replication-protocol.md`:
 | Kind | Tolerance | Example |
 |---|---|---|
 | Integers (N, counts) | Exact | 2,847 must equal 2,847 |
-| Point estimates | |reported − computed| < 0.01 | -1.632 vs -1.628 → diff = 0.004 → PASS |
-| Standard errors | |reported − computed| < 0.05 | 0.584 vs 0.591 → diff = 0.007 → PASS |
+| Point estimates | `abs(reported - computed)` < 0.01 | -1.632 vs -1.628 → diff = 0.004 → PASS |
+| Standard errors | `abs(reported - computed)` < 0.05 | 0.584 vs 0.591 → diff = 0.007 → PASS |
 | P-values | Same significance level | p<0.01 and p<0.01 → PASS; p<0.01 and p=0.03 → FAIL |
 | Percentages | ±0.1pp | 42.3% vs 42.35% → PASS |
 

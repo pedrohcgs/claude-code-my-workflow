@@ -10,7 +10,7 @@ context: fork
 
 Run a comprehensive multi-dimensional review of lecture slides. Multiple agents analyze the file independently, then results are synthesized.
 
-**Important:** this orchestrator does **conditional** dispatch — it only spawns the subagents that can actually produce useful output for the given file. No more running `tikz-reviewer` on a file with zero TikZ, or `content-parity` on a deck without a counterpart.
+**Important:** this orchestrator does **conditional** dispatch — it only spawns the subagents that can actually produce useful output for the given file. No more running `tikz-reviewer` on a file with zero TikZ, or `quarto-critic` on a deck without a counterpart.
 
 ## Step 1: Identify the File
 
@@ -30,7 +30,7 @@ Before spawning any agent, probe the file to determine which reviews make sense:
 FILE="$resolved_path"
 
 # Has TikZ diagrams?
-has_tikz=$(grep -c '\\begin{tikzpicture}' "$FILE" 2>/dev/null || echo 0)
+has_tikz=$(grep -c '\\begin{tikzpicture}' "$FILE" 2>/dev/null); has_tikz=${has_tikz:-0}
 
 # For .qmd: is there a paired .tex in Slides/?
 has_tex_pair="false"
@@ -82,8 +82,8 @@ Before spawning the substance-review agent on a `.tex` file, verify `.claude/age
 
 Detection heuristic (any of these → still template):
 
-- Contains the exact marker comment `<!-- AUTO-DETECT-TEMPLATE-MARKER -->` (present in the shipped template; removed/replaced when customized).
-- Contains any `[Customize: ...]` placeholder brackets.
+- Contains the marker token `AUTO-DETECT-TEMPLATE-MARKER` anywhere in the file (present in the shipped template; removed/replaced when customized). Detection is a substring match — the marker can span lines.
+- Contains any `<!-- Customize: ... -->` or `[Customize: ...]` placeholder (both forms are checked).
 - The five lenses are identical to the shipped template's wording (diff against `.claude/agents/domain-reviewer.md` on the v1.3.0 tag — if zero lines changed, it's still template).
 
 If the template marker is present:
@@ -202,6 +202,6 @@ cost-conscious reviews, run individual subagent skills directly
 
 ## Why conditional dispatch matters
 
-The previous version of this orchestrator spawned **all 6** subagents regardless of file type. Running `tikz-reviewer` on a TikZ-free deck produced an empty report (wasted tokens). Running `content-parity` without a counterpart file produced a "no pair to compare" report (wasted tokens). And running `domain-reviewer` without customization produced generic "are assumptions stated?" feedback that authors learned to ignore (eroded trust in the whole orchestrator).
+The previous version of this orchestrator spawned **all 6** subagents regardless of file type. Running `tikz-reviewer` on a TikZ-free deck produced an empty report (wasted tokens). Running `quarto-critic` without a counterpart file produced a "no pair to compare" report (wasted tokens). And running `domain-reviewer` without customization produced generic "are assumptions stated?" feedback that authors learned to ignore (eroded trust in the whole orchestrator).
 
 Conditional dispatch cuts token cost roughly in half on typical `.qmd`-only files and doubles trust by never running a reviewer that can't produce useful output.

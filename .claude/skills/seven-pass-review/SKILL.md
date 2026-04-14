@@ -47,7 +47,7 @@ In a single message, spawn 7 Task tool calls (one per lens). Each subagent gets:
 - Instructions to write to `quality_reports/seven_pass_[stem]/lens_[N]_[lens-name].md`.
 - Severity tagging: CRITICAL / MAJOR / MINOR.
 
-Lens prompts live in `prompts/lens_[N].md` inside this skill's directory — each is a purpose-built rubric. (Files will be written alongside the SKILL as supporting material if the user invokes the skill and they don't yet exist; this SKILL.md embeds the rubric summary inline.)
+Lens prompt rubrics are embedded inline below — one summary paragraph per lens. Each forked subagent receives its lens's rubric plus the manuscript path.
 
 **Lens prompt summaries:**
 

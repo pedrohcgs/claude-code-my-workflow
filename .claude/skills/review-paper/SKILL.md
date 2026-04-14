@@ -31,8 +31,8 @@ Use when: preparing a pre-submission draft, responding to a journal-desk rejecti
 
 ## Steps (both modes)
 
-1. **Locate and read the manuscript.** Check:
-   - Direct path from `$ARGUMENTS` (ignoring any flags)
+1. **Locate and read the manuscript.** First strip flags (`--adversarial`, `--no-cross-artifact`) from `$ARGUMENTS` to get the bare manuscript path. Check:
+   - Direct path (bare path from step 1)
    - `master_supporting_docs/supporting_papers/$ARGUMENTS`
    - Glob for partial matches
 
@@ -208,7 +208,7 @@ Phase 2: Fixer
   ├─ Present proposed edits to the user grouped by severity (Critical →
   │  Major → Minor). Ask for approval: "apply all", "apply critical+major
   │  only", "review each", or "abort".
-  ├─ Apply approved edits with Edit / MultiEdit tools.
+  ├─ Apply approved edits with Edit / Edit tools.
   ├─ If the manuscript is a compile target (`.tex` / `.qmd`), re-compile
   │  and verify it still builds.
   │

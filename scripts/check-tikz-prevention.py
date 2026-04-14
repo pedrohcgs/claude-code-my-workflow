@@ -256,7 +256,7 @@ def check_p3(stripped: str) -> list[tuple[int, str]]:
     violations: list[tuple[int, str]] = []
     for m in TIKZPICTURE_OPENER_RE.finditer(stripped):
         bracket_pos = m.end() - 1  # position of `[`
-        opts, close_pos = parse_options(stripped, bracket_pos)
+        opts, _ = parse_options(stripped, bracket_pos)
         if opts is None:
             # Unbalanced options block — surface as a parse error, not silent.
             raise ValueError(
