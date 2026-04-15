@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Stage, commit, create PR, and merge to main. Use for the standard commit-PR-merge cycle.
+description: Stage, commit, push, open a PR, and merge to main. Use when user says "commit", "ship it", "push this", "open a PR", "merge to main", "wrap up these changes", "let's commit this", or signals end-of-task with uncommitted diffs. Runs the standard commit-PR-merge cycle; never force-pushes or skips hooks.
 argument-hint: "[optional: commit message]"
 allowed-tools: ["Bash", "Read", "Glob", "Task"]
 ---

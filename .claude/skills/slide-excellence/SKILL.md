@@ -1,6 +1,6 @@
 ---
 name: slide-excellence
-description: Multi-agent slide review (visual, pedagogy, proofreading, plus TikZ/parity/substance conditionally). Use for comprehensive quality check before milestones.
+description: Multi-agent comprehensive slide review (visual + pedagogy + proofreading, plus TikZ / parity / substance conditionally). Use when user says "full review", "excellence pass", "comprehensive check", "review everything", "pre-release review", "slide excellence", or before teaching / shipping a deck. Fanout wrapper — for a single lens, use `/visual-audit`, `/pedagogy-review`, or `/proofread` directly.
 argument-hint: "[QMD or TEX filename]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Bash", "Task"]
 context: fork

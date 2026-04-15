@@ -1,6 +1,6 @@
 ---
 name: interview-me
-description: Interactive interview to formalize a research idea into a structured specification with hypotheses and empirical strategy
+description: Interactive interview that formalizes a fuzzy research idea into a structured spec (RQ, hypotheses, identification, data needs, empirical strategy). Use when user says "interview me", "help me think through this idea", "I have a half-baked idea", "formalize this into a project", "walk me through framing a study". Multi-turn Q&A; saves spec to disk. NOT for lit review (`/lit-review`) or ideation from scratch (`/research-ideation`).
 argument-hint: "[brief topic or 'start fresh']"
 allowed-tools: ["Read", "Write"]
 ---

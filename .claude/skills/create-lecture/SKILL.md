@@ -1,6 +1,6 @@
 ---
 name: create-lecture
-description: Create new Beamer lecture from papers and materials. Guided workflow with notation consistency.
+description: Create a new Beamer lecture `.tex` from source papers and materials, with notation consistency checks and the project's preamble wired in. Use when user says "create a lecture on X", "new lecture from these papers", "start a deck on topic Y", "scaffold a new Beamer file", "build me a lecture from these PDFs". Scaffolds the full deck — NOT for compiling existing `.tex` (use `/compile-latex`).
 argument-hint: "[Topic name]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 context: fork

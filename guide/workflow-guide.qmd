@@ -809,6 +809,64 @@ Use `maxTurns` to prevent review agents from looping indefinitely, and `tools` t
 
 Set via CLI flag (`claude --permission-mode plan`), the `/config` command, or `permissions.defaultMode` in `settings.json`.
 
+### The Six-Layer Permission Stack
+
+Permission mode is not resolved from a single file. Claude Code honors **six layers**, with later layers overriding earlier ones:
+
+| # | Layer | Location | Key |
+|---|---|---|---|
+| 1 | VSCode user | `~/Library/Application Support/Code/User/settings.json` (macOS), `~/.config/Code/User/settings.json` (Linux), `%APPDATA%/Code/User/settings.json` (Windows) | `claudeCode.initialPermissionMode` |
+| 2 | VSCode workspace | `<repo>/.vscode/settings.json` | `claudeCode.initialPermissionMode` |
+| 3 | CLI user | `~/.claude/settings.json` | `permissions.defaultMode` |
+| 4 | CLI project | `<repo>/.claude/settings.json` | `permissions.defaultMode` |
+| 5 | CLI project-local (gitignored) | `<repo>/.claude/settings.local.json` | `permissions.defaultMode` |
+| 6 | **In-session runtime** | (ephemeral) | toggled via `Shift+Tab` / `/permission-mode` |
+
+**Layer 6 is authoritative** and catches most users off-guard. `initialPermissionMode` only fires at **session start** --- if you (or `Shift+Tab`) change modes mid-session, every file-level layer is ignored until the session ends.
+
+### Troubleshooting: Prompts Fire Despite `bypassPermissions`
+
+This is the single most common source of confusion. Work through the checklist in order:
+
+1. **Look at the status line** at the top of the Claude Code panel. With this repo's `statusLine` configured, it prints `[BYPASS]`, `[PLAN]`, `[AUTO-EDIT]`, or `[PROMPT]`. If it doesn't say `[BYPASS]`, you have an in-session override --- press `Shift+Tab` to cycle modes until you land on bypass.
+2. **Run `/permission-check`** to see every layer's value, the resolved merged state, and any drift (e.g., project says bypass but project-local says default).
+3. **Check for stale sessions.** If settings changed recently but the session predates the change, it still runs under the old mode. Reload the window (`Cmd+Shift+P` → "Developer: Reload Window") and start a new session.
+4. **Check `deny` lists.** A match in any layer's `deny` blocks the tool regardless of `allow` entries elsewhere.
+5. **VSCode vs CLI split.** If the VSCode layers say bypass but no CLI layer does, a terminal-launched Claude Code will still prompt. Align them.
+
+### The Plan → Bypass Handoff (Recommended Daily Driver)
+
+Plan mode and bypass permissions sound like opposites, but they chain into a single workflow that combines safety *and* prompt-free execution:
+
+```
+Start session in plan mode  (Shift+Tab at startup, or claude --permission-mode plan)
+     |
+     | Read-only exploration + planning
+     |   Claude can Read, Grep, run Bash readonly, spawn Explore/Plan agents
+     |   Claude CANNOT edit files (except the plan file itself)
+     |
+     v
+Plan drafted, saved to quality_reports/plans/YYYY-MM-DD_description.md
+     |
+     v
+User approves via ExitPlanMode UI
+     |
+     | Claude Code returns the session to defaultMode.
+     | If defaultMode = bypassPermissions, execution now runs
+     | without approval prompts.
+     v
+Orchestrator executes the plan end-to-end --- no prompts.
+```
+
+**Why this is the recommended daily flow:**
+
+- You always see the approach before any edits happen (plan mode is read-only).
+- Once you approve, every downstream action --- edits, bash, multi-file refactors --- runs without interruption.
+- No need to remember to toggle bypass mid-session. The handoff is automatic.
+- Fits cleanly with the plan-first rule enforced by this repo.
+
+**Prerequisite:** your `defaultMode` must be `bypassPermissions` in at least one CLI layer (typically the project or project-local layer). Without that, exiting plan mode returns you to `default` and you're back to per-tool prompts.
+
 ::: {.callout-warning}
 ## Plans Directory
 
@@ -2072,22 +2130,55 @@ When Claude loads the skill, it runs these commands and injects the live output 
 
 ### Writing Effective Trigger Descriptions
 
-The `description` field determines when Claude loads your skill. Use specific trigger phrases users would actually say:
+The `description` field is the single most important thing you write when creating a skill. Claude reads the description of every available skill on every turn and uses it to decide whether to auto-invoke without the user typing a slash command. A vague description means a skill that only runs when the user remembers its name --- defeating the point of auto-invocation.
 
-**Good (Citation Style Enforcement):**
+**The gold-standard pattern has three parts:**
+
+1. **Verb + object** --- what the skill *does*, in one clause. Start with an action verb (Compile, Review, Generate, Translate).
+2. **"Use when:" trigger phrases** --- 3--5 phrases the user might *actually* say. Include verbatim quotes (`"proofread"`, `"check the layout"`) and semantic paraphrases (`"does this overflow?"`). Cover both explicit commands and natural-language requests.
+3. **Disambiguation from sibling skills** --- if your skill lives near others in the same domain (e.g., `proofread`, `visual-audit`, and `pedagogy-review` all operate on slides), explicitly say what it is *not* for, or point at the alternative. This prevents mis-routing.
+
+**Example: refactoring a weak description into an A-grade one.**
+
+Before (weak --- the skill exists but Claude won't auto-pick it):
 ```yaml
-description: Enforces APA 7th edition citation format. Use when user asks to "check citations", "fix references", "apply APA style", or when reviewing .tex/.qmd files with bibliographies.
+description: Run the proofreading protocol on lecture files. Checks grammar, typos, overflow, consistency.
 ```
 
-**Good (Lab Notebook Entry):**
+After (strong --- Claude will match this from cold prompts):
 ```yaml
-description: Generates structured lab notebook entries from experimental notes. Use when user provides "experiment notes", "protocol results", or asks to "format lab entry".
+description: Read-only proofreading pass over lecture .tex or .qmd files.
+  Checks grammar, typos, overflow, terminology consistency, and academic
+  writing quality; produces a report without editing. Use when user says
+  "proofread", "check for typos", "look for grammar issues", "copy-edit
+  this", "any writing errors?", or before a lecture release.
 ```
 
-**Bad (Too Vague):**
+**The test:** imagine a teammate who has never seen your skill list types `"can you look for writing errors in Lecture 3?"`. Does your description contain enough lexical overlap that Claude would match it against competing skills? If not, add more trigger phrases.
+
+**Another good example (disambiguation):**
+```yaml
+description: Interactive interview that formalizes a fuzzy research idea into
+  a structured spec (RQ, hypotheses, identification, data needs, empirical
+  strategy). Use when user says "interview me", "help me think through this
+  idea", "I have a half-baked idea". Multi-turn Q&A; saves spec to disk.
+  NOT for lit review (/lit-review) or ideation from scratch (/research-ideation).
+```
+
+The final sentence --- "NOT for X, use /Y instead" --- is the disambiguation clause. Two skills with overlapping descriptions will split Claude's routing probability; the explicit "not for" resolves the tie.
+
+**Bad (too vague --- will never auto-invoke):**
 ```yaml
 description: Helps with citations
 ```
+
+**Checklist before shipping a new skill:**
+
+- [ ] Starts with a verb + object.
+- [ ] Has a "Use when:" clause with at least 3 trigger phrases.
+- [ ] Includes at least one verbatim quote a user might literally type.
+- [ ] Disambiguates from any sibling skills in the same domain.
+- [ ] Fits in roughly 2--4 lines (longer descriptions get truncated in Claude's skill index).
 
 ### Domain-Specific Examples
 

@@ -1,6 +1,6 @@
 ---
 name: qa-quarto
-description: Adversarial Quarto vs Beamer QA. Critic finds issues, fixer applies fixes, loops until APPROVED (max 5 rounds).
+description: Adversarial Quarto-vs-Beamer parity QA. A critic agent compares the Quarto HTML render to the Beamer PDF benchmark for content/visual parity; a fixer agent applies fixes; loops until APPROVED (max 5 rounds). Use when user says "qa the quarto", "check parity", "does the html match the pdf?", "quarto matches beamer?", or after a translate-to-quarto run. Requires both the `.qmd` rendered and a `.pdf` benchmark.
 argument-hint: "[LectureN]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 context: fork

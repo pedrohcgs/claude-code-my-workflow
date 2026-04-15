@@ -1,6 +1,6 @@
 ---
 name: devils-advocate
-description: Challenge slide design with 5-7 pedagogical questions. Checks ordering, prerequisites, and cognitive load.
+description: Adversarial 5-7 question challenge to a deck's pedagogical choices — ordering, prerequisites, cognitive load, motivation. Use when user says "devil's advocate", "poke holes in this deck", "push back on my slides", "stress-test the design", "what would a skeptical student ask?". Read-only; surfaces questions to force rethinking. Lighter than `/pedagogy-review`.
 argument-hint: "[Lecture filename]"
 allowed-tools: ["Read", "Grep", "Glob"]
 ---

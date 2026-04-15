@@ -106,6 +106,7 @@ python scripts/quality_score.py Quarto/file.qmd
 | `/learn [skill-name]` | Extract discovery into persistent skill |
 | `/context-status` | Show session health + context usage |
 | `/deep-audit` | Repository-wide consistency audit |
+| `/permission-check` | Diagnose permission layers when prompts fire unexpectedly |
 
 ---
 
