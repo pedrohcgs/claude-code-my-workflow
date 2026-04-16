@@ -8,7 +8,7 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ## v1.6.1 — 2026-04-16
 
-A **framing honesty + hook friction** patch release. No new skills, no new rules, no breaking changes. Addresses two classes of issue surfaced by a multi-round audit:
+A **framing honesty + hook friction** patch release. No new skill or rule directories, no new hooks, and no breaking changes (on-disk counts unchanged at 27/22/13/6); existing skills, rules, docs, and hooks are revised to address two classes of issue surfaced by a multi-round audit:
 
 1. **Claim-vs-reality drift:** v1.6.0 docs and rules described the "orchestrator" as if it were a repo-wide daemon that activates automatically after plan approval. In reality, the 6-step loop (IMPLEMENT → VERIFY → REVIEW → FIX → RE-VERIFY → SCORE) is a **pattern** implemented by specific skills (`/commit`, `/qa-quarto`, `/review-paper --adversarial`, `/slide-excellence`, `/create-lecture`, `/data-analysis`, `/review-paper --peer`). Plan approval does NOT trigger an auto-loop. Similarly, quality thresholds are **advisory inside `/commit`**, not enforced by a repo-wide git pre-commit hook.
 
