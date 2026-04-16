@@ -24,6 +24,18 @@ python3 scripts/quality_score.py <changed-file-paths>
 
 Spawn the **verifier** agent (via `Task` with `subagent_type=verifier`) to run compilation/render checks on the changed files. Report pass/fail before committing.
 
+### Step 0b: Surface-Sync Gate (Pre-Commit)
+
+**Runs unconditionally.** Enforces that count claims (`"13 agents, 27 skills, 21 rules, 6 hooks"` and siblings) across README.md, CLAUDE.md, the guide source + rendered HTML, the landing page, and the skill template all agree with the on-disk counts of `.claude/{skills,agents,rules,hooks}`:
+
+```bash
+./scripts/check-surface-sync.sh
+```
+
+- **Exit 0:** all counts consistent — continue.
+- **Exit 1:** drift detected — print the diff and halt. Fix the stale counts, then re-run. Do NOT proceed past this gate on drift, even with "commit anyway" — the purpose is to catch the exact class of issue that produced PRs #70, #76, and #78.
+- **Exit 2:** script error (missing surface file, unreadable directory) — investigate before proceeding.
+
 ### Step 1: Check current state
 
 ```bash
