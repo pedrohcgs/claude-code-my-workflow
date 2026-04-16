@@ -1,8 +1,10 @@
 ---
 paths:
-  - Slides/
-  - Quarto/
-  - scripts/R/
+  - Slides/**/*.tex
+  - Quarto/**/*.qmd
+  - Quarto/**/*.scss
+  - Preambles/header.tex
+  - scripts/R/**/*.R
 ---
 
 # Content Invariants (INV-1 through INV-12)
@@ -13,7 +15,7 @@ Numbered non-negotiable rules for content produced in this repository. Critic ag
 
 - **INV-1: Palette sync.** Color names in `Preambles/header.tex` must match SCSS variables in `Quarto/theme-template.scss`. Verify with `./scripts/check-palette-sync.sh`. Any new color added to one must be added to the other.
 - **INV-2: Beamer↔Quarto notation parity.** Every math symbol, variable name, and subscript in a Beamer `.tex` slide must appear identically in its Quarto `.qmd` mirror. Notation drift between the two is a critical bug.
-- **INV-3: Quarto CSS override contract.** Styles that must override Bootstrap defaults (e.g., inline code color, code block background) go in `include-in-header` as a raw `<style>` tag, never in the SCSS file. SCSS is for styles that don't conflict with Bootstrap. See MEMORY.md "Quarto SCSS Override Pitfall."
+- **INV-3: Quarto CSS override contract.** Styles that must override Bootstrap defaults (e.g., inline code color, code block background) go in `include-in-header` as a raw `<style>` tag, never in the SCSS file. SCSS is only for styles that do not need to beat Bootstrap's cascade — Bootstrap's own selectors win specificity wars otherwise.
 - **INV-4: TikZ as SVG.** Browsers cannot render PDF images inline. All TikZ diagrams in Quarto/HTML must be SVG, produced via `/extract-tikz`. Never embed a `.pdf` in a `.qmd` slide.
 - **INV-5: Single bibliography.** `Bibliography_base.bib` is the canonical bibliography. No per-lecture `.bib` files. All citations must resolve against this one file.
 

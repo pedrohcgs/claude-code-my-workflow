@@ -115,7 +115,7 @@ Produce a thorough, actionable code review report. You do NOT edit files — you
 
 ### 11. NUMERICAL DISCIPLINE
 - [ ] **No float equality.** Never `==` on doubles. Use `abs(x - y) < tol` or `all.equal()`.
-- [ ] **CDF clamping.** Any computed probability passed to `qnorm()` / `pbinom()` etc. must be clamped: `pmin(1, pmax(0, p))`.
+- [ ] **CDF clamping.** Any computed probability passed to `qnorm()` / `pbinom()` etc. must be clamped to an OPEN interval, not `[0,1]` — exact 0 or 1 produce `-Inf`/`Inf`. Use a named epsilon: `eps <- 1e-12; pmin(1 - eps, pmax(eps, p))`.
 - [ ] **Integer literals for counts.** Use `1L`, `0L`, `nrow(df)` — not bare `1`, `0` — when the value is conceptually an integer (loop counters, indices, sample sizes).
 - [ ] **Pre-allocate, don't grow.** Vectors/lists inside loops must be pre-allocated (`vector("numeric", n)` or `numeric(n)`), never grown via `c(vec, new_val)` or `append()`.
 - [ ] **Bootstrap seed handling.** `set.seed()` once before the bootstrap loop, never inside. If parallel bootstrapping, each worker must get a deterministic sub-seed (`RNGkind("L'Ecuyer-CMRG")`).
