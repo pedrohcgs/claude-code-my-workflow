@@ -39,3 +39,8 @@ Initialize the Claude Code academic workflow for a new research project on low-r
 
 - User to fill in Beamer custom environments and Quarto CSS classes once a theme is established
 - First research task TBD — likely starting with Problem Setup deck or literature review
+
+
+---
+**Context compaction (auto) at 12:58**
+Check git log and quality_reports/plans/ for current state.
