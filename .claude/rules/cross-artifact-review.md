@@ -1,109 +1,65 @@
 ---
-description: Paper ↔ code cross-artifact review — when /review-paper runs, auto-invoke /review-r on referenced scripts and /audit-reproducibility on the pair. Surface cross-artifact findings alongside the paper review.
+description: Paper-to-code cross-artifact review. When /review-paper runs, auto-invoke the matching R, Python, or Stata review skill on referenced scripts and pair that with /audit-reproducibility.
 globs: ["master_supporting_docs/**/*.tex", "master_supporting_docs/**/*.qmd", "Slides/**/*.tex", "*.tex", "*.qmd"]
 alwaysApply: false
 ---
 
 # Cross-Artifact Review Protocol
 
-A paper is not an island. Its claims depend on the code that produced them. Reviewing the paper without reviewing the code is reviewing half the artifact.
+A paper is not an island. If the paper depends on code, review the code and the
+reported numbers together.
 
-## The Dependency Graph
+## Dependency graph
 
+```text
+manuscript.tex -> Table 2
+Table 2 -> scripts/<language>/_outputs/results.*
+results.* -> scripts/<language>/03_analyze.<ext>
+03_analyze.<ext> -> scripts/<language>/02_clean.<ext>
+02_clean.<ext> -> data/raw.*
 ```
-manuscript.tex ──cites──> Table 2
-Table 2        ──from──> scripts/R/_outputs/results.rds
-results.rds    ──by──> scripts/R/03_analyze.R
-03_analyze.R   ──uses──> scripts/R/_outputs/clean.rds
-clean.rds      ──by──> scripts/R/02_clean.R
-02_clean.R     ──reads──> data/raw.csv
-```
-
-A bug in `02_clean.R` invalidates Table 2. Reviewing `manuscript.tex` without touching the code misses this class of error entirely.
 
 ## When to apply
 
-Applies when `/review-paper` runs on a manuscript that references analysis scripts. Detection is **pattern-based** — if the manuscript has none of the signals below, no cross-artifact work happens (and `--no-cross-artifact` is a no-op). To force invocation on a paper without these detection signals, point `/review-paper` at a manuscript that `\input{}`s the script outputs, or invoke `/review-r` and `/audit-reproducibility` directly alongside `/review-paper`.
+Apply when `/review-paper` detects any of these signals:
 
-Detection signals:
+- `\input{scripts/...}` or `\input{tables/...}`
+- comments such as `%% source: scripts/python/03_analyze.py`
+- numeric claims in text plus a sibling `scripts/R/`, `scripts/python/`, or
+  `scripts/stata/` directory
+- table labels that match filenames under `scripts/*/_outputs/`
 
-- `\input{scripts/R/...}` or `\input{tables/...}`
-- `%% source: scripts/R/03_analyze.R` comments
-- Numeric claims in text (ATT, coefficients, N, p-values) **combined with** a sibling `scripts/R/` / `scripts/stata/` / `scripts/python/` directory
-- Table labels in the paper that match filenames under `scripts/*/\_outputs/`
-
-Detection is intentionally conservative — a theory paper with no code should not trigger the protocol, even if it lives in a repo that has scripts for other work.
-
-## The protocol
-
-When `/review-paper` detects any of the above:
+## Protocol
 
 ### 1. Identify referenced scripts
 
-Scan the manuscript for:
+Scan the manuscript for referenced tables, figures, source comments, and script
+paths. Build a list of `.R`, `.py`, and `.do` files that feed the manuscript.
 
-- `\input{path}` commands (tables, figures pulled from files)
-- Line comments `%% from: scripts/...`
-- Table labels that match filenames in `scripts/R/_outputs/` (e.g., `Table:main_ATT` ↔ `results_main.rds`)
+### 2. Run the matching code reviews
 
-Build a list of scripts that produced content in this paper.
+- `.R` -> `/review-r`
+- `.py` -> `/review-python`
+- `.do` -> `/review-stata`
 
-### 2. Auto-invoke `/review-r`
+Save reports under `quality_reports/cross_artifact_[paper]/`.
 
-For each identified R script, launch `/review-r` in a forked subagent (`context: fork`). Save reports to `quality_reports/cross_artifact_[paper]/review_r_[script].md`.
+### 3. Run reproducibility audit
 
-### 3. Auto-invoke `/audit-reproducibility`
+Run `/audit-reproducibility` on the manuscript and the nearest relevant outputs
+directory under `scripts/<language>/_outputs/`.
 
-Run `/audit-reproducibility $manuscript scripts/R/_outputs/` once. Save to `quality_reports/cross_artifact_[paper]/reproducibility.md`.
+### 4. Surface findings in the paper review
 
-### 4. Surface cross-artifact findings
+Promote any load-bearing reproducibility failures or code defects into the top
+of the manuscript review. Keep unrelated code-only issues as follow-up actions.
 
-In the paper review report, add a new section:
+## Exit behavior
 
-```markdown
-## Cross-Artifact Findings
-
-**Scripts reviewed:** N (see `quality_reports/cross_artifact_[paper]/`)
-**Reproducibility:** PASS / FAIL — k of m claims within tolerance
-**Code quality (merged from /review-r reports):** C critical, M major, L minor
-
-### Critical cross-artifact issues (paper + code together)
-| Paper claim | Code location | Issue |
-|---|---|---|
-
-### Code-only issues (won't block paper, but file a follow-up)
-…
-
-### Paper-only issues (code is clean)
-[Rest of the paper review goes here]
-```
-
-### 5. Exit behavior
-
-- Any CRITICAL from `/audit-reproducibility` (FAIL on tolerance) → escalate to CRITICAL in paper review.
-- Code CRITICAL bugs that affect paper claims → escalate in paper review.
-- Code CRITICAL bugs unrelated to paper claims → file as separate action item.
+- Reproducibility FAIL on a claim cited in the manuscript -> critical paper issue
+- Critical code defect affecting cited outputs -> critical paper issue
+- Critical code defect unrelated to cited outputs -> separate follow-up item
 
 ## Opt-out
 
-- `/review-paper --no-cross-artifact` skips the dependency graph. Useful for theory papers, comments, or preprints without code.
-
-## Cross-references
-
-- `.claude/skills/review-paper/SKILL.md` — the orchestrator.
-- `.claude/skills/review-r/SKILL.md` — code reviewer.
-- `.claude/skills/audit-reproducibility/SKILL.md` — numeric claims verifier.
-- `.claude/rules/replication-protocol.md` — tolerance contract.
-
-## What this rule does NOT require
-
-- Running R / Stata / Python (that's `/audit-reproducibility`'s job, and it reads existing outputs).
-- Git-blame archaeology — we review current state.
-- Judging whether a paper's authors wrote good code vs. whether their *results* are defensible. We care about the latter first.
-
-## `--peer` mode ordering
-
-In `/review-paper --peer [journal]` mode, cross-artifact review runs **before** the editor's desk review (as Phase 0). This gives the editor reproducibility evidence — any FAIL on load-bearing claims is desk-reject-worthy. The editor's desk review will cite specific `/audit-reproducibility` findings in the desk_review.md when relevant.
-
-In default and `--adversarial` modes, cross-artifact still runs at Step 6b (after the paper review). Both orderings are valid; the `--peer` pre-flight ordering exists because editors make desk-reject decisions based on evidence of data errors.
-
+`/review-paper --no-cross-artifact` skips this protocol.

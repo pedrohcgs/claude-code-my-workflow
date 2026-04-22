@@ -1,115 +1,62 @@
 ---
 paths:
   - "scripts/**/*.R"
+  - "scripts/**/*.py"
+  - "scripts/**/*.do"
   - "Figures/**/*.R"
+  - "Figures/**/*.py"
+  - "Figures/**/*.do"
 ---
 
 # Replication-First Protocol
 
-**Core principle:** Replicate original results to the dot BEFORE extending.
+**Core principle:** replicate the original results before extending them,
+regardless of whether the implementation language is R, Python, or Stata.
 
----
+## Phase 1: Inventory & baseline
 
-## Phase 1: Inventory & Baseline
+Before writing new empirical code:
 
-Before writing any R code:
+- Read the paper's replication README.
+- Inventory the replication package: language, data files, scripts, outputs.
+- Record the gold-standard quantities from the paper.
+- Store targets in `quality_reports/` as a markdown or JSON artifact.
 
-- [ ] Read the paper's replication README
-- [ ] Inventory replication package: language, data files, scripts, outputs
-- [ ] Record gold standard numbers from the paper:
+## Phase 2: Translate or execute faithfully
 
-```markdown
-## Replication Targets: [Paper Author (Year)]
+- Follow the relevant language conventions:
+  - `.claude/rules/r-code-conventions.md`
+  - `.claude/rules/python-code-conventions.md`
+  - `.claude/rules/stata-code-conventions.md`
+- Match the original sample, covariates, clustering, transformations, and
+  output definitions before "improving" anything.
+- Save machine-readable intermediate results under
+  `scripts/<language>/_outputs/`.
 
-| Target | Table/Figure | Value | SE/CI | Notes |
-|--------|-------------|-------|-------|-------|
-| Main ATT | Table 2, Col 3 | -1.632 | (0.584) | Primary specification |
-```
+## Phase 3: Verify match
 
-- [ ] Store targets in `quality_reports/LectureNN_replication_targets.md` or as RDS
-
----
-
-## Phase 2: Translate & Execute
-
-- [ ] Follow `r-code-conventions.md` for all R coding standards
-- [ ] Translate line-by-line initially -- don't "improve" during replication
-- [ ] Match original specification exactly (covariates, sample, clustering, SE computation)
-- [ ] Save all intermediate results as RDS
-
-### Stata to R Translation Pitfalls
-
-<!-- Customize: Add pitfalls specific to your field -->
-
-| Stata | R | Trap |
-|-------|---|------|
-| `reg y x, cluster(id)` | `feols(y ~ x, cluster = ~id)` | Stata clusters df-adjust differently from some R packages |
-| `areg y x, absorb(id)` | `feols(y ~ x \| id)` | Check demeaning method matches |
-| `probit` for PS | `glm(family=binomial(link="probit"))` | R default logit != Stata default in some commands |
-| `bootstrap, reps(999)` | Depends on method | Match seed, reps, and bootstrap type exactly |
-
----
-
-## Phase 3: Verify Match
-
-### Tolerance Thresholds
+### Tolerance thresholds
 
 | Type | Tolerance | Rationale |
-|------|-----------|-----------|
-| Integers (N, counts) | Exact match | No reason for any difference |
-| Point estimates | < 0.01 | Rounding in paper display |
-| Standard errors | < 0.05 | Bootstrap/clustering variation |
-| P-values | Same significance level | Exact p may differ slightly |
+| --- | --- | --- |
+| Integers (N, counts) | Exact | No reason for difference |
+| Point estimates | < 0.01 | Display rounding |
+| Standard errors | < 0.05 | Bootstrap or clustering variation |
+| P-values | Same significance level | Exact display may differ |
 | Percentages | < 0.1pp | Display rounding |
 
-### If Mismatch
+If the match fails, stop and isolate the divergence before extending.
 
-**Do NOT proceed to extensions.** Isolate which step introduces the difference, check common causes (sample size, SE computation, default options, variable definitions), and document the investigation even if unresolved.
+## Phase 4: Only then extend
 
-### Replication Report
+After all targets pass:
 
-Save to `quality_reports/LectureNN_replication_report.md`:
-
-```markdown
-# Replication Report: [Paper Author (Year)]
-**Date:** [YYYY-MM-DD]
-**Original language:** [Stata/R/etc.]
-**R translation:** [script path]
-
-## Summary
-- **Targets checked / Passed / Failed:** N / M / K
-- **Overall:** [REPLICATED / PARTIAL / FAILED]
-
-## Results Comparison
-
-| Target | Paper | Ours | Diff | Status |
-|--------|-------|------|------|--------|
-
-## Discrepancies (if any)
-- **Target:** X | **Investigation:** ... | **Resolution:** ...
-
-## Environment
-- R version, key packages (with versions), data source
-```
-
----
-
-## Phase 4: Only Then Extend
-
-After replication is verified (all targets PASS):
-
-- [ ] Commit replication script: "Replicate [Paper] Table X -- all targets match"
-- [ ] Now extend with course-specific modifications (different estimators, new figures, etc.)
-- [ ] Each extension builds on the verified baseline
-
----
+- commit or checkpoint the verified baseline
+- make extensions on top of that baseline
+- document every extension relative to the replicated core
 
 ## Enforcement
 
-This rule is enforced by the [`/audit-reproducibility`](../skills/audit-reproducibility/SKILL.md) skill. It parses numeric claims from a manuscript, locates matching values in `scripts/R/_outputs/` (or the user-specified outputs directory), and compares against the tolerance thresholds above. Run it:
-
-- **Before submission** — `/audit-reproducibility path/to/manuscript.tex`
-- **Before releasing a replication package** — same invocation; aim for zero FAILs.
-- **As a pre-commit gate** — wire into `/commit` when the diff touches both manuscript and analysis files.
-
-The skill exits 1 on any tolerance violation, so it integrates cleanly with quality gates.
+This rule is enforced by `/audit-reproducibility`. That skill compares
+manuscript claims against the current outputs under `scripts/R/_outputs/`,
+`scripts/python/_outputs/`, or `scripts/stata/_outputs/`.

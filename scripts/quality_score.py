@@ -11,6 +11,8 @@ Usage:
     python scripts/quality_score.py Quarto/*.qmd
     python scripts/quality_score.py Slides/Lecture01_Topic.tex
     python scripts/quality_score.py scripts/R/Lecture06_simulations.R
+    python scripts/quality_score.py scripts/python/03_analyze.py
+    python scripts/quality_score.py scripts/stata/03_analyze.do
 """
 
 import sys
@@ -61,6 +63,34 @@ R_SCRIPT_RUBRIC = {
     'minor': {
         'style_violation': {'points': 1},
         'missing_roxygen': {'points': 1},
+    }
+}
+
+PYTHON_SCRIPT_RUBRIC = {
+    'critical': {
+        'syntax_error': {'points': 100, 'auto_fail': True},
+        'hardcoded_path': {'points': 20},
+    },
+    'major': {
+        'missing_seed': {'points': 10},
+        'missing_output_dir': {'points': 5},
+    },
+    'minor': {
+        'missing_main_guard': {'points': 1},
+    }
+}
+
+STATA_SCRIPT_RUBRIC = {
+    'critical': {
+        'hardcoded_path': {'points': 20},
+    },
+    'major': {
+        'missing_version': {'points': 10},
+        'missing_seed': {'points': 10},
+        'missing_log': {'points': 5},
+    },
+    'minor': {
+        'missing_output_dir': {'points': 1},
     }
 }
 
@@ -234,17 +264,51 @@ class IssueDetector:
             return False, "Rscript not installed"
 
     @staticmethod
+    def check_python_syntax(filepath: Path) -> Tuple[bool, str]:
+        """Check Python script for syntax errors."""
+        try:
+            result = subprocess.run(
+                [sys.executable, '-m', 'py_compile', str(filepath)],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if result.returncode != 0:
+                return False, result.stderr
+            return True, ""
+        except subprocess.TimeoutExpired:
+            return False, "Syntax check timeout"
+
+    @staticmethod
     def check_hardcoded_paths(content: str) -> List[int]:
         """Detect absolute paths in R scripts."""
         issues = []
         lines = content.split('\n')
 
         for i, line in enumerate(lines, 1):
-            if re.search(r'["\'][/\\]|["\'][A-Za-z]:[/\\]', line):
+            if re.search(r'["\']/[A-Za-z0-9._~-]', line) or \
+               re.search(r'["\'][A-Za-z]:[/\\][^"\']+', line) or \
+               re.search(r'["\']\\\\[A-Za-z0-9._-]+\\', line):
                 if not re.search(r'http:|https:|file://|/tmp/', line):
                     issues.append(i)
 
         return issues
+
+    @staticmethod
+    def has_python_main_guard(content: str) -> bool:
+        """Check if a Python script has a standard main guard."""
+        return 'if __name__ == "__main__":' in content
+
+    @staticmethod
+    def check_stata_structure(content: str, filename: str) -> Dict[str, bool]:
+        """Check common Stata reproducibility conventions."""
+        return {
+            'has_version': bool(re.search(r'^\s*version\s+\d+', content, re.MULTILINE)),
+            'has_seed': 'set seed' in content.lower(),
+            'has_log': bool(re.search(r'^\s*log\s+using\b', content, re.MULTILINE)),
+            'has_output_dir': '_outputs' in content or 'mkdir' in content.lower(),
+            'is_orchestrator': filename.startswith('00_') or 'run_all' in filename.lower(),
+        }
 
     @staticmethod
     def check_latex_syntax(content: str) -> List[Dict]:
@@ -491,6 +555,128 @@ class QualityScorer:
         self.score = max(0, self.score)
         return self._generate_report()
 
+    def score_python_script(self) -> Dict:
+        """Score Python script quality."""
+        content = self.filepath.read_text(encoding='utf-8')
+
+        is_valid, error = IssueDetector.check_python_syntax(self.filepath)
+        if not is_valid:
+            self.auto_fail = True
+            self.issues['critical'].append({
+                'type': 'syntax_error',
+                'description': 'Python syntax error',
+                'details': error[:200],
+                'points': 100
+            })
+            self.score = 0
+            return self._generate_report()
+
+        path_issues = IssueDetector.check_hardcoded_paths(content)
+        for line in path_issues:
+            self.issues['critical'].append({
+                'type': 'hardcoded_path',
+                'description': f'Hardcoded absolute path at line {line}',
+                'details': 'Use pathlib with repo-relative paths',
+                'points': 20
+            })
+            self.score -= 20
+
+        has_random = any(
+            token in content
+            for token in ['np.random', 'random.', 'default_rng(', 'bootstrap', 'resample(']
+        )
+        has_seed = any(
+            token in content
+            for token in ['np.random.seed', 'random.seed', 'default_rng(', 'seed=']
+        )
+        if has_random and not has_seed:
+            self.issues['major'].append({
+                'type': 'missing_seed',
+                'description': 'Missing explicit seed for stochastic code',
+                'details': 'Set one project seed near the top of the workflow',
+                'points': 10
+            })
+            self.score -= 10
+
+        if '_outputs' not in content:
+            self.issues['major'].append({
+                'type': 'missing_output_dir',
+                'description': 'No scripts/python/_outputs/ path referenced',
+                'details': 'Save tables, figures, and machine-readable outputs under scripts/python/_outputs/',
+                'points': 5
+            })
+            self.score -= 5
+
+        if not IssueDetector.has_python_main_guard(content):
+            self.issues['minor'].append({
+                'type': 'missing_main_guard',
+                'description': 'Missing Python main guard',
+                'details': 'Use if __name__ == "__main__": for runnable scripts',
+                'points': 1
+            })
+            self.score -= 1
+
+        self.score = max(0, self.score)
+        return self._generate_report()
+
+    def score_stata_script(self) -> Dict:
+        """Score Stata do-file quality with static checks."""
+        content = self.filepath.read_text(encoding='utf-8')
+        structure = IssueDetector.check_stata_structure(content, self.filepath.name)
+
+        path_issues = IssueDetector.check_hardcoded_paths(content)
+        for line in path_issues:
+            self.issues['critical'].append({
+                'type': 'hardcoded_path',
+                'description': f'Hardcoded absolute path at line {line}',
+                'details': 'Use repo-root globals or relative paths',
+                'points': 20
+            })
+            self.score -= 20
+
+        if not structure['has_version']:
+            self.issues['major'].append({
+                'type': 'missing_version',
+                'description': 'Missing Stata version statement',
+                'details': 'Pin version at the top of each do-file',
+                'points': 10
+            })
+            self.score -= 10
+
+        has_random = any(
+            token in content.lower()
+            for token in ['runiform', 'rnormal', 'bootstrap', 'simulate', 'bsample']
+        )
+        if has_random and not structure['has_seed']:
+            self.issues['major'].append({
+                'type': 'missing_seed',
+                'description': 'Missing set seed for stochastic Stata workflow',
+                'details': 'Set one project seed in the orchestrator or do-file',
+                'points': 10
+            })
+            self.score -= 10
+
+        if structure['is_orchestrator'] and not structure['has_log']:
+            self.issues['major'].append({
+                'type': 'missing_log',
+                'description': 'Missing log using in Stata orchestrator',
+                'details': 'Write a text log under scripts/stata/_outputs/ for reproducibility',
+                'points': 5
+            })
+            self.score -= 5
+
+        if not structure['has_output_dir']:
+            self.issues['minor'].append({
+                'type': 'missing_output_dir',
+                'description': 'No scripts/stata/_outputs/ path referenced',
+                'details': 'Save logs, tables, and figures under scripts/stata/_outputs/',
+                'points': 1
+            })
+            self.score -= 1
+
+        self.score = max(0, self.score)
+        return self._generate_report()
+
     def score_beamer(self) -> Dict:
         """Score Beamer/LaTeX lecture slides."""
         content = self.filepath.read_text(encoding='utf-8')
@@ -690,6 +876,12 @@ Examples:
   # Score an R script
   python scripts/quality_score.py scripts/R/Lecture06_simulations.R
 
+  # Score a Python script
+  python scripts/quality_score.py scripts/python/03_analyze.py
+
+  # Score a Stata do-file
+  python scripts/quality_score.py scripts/stata/03_analyze.do
+
   # Summary only (no detailed issues)
   python scripts/quality_score.py Quarto/Lecture6.qmd --summary
 
@@ -731,6 +923,10 @@ Exit Codes:
                 report = scorer.score_quarto()
             elif filepath.suffix == '.R':
                 report = scorer.score_r_script()
+            elif filepath.suffix == '.py':
+                report = scorer.score_python_script()
+            elif filepath.suffix == '.do':
+                report = scorer.score_stata_script()
             elif filepath.suffix == '.tex':
                 report = scorer.score_beamer()
             else:

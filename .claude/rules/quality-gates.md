@@ -3,67 +3,83 @@ paths:
   - "Slides/**/*.tex"
   - "Quarto/**/*.qmd"
   - "scripts/**/*.R"
+  - "scripts/**/*.py"
+  - "scripts/**/*.do"
 ---
 
 # Quality Review & Scoring Rubrics
 
-> **Framing:** Thresholds are **advisory at the harness level**. The `/commit` skill runs `quality_score.py` and halts on failure until the user fixes or explicitly overrides. There is no git pre-commit hook that blocks a direct `git commit` — if you bypass the skill, you bypass the review. "Gate" in this file means "checkpoint enforced by a specific skill," not "repo-wide block."
+Thresholds are advisory at the repo level and enforced only by the workflows
+that explicitly call `scripts/quality_score.py`.
 
 ## Thresholds
 
-- **80/100 = Commit** -- good enough to save
-- **90/100 = PR** -- ready for deployment
-- **95/100 = Excellence** -- aspirational
+- **80/100 = Commit**
+- **90/100 = PR**
+- **95/100 = Excellence**
 
 ## Quarto Slides (.qmd)
 
 | Severity | Issue | Deduction |
-|----------|-------|-----------|
+| --- | --- | --- |
 | Critical | Compilation failure | -100 |
 | Critical | Equation overflow | -20 |
 | Critical | Broken citation | -15 |
-| Critical | Typo in equation | -10 |
 | Major | Text overflow | -5 |
 | Major | TikZ label overlap | -5 |
 | Major | Notation inconsistency | -3 |
-| Minor | Font size reduction | -1 per slide |
-| Minor | Long lines (>100 chars) | -1 (EXCEPT documented math formulas) |
-
-## R Scripts (.R)
-
-| Severity | Issue | Deduction |
-|----------|-------|-----------|
-| Critical | Syntax errors | -100 |
-| Critical | Domain-specific bugs | -30 |
-| Critical | Hardcoded absolute paths | -20 |
-| Major | Missing set.seed() | -10 |
-| Major | Missing figure generation | -5 |
+| Minor | Font size reduction | -1 |
 
 ## Beamer Slides (.tex)
 
 | Severity | Issue | Deduction |
-|----------|-------|-----------|
+| --- | --- | --- |
 | Critical | XeLaTeX compilation failure | -100 |
 | Critical | Undefined citation | -15 |
-| Critical | Overfull hbox > 10pt | -10 |
+| Critical | Overfull hbox risk | -10 |
+| Major | Notation inconsistency | -3 |
+| Minor | Font size reduction | -1 |
 
-## Enforcement (by the /commit skill only)
+## R Scripts (.R)
 
-- **Score < 80:** Halt within `/commit`. List blocking issues. User may override with an explicit natural-language signal ("commit anyway" / "skip quality gate") and a reason — the override is logged in the commit body.
-- **Score < 90:** Allow commit within `/commit`, warn. List recommendations.
-- **Direct `git commit`** (bypassing the skill): no enforcement. For hard enforcement, install a git pre-commit hook that wraps `quality_score.py`.
+| Severity | Issue | Deduction |
+| --- | --- | --- |
+| Critical | Syntax errors | -100 |
+| Critical | Hardcoded absolute paths | -20 |
+| Major | Missing set.seed() when stochastic | -10 |
+| Major | Missing reproducibility outputs | -5 |
+
+## Python Scripts (.py)
+
+| Severity | Issue | Deduction |
+| --- | --- | --- |
+| Critical | Syntax errors | -100 |
+| Critical | Hardcoded absolute paths | -20 |
+| Major | Missing explicit seed when stochastic | -10 |
+| Major | Missing `scripts/python/_outputs/` discipline | -5 |
+| Minor | Missing main guard | -1 |
+
+## Stata Do-files (.do)
+
+| Severity | Issue | Deduction |
+| --- | --- | --- |
+| Critical | Hardcoded absolute paths | -20 |
+| Major | Missing `version` statement | -10 |
+| Major | Missing `set seed` when stochastic | -10 |
+| Major | Missing orchestrator log | -5 |
+| Minor | Missing `scripts/stata/_outputs/` discipline | -1 |
+
+## Enforcement
+
+- **Score < 80:** halt within the workflow that called the scorer.
+- **Score < 90:** allow save/commit workflows but warn.
+- **Direct git commands:** no enforcement unless the user wires in a hook.
 
 ## Quality Reports
 
-Generated **only at merge time**. Use `templates/quality-report.md` for format.
-Save to `quality_reports/merges/YYYY-MM-DD_[branch-name].md`.
+Generate quality reports only when the workflow explicitly requests them.
 
-## Tolerance Thresholds (Research)
+## Research tolerances
 
-<!-- Customize for your domain -->
-
-| Quantity | Tolerance | Rationale |
-|----------|-----------|-----------|
-| Point estimates | [e.g., 1e-6] | [Numerical precision] |
-| Standard errors | [e.g., 1e-4] | [MC variability] |
-| Coverage rates | [e.g., +/- 0.01] | [MC with B reps] |
+Use `.claude/rules/replication-protocol.md` for cross-language numerical
+tolerance thresholds.

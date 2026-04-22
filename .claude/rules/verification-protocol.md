@@ -3,51 +3,58 @@ paths:
   - "Slides/**/*.tex"
   - "Quarto/**/*.qmd"
   - "docs/**"
+  - "scripts/**/*.R"
+  - "scripts/**/*.py"
+  - "scripts/**/*.do"
 ---
 
 # Task Completion Verification Protocol
 
-**At the end of EVERY task, Claude MUST verify the output works correctly.** This is non-negotiable.
+At the end of every non-trivial task, verify the output actually works.
 
-## For Quarto/HTML Slides:
-1. Run `./scripts/sync_to_docs.sh` (or `./scripts/sync_to_docs.sh LectureN`) to render and deploy
-2. Open the HTML in browser: `open docs/slides/LectureX.html` (macOS) or `xdg-open` (Linux)
-3. Verify images display by reading 2-3 image files to confirm valid content
-4. Check HTML source for correct image paths
-5. Check for overflow by scanning dense slides
-6. Verify environment parity: every Beamer box environment has a CSS equivalent in the QMD
-7. Report verification results
+## Quarto / HTML slides
 
-## For LaTeX/Beamer Slides:
-1. Compile with xelatex and check for errors
-2. Open the PDF to verify figures render (`open` on macOS, `xdg-open` on Linux)
-3. Check for overfull hbox warnings
+1. Run `./scripts/sync_to_docs.sh` (or the lecture-specific variant).
+2. Check render output for errors.
+3. Verify figures and image paths.
+4. Spot-check dense slides for overflow or layout breakage.
 
-## For TikZ Diagrams in HTML/Quarto:
-1. Browsers **cannot** display PDF images inline — ALWAYS convert to SVG
-2. Use SVG (vector format) for crisp rendering: `pdf2svg input.pdf output.svg`
-3. **NEVER use PNG for diagrams** — PNG is raster and looks blurry
-4. Verify SVG files contain valid XML/SVG markup
-5. Copy SVGs to `docs/Figures/LectureX/` via `sync_to_docs.sh`
-6. **Freshness check:** Before using any TikZ SVG, verify extract_tikz.tex matches current Beamer source
+## LaTeX / Beamer slides
 
-## For R Scripts:
-1. Run `Rscript scripts/R/filename.R`
-2. Verify output files (PDF, RDS) were created with non-zero size
-3. Spot-check estimates for reasonable magnitude
+1. Compile with XeLaTeX.
+2. Check for errors and overfull warnings.
+3. Open the PDF if visual inspection matters.
 
-## Common Pitfalls:
-- **PDF images in HTML**: Browsers don't render PDFs inline → convert to SVG
-- **Relative paths**: `../Figures/` works from `Quarto/` but not from `docs/slides/` → use `sync_to_docs.sh`
-- **Assuming success**: Always verify output files exist AND contain correct content
-- **Stale TikZ SVGs**: extract_tikz.tex diverges from Beamer source → always diff-check
+## TikZ in HTML / Quarto
 
-## Verification Checklist:
-```
-[ ] Output file created successfully
-[ ] No compilation/render errors
-[ ] Images/figures display correctly
-[ ] Paths resolve in deployment location (docs/)
-[ ] Opened in browser/viewer to confirm visual appearance
-[ ] Reported results to user
+1. Convert PDF diagrams to SVG for browser use.
+2. Verify SVG files contain valid markup.
+3. Confirm deployed paths resolve in `docs/`.
+
+## R scripts
+
+1. Run `Rscript scripts/R/<file>.R` or `Rscript scripts/R/00_run_all.R`.
+2. Verify `scripts/R/_outputs/` contains the expected artifacts.
+3. Spot-check key estimates for plausible magnitude.
+
+## Python scripts
+
+1. Run `python scripts/python/<file>.py` or `python scripts/python/00_run_all.py`.
+2. Verify `scripts/python/_outputs/` contains the expected artifacts.
+3. Spot-check key estimates or summaries for plausible magnitude.
+
+## Stata do-files
+
+1. Run the relevant `do` file or `scripts/stata/00_run_all.do`.
+2. Verify `scripts/stata/_outputs/` contains the expected artifacts and log.
+3. Spot-check key estimates or summaries for plausible magnitude.
+
+## Checklist
+
+```text
+[ ] Output file(s) created successfully
+[ ] No compilation or runtime errors
+[ ] Expected paths and deployment targets resolve
+[ ] Visual or numeric spot-check completed
+[ ] Results reported back to the user
 ```
