@@ -1,0 +1,284 @@
+LITERATURE REVIEW PAPERS — CET Dominican Republic
+Ranked by Relevance
+Generated: 2026-04-27
+=======================================================================
+
+KEY:
+  [IN BIB]     = Entry exists in Paper/BID_Bib.bib
+  [CITED]      = Already cited in Paper/main.tex
+  [ADD BIB]    = Needs to be added to bibliography
+  FILE         = Filename in this folder
+
+=======================================================================
+
+RANK 1 — HIGHEST RELEVANCE
+-----------------------------------------------------------------------
+Claxton, K., Martin, S., Soares, M., Rice, N., Spackman, E., Hinde, S.,
+  Devlin, N., Smith, P.C., and Sculpher, M. (2015).
+  "Methods for the estimation of the National Institute for Health and
+  Care Excellence cost-effectiveness threshold."
+  Health Technology Assessment, 19(14), 1–504.
+  DOI: 10.3310/hta19140
+  [IN BIB: Claxton2015] [CITED]
+  FILE: health technology assessment.pdf
+
+  WHY: The foundational methodology paper. This study's entire approach
+  (2SLS, disease-level elasticity, QALY conversion) follows Claxton et al.
+  directly. It is the primary methodological reference for all subsequent
+  country-level estimates.
+
+-----------------------------------------------------------------------
+RANK 2
+-----------------------------------------------------------------------
+Martin, S., Lomas, J., Claxton, K., and Longo, F. (2021).
+  "How Effective is Marginal Healthcare Expenditure? New Evidence from
+  England for 2003/04 to 2012/13."
+  Applied Health Economics and Health Policy, 19(6), 885–903.
+  DOI: 10.1007/s40258-021-00663-3
+  [IN BIB: Martin2021] [CITED]
+  FILE: martin2021.pdf
+
+  WHY: Most direct empirical predecessor. Refines Claxton 2015 using the
+  funding-rule IV approach over a 10-year panel. The instrument strategy
+  in the DR paper is closest to Martin et al. Headline: £5,000–£10,000
+  per QALY for the English NHS.
+
+-----------------------------------------------------------------------
+RANK 3
+-----------------------------------------------------------------------
+Espinosa, O., Rodríguez-Lesmes, P., Orozco, L., Ávila, D., Enríquez, H.,
+  Romano, G., and Ceballos, M. (2021).
+  "Estimating cost-effectiveness thresholds under a managed healthcare
+  system: experiences from Colombia."
+  Health Policy and Planning, 37(3), 359–368.
+  DOI: 10.1093/heapol/czab146
+  [IN BIB: Espinosa2021] [NOT YET CITED IN TEXT]
+  FILE: Estimating cost-effectiveness thresholds Colombia.pdf
+
+  WHY: The closest parallel to the DR study. Same supply-side elasticity
+  methodology, Latin America, middle-income country, managed health system.
+  CET: US$4,488/YLL or US$5,181/QALY (~1× GDP per capita, 2019).
+  Uses drug-price regulation and HBP changes as instruments — conceptually
+  similar to the DR municipality contiguity approach.
+
+-----------------------------------------------------------------------
+RANK 4
+-----------------------------------------------------------------------
+Edney, L.C., Lomas, J., Karnon, J., Vallejo-Torres, L., Stadhouders, N.,
+  Siverskog, J., Paulden, M., Edoka, I.P., and Ochalek, J. (2022).
+  "Empirical Estimates of the Marginal Cost of Health Produced by a
+  Healthcare System: Methodological Considerations from Country-Level
+  Estimates."
+  PharmacoEconomics, 40, 31–43.
+  DOI: 10.1007/s40273-021-01087-6
+  [ADD BIB — not in bibliography]
+  FILE: Empirical Estimates of the Marginal Cost of Health Produced.pdf
+
+  WHY: The only systematic review of all 8 country-level empirical
+  estimates (England, Spain, Australia, Netherlands, Sweden, South Africa,
+  China). Identifies shared methodological choices and open issues. Places
+  the DR paper in the global state of the art. Essential for lit review
+  positioning.
+
+-----------------------------------------------------------------------
+RANK 5
+-----------------------------------------------------------------------
+Woods, B., Revill, P., Sculpher, M., and Claxton, K. (2016).
+  "Country-Level Cost-Effectiveness Thresholds: Initial Estimates and
+  the Need for Further Research."
+  Value in Health, 19(8), 929–935.
+  DOI: 10.1016/j.jval.2016.02.017
+  [IN BIB: Woods2016] [NOT YET CITED IN TEXT]
+  FILE: Country-Level Cost-Effectiveness Thresholds- Initial Estimates
+        and the Need for Further Research.pdf
+
+  WHY: Extends the Claxton 2015 UK estimate to low- and middle-income
+  countries using income elasticity of VSL. Provides indirect CET
+  benchmarks for countries without own estimates, including Latin America.
+  The DR estimate (26% of GDP per capita) can be directly compared
+  against the Woods et al. country range.
+
+-----------------------------------------------------------------------
+RANK 6
+-----------------------------------------------------------------------
+Pichon-Riviere, A., Drummond, M., Palacios, A., Garcia-Marti, S., and
+  Augustovski, F. (2023).
+  "Determining the efficiency path to universal health coverage:
+  cost-effectiveness thresholds for 174 countries based on growth in
+  life expectancy and health expenditures."
+  Lancet Global Health, 11, e833–e842.
+  DOI: 10.1016/S2214-109X(23)00162-6
+  [ADD BIB — not in bibliography]
+  FILE: Determining the efficiency path to universal health 174 Countries.pdf
+
+  WHY: Provides a CET estimate for the Dominican Republic (and 173 other
+  countries) using a growth-in-life-expectancy methodology. The DR
+  estimate in this paper can be used to benchmark our econometric result.
+  Strong policy relevance: Lancet Global Health, Latin American authors
+  (IECS Buenos Aires / University of York).
+
+-----------------------------------------------------------------------
+RANK 7
+-----------------------------------------------------------------------
+Vallejo-Torres, L., García-Lorenzo, B., and Serrano-Aguilar, P. (2018).
+  "Estimating a cost-effectiveness threshold for the Spanish NHS."
+  Health Economics, 27(4), 746–761.
+  DOI: 10.1002/hec.3633
+  [IN BIB: Vallejo2018] [CITED]
+  FILE: Estimating a cost-effectiveness threshold for the Spanish NHS.pdf
+
+  WHY: Spain application of the Claxton/Martin methodology using
+  regional panel data (17 ACs, 2008–2012). CET: €21,000–€24,000/QALY.
+  Relevant as a middle-income-adjacent comparator and for the IV
+  approach (% public expenditure on health as instrument).
+
+-----------------------------------------------------------------------
+RANK 8
+-----------------------------------------------------------------------
+Edney, L.C., Haji Ali Afzali, H., Cheng, T.C., and Karnon, J. (2018).
+  "Estimating the Reference Incremental Cost-Effectiveness Ratio for the
+  Australian Health System."
+  PharmacoEconomics, 36(2), 239–252.
+  DOI: 10.1007/s40273-017-0585-2
+  [IN BIB: Edney2018] [NOT YET CITED IN TEXT]
+  FILE: 2018_pharmaco.pdf
+
+  WHY: Australia application. CET: AUD 28,033/QALY. Introduces the
+  morbidity-component estimation approach (HRQoL survey data). Adds
+  methodological diversity to the country comparison.
+
+-----------------------------------------------------------------------
+RANK 9
+-----------------------------------------------------------------------
+Sampson, C., Zamora, B., Watson, S., Cairns, J., Chalkidou, K.,
+  Cubi-Molla, P., Devlin, N., García-Lorenzo, B., Hughes, D.A.,
+  Leech, A.A., and Towse, A. (2022).
+  "Supply-Side Cost-Effectiveness Thresholds: Questions for Evidence-
+  Based Policy."
+  Applied Health Economics and Health Policy, 20, 651–667.
+  DOI: 10.1007/s40258-022-00730-3
+  [ADD BIB — not in bibliography]
+  FILE: Sampson2022_Supply_Side_CET.pdf
+
+  WHY: Critical methodological review of limitations in supply-side
+  threshold estimation (theory, methods, data). Distinguishes marginal
+  productivity, average displacement, and outcome elasticity estimates.
+  Citing Sampson et al. and acknowledging their critiques strengthens the
+  robustness discussion of the DR paper.
+
+-----------------------------------------------------------------------
+RANK 10
+-----------------------------------------------------------------------
+Espinosa, O., Rodríguez-Lesmes, P., Romano, G., Orozco, E., Basto, S.,
+  Ávila, D., Mesa, L., and Enríquez, H. (2024).
+  "Use of Cost-Effectiveness Thresholds in Healthcare Public Policy:
+  Progress and Challenges."
+  Applied Health Economics and Health Policy, 22(6), 797–804.
+  DOI: 10.1007/s40258-024-00900-5
+  [ADD BIB — not in bibliography]
+  FILE: Espinosa2024_CET_Progress_Challenges.pdf
+
+  WHY: Surveys how 9 countries (Australia, Colombia, England, Malaysia,
+  Netherlands, Spain, South Africa, Thailand, USA) actually use CETs in
+  financing, coverage, and pricing decisions. Motivates the policy
+  relevance of the DR estimate — only Thailand has made explicit use of
+  a CET with favorable results. Strong motivation for introduction.
+
+-----------------------------------------------------------------------
+RANK 11
+-----------------------------------------------------------------------
+Pichon-Riviere, A., Drummond, M., García-Martí, S., and Augustovski, F.
+  (2021).
+  "Application of economic evidence in health technology assessment and
+  decision-making for the allocation of health resources in Latin America:
+  Seven key topics and a preliminary proposal for implementation."
+  IDB Technical Note No. IDB-TN-2286. Inter-American Development Bank.
+  [ADD BIB — not in bibliography]
+  FILE: LatinAmerica_HTA.pdf (renamed from long original filename)
+
+  WHY: IDB-commissioned technical note on HTA in Latin America from the
+  same IECS group that produced the Lancet Global Health 2023 paper.
+  Directly addresses barriers to economic evaluation in the region and
+  how to set cost-effectiveness thresholds in fragmented systems.
+  Strong regional motivation for the DR paper.
+
+-----------------------------------------------------------------------
+RANK 12
+-----------------------------------------------------------------------
+Brazil Ministry of Health — CONITEC (2021).
+  "O uso de limiares de custo-efetividade nas decisões em saúde:
+  proposta para as incorporações de tecnologias no Sistema Único de
+  Saúde."
+  Ministério da Saúde, Brasília, 2021.
+  [ADD BIB — not in bibliography] [Policy document, not journal article]
+  FILE: Brasil paper.pdf
+
+  WHY: Brazil's official proposal for adopting a CET in the SUS (Unified
+  Health System). Shows that the DR paper fits into an active regional
+  policy movement to institutionalize CETs. Useful for policy motivation
+  in the introduction and conclusion.
+
+-----------------------------------------------------------------------
+RANK 13
+-----------------------------------------------------------------------
+Pandey, H., Paulden, M., and McCabe, C. (2018).
+  "Theoretical models of the cost-effectiveness threshold, value
+  assessment, and health care system sustainability."
+  IHE White Paper. Institute of Health Economics, Edmonton, AB.
+  Prepared for the Patented Medicines Prices Review Board (PMPRB).
+  [ADD BIB — not in bibliography] [Technical report]
+  FILE: IHE_white_paper_for_PMPRB_Final.pdf
+
+  WHY: Theoretical review of CET models (supply-side, demand-side,
+  system sustainability) prepared for the Canadian context. Useful for
+  the methodological discussion of which threshold concept the DR paper
+  is estimating and why.
+
+-----------------------------------------------------------------------
+RANK 14
+-----------------------------------------------------------------------
+Culyer, A.J. (2016).
+  "Cost-effectiveness thresholds in health care: a bookshelf guide to
+  their meaning and use."
+  Health Economics, Policy and Law, 11(4), 415–432.
+  [IN BIB: Culyer2016] [CITED]
+  FILE: cost effectiveness bookshelf.pdf
+
+  WHY: Accessible conceptual guide explaining what CETs mean and why they
+  matter, with emphasis on developing-country relevance. Already cited in
+  the introduction. Background reference.
+
+=======================================================================
+
+SUMMARY TABLE
+-----------------------------------------------------------------------
+Rank  Author (Year)              In Bib?    Cited?    Country/Scope
+-----------------------------------------------------------------------
+1     Claxton et al. (2015)      YES        YES       England (method)
+2     Martin et al. (2021)       YES        YES       England (updated)
+3     Espinosa et al. (2021)     YES        NO        Colombia
+4     Edney et al. (2022)        NO         NO        8-country review
+5     Woods et al. (2016)        YES        NO        174 countries
+6     Pichon-Riviere et al.(2023)NO         NO        174 countries
+7     Vallejo-Torres et al.(2018)YES        YES       Spain
+8     Edney et al. (2018)        YES        NO        Australia
+9     Sampson et al. (2022)      NO         NO        Methodol. critique
+10    Espinosa et al. (2024)     NO         NO        9-country policy
+11    Pichon-Riviere et al.(2021)NO         NO        Latin America
+12    Brazil MoH (2021)          NO         NO        Brazil (policy doc)
+13    Pandey et al. (2018)       NO         NO        Canada (theory)
+14    Culyer (2016)              YES        YES       Conceptual guide
+
+Papers to add to BID_Bib.bib: Edney2022, PichonRiviere2023,
+  Sampson2022, Espinosa2024, PichonRiviere2021, BrazilMoH2021,
+  Pandey2018
+
+Papers in bib but not yet cited in text: Espinosa2021, Woods2016,
+  Edney2018
+
+=======================================================================
+NOTE: "Metodologia-para-la-estimacion-del-umbral-de-costo-efectividad-
+el-caso-de-Republica-Dominicana.pdf" is also in this folder but
+password-protected (cannot be read). Likely a prior Dominican Republic
+CET report — confirm with authors before citing.
+=======================================================================
