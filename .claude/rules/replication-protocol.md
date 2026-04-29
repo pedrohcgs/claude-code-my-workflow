@@ -26,7 +26,7 @@ Before writing any R code:
 | Main ATT | Table 2, Col 3 | -1.632 | (0.584) | Primary specification |
 ```
 
-- [ ] Store targets in `quality_reports/LectureNN_replication_targets.md` or as RDS
+- [ ] Store targets in `quality_reports/paper_replication_targets.md` or as RDS
 
 ---
 
@@ -68,7 +68,7 @@ Before writing any R code:
 
 ### Replication Report
 
-Save to `quality_reports/LectureNN_replication_report.md`:
+Save to `quality_reports/paper_replication_report.md`:
 
 ```markdown
 # Replication Report: [Paper Author (Year)]

@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-compact.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-compact.py",
             "timeout": 10
           }
         ]
@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-compact-restore.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-compact-restore.py",
             "timeout": 5
           }
         ]
@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/context-monitor.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/context-monitor.py",
             "timeout": 5
           }
         ]
@@ -64,7 +64,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/verify-reminder.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/verify-reminder.py",
             "timeout": 5
           }
         ]
@@ -75,7 +75,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/log-reminder.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/log-reminder.py",
             "timeout": 10
           }
         ]

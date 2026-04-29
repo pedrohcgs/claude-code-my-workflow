@@ -68,11 +68,16 @@ saveRDS(result, file.path(out_dir, "descriptive_name.rds"))
 
 ## 6. Common Pitfalls
 
-<!-- Add your field-specific pitfalls here -->
 | Pitfall | Impact | Prevention |
 |---------|--------|------------|
 | Missing `bg = "transparent"` | White boxes on slides | Always include in ggsave() |
 | Hardcoded paths | Breaks on other machines | Use relative paths |
+| Ignoring zero-trade observations | Biased OLS on log(exports) | Use PPML or explicitly document sample restriction |
+| `log(trade + 1)` without justification | Inconsistent with theory; results not comparable across papers | Document transformation choice; default to PPML unless theory demands log-OLS |
+| Clustering SE at firm only when exporting to multiple destinations | Under-rejection when errors are correlated across destinations | Cluster at the appropriate level; see Abadie et al. (2023) |
+| Country/firm FE absorbed without collinearity check | Perfect multicollinearity silently drops variables | Use `fixest::feols()` and inspect `summary()` for dropped dummies |
+| Credit constraint proxy undefined or undocumented | Replication impossible | Construct and document proxy in a dedicated `00_construct_proxies.R` |
+| No overlap check before comparing credit-constrained vs. unconstrained firms | Extrapolating far outside common support | Run balance table + overlap diagnostic before any ATT/ATET estimation |
 
 ## 7. Line Length & Mathematical Exceptions
 

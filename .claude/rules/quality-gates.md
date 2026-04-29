@@ -60,10 +60,9 @@ Save to `quality_reports/merges/YYYY-MM-DD_[branch-name].md`.
 
 ## Tolerance Thresholds (Research)
 
-<!-- Customize for your domain -->
-
 | Quantity | Tolerance | Rationale |
 |----------|-----------|-----------|
-| Point estimates | [e.g., 1e-6] | [Numerical precision] |
-| Standard errors | [e.g., 1e-4] | [MC variability] |
-| Coverage rates | [e.g., +/- 0.01] | [MC with B reps] |
+| Point estimates | ≤ 1e-6 | Numerical precision (deterministic code, no MC) |
+| Standard errors | ≤ 1e-4 | Bootstrap / clustering run-to-run variation |
+| Coverage rates | ± 0.01 | MC simulation with reasonable B reps |
+| Counts / N | Exact | No acceptable difference |
