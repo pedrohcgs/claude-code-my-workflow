@@ -503,7 +503,7 @@ Understanding the configuration layers helps you customize the workflow and debu
 
 ## CLAUDE.md --- Your Project's Constitution
 
-`CLAUDE.md` is the single most important file. Claude reads it at the start of every session. But here is the critical insight: **Claude reliably follows about 100--150 custom instructions.** Your system prompt already uses ~50, leaving ~100--150 for your project. CLAUDE.md and always-on rules share this budget.
+`CLAUDE.md` is the single most important file. Claude reads it at the start of every session. But here is the critical insight: **Claude reliably follows about 100--150 custom instructions.** Your system prompt already uses ~50, leaving ~50--100 for your project. CLAUDE.md and always-on rules share this budget.
 
 This means CLAUDE.md should be a **slim constitution** --- short directives and pointers, not comprehensive documentation. Aim for ~120 lines:
 
