@@ -1,0 +1,9 @@
+file_name,source_type,url_or_origin,role_in_analysis
+CIQ_Zensho_Financials_Segments_original.xls,CIQ workbook,WeChat cache file provided by user,Initial geography and segment table cross-check
+zensho_41st_asr_en_fy2023.pdf,Official annual securities report,https://www.zensho.co.jp/en/ir/resource/pdf/41th.pdf,FY2023 official filing and old segment basis
+zensho_42nd_asr_en_fy2024.pdf,Official annual securities report,https://www.zensho.co.jp/en/ir/resource/pdf/42th.pdf,FY2024 official filing and restated new segment basis
+zensho_43rd_asr_en_fy2025.pdf,Official annual securities report,https://www.zensho.co.jp/en/ir/resource/43rd.pdf,FY2025 official filing and geography table
+zensho_fy2024_results_en.pdf,Official results deck,https://www.zensho.co.jp/en/ir/resource/pdf/ZHD240521.pdf,FY2024 segment SSSG/store-count support
+zensho_fy2025_results_en.pdf,Official results deck,https://www.zensho.co.jp/en/ir/resource/pdf/ZHD250513EN.pdf,FY2025 segment SSSG/store-count support
+sukiya_monthly_fy2024.html,Official monthly data,https://www.zensho.co.jp/en/ir/finance/monthly/2024.html,Sukiya FY2024 all-store/existing-store/customer/ticket data
+sukiya_monthly_fy2025.html,Official monthly data,https://www.zensho.co.jp/en/ir/finance/monthly/2025.html,Sukiya FY2025 all-store/existing-store/customer/ticket data
