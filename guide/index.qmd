@@ -5,7 +5,7 @@ subtitle: "Get running in 5 minutes"
 
 **Research papers have a production function: identify, estimate, write, submit.** This scaffold automates each stage with specialized agents that create, review, and gate-check every artifact before it advances. One [Claude Code](https://docs.anthropic.com/en/docs/claude-code) configuration handles the full pipeline --- from literature review to journal submission.
 
-Works for empirical economics out of the box. Adapts to finance, accounting, marketing, and management by customizing the domain profile and journal profiles.
+Works for empirical economics out of the box. Adapts to labor, public, health, development, trade, IO, and other applied fields by customizing the domain profile and journal profiles.
 
 ## What to Expect
 

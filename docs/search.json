@@ -837,7 +837,7 @@
     "href": "index.html",
     "title": "Quick Start",
     "section": "",
-    "text": "Research papers have a production function: identify, estimate, write, submit. This scaffold automates each stage with specialized agents that create, review, and gate-check every artifact before it advances. One Claude Code configuration handles the full pipeline — from literature review to journal submission.\nWorks for empirical economics out of the box. Adapts to finance, accounting, marketing, and management by customizing the domain profile and journal profiles."
+    "text": "Research papers have a production function: identify, estimate, write, submit. This scaffold automates each stage with specialized agents that create, review, and gate-check every artifact before it advances. One Claude Code configuration handles the full pipeline — from literature review to journal submission.\nWorks for empirical economics out of the box. Adapts to labor, public, health, development, trade, IO, and other applied fields by customizing the domain profile and journal profiles."
   },
   {
     "objectID": "index.html#what-to-expect",

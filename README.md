@@ -35,7 +35,7 @@ Claude reads the config, plans the approach, you approve, it runs. Works in the 
 2. Fill in `.claude/references/domain-profile.md` — your field, journals, data, methods. Or run `/discover interview` to do it interactively.
 3. Configure your language — R is the default. Python and Julia also supported.
 
-**Other fields:** Economics by default. Adapts to finance, accounting, marketing, management by changing the domain profile and journal profiles.
+**Other fields:** Economics by default. Adapts to labor, public, health, development, trade, IO, and other applied fields by customizing the domain profile and journal profiles.
 
 ---
 
