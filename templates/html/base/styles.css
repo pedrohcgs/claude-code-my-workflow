@@ -616,6 +616,37 @@ html.dark .alert-info    { background: #3d2a1a; color: var(--clay); border-color
   .alert-info    { background: #3d2a1a; color: var(--clay); border-color: #5a3a28; }
 }
 
+/* Pipeline */
+.pipeline-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+.pipeline-source, .pipeline-output {
+  flex: 1;
+  min-width: 180px;
+  padding: 12px;
+  border: 1.5px solid var(--g300);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.pipeline-source { border-left: 3px solid var(--clay); }
+.pipeline-output { border-left: 3px solid var(--accept); }
+.pipeline-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 20px;
+  color: var(--g400);
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  .pipeline-flow { flex-direction: column; }
+  .pipeline-arrow { transform: rotate(90deg); justify-content: center; padding: 8px 0; }
+}
+
 /* Copy Button */
 .copy-btn {
   font-family: var(--mono);

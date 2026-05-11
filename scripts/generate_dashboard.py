@@ -278,6 +278,21 @@ def scan_literature(root):
     return None
 
 
+def scan_pipelines(root):
+    """Find pipeline manifests in data/cleaned/."""
+    pipelines = []
+    cleaned = root / "data" / "cleaned"
+    if not cleaned.is_dir():
+        return pipelines
+    for f in sorted(cleaned.glob("*_manifest.json")):
+        try:
+            manifest = json.loads(f.read_text(errors="replace"))
+            pipelines.append(manifest)
+        except (json.JSONDecodeError, KeyError):
+            continue
+    return pipelines
+
+
 def scan_plans(root):
     """Find active plans."""
     plans = []
@@ -419,8 +434,8 @@ def build_header(meta, stats):
 
 def build_nav():
     links = [
-        ("sections", "Sections"), ("data", "Data"), ("code", "Code"),
-        ("literature", "Literature"), ("quality", "Quality"),
+        ("sections", "Sections"), ("data", "Data"), ("pipeline", "Pipeline"),
+        ("code", "Code"), ("literature", "Literature"), ("quality", "Quality"),
         ("history", "History"), ("plans", "Plans"),
     ]
     items = "".join(f'<a class="nav-link" href="#{k}">{v}</a>' for k, v in links)
@@ -498,6 +513,169 @@ def build_data_panel(data):
         <thead><tr><th>File</th><th class="text-right">Size</th><th class="text-right">Modified</th></tr></thead>
         <tbody>{rows}</tbody>
       </table>
+    </section>"""
+
+
+def build_pipeline_panel(pipelines):
+    if not pipelines:
+        return ""
+
+    panels = ""
+    for p in pipelines:
+        name = escape(p.get("name", "Untitled"))
+        desc = escape(p.get("description", ""))
+        created = p.get("created", "")[:10]
+        script = escape(p.get("script", ""))
+        output = p.get("output", {})
+        sources = p.get("sources", [])
+        diag = p.get("diagnostics", {})
+        flags = diag.get("flags", [])
+
+        # Output summary
+        out_rows = f"{output.get('rows', '?'):,}" if isinstance(output.get('rows'), int) else str(output.get('rows', '?'))
+        out_counties = f"{output.get('counties', '?'):,}" if isinstance(output.get('counties'), int) else str(output.get('counties', '?'))
+        out_years = output.get("years", [])
+        years_str = ", ".join(str(y) for y in out_years) if out_years else "?"
+
+        # Sources flow
+        source_cards = ""
+        for s in sources:
+            s_name = escape(s.get("name", ""))
+            s_key = escape(s.get("merge_key", ""))
+            s_cov = escape(s.get("coverage", ""))
+            s_vars = s.get("variables_contributed", [])
+            vars_html = ", ".join(f"<code>{escape(v)}</code>" for v in s_vars[:6])
+            if len(s_vars) > 6:
+                vars_html += f" +{len(s_vars) - 6} more"
+
+            source_cards += f"""
+          <div class="pipeline-source">
+            <div style="font-weight:500;color:var(--slate);font-size:13px;margin-bottom:4px">{s_name}</div>
+            <div style="font-size:12px;color:var(--g600);margin-bottom:2px"><strong>Key:</strong> {s_key}</div>
+            <div style="font-size:12px;color:var(--g600);margin-bottom:2px"><strong>Coverage:</strong> {s_cov}</div>
+            <div style="font-size:11px;color:var(--g500)">{vars_html}</div>
+          </div>"""
+
+        # Flags
+        flags_html = ""
+        for f in flags:
+            sev = f.get("severity", "info")
+            msg = escape(f.get("message", ""))
+            cls = "alert-danger" if sev == "error" else "alert-warning" if sev == "warning" else "alert-info"
+            icon = "&#9888;" if sev in ("error", "warning") else "&#8505;"
+            flags_html += f'<div class="alert {cls}" style="font-size:12px;margin-top:8px">{icon} {msg}</div>'
+
+        # Coverage table
+        cov_by_year = diag.get("coverage_by_year", [])
+        cov_rows = ""
+        for c in cov_by_year:
+            yr = c.get("year", "")
+            n = c.get("n_counties", 0)
+            e = c.get("has_erosion", 0)
+            ch = c.get("has_church", 0)
+            v = c.get("has_voting", 0)
+            gop = c.get("mean_gop")
+            gop_str = f"{gop:.1%}" if gop is not None else "&mdash;"
+            evan = c.get("mean_evan_rate")
+            evan_str = f"{evan:.0f}" if evan is not None else "&mdash;"
+            cov_rows += f"""
+            <tr>
+              <td class="mono">{yr}</td>
+              <td class="text-right">{n:,}</td>
+              <td class="text-right">{e:,}</td>
+              <td class="text-right">{ch:,}</td>
+              <td class="text-right">{v:,}</td>
+              <td class="text-right mono" style="font-size:12px">{gop_str}</td>
+              <td class="text-right mono" style="font-size:12px">{evan_str}</td>
+            </tr>"""
+
+        cov_table = ""
+        if cov_rows:
+            cov_table = f"""
+        <h3 style="margin-top:20px">Coverage by Year</h3>
+        <table class="report-table" style="font-size:13px">
+          <thead><tr>
+            <th>Year</th><th class="text-right">Counties</th>
+            <th class="text-right">Erosion</th><th class="text-right">Church</th>
+            <th class="text-right">Voting</th><th class="text-right">Mean GOP</th>
+            <th class="text-right">Evan/1k</th>
+          </tr></thead>
+          <tbody>{cov_rows}</tbody>
+        </table>"""
+
+        # Dust Bowl summary
+        db = diag.get("dust_bowl", {})
+        db_html = ""
+        if db:
+            ed = db.get("erosion_distribution", {})
+            db_html = f"""
+        <h3 style="margin-top:20px">Dust Bowl Region</h3>
+        <div class="grid-3" style="gap:12px;margin-bottom:12px">
+          <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
+            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('counties', 0):,}</div>
+            <div style="font-size:11px;color:var(--g500)">DB counties</div>
+          </div>
+          <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
+            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('with_church', 0):,}</div>
+            <div style="font-size:11px;color:var(--g500)">with church data</div>
+          </div>
+          <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
+            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('with_voting', 0):,}</div>
+            <div style="font-size:11px;color:var(--g500)">with voting data</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;justify-content:center;font-size:13px">
+          <span><span class="pill pill-reject" style="font-size:10px">High</span> {ed.get('high', 0)} counties</span>
+          <span><span class="pill pill-warn" style="font-size:10px">Medium</span> {ed.get('medium', 0)} counties</span>
+          <span><span class="pill pill-pass" style="font-size:10px">Low</span> {ed.get('low', 0)} counties</span>
+        </div>"""
+
+        panels += f"""
+      <div class="card" style="margin-bottom:20px">
+        <div class="flex-between" style="margin-bottom:12px">
+          <div>
+            <span style="font-family:var(--serif);font-weight:600;font-size:16px;color:var(--slate)">{name}</span>
+            <span class="mono" style="font-size:11px;color:var(--g500);margin-left:8px">{created}</span>
+          </div>
+          <span class="pill pill-pass">Active</span>
+        </div>
+        <p style="color:var(--g700);font-size:13px;margin-bottom:12px">{desc}</p>
+
+        <div class="grid-3" style="gap:12px;margin-bottom:16px">
+          <div class="card" style="text-align:center;margin-bottom:0;padding:12px;background:var(--g100)">
+            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{out_rows}</div>
+            <div style="font-size:11px;color:var(--g500)">county-years</div>
+          </div>
+          <div class="card" style="text-align:center;margin-bottom:0;padding:12px;background:var(--g100)">
+            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{out_counties}</div>
+            <div style="font-size:11px;color:var(--g500)">counties</div>
+          </div>
+          <div class="card" style="text-align:center;margin-bottom:0;padding:12px;background:var(--g100)">
+            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{len(out_years)}</div>
+            <div style="font-size:11px;color:var(--g500)">years</div>
+          </div>
+        </div>
+
+        <h3>Sources &rarr; Merge</h3>
+        <div class="pipeline-flow">{source_cards}
+          <div class="pipeline-arrow">&rarr;</div>
+          <div class="pipeline-output">
+            <div style="font-weight:500;color:var(--slate);font-size:13px;margin-bottom:4px">Output</div>
+            <div style="font-size:12px;color:var(--g600)"><code>{escape(', '.join(output.get('files', [])))}</code></div>
+            <div style="font-size:11px;color:var(--g500);margin-top:4px">Key: <code>{escape(', '.join(output.get('key', [])))}</code></div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--g500);margin-top:8px">Script: <code>{script}</code> &middot; Years: {years_str}</div>
+
+        {flags_html}
+        {cov_table}
+        {db_html}
+      </div>"""
+
+    return f"""
+    <section id="pipeline">
+      <h2>Data Pipeline &nbsp;<span style="font-family:var(--mono);font-size:13px;color:var(--g500);font-weight:400">{len(pipelines)} dataset{'s' if len(pipelines) != 1 else ''}</span></h2>
+      {panels}
     </section>"""
 
 
@@ -728,6 +906,7 @@ def build_dashboard(root):
     sections = scan_sections(root)
     data = scan_data(root)
     scripts_list = scan_scripts(root)
+    pipelines = scan_pipelines(root)
     n_figs, n_tabs = scan_figures_tables(root)
     n_bib = scan_bibliography(root)
     reports, gate = scan_quality_reports(root)
@@ -770,6 +949,7 @@ def build_dashboard(root):
         build_nav(),
         build_sections_panel(sections),
         build_data_panel(data),
+        build_pipeline_panel(pipelines),
         build_code_panel(scripts_list),
         build_literature_panel(lit),
         build_quality_panel(gate),
