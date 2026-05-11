@@ -434,8 +434,8 @@ def build_header(meta, stats):
 
 def build_nav():
     links = [
-        ("sections", "Sections"), ("data", "Data"), ("pipeline", "Pipeline"),
-        ("code", "Code"), ("literature", "Literature"), ("quality", "Quality"),
+        ("sections", "Sections"), ("data", "Data"), ("code", "Code"),
+        ("literature", "Literature"), ("quality", "Quality"),
         ("history", "History"), ("plans", "Plans"),
     ]
     items = "".join(f'<a class="nav-link" href="#{k}">{v}</a>' for k, v in links)
@@ -474,10 +474,10 @@ def build_sections_panel(sections):
     </section>"""
 
 
-def build_data_panel(data):
+def build_data_panel(data, pipelines=None):
     has_raw = len(data["raw"]) > 0
     has_cleaned = len(data["cleaned"]) > 0
-    if not has_raw and not has_cleaned:
+    if not has_raw and not has_cleaned and not pipelines:
         return """
     <section id="data">
       <h2>Data</h2>
@@ -494,143 +494,113 @@ def build_data_panel(data):
     else:
         stage_cls, stage_label = "pill-neutral", "Empty"
 
-    rows = ""
-    for sub, files in [("raw", data["raw"]), ("cleaned", data["cleaned"])]:
-        for f in files:
-            rows += f"""
-        <tr>
-          <td><span class="pill pill-neutral" style="font-size:9px">{sub}</span> &nbsp;{escape(f['name'])}</td>
-          <td class="text-right"><span class="mono" style="font-size:12px">{f['size']}</span></td>
-          <td class="text-right" style="color:var(--g500);font-size:12px">{f['modified']}</td>
-        </tr>"""
+    # --- Pipeline subsection (rendered first, above file listing) ---
+    pipeline_html = ""
+    if pipelines:
+        for p in pipelines:
+            name = escape(p.get("name", "Untitled"))
+            desc = escape(p.get("description", ""))
+            created = p.get("created", "")[:10]
+            script = escape(p.get("script", ""))
+            output = p.get("output", {})
+            sources = p.get("sources", [])
+            diag = p.get("diagnostics", {})
+            flags = diag.get("flags", [])
 
-    total = len(data["raw"]) + len(data["cleaned"])
-    return f"""
-    <section id="data">
-      <h2>Data &nbsp;<span class="pill {stage_cls}">{stage_label}</span></h2>
-      <p style="color:var(--g500);font-size:13px">{len(data['raw'])} raw, {len(data['cleaned'])} cleaned &mdash; {total} total files</p>
-      <table class="report-table">
-        <thead><tr><th>File</th><th class="text-right">Size</th><th class="text-right">Modified</th></tr></thead>
-        <tbody>{rows}</tbody>
-      </table>
-    </section>"""
+            out_rows = f"{output.get('rows', '?'):,}" if isinstance(output.get('rows'), int) else str(output.get('rows', '?'))
+            out_counties = f"{output.get('counties', '?'):,}" if isinstance(output.get('counties'), int) else str(output.get('counties', '?'))
+            out_years = output.get("years", [])
+            years_str = ", ".join(str(y) for y in out_years) if out_years else "?"
 
+            source_cards = ""
+            for s in sources:
+                s_name = escape(s.get("name", ""))
+                s_key = escape(s.get("merge_key", ""))
+                s_cov = escape(s.get("coverage", ""))
+                s_vars = s.get("variables_contributed", [])
+                vars_html = ", ".join(f"<code>{escape(v)}</code>" for v in s_vars[:6])
+                if len(s_vars) > 6:
+                    vars_html += f" +{len(s_vars) - 6} more"
+                source_cards += f"""
+              <div class="pipeline-source">
+                <div style="font-weight:500;color:var(--slate);font-size:13px;margin-bottom:4px">{s_name}</div>
+                <div style="font-size:12px;color:var(--g600);margin-bottom:2px"><strong>Key:</strong> {s_key}</div>
+                <div style="font-size:12px;color:var(--g600);margin-bottom:2px"><strong>Coverage:</strong> {s_cov}</div>
+                <div style="font-size:11px;color:var(--g500)">{vars_html}</div>
+              </div>"""
 
-def build_pipeline_panel(pipelines):
-    if not pipelines:
-        return ""
+            flags_html = ""
+            for fl in flags:
+                sev = fl.get("severity", "info")
+                msg = escape(fl.get("message", ""))
+                cls = "alert-danger" if sev == "error" else "alert-warning" if sev == "warning" else "alert-info"
+                icon = "&#9888;" if sev in ("error", "warning") else "&#8505;"
+                flags_html += f'<div class="alert {cls}" style="font-size:12px;margin-top:8px">{icon} {msg}</div>'
 
-    panels = ""
-    for p in pipelines:
-        name = escape(p.get("name", "Untitled"))
-        desc = escape(p.get("description", ""))
-        created = p.get("created", "")[:10]
-        script = escape(p.get("script", ""))
-        output = p.get("output", {})
-        sources = p.get("sources", [])
-        diag = p.get("diagnostics", {})
-        flags = diag.get("flags", [])
+            cov_by_year = diag.get("coverage_by_year", [])
+            cov_rows = ""
+            for c in cov_by_year:
+                yr = c.get("year", "")
+                n = c.get("n_counties", 0)
+                e = c.get("has_erosion", 0)
+                ch = c.get("has_church", 0)
+                v = c.get("has_voting", 0)
+                gop = c.get("mean_gop")
+                gop_str = f"{gop:.1%}" if gop is not None else "&mdash;"
+                evan = c.get("mean_evan_rate")
+                evan_str = f"{evan:.0f}" if evan is not None else "&mdash;"
+                cov_rows += f"""
+                <tr>
+                  <td class="mono">{yr}</td>
+                  <td class="text-right">{n:,}</td>
+                  <td class="text-right">{e:,}</td>
+                  <td class="text-right">{ch:,}</td>
+                  <td class="text-right">{v:,}</td>
+                  <td class="text-right mono" style="font-size:12px">{gop_str}</td>
+                  <td class="text-right mono" style="font-size:12px">{evan_str}</td>
+                </tr>"""
 
-        # Output summary
-        out_rows = f"{output.get('rows', '?'):,}" if isinstance(output.get('rows'), int) else str(output.get('rows', '?'))
-        out_counties = f"{output.get('counties', '?'):,}" if isinstance(output.get('counties'), int) else str(output.get('counties', '?'))
-        out_years = output.get("years", [])
-        years_str = ", ".join(str(y) for y in out_years) if out_years else "?"
+            cov_table = ""
+            if cov_rows:
+                cov_table = f"""
+            <h3 style="margin-top:20px">Coverage by Year</h3>
+            <table class="report-table" style="font-size:13px">
+              <thead><tr>
+                <th>Year</th><th class="text-right">Counties</th>
+                <th class="text-right">Erosion</th><th class="text-right">Church</th>
+                <th class="text-right">Voting</th><th class="text-right">Mean GOP</th>
+                <th class="text-right">Evan/1k</th>
+              </tr></thead>
+              <tbody>{cov_rows}</tbody>
+            </table>"""
 
-        # Sources flow
-        source_cards = ""
-        for s in sources:
-            s_name = escape(s.get("name", ""))
-            s_key = escape(s.get("merge_key", ""))
-            s_cov = escape(s.get("coverage", ""))
-            s_vars = s.get("variables_contributed", [])
-            vars_html = ", ".join(f"<code>{escape(v)}</code>" for v in s_vars[:6])
-            if len(s_vars) > 6:
-                vars_html += f" +{len(s_vars) - 6} more"
+            db = diag.get("dust_bowl", {})
+            db_html = ""
+            if db:
+                ed = db.get("erosion_distribution", {})
+                db_html = f"""
+            <h3 style="margin-top:20px">Dust Bowl Region</h3>
+            <div class="grid-3" style="gap:12px;margin-bottom:12px">
+              <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
+                <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('counties', 0):,}</div>
+                <div style="font-size:11px;color:var(--g500)">DB counties</div>
+              </div>
+              <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
+                <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('with_church', 0):,}</div>
+                <div style="font-size:11px;color:var(--g500)">with church data</div>
+              </div>
+              <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
+                <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('with_voting', 0):,}</div>
+                <div style="font-size:11px;color:var(--g500)">with voting data</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;justify-content:center;font-size:13px">
+              <span><span class="pill pill-reject" style="font-size:10px">High</span> {ed.get('high', 0)} counties</span>
+              <span><span class="pill pill-warn" style="font-size:10px">Medium</span> {ed.get('medium', 0)} counties</span>
+              <span><span class="pill pill-pass" style="font-size:10px">Low</span> {ed.get('low', 0)} counties</span>
+            </div>"""
 
-            source_cards += f"""
-          <div class="pipeline-source">
-            <div style="font-weight:500;color:var(--slate);font-size:13px;margin-bottom:4px">{s_name}</div>
-            <div style="font-size:12px;color:var(--g600);margin-bottom:2px"><strong>Key:</strong> {s_key}</div>
-            <div style="font-size:12px;color:var(--g600);margin-bottom:2px"><strong>Coverage:</strong> {s_cov}</div>
-            <div style="font-size:11px;color:var(--g500)">{vars_html}</div>
-          </div>"""
-
-        # Flags
-        flags_html = ""
-        for f in flags:
-            sev = f.get("severity", "info")
-            msg = escape(f.get("message", ""))
-            cls = "alert-danger" if sev == "error" else "alert-warning" if sev == "warning" else "alert-info"
-            icon = "&#9888;" if sev in ("error", "warning") else "&#8505;"
-            flags_html += f'<div class="alert {cls}" style="font-size:12px;margin-top:8px">{icon} {msg}</div>'
-
-        # Coverage table
-        cov_by_year = diag.get("coverage_by_year", [])
-        cov_rows = ""
-        for c in cov_by_year:
-            yr = c.get("year", "")
-            n = c.get("n_counties", 0)
-            e = c.get("has_erosion", 0)
-            ch = c.get("has_church", 0)
-            v = c.get("has_voting", 0)
-            gop = c.get("mean_gop")
-            gop_str = f"{gop:.1%}" if gop is not None else "&mdash;"
-            evan = c.get("mean_evan_rate")
-            evan_str = f"{evan:.0f}" if evan is not None else "&mdash;"
-            cov_rows += f"""
-            <tr>
-              <td class="mono">{yr}</td>
-              <td class="text-right">{n:,}</td>
-              <td class="text-right">{e:,}</td>
-              <td class="text-right">{ch:,}</td>
-              <td class="text-right">{v:,}</td>
-              <td class="text-right mono" style="font-size:12px">{gop_str}</td>
-              <td class="text-right mono" style="font-size:12px">{evan_str}</td>
-            </tr>"""
-
-        cov_table = ""
-        if cov_rows:
-            cov_table = f"""
-        <h3 style="margin-top:20px">Coverage by Year</h3>
-        <table class="report-table" style="font-size:13px">
-          <thead><tr>
-            <th>Year</th><th class="text-right">Counties</th>
-            <th class="text-right">Erosion</th><th class="text-right">Church</th>
-            <th class="text-right">Voting</th><th class="text-right">Mean GOP</th>
-            <th class="text-right">Evan/1k</th>
-          </tr></thead>
-          <tbody>{cov_rows}</tbody>
-        </table>"""
-
-        # Dust Bowl summary
-        db = diag.get("dust_bowl", {})
-        db_html = ""
-        if db:
-            ed = db.get("erosion_distribution", {})
-            db_html = f"""
-        <h3 style="margin-top:20px">Dust Bowl Region</h3>
-        <div class="grid-3" style="gap:12px;margin-bottom:12px">
-          <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
-            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('counties', 0):,}</div>
-            <div style="font-size:11px;color:var(--g500)">DB counties</div>
-          </div>
-          <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
-            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('with_church', 0):,}</div>
-            <div style="font-size:11px;color:var(--g500)">with church data</div>
-          </div>
-          <div class="card" style="text-align:center;margin-bottom:0;padding:12px">
-            <div style="font-size:22px;font-family:var(--mono);font-weight:600;color:var(--slate)">{db.get('with_voting', 0):,}</div>
-            <div style="font-size:11px;color:var(--g500)">with voting data</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:16px;justify-content:center;font-size:13px">
-          <span><span class="pill pill-reject" style="font-size:10px">High</span> {ed.get('high', 0)} counties</span>
-          <span><span class="pill pill-warn" style="font-size:10px">Medium</span> {ed.get('medium', 0)} counties</span>
-          <span><span class="pill pill-pass" style="font-size:10px">Low</span> {ed.get('low', 0)} counties</span>
-        </div>"""
-
-        panels += f"""
+            pipeline_html += f"""
       <div class="card" style="margin-bottom:20px">
         <div class="flex-between" style="margin-bottom:12px">
           <div>
@@ -672,10 +642,28 @@ def build_pipeline_panel(pipelines):
         {db_html}
       </div>"""
 
+    # --- File listing ---
+    rows = ""
+    for sub, files in [("raw", data["raw"]), ("cleaned", data["cleaned"])]:
+        for f in files:
+            rows += f"""
+        <tr>
+          <td><span class="pill pill-neutral" style="font-size:9px">{sub}</span> &nbsp;{escape(f['name'])}</td>
+          <td class="text-right"><span class="mono" style="font-size:12px">{f['size']}</span></td>
+          <td class="text-right" style="color:var(--g500);font-size:12px">{f['modified']}</td>
+        </tr>"""
+
+    total = len(data["raw"]) + len(data["cleaned"])
     return f"""
-    <section id="pipeline">
-      <h2>Data Pipeline &nbsp;<span style="font-family:var(--mono);font-size:13px;color:var(--g500);font-weight:400">{len(pipelines)} dataset{'s' if len(pipelines) != 1 else ''}</span></h2>
-      {panels}
+    <section id="data">
+      <h2>Data &nbsp;<span class="pill {stage_cls}">{stage_label}</span></h2>
+      {pipeline_html}
+      <h3 style="margin-top:24px">Files</h3>
+      <p style="color:var(--g500);font-size:13px">{len(data['raw'])} raw, {len(data['cleaned'])} cleaned &mdash; {total} total files</p>
+      <table class="report-table">
+        <thead><tr><th>File</th><th class="text-right">Size</th><th class="text-right">Modified</th></tr></thead>
+        <tbody>{rows}</tbody>
+      </table>
     </section>"""
 
 
@@ -948,8 +936,7 @@ def build_dashboard(root):
         build_header(meta, stats),
         build_nav(),
         build_sections_panel(sections),
-        build_data_panel(data),
-        build_pipeline_panel(pipelines),
+        build_data_panel(data, pipelines),
         build_code_panel(scripts_list),
         build_literature_panel(lit),
         build_quality_panel(gate),
