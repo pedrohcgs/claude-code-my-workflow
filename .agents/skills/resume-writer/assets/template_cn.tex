@@ -1,0 +1,144 @@
+% ============================================================
+%  中文简历模板 — 基于 GraniteAsia AI/科技 VC 风格
+%  使用方式：
+%    1. 将 <<PLACEHOLDER>> 替换为真实内容
+%    2. 使用 xelatex 编译（需要 macOS + Kaiti SC 字体）
+%    3. 确认输出为单页
+% ============================================================
+\documentclass[a4paper, 10pt]{article}
+
+% -------- 中文支持 --------
+\usepackage[UTF8, fontset=mac]{ctex}
+\setCJKmainfont{Kaiti SC}[AutoFakeBold={2.5}]
+\AtBeginDocument{\fontsize{9.5}{12}\selectfont}
+
+% -------- 页面设置 --------
+\usepackage[a4paper, top=0.75cm, bottom=0.75cm, left=1.4cm, right=1.4cm]{geometry}
+
+% -------- 颜色 --------
+\usepackage{xcolor}
+\definecolor{headerblue}{RGB}{31, 73, 125}
+
+% -------- 列表 --------
+\usepackage{enumitem}
+\setlist[itemize]{
+  leftmargin=1.15em,
+  itemsep=0.5pt,
+  topsep=0.8pt,
+  parsep=0pt,
+  partopsep=0pt,
+  label=\textbullet
+}
+
+% -------- Section 格式 --------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\color{headerblue}\bfseries\large}
+  {}
+  {0em}
+  {}
+  [\vspace{-5pt}\color{headerblue}\rule{\linewidth}{1.0pt}\vspace{1pt}]
+
+\titlespacing{\section}{0pt}{6pt}{3pt}
+
+% -------- 其他 --------
+\usepackage{parskip}
+\setlength{\parskip}{0pt}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\pagestyle{empty}
+\linespread{1.05}
+\setlength{\emergencystretch}{1em}
+
+% -------- 自定义命令 --------
+% \workentry{机构/公司}{日期}{职位/题目}{地点/奖项}
+\newcommand{\workentry}[4]{%
+  \noindent\textbf{#1}\hfill{\small #2}\\[-2pt]
+  {\kaishu\small #3}\hfill{\kaishu\small #4}\par\vspace{1.5pt}%
+}
+
+% \projentry{日期}{竞赛名称}{题目 + 奖项}（不推荐，优先使用 \workentry）
+\newcommand{\projentry}[3]{%
+  \noindent{\textbf{#1}\enspace\textbf{#2}\hfill{\kaishu #3}}\par\vspace{1.5pt}%
+}
+
+% ============================================================
+\begin{document}
+
+% ========= 标题 =========
+\noindent
+\begin{minipage}{\textwidth}
+  \centering
+  {\Large\bfseries <<姓名>>\par}
+  \vspace{2pt}
+  {\small 电话：<<手机号>> \enspace|\enspace 邮箱：<<邮箱>> \enspace|\enspace 作品集：\href{<<作品集URL>>}{<<作品集短链接>>}\par}
+\end{minipage}
+
+\vspace{2pt}
+
+% ========= 教育背景 =========
+\section{教育背景}
+
+\workentry{<<大学名称>>}{}{<<专业>> / <<学历>>}{<<入学年份>>.09 -- <<毕业年份>>.06}
+
+\begin{itemize}
+  \item \textbf{学业成绩：}<<GPA、排名；获奖学金情况>>
+  \item \textbf{核心课程：}<<高分课程1>>（<<分数>>）、<<高分课程2>>（<<分数>>）、<<高分课程3>>（<<分数>>）。
+\end{itemize}
+
+% ========= 工作经历 =========
+\section{工作经历}
+
+\workentry{<<公司名称>>}{<<城市>>}{<<职位>>}{<<开始日期>> -- <<结束日期>>}
+
+\begin{itemize}
+  \item \textbf{<<项目/模块名称1>>：}<<用动词开头的行动描述。具体做了什么，使用了什么方法，得出了什么结论。用数字量化结果。>>
+  \item \textbf{<<项目/模块名称2>>：}<<行动 + 方法 + 结果。如果涉及分析判断，加上"核心判断：..."收尾>>。
+  \item \textbf{<<项目/模块名称3>>：}<<行动描述。覆盖XX、XX、XX等范围，抓取XX+ 样本/数据进行XX测算。核心判断：总结性洞察。>>
+\end{itemize}
+
+\workentry{<<公司名称2>>}{<<城市>>}{<<职位>>}{<<开始日期>> -- <<结束日期>>}
+
+\begin{itemize}
+  \item \textbf{<<模块1>>：}<<具体工作内容与成果>>
+  \item \textbf{<<模块2>>：}<<具体工作内容与成果>>
+\end{itemize}
+
+% ========= 项目经历 =========
+\section{项目经历}
+
+\workentry{<<竞赛/项目名称1>>}{<<日期>>}{<<题目>>}{<<奖项>>}
+\begin{itemize}
+  \item \textbf{<<子弹1标签（4-8字总结）>>：}<<用动词开头，描述做了什么、用什么方法、达到什么结果。技术细节 + 量化指标>>
+  \item \textbf{<<子弹2标签（4-8字总结）>>：}<<另一个独立维度，与子弹1形成互补。每个项目必须有2-3个bullet，每个bullet以加粗标签开头>>
+\end{itemize}
+
+\workentry{<<竞赛/项目名称2>>}{<<日期>>}{<<题目>>}{<<奖项>>}
+\begin{itemize}
+  \item \textbf{<<子弹1标签>>：}<<分析框架 + 具体方法>>
+  \item \textbf{<<子弹2标签>>：}<<量化验证结果 + 角色贡献>>
+\end{itemize}
+
+\workentry{<<竞赛/项目名称3>>}{<<日期>>}{<<题目>>}{<<奖项>>}
+\begin{itemize}
+  \item \textbf{<<子弹1标签>>：}<<围绕XX构建XX框架，拆解XX如何重塑XX>>
+  \item \textbf{<<子弹2标签>>：}<<参与XX和XX，主笔/统筹XX，以LaTeX完成XX>>
+\end{itemize}
+
+\workentry{<<竞赛/项目名称4>>}{<<日期>>}{<<题目>>}{<<奖项>>}
+\begin{itemize}
+  \item \textbf{<<子弹1标签>>：}<<数据采集处理方法（样本量、变量数）+ 分析发现>>
+  \item \textbf{<<子弹2标签>>：}<<使用XX方法/工具进行XX验证，为XX策略提供了数据锚点>>
+\end{itemize}
+
+% ========= 技能特长 =========
+\section{技能特长}
+
+\begin{itemize}
+  \item \textbf{语言：}<<母语>>（母语）、<<外语>>（<<成绩/等级>>），<<外语能力描述>>。
+  \item \textbf{研究与数据：}<<工具/软件/语言列表>>，能够利用<<金融终端/专业工具>>完成<<能力范围>>。
+  \item \textbf{AI 工具使用：}<<AI 相关工具与能力描述>>。
+  \item \textbf{校园经历：}<<社团、组织、活动参与情况>>。
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,23 @@
+{
+  "skill_name": "resume-writer",
+  "evals": [
+    {
+      "id": "cn_raw_notes_to_latex",
+      "prompt": "我在一家咨询公司实习，做过餐饮集团增长战略、AI采购平台研究，还有一个数学建模比赛。请把这些零散经历整理成中文一页 LaTeX 简历，并给出需要我补充的信息。",
+      "expected_output": "Produces a Chinese resume workflow, uses bold Chinese bullet prefixes, asks for missing factual details, and avoids inventing dates, GPA, employer names, or awards.",
+      "files": []
+    },
+    {
+      "id": "en_resume_polish",
+      "prompt": "Polish my English resume for consulting roles. Keep the facts unchanged, rewrite bullets to sound more analytical, and compile it if possible.",
+      "expected_output": "Keeps facts unchanged, rewrites bullets with English bold labels, consulting-oriented action-result-insight phrasing, and reports compile status.",
+      "files": []
+    },
+    {
+      "id": "resume_review_only",
+      "prompt": "帮我 review 这份投行简历，先不要改文件，只告诉我最大的问题和怎么改。",
+      "expected_output": "Gives prioritized review findings rather than editing files, focuses on investment role fit, evidence strength, bullet ordering, quantification, and factual gaps.",
+      "files": []
+    }
+  ]
+}

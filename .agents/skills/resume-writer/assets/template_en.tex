@@ -1,0 +1,144 @@
+% ============================================================
+%  English Resume Template — GraniteAsia AI/Tech VC Style
+%  Usage:
+%    1. Replace <<PLACEHOLDER>> with real content
+%    2. Compile with xelatex (requires Palatino font)
+%    3. Verify single-page output
+% ============================================================
+\documentclass[a4paper, 10pt]{article}
+
+% -------- English Font --------
+\usepackage{fontspec}
+\IfFontExistsTF{Palatino}{\setmainfont{Palatino}}{\setmainfont{TeX Gyre Pagella}}
+\AtBeginDocument{\fontsize{8}{10.5}\selectfont}
+
+% -------- Page Setup --------
+\usepackage[a4paper, top=0.75cm, bottom=0.75cm, left=1.4cm, right=1.4cm]{geometry}
+
+% -------- Colors --------
+\usepackage{xcolor}
+\definecolor{headerblue}{RGB}{31, 73, 125}
+
+% -------- Lists --------
+\usepackage{enumitem}
+\setlist[itemize]{
+  leftmargin=1.15em,
+  itemsep=0.5pt,
+  topsep=0.8pt,
+  parsep=0pt,
+  partopsep=0pt,
+  label=\textbullet
+}
+
+% -------- Section Format --------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\color{headerblue}\bfseries\large}
+  {}
+  {0em}
+  {}
+  [\vspace{-5pt}\color{headerblue}\rule{\linewidth}{1.0pt}\vspace{1pt}]
+
+\titlespacing{\section}{0pt}{5pt}{2pt}
+
+% -------- Misc --------
+\usepackage{parskip}
+\setlength{\parskip}{0pt}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\pagestyle{empty}
+\linespread{1.0}
+\setlength{\emergencystretch}{1em}
+
+% -------- Custom Commands --------
+% \workentry{Organization}{Date}{Title/Position}{Award/Location}
+\newcommand{\workentry}[4]{%
+  \noindent\textbf{#1}\hfill{\small #2}\\[-2pt]
+  {\small #3}\hfill{\small #4}\par\vspace{1.5pt}%
+}
+
+% \projentry{Date}{Competition}{Topic + Award} (DEPRECATED — prefer \workentry)
+\newcommand{\projentry}[3]{%
+  \noindent{\textbf{#1}\enspace\textbf{#2}\hfill{\small #3}}\par\vspace{1.5pt}%
+}
+
+% ============================================================
+\begin{document}
+
+% ========= Header =========
+\noindent
+\begin{minipage}{\textwidth}
+  \centering
+  {\Large\bfseries <<Full Name>>\par}
+  \vspace{2pt}
+  {\small <<Phone>> \enspace|\enspace <<Email>> \enspace|\enspace \href{<<Portfolio URL>>}{<<Portfolio Short Link>>}\par}
+\end{minipage}
+
+\vspace{2pt}
+
+% ========= Education =========
+\section{Education}
+
+\workentry{<<University>>}{}{<<Degree>>}{<<Start Year>>.09 -- <<End Year>>.06}
+
+\begin{itemize}
+  \item \textbf{Academic Performance:} <<GPA, Rank; Scholarships>>.
+  \item \textbf{Key Coursework:} <<Course 1>> (<<Score>>), <<Course 2>> (<<Score>>), <<Course 3>> (<<Score>>).
+\end{itemize}
+
+% ========= Work Experience =========
+\section{Work Experience}
+
+\workentry{<<Company>>}{<<City>>}{<<Title>>}{<<Start>> -- <<End>>}
+
+\begin{itemize}
+  \item \textbf{<<Project/Module 1>>:} <<Action-verb-led description. What you did, methods used, conclusions drawn. Quantify with numbers. For analysis work, end with "Core insight: ...">>
+  \item \textbf{<<Project/Module 2>>:} <<Action + method + result. If involving analytical judgment, close with "Core insight: ..." summarizing the takeaway.>>
+  \item \textbf{<<Project/Module 3>>:} <<Action description. Covering X, Y, Z scope; capturing XX+ samples/SKUs for XX benchmarking. Core insight: synthesized analytical takeaway.>>
+\end{itemize}
+
+\workentry{<<Company 2>>}{<<City>>}{<<Title>>}{<<Start>> -- <<End>>}
+
+\begin{itemize}
+  \item \textbf{<<Module 1>>:} <<Specific work and outcomes>>
+  \item \textbf{<<Module 2>>:} <<Specific work and outcomes>>
+\end{itemize}
+
+% ========= Projects =========
+\section{Projects}
+
+\workentry{<<Competition/Project 1>>}{<<Date>>}{<<Topic>>}{<<Award>>}
+\begin{itemize}
+  \item \textbf{<<Bullet 1 Label>>:} <<Action-verb-led. What you built/modeled, methods used, quantitative results.>>
+  \item \textbf{<<Bullet 2 Label>>:} <<Another independent dimension. Each project MUST have 2-3 bullets, each starting with a bold label.>>
+\end{itemize}
+
+\workentry{<<Competition/Project 2>>}{<<Date>>}{<<Topic>>}{<<Award>>}
+\begin{itemize}
+  \item \textbf{<<Bullet 1 Label>>:} <<Analytical framework + specific methods>>
+  \item \textbf{<<Bullet 2 Label>>:} <<Quantitative validation + your role>>
+\end{itemize}
+
+\workentry{<<Competition/Project 3>>}{<<Date>>}{<<Topic>>}{<<Award>>}
+\begin{itemize}
+  \item \textbf{<<Bullet 1 Label>>:} <<Centered on XX, constructed XX framework, deconstructing how XX reshapes XX>>
+  \item \textbf{<<Bullet 2 Label>>:} <<Led XX writing, completed XX in \LaTeX{}.>>
+\end{itemize}
+
+\workentry{<<Competition/Project 4>>}{<<Date>>}{<<Topic>>}{<<Award>>}
+\begin{itemize}
+  \item \textbf{<<Bullet 1 Label>>:} <<Data processing methods (sample size, variables) + analytical findings>>
+  \item \textbf{<<Bullet 2 Label>>:} <<Used XX method/tool for XX validation, providing data anchor for XX strategy>>
+\end{itemize}
+
+% ========= Skills & Interests =========
+\section{Skills \& Interests}
+
+\begin{itemize}
+  \item \textbf{Languages:} <<Native language>> (native), <<Foreign language>> (<<score/certification>>), <<proficiency level>>.
+  \item \textbf{Research \& Data:} <<Tools/software/languages>>; capable of <<capability scope>> using <<financial terminals/specialized tools>>.
+  \item \textbf{AI Tools:} <<AI-related tools and capabilities description>>.
+  \item \textbf{Campus:} <<Clubs, organizations, activities>>.
+\end{itemize}
+
+\end{document}
