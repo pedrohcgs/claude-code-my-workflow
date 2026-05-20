@@ -96,6 +96,27 @@ Promotes the v1.8.0 `/preregister` and `/checkpoint` skills from appendix entrie
 - `quarto render guide/workflow-guide.qmd` — clean render
 - `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
 
+### Pass 2C — `/review-paper --variance N` reviewer-disposition variance mode (2026-05-20)
+
+Adds a fourth `--peer` mode to `/review-paper`: **`--variance` (with integer N, default 3)** runs N referees with independently sampled dispositions from the 6-way taxonomy, then the editor synthesizes the results into a **decision distribution** (not a point estimate). Motivated by AgentReview (ACL 2024, [arXiv:2406.12708](https://arxiv.org/abs/2406.12708)), which found ~37% of paper decisions vary purely from reviewer-disposition sampling.
+
+#### Changed — `/review-paper` SKILL.md
+
+- New `--variance` flag in argument-hint and the sub-flags list under "Peer-review mode."
+- New "Variance mode (`--peer --variance N`)" subsection: motivation (AgentReview), procedure (sample with replacement + stratification override that always includes a SKEPTIC if none drawn for N ≥ 3), output files (`referee_1.md` … `referee_N.md`, `decision_distribution.md`, `editor_synthesis.md`), cost discipline (referee-tier cost × N relative to default `--peer`; hard cap N=5; route referees to Sonnet for variance runs), and mutual-exclusivity rules (cannot combine with `--stress` or `--r2`/`--r3`).
+- When-to-reach-for-it guidance: pre-submission "how confidently will this survive," cross-journal target comparison, post-rejection sanity check.
+
+#### Changed — `editor.md` agent
+
+- **Phase 1b (Referee selection)** now branches: default 2-referee deliberate-diversity sampling (existing) vs. variance-mode N-referee independent sampling **with replacement** (new). Stratification rule: if N ≥ 3 and the realised draw includes no SKEPTIC, replace one randomly chosen referee with a SKEPTIC. Realised-disposition table and stratification-override metadata are recorded for `decision_distribution.md`.
+- **New "Variance synthesis mode" section** documents the two-file output (`decision_distribution.md` + `editor_synthesis.md`). The distribution file contains a realised-disposition table, a verdict-distribution table (counts and shares), a concern-frequency table (K-of-N), and an interpretation guide (tight modal majority + robust concerns; wide spread + high-K skeptic objection; bimodal "love-it-or-hate-it"). The editorial letter explicitly references the variance instead of collapsing it.
+
+#### Verification — Pass 2C
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts unchanged (30/14/24/6)
+- `./scripts/check-skill-integrity.py` — all checks pass (forward + reverse flag-parity OK after one cycle of integrity feedback — original `` `--variance N` `` single code-span fixed to ``--variance`` standalone code-span with `N` documented in prose)
+- No on-disk inventory change
+
 ---
 
 ## v1.8.0 — 2026-04-27

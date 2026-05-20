@@ -1,7 +1,7 @@
 ---
 name: review-paper
-description: Comprehensive manuscript review with three modes: single-pass (default), --adversarial critic-fixer loop, and --peer [journal] simulated peer-review pipeline (editor + 2 dispositioned referees + editorial decision, calibrated to a target journal). R&R continuation via --peer --r2/--r3; hostile-editor stress test via --peer --stress. Auto-invokes /review-r + /audit-reproducibility on referenced scripts unless --no-cross-artifact.
-argument-hint: "[paper path] [--adversarial | --peer <journal> [--r2 | --r3 | --stress] [--no-novelty-check]] [--no-cross-artifact]"
+description: Comprehensive manuscript review with three modes: single-pass (default), --adversarial critic-fixer loop, and --peer [journal] simulated peer-review pipeline (editor + 2 dispositioned referees + editorial decision, calibrated to a target journal). R&R continuation via --peer --r2/--r3; hostile-editor stress test via --peer --stress; reviewer-disposition variance reporting via --peer --variance N. Auto-invokes /review-r + /audit-reproducibility on referenced scripts unless --no-cross-artifact.
+argument-hint: "[paper path] [--adversarial | --peer <journal> [--r2 | --r3 | --stress | --variance N] [--no-novelty-check]] [--no-cross-artifact]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 ---
 
@@ -22,6 +22,7 @@ Produce a thorough, constructive review of an academic manuscript — the kind o
 - `--peer <JOURNAL>` — simulated peer review pipeline calibrated to `<JOURNAL>` (see `.claude/references/journal-profiles.md` for available short names).
 - `--r2` / `--r3` — R&R continuation mode (requires `--peer`). Reloads prior round, classifies concerns Resolved / Partial / Not addressed.
 - `--stress` — hostile-editor stress test (requires `--peer`). Forces SKEPTIC dispositions, doubles critical peeves.
+- `--variance` (followed by integer **N**, default 3) — reviewer-disposition variance mode (requires `--peer`). Runs **N** referees with **independently sampled** dispositions from the 6-way taxonomy. Editor aggregates into a **decision distribution**, not a point estimate. Mutually exclusive with `--stress` and `--r2`/`--r3`.
 - `--no-novelty-check` — skip editor's WebSearch novelty probe (default is ON).
 - `--no-cross-artifact` — skip auto-invocation of `/review-r` + `/audit-reproducibility` on referenced scripts.
 
@@ -57,7 +58,40 @@ This mode is materially different from `--adversarial`: adversarial runs the sam
 
 - `--r2` / `--r3` — R&R mode. Skips fresh desk review; reloads prior round's reports; same referees + dispositions + peeves; classifies each prior concern as Resolved / Partial / Not addressed. Hard cap at `--r3` (no round 4+).
 - `--stress` — Hostile editor. Forces both referees to SKEPTIC disposition, doubles critical peeves, framing: "you are looking for reasons to reject this paper." Output is a concern-list gauntlet, not a decision letter.
+- `--variance` (with integer **N**, default 3) — Reviewer-disposition variance mode. Runs **N** referees with **independently sampled** dispositions from the 6-way taxonomy (STRUCTURAL / CREDIBILITY / MEASUREMENT / POLICY / THEORY / SKEPTIC). Editor synthesizes into a **distribution of decisions**, not a single verdict. See "Variance mode" below.
 - `--no-novelty-check` — Disables the editor's WebSearch novelty probes (default is ON). Use in offline or hallucination-sensitive contexts. **Novelty-check caveat (document this to users):** WebSearch can return hallucinated citations or miss paywalled recent work. Always surface novelty-probe results as flags for manual verification, not verdicts.
+
+#### Variance mode (`--peer --variance N`)
+
+**Why this mode exists.** Default `--peer` runs an editor + 2 referees with dispositions sampled once. A single peer-review pass is a point estimate of how the paper would fare — but the AgentReview ACL 2024 study ([arXiv:2406.12708](https://arxiv.org/abs/2406.12708)) found that **~37% of paper decisions vary purely from reviewer-disposition sampling** and another 27.7% from partial author-identity disclosure. A point estimate hides this variance.
+
+Variance mode runs N independent referees (default N=3, max N=5 for token-cost discipline) with disposition sampling, then reports a **decision distribution** that surfaces this variance to the author.
+
+**How it works:**
+
+1. Editor performs desk review once (shared across the N referees).
+2. The editor samples N dispositions from the 6-way taxonomy **with replacement**. Stratification rule: if N ≥ 3, at least one SKEPTIC is always sampled (avoids drawing N friendly referees by chance).
+3. Each of the N referees runs in an isolated context (`Task` with `context: fork`) — same manuscript, same paper-type rubric, different disposition. Referees are blind to each other.
+4. Editor receives N independent reports and produces:
+   - A **decision-distribution table** (e.g., `2/3 R&R, 1/3 Reject` with the modal verdict highlighted).
+   - A **concern-frequency table** showing which concerns appeared across multiple referees (high frequency = robust criticism; low frequency = disposition-dependent).
+   - An **editorial recommendation** that explicitly references the variance ("modal verdict R&R, with one SKEPTIC dissent on identification — author should address the identification concern even though it's not the majority position").
+
+**Output files:**
+
+- `quality_reports/peer_review_<paper>/referee_1.md` … `referee_N.md` (per-referee reports)
+- `quality_reports/peer_review_<paper>/decision_distribution.md` (aggregate table + concern-frequency analysis)
+- `quality_reports/peer_review_<paper>/editor_synthesis.md` (final editorial letter)
+
+**Cost discipline.** Variance mode multiplies referee-tier cost by N relative to default `--peer` (which runs 2 referees). The Cost-Conscious Composition section of the workflow guide recommends keeping referees on Sonnet (mid-tier) for variance runs and reserving Opus for the editor synthesis. Hard cap at N=5; for higher variance estimates, run `--variance 5` twice and combine offline.
+
+**Mutual exclusivity.** Variance mode cannot combine with `--stress` (which forces SKEPTIC×2 and would defeat the sampling purpose) or `--r2`/`--r3` (which reuses prior-round dispositions for continuity). The skill halts with an error if mutually-exclusive flags are combined.
+
+**When to reach for it:**
+
+- Pre-submission dress rehearsal where you want to know not just "will this paper survive review" but "*how confidently* will it survive."
+- Deciding between target journals — run `--variance 3` against two journal profiles, compare distributions.
+- Responding to a rejection where the referee panel felt unrepresentative — `--variance 5` against the same journal profile gives an empirical sense of whether the original referees were typical.
 
 ---
 
