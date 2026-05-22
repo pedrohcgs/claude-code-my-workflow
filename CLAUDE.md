@@ -1,146 +1,93 @@
-# CLAUDE.MD -- Academic Project Development with Claude Code
+# CLAUDE.MD -- PKU-DFIIC 数据清洗项目
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
-**Institution:** [YOUR INSTITUTION]
-**Branch:** main
+**项目名称：** 北京大学数字普惠金融指数（PKU-DFIIC）数据清洗  
+**工具栈：** Python + Stata  
+**分支：** main
 
 ---
 
-## Core Principles
+## 核心原则
 
-- **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
-- **Verify after** -- compile/render and confirm output at the end of every task
-- **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
-- **Quality gates** -- nothing ships below 80/100
-- **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to [MEMORY.md](MEMORY.md)
+- **Plan first** — 非 trivial 任务先进 plan mode，计划存 `quality_reports/plans/`
+- **Verify after** — 每步完成后核查观测数、变量数、缺失模式
+- **数据不修改** — 原始值如实保留，缺失即缺失，不插补
+- **[LEARN] tags** — 被纠正时，写 `[LEARN:category] wrong → right` 到 MEMORY.md
 
-Cross-session context lives in [MEMORY.md](MEMORY.md); past plans, specs, and session logs are in [quality_reports/](quality_reports/).
+跨会话上下文在 MEMORY.md；历史计划和 session log 在 quality_reports/。
 
 ---
 
-## Folder Structure
+## 文件夹结构
 
 ```
-[YOUR-PROJECT]/
-├── CLAUDE.MD                    # This file
-├── .claude/                     # Rules, skills, agents, hooks
-├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
-├── Quarto/                      # RevealJS .qmd files + theme
-├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
-├── quality_reports/             # Plans, session logs, merge reports, decision records
-├── explorations/                # Research sandbox (see rules)
-├── templates/                   # Session log, quality report templates
-└── master_supporting_docs/      # Papers and existing slides
+1_Cleaned_PKU_DFIIC/
+├── PKU_DFIIC_province.dta    # 最终干净数据：省级（2011-2023）
+├── PKU_DFIIC_city.dta        # 最终干净数据：市级（2011-2023）
+├── PKU_DFIIC_county.dta      # 最终干净数据：县级（2014-2023）
+├── CLAUDE.md                 # 本文件
+├── MEMORY.md                 # 重要决策记录
+├── README.md                 # 数据文档：变量含义、局限性、使用示例
+├── codes/                    # 所有代码，按工作顺序编号
+│   ├── 01_explore.py         # Python: 读 Excel → 探索 → 存临时 .dta
+│   ├── 02_clean_province.do  # Stata: 清洗省级数据
+│   ├── 03_clean_city.do      # Stata: 清洗市级数据
+│   └── 04_clean_county.do    # Stata: 清洗县级数据
+├── data_logs/                # 所有运行产生的 log 文件
+├── data_temp/                # 清洗过程中的临时 .dta 文件
+└── quality_reports/          # 工作流记忆系统（Claude 自动维护）
+    ├── session_logs/
+    ├── plans/
+    └── specs/
 ```
 
 ---
 
-## Commands
+## 常用命令
 
 ```bash
-# LaTeX (3-pass, XeLaTeX only)
-cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-BIBINPUTS=..:$BIBINPUTS bibtex file
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
+# 运行探索脚本（从项目根目录）
+python3 codes/01_explore.py
 
-# Deploy Quarto to GitHub Pages
-./scripts/sync_to_docs.sh LectureN
-
-# Quality score
-python scripts/quality_score.py Quarto/file.qmd
-
-# Palette sync (LaTeX ↔ SCSS)
-./scripts/check-palette-sync.sh
-
-# Surface-count sync (README ↔ CLAUDE.md ↔ guide ↔ landing page)
-./scripts/check-surface-sync.sh
+# Stata 清洗（在 Stata 中运行，路径以项目根目录为准）
+# do codes/02_clean_province.do
+# do codes/03_clean_city.do
+# do codes/04_clean_county.do
 ```
 
-**Palette contract:** color names in `Preambles/header.tex` must match SCSS variables in `Quarto/theme-template.scss`. See [`Preambles/README.md`](Preambles/README.md).
+---
+
+## 原始数据
+
+| 文件 | 路径 |
+|------|------|
+| Excel 原始数据 | `/Volumes/douqianbin/0_Raw/PKU_DFIIC/北京大学数字普惠金融指数（PKU-DFIIC）2011-2023.xlsx` |
+
+**Excel Sheets：**
+- `Provinces` → `data_temp/province_raw.dta`（403行 × 14列）
+- `Prefecture_Level_Cities` → `data_temp/city_raw.dta`（4369行 × 16列）
+- `Counties` → `data_temp/county_raw.dta`（26090行 × 17列）
+- `Regionalism_Code` → `data_temp/regionalism_code_raw.dta`（3253行 × 22列）
 
 ---
 
-## Quality Thresholds (advisory)
+## 数据集状态
 
-| Score | Checkpoint | Meaning |
-|-------|------|---------|
-| 80 | Commit | Good enough to save |
-| 90 | PR | Ready for deployment |
-| 95 | Excellence | Aspirational |
-
-Enforced by `/commit` (halts + asks for override); not enforced by a git pre-commit hook.
+| 数据集 | 输入文件 | 输出文件 | 时间跨度 | 状态 |
+|--------|---------|---------|---------|------|
+| 省级 | province_raw.dta | PKU_DFIIC_province.dta | 2011-2023 | 待清洗 |
+| 市级 | city_raw.dta | PKU_DFIIC_city.dta | 2011-2023 | 待清洗 |
+| 县级 | county_raw.dta | PKU_DFIIC_county.dta | 2014-2023 | 待清洗 |
 
 ---
 
-## Skills Quick Reference
+## 关键数据说明
 
-| Command | What It Does |
-|---------|-------------|
-| `/compile-latex [file]` | 3-pass XeLaTeX + bibtex |
-| `/deploy [LectureN]` | Render Quarto + sync to docs/ |
-| `/extract-tikz [LectureN]` | TikZ → PDF → SVG |
-| `/new-diagram [snippet] [output.tex]` | Scaffold a TikZ diagram from the gallery with prevention + review |
-| `/proofread [file]` | Grammar/typo/overflow review |
-| `/visual-audit [file]` | Slide layout audit |
-| `/pedagogy-review [file]` | Narrative, notation, pacing review |
-| `/review-r [file]` | R code quality review |
-| `/qa-quarto [LectureN]` | Adversarial Quarto vs Beamer QA |
-| `/slide-excellence [file]` | Combined multi-agent review |
-| `/translate-to-quarto [file]` | Beamer → Quarto translation |
-| `/validate-bib` | Cross-reference citations |
-| `/devils-advocate` | Challenge slide design |
-| `/create-lecture` | Full lecture creation |
-| `/commit [msg]` | Stage, commit, PR, merge |
-| `/lit-review [topic]` | Literature search + synthesis |
-| `/research-ideation [topic]` | Research questions + strategies |
-| `/interview-me [topic]` | Interactive research interview |
-| `/review-paper [file]` | Manuscript review (single-pass / `--adversarial` / `--peer <journal>` simulated pipeline) |
-| `/respond-to-referees [report] [manuscript]` | R&R cross-reference + response draft |
-| `/data-analysis [dataset]` | End-to-end R analysis |
-| `/audit-reproducibility [paper]` | Enforce replication tolerance thresholds on paper ↔ code |
-| `/learn [skill-name]` | Extract discovery into persistent skill |
-| `/context-status` | Show session health + context usage |
-| `/deep-audit` | Repository-wide consistency audit |
-| `/permission-check` | Diagnose permission layers when prompts fire unexpectedly |
-| `/seven-pass-review` | Seven-pass adversarial manuscript review (parallel forked subagents) |
-| `/verify-claims [file]` | Chain-of-Verification fact-check (forked verifier, fresh context) |
+**已知缺失模式（非错误，来自原始数据）：**
+- `monetary_fund`、`investment`：2011 年早期产品未上线，为空
+- `credit_investigation`、`monetary_fund`：2019-2023 因监管原因未公布
+- `credit_investigation`：省级 2011 起、市级早期可能为空
 
----
-
-<!-- CUSTOMIZE: Replace placeholder rows ([your-env], [.your-class]) with your own.
-     Delete the rows marked "(example — delete)" once you've added yours. -->
-
-## Beamer Custom Environments
-
-| Environment | Effect | Use Case |
-| --- | --- | --- |
-| `[your-env]` | [Description] | [When to use] |
-| `keybox` | Gold background box | Key points *(example — delete)* |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions *(example — delete)* |
-
-## Quarto CSS Classes
-
-| Class | Effect | Use Case |
-| --- | --- | --- |
-| `[.your-class]` | [Description] | [When to use] |
-| `.smaller` | 85% font | Dense content *(example — delete)* |
-| `.positive` | Green bold | Good annotations *(example — delete)* |
-
----
-
-## Current Project State
-
-| Lecture | Beamer | Quarto | Key Content |
-| --- | --- | --- | --- |
-| HelloWorld *(sample — delete when ready)* | `HelloWorld.tex` | `HelloWorld.qmd` | Minimal deck to verify setup |
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
+**行政区划代码：**
+- 市级数据同时保留 `pref_code_year14`（2014年底标准）和 `pref_code_year18`（2018年标准）
+- 县级统一使用 2014 年底代码（`county_code_year14`）
+- 合并其他数据集时注意代码版本匹配

@@ -34,6 +34,7 @@ __pycache__/
 
 # OS files
 .DS_Store
+._*
 Thumbs.db
 
 # Claude Code local files (not shared across machines)
@@ -64,6 +65,12 @@ quality_reports/decisions/*
 !quality_reports/session_logs/.gitkeep
 !quality_reports/merges/.gitkeep
 !quality_reports/decisions/.gitkeep
+
+# PKU-DFIIC project: intermediate/temp data (final .dta files live at root)
+data_temp/
+
+# PKU-DFIIC project: Stata log files (already covered by *.log above, explicit for clarity)
+data_logs/
 
 # R analysis outputs (generated artifacts; keep scripts, ignore outputs)
 scripts/R/_outputs/

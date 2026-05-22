@@ -1,334 +1,163 @@
-# My Claude Code Setup
+# 北京大学数字普惠金融指数（PKU-DFIIC）清洗数据
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Changelog](https://img.shields.io/badge/See-CHANGELOG-blue.svg)](CHANGELOG.md)
-[![Contributing](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](.github/CONTRIBUTING.md)
-
-> **Actively maintained.** A summary of how I use Claude Code for academic work — slides, papers, data analysis, and more — packaged so you can fork it for your own research. See [CHANGELOG.md](CHANGELOG.md) for the latest changes.
-
-**Live site:** [psantanna.com/claude-code-my-workflow](https://psantanna.com/claude-code-my-workflow/)
-
-A ready-to-fork foundation for AI-assisted academic work. You describe what you want — lecture slides, a research paper, a data analysis, a replication package — and Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results. Like a contractor who handles the entire job. Extracted from a production PhD course and extended by a growing [community](#community--extensions).
+**数据来源：** 北京大学数字金融研究中心 & 蚂蚁科技集团研究院  
+**时间跨度：** 省级/市级 2011–2023；县级 2014–2023  
+**清洗日期：** 2026-05-22  
 
 ---
 
-## Quick Start (5–10 minutes, plus ~30 min for first-time installs)
+## 引用
 
-> **Before you start:** Claude Code + git are the minimum. To run the included `HelloWorld` demos end-to-end you also need XeLaTeX (Beamer sample) and Quarto (Quarto sample). R and the GitHub CLI are recommended. Python 3 is used by a few internal scripts (`check-palette-sync.py`, `check-tikz-prevention.py`) and is pre-installed on macOS/Linux. Full list in [Prerequisites](#prerequisites) below. Fastest path: clone first, then run `./scripts/validate-setup.sh` — it reports exactly what's missing with install links.
->
-> **Only need Python/R/markdown?** You don't need XeLaTeX or Quarto. The agents, rules, skills, and orchestration patterns work for any text/code artifact. Skip the `HelloWorld` demos and head straight to `/data-analysis`, `/review-paper`, `/lit-review`, or `/review-r`.
->
-> **Session 2 onwards:** [MEMORY.md](MEMORY.md) (committed) collects generic `[LEARN]` entries that help all forkers; `.claude/state/personal-memory.md` (gitignored) is for machine-specific notes. See [`.claude/rules/meta-governance.md`](.claude/rules/meta-governance.md) for the distinction.
+使用本数据请注明来源，并引用：
 
-### 1. Fork & Clone
+> 郭峰、王靖一、王芳、孔涛、张勋、程志云，《测度中国数字普惠金融发展：指数编制与空间特征》，《经济学季刊》，2020年第19卷第4期，第1401–1418页。
 
-```bash
-# Fork this repo on GitHub (click "Fork" on the repo page), then:
-git clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project
-cd my-project
-./scripts/validate-setup.sh        # reports missing tools with install links
+英文引用：
+> Guo, F., Wang, J., Wang, F., Kong, T., Zhang, X., & Cheng, Z. (2020). Measuring China's Digital Financial Inclusion: Index Compilation and Spatial Characteristics. *China Economic Quarterly*, 19(4), 1401–1418.
+
+---
+
+## 输出文件
+
+| 文件 | 地理层级 | 时间跨度 | 观测数 | 面板类型 |
+|------|---------|---------|-------|---------|
+| `PKU_DFIIC_province.dta` | 省级（31省） | 2011–2023 | 403 | 平衡面板 |
+| `PKU_DFIIC_city.dta` | 市级（~337城市） | 2011–2023 | 4369 | 近似平衡面板 |
+| `PKU_DFIIC_county.dta` | 县级（~2800县） | 2014–2023 | 26090 | 非平衡面板 |
+
+**面板 ID：**
+- 省级：`prov_code`（2位省级代码）
+- 市级：`pref_code_year14`（与县级一致，推荐合并用）
+- 县级：`county_code_year14`（6位代码，2014年底标准）
+
+---
+
+## 变量字典
+
+### 通用变量（三个数据集均有）
+
+| 变量名 | 中文含义 | 说明 |
+|--------|---------|------|
+| `year` | 年份 | 2011-2023（省/市）；2014-2023（县） |
+| `index_aggregate` | 数字普惠金融总指数 | 综合指数 |
+| `coverage_breadth` | 覆盖广度 | 数字金融覆盖广度分指数 |
+| `usage_depth` | 使用深度 | 数字金融使用深度分指数 |
+| `payment` | 支付业务指数 | 支付类业务分指数 |
+| `insurance` | 保险业务指数 | 保险类业务分指数 |
+| `monetary_fund` | 货币基金业务指数 | **2019–2023 因监管原因未公布（缺失）** |
+| `investment` | 投资业务指数 | 早期年份未上线（部分缺失） |
+| `credit` | 信贷业务指数 | 信贷类业务分指数 |
+| `credit_investigation` | 信用业务指数 | **2019–2023 因监管原因未公布（缺失）** |
+| `digitization_level` | 数字化程度 | 普惠金融数字化程度分指数 |
+
+### 省级特有变量（`PKU_DFIIC_province.dta`）
+
+| 变量名 | 含义 |
+|--------|------|
+| `prov_name` | 省份名称（中文） |
+| `prov_name_eng` | 省份名称（英文） |
+| `prov_code` | 省级行政区划代码（2位） |
+
+### 市级特有变量（`PKU_DFIIC_city.dta`）
+
+| 变量名 | 含义 |
+|--------|------|
+| `pref_name_year18` | 城市名称（2018年代码标准，中文） |
+| `pref_name_year18_eng` | 城市名称（2018年代码标准，英文） |
+| `pref_code_year18` | 城市行政区划代码（2018年标准） |
+| `pref_name_year14` | 城市名称（2014年代码标准，中文） |
+| `pref_code_year14` | 城市行政区划代码（2014年底标准）**推荐用于合并** |
+
+### 县级特有变量（`PKU_DFIIC_county.dta`）
+
+| 变量名 | 含义 |
+|--------|------|
+| `county_name_year14` | 县域名称（2014年底标准） |
+| `county_code_year14` | 县域行政区划代码（6位，2014年底标准） |
+| `prov_code` | 所属省级代码（2位） |
+| `prov_name` | 所属省份名称（中文） |
+| `pref_code` | 所属市级代码（通常4位，2014年标准） |
+| `pref_name` | 所属城市名称（中文） |
+
+---
+
+## 缺失值说明
+
+| 变量 | 省级缺失率 | 市级缺失率 | 县级缺失率 | 原因 |
+|------|---------|---------|---------|------|
+| `monetary_fund` | 53.8% | 53.8% | 54.4% | 2019+未公布；早期产品未上线 |
+| `credit_investigation` | 69.2% | 69.2% | 61.2% | 2019+未公布；早期可能未覆盖 |
+| `investment` | 23.1% | 23.1% | 0% | 早期（2011-2013）产品未上线 |
+
+---
+
+## 已知数据局限性
+
+### 1. 子指数缺失（非数据错误）
+`monetary_fund`（货币基金）和 `credit_investigation`（信用）分指数在 2019–2023 年因监管和公司数据安全审核原因未对外公布，表现为缺失值。这是原始数据本身的局限，非清洗错误。
+
+### 2. 县级数据负值（原始数据如此）
+县级数据部分观测的子指数存在负值（如 `digitization_level` 最小值 -165.39，`payment` 最小值 -70.17）。这是原始发布数据中已有的极端值，本数据集如实保留，未做修改。分析时建议检查异常值分布。
+
+### 3. 市级双代码体系
+2011–2023 年间，部分城市经历"撤地设市"或"县改区"等行政调整，导致同一城市在 2014 年和 2018 年使用不同的行政区划代码。市级数据同时保留两套代码：
+- `pref_code_year14`：2014年底标准，与县级数据代码一致，**推荐用于与县级或早期数据合并**
+- `pref_code_year18`：2018年标准，**推荐用于与近期数据（2018后发布）合并**
+
+### 4. 新疆生产建设兵团（XPCC）代码问题
+县级数据中，新疆生产建设兵团（XPCC）所属县域的 `pref_code` 呈现 6 位代码（最大值 659010），而非标准 4 位地级市代码。这是 XPCC 特殊行政体制导致的已知特征。
+
+### 5. 县级数据覆盖扩展
+2014–2015 年县级覆盖约 1754 个县，2016 年起扩展至约 2800 个县，导致面板为非平衡结构。
+
+### 6. 港澳台数据缺失
+港澳台地区数据未包含在本指数中。
+
+---
+
+## 代码结构
+
+```
+codes/
+├── 01_explore.py        ← Python: 读 Excel，探索数据，存 data_temp/*.dta
+├── 02_clean_province.do ← Stata: 清洗省级数据
+├── 03_clean_city.do     ← Stata: 清洗市级数据
+└── 04_clean_county.do   ← Stata: 清洗县级数据
 ```
 
-Replace `YOUR_USERNAME` with your GitHub username.
+**运行顺序：**
+1. 在项目根目录运行：`python3 codes/01_explore.py`
+2. 在 Stata 中依次运行（工作目录设为项目根目录）：
+   ```stata
+   do codes/02_clean_province.do
+   do codes/03_clean_city.do
+   do codes/04_clean_county.do
+   ```
 
-### 2. Start Claude Code and Paste This Prompt
+---
 
-```bash
-claude
+## 使用示例（Stata）
+
+```stata
+* 加载省级数据
+use "PKU_DFIIC_province.dta", clear
+xtset prov_code year
+
+* 与其他省级数据合并（以省份代码为键）
+merge 1:1 prov_code year using "your_data.dta"
+
+* 加载市级数据并合并（以2014年代码为键）
+use "PKU_DFIIC_city.dta", clear
+merge 1:1 pref_code_year14 year using "your_city_data.dta"
+
+* 加载县级数据
+use "PKU_DFIIC_county.dta", clear
+xtset county_code_year14 year   // 非平衡面板
 ```
 
-**Using VS Code?** Open the Claude Code panel instead. Everything works the same — see the [full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-setup) for details.
-
-> **Avoid prompt fatigue.** Out of the box, Claude Code asks permission for every tool invocation. After the first few approvals, toggle **Auto-accept edits** mode (a keybinding; see the [permission modes section](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#settings---permissions-and-hooks) of the guide) or run `claude --permission-mode acceptEdits`. For fully-autonomous runs on a trusted repo, **Bypass** mode skips prompts entirely. The template's `.claude/settings.json` pre-approves ~100 common Bash and Edit/Write patterns, so even at default permissions most work is unattended.
-
-Then paste the [starter prompt](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-first-session) from the guide, filling in your project details:
-
-> I am starting to work on **[PROJECT NAME]** in this repo. **[Describe your project in 2–3 sentences.]** I've set up the Claude Code academic workflow... Please read the configuration files and adapt them for my project. Enter plan mode and start.
-
-The [full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-first-session) has the complete starter prompt with all the details.
-
-**What this does:** Claude reads all the configuration files, fills in your project name, institution, and preferences, then enters contractor mode — planning, implementing, and (within the skill you invoke) running the review + verify loop. You approve the plan, invoke a skill, and the skill handles the rest within its scope.
-
-### 3. Verify Your Setup
-
-Before building real lectures, confirm your environment works:
-
-```bash
-./scripts/validate-setup.sh        # Checks XeLaTeX, Quarto, Python, git, etc.
-```
-
-Then inside Claude:
-
-```text
-/compile-latex HelloWorld          # Compiles Slides/HelloWorld.tex to PDF
-/deploy HelloWorld                 # Renders Quarto/HelloWorld.qmd to HTML
-```
-
-If both succeed, delete `Slides/HelloWorld.tex` and `Quarto/HelloWorld.qmd` and start on your real work.
-
 ---
 
-## How It Works
+## 原始数据路径
 
-### Contractor Mode
-
-You describe a task. For complex or ambiguous requests, Claude first creates a requirements specification with MUST/SHOULD/MAY priorities and clarity status (CLEAR/ASSUMED/BLOCKED). You approve the spec, then Claude plans the approach and invokes the right skill (e.g. `/create-lecture`, `/qa-quarto`, `/review-paper --adversarial`). That skill implements the orchestrator pattern internally — implement, verify, review, fix, re-verify, score — and returns a summary when the work meets quality standards. Say "just do it" and it auto-commits when the score clears 80.
-
-### Specialized Agents
-
-Instead of one general-purpose reviewer, 14 focused agents each check one dimension. A representative sample:
-
-- **proofreader** — grammar/typos
-- **slide-auditor** — visual layout
-- **pedagogy-reviewer** — teaching quality
-- **r-reviewer** — R code quality
-- **domain-reviewer** — field-specific correctness, slides (template — customize for your field)
-- **domain-referee** / **methods-referee** / **editor** — manuscript peer-review pipeline (`/review-paper --peer`)
-
-Each is better at its narrow task than a generalist would be. The `/slide-excellence` skill runs the slide-review agents in parallel; `/review-paper --peer` runs the paper-review pipeline. The same pattern extends to any academic artifact — manuscripts, data pipelines, proposals.
-
-### Adversarial QA
-
-Two agents work in opposition: the **critic** reads both Beamer and Quarto and produces harsh findings. The **fixer** implements exactly what the critic found. They loop until the critic says "APPROVED" (or 5 rounds max). This catches errors that single-pass review misses.
-
-### Quality Review
-
-Every artifact gets a score (0–100). Scores below threshold halt the workflow and surface the findings — the user decides whether to fix or explicitly override:
-
-- **80** — commit threshold
-- **90** — PR threshold
-- **95** — excellence (aspirational)
-
-> **Framing honesty:** Thresholds are advisory at the harness level — the `/commit` skill runs quality checks and halts on failure, but there is no pre-commit git hook that blocks a direct `git commit`. If you bypass the skill, you bypass the review. For hard enforcement, configure a git pre-commit hook.
-
-### Context Survival
-
-Plans, specifications, and session logs survive auto-compression and session boundaries. The PreCompact hook saves a context snapshot before Claude's auto-compression triggers, ensuring critical decisions are never lost. MEMORY.md accumulates learning across sessions, so patterns discovered in one session inform future work.
-
----
-
-## The Guide
-
-For a comprehensive walkthrough, read the **[full guide](https://psantanna.com/claude-code-my-workflow/workflow-guide.html)** (or see the [source](guide/workflow-guide.qmd)).
-
-It covers:
-1. **Why This Workflow Exists** — the problem and the vision
-2. **Getting Started** — fork, paste one prompt, and Claude sets up the rest
-3. **The System in Action** — specialized agents, adversarial QA, quality scoring
-4. **The Building Blocks** — CLAUDE.md, rules, skills, agents, hooks, memory
-5. **Workflow Patterns** — slides, research, reproducibility, presentation rhetoric, sequential adversarial audits, and more
-6. **The Ecosystem** — extensions by clo-author, claudeblattman, MixtapeTools, autoresearch, ClaudeCodeTools, and a growing community
-7. **Customizing for Your Domain** — creating your own reviewers and knowledge bases
-
-### 2026 Features
-
-The guide covers Claude Code's latest capabilities:
-
-- **Effort levels** — `/effort` command for cost vs. thoroughness tradeoffs (low/medium/high/max)
-- **Skill frontmatter** — `effort`, `context: fork`, `agent`, `hooks`, and dynamic content (`$ARGUMENTS`, `!command` syntax)
-- **Permission modes** — Normal, Auto-accept, Plan, Bypass for different workflows
-- **Hook handler types** — command, prompt, and HTTP handlers with 20+ hook events
-- **Advanced agent configuration** — model, maxTurns, isolation, tool restrictions
-- **Built-in skills** — `/batch` for parallel refactoring, `/simplify` for code review, `/remote-control` for browser bridge
-- **Plugins** — `/discover-plugins` for third-party extensions
-
----
-
-## Use Cases
-
-| Academic Task | How This Workflow Helps |
-|---------------|----------------------|
-| Lecture slides (Beamer/Quarto) | Full creation, translation, multi-agent review, deployment |
-| Research papers | Literature review, manuscript review, simulated peer review |
-| Data analysis | End-to-end R pipelines, replication verification, publication-ready output |
-| Replication packages | AEA-compliant packaging, reproducibility audit trails |
-| Presentations | Rhetoric of decks principles, visual audit, cognitive load review |
-| Research proposals | Structured drafting with adversarial critique |
-
----
-
-## What's Included
-
-<details>
-<summary><strong>14 agents, 28 skills, 24 rules, 6 hooks</strong> (click to expand)</summary>
-
-### Agents (`.claude/agents/`)
-
-| Agent | What It Does |
-|-------|-------------|
-| `proofreader` | Grammar, typos, overflow, consistency review |
-| `slide-auditor` | Visual layout audit (overflow, font consistency, spacing) |
-| `pedagogy-reviewer` | 13-pattern pedagogical review (narrative arc, notation density, pacing) |
-| `r-reviewer` | R code quality, reproducibility, and domain correctness |
-| `tikz-reviewer` | Merciless TikZ diagram visual critique |
-| `beamer-translator` | Beamer-to-Quarto translation specialist |
-| `quarto-critic` | Adversarial QA comparing Quarto against Beamer benchmark |
-| `quarto-fixer` | Implements fixes from the critic agent |
-| `verifier` | End-to-end task completion verification |
-| `domain-reviewer` | **Template** for your field-specific substance reviewer |
-
-### Skills (`.claude/skills/`)
-
-| Skill | What It Does |
-|-------|-------------|
-| `/compile-latex` | 3-pass XeLaTeX compilation with bibtex |
-| `/deploy` | Render Quarto + sync to GitHub Pages |
-| `/extract-tikz` | TikZ diagrams to PDF to SVG pipeline |
-| `/proofread` | Launch proofreader on a file |
-| `/visual-audit` | Launch slide-auditor on a file |
-| `/pedagogy-review` | Launch pedagogy-reviewer on a file |
-| `/review-r` | Launch R code reviewer |
-| `/qa-quarto` | Adversarial critic-fixer loop (max 5 rounds) |
-| `/slide-excellence` | Combined multi-agent review |
-| `/translate-to-quarto` | Full 11-phase Beamer-to-Quarto translation |
-| `/validate-bib` | Cross-reference citations against bibliography |
-| `/devils-advocate` | Challenge design decisions before committing |
-| `/create-lecture` | Full lecture creation workflow |
-| `/commit` | Stage, commit, create PR, and merge to main |
-| `/lit-review` | Literature search, synthesis, and gap identification |
-| `/research-ideation` | Generate research questions and empirical strategies |
-| `/interview-me` | Interactive interview to formalize a research idea |
-| `/review-paper` | Manuscript review: structure, econometrics, referee objections |
-| `/data-analysis` | End-to-end R analysis with publication-ready output |
-| `/learn` | Extract non-obvious discoveries into persistent skills |
-| `/context-status` | Show session health and context usage |
-| `/deep-audit` | Repository-wide consistency audit |
-| `/permission-check` | Diagnose permission layers when prompts fire unexpectedly |
-| `/audit-reproducibility` | Enforce tolerance thresholds on paper ↔ code numeric claims |
-| `/new-diagram` | Scaffold a TikZ diagram from the snippet gallery with prevention + review |
-| `/respond-to-referees` | R&R response-letter generator (maps referee comments to revisions) |
-| `/seven-pass-review` | Seven-pass adversarial manuscript review (parallel forked subagents) |
-
-### Research Workflow
-
-| Feature | What It Does |
-|---------|-------------|
-| Exploration folder | Structured `explorations/` sandbox with graduate/archive lifecycle |
-| Fast-track workflow | 60/100 quality threshold for rapid prototyping |
-| Simplified orchestrator | implement → verify → score → done (no multi-round reviews) |
-| Enhanced session logging | Structured tables for changes, decisions, verification |
-| Merge-only reporting | Quality reports at merge time only |
-| Math line-length exception | Long lines acceptable for documented formulas |
-| Workflow quick reference | One-page cheat sheet at `.claude/WORKFLOW_QUICK_REF.md` |
-
-### Rules (`.claude/rules/`)
-
-Rules use path-scoped loading: **always-on** rules load every session (~100 lines total); **path-scoped** rules load only when Claude works on matching files. Claude follows ~150 instructions reliably, so less is more.
-
-**Always-on** (no `paths:` frontmatter — load every session):
-
-| Rule | What It Enforces |
-|------|-----------------|
-| `plan-first-workflow` | Plan mode for non-trivial tasks + context preservation |
-| `orchestrator-protocol` | Contractor mode: implement → verify → review → fix → score |
-| `session-logging` | Three logging triggers: post-plan, incremental, end-of-session |
-| `meta-governance` | Template vs. working project distinctions |
-
-**Path-scoped** (load only when working on matching files):
-
-| Rule | Triggers On | What It Enforces |
-|------|------------|-----------------|
-| `verification-protocol` | `.tex`, `.qmd`, `docs/` | Task completion checklist |
-| `single-source-of-truth` | `Figures/`, `.tex`, `.qmd` | No content duplication; Beamer is authoritative |
-| `quality-gates` | `.tex`, `.qmd`, `*.R` | 80/90/95 scoring + tolerance thresholds |
-| `r-code-conventions` | `*.R` | R coding standards + math line-length exception |
-| `tikz-visual-quality` | `.tex` | TikZ diagram visual standards |
-| `beamer-quarto-sync` | `.tex`, `.qmd` | Auto-sync Beamer edits to Quarto |
-| `pdf-processing` | `master_supporting_docs/` | Safe large PDF handling |
-| `proofreading-protocol` | `.tex`, `.qmd`, `quality_reports/` | Propose-first, then apply with approval |
-| `no-pause-beamer` | `.tex` | No overlay commands in Beamer |
-| `replication-protocol` | `*.R` | Replicate original results before extending |
-| `knowledge-base-template` | `.tex`, `.qmd`, `*.R` | Notation/application registry template |
-| `orchestrator-research` | `*.R`, `explorations/` | Simple orchestrator for research (no multi-round reviews) |
-| `exploration-folder-protocol` | `explorations/` | Structured sandbox for experimental work |
-| `exploration-fast-track` | `explorations/` | Lightweight exploration workflow (60/100 threshold) |
-
-### Templates (`templates/`)
-
-| Template | What It Does |
-|----------|-------------|
-| `session-log.md` | Structured session logging format |
-| `quality-report.md` | Merge-time quality report format |
-| `exploration-readme.md` | Exploration project README template |
-| `archive-readme.md` | Archive documentation template |
-| `requirements-spec.md` | MUST/SHOULD/MAY requirements framework with clarity status |
-| `constitutional-governance.md` | Template for defining non-negotiable principles vs. preferences |
-| `skill-template.md` | Academic skill creation template with domain-specific examples |
-
-</details>
-
----
-
-## Prerequisites
-
-| Tool | Required For | Install |
-|------|-------------|---------|
-| [Claude Code](https://code.claude.com/docs/en/overview) | Everything | [claude.ai/install](https://claude.ai/install) |
-| git | Clone + version control | [git-scm.com](https://git-scm.com/downloads) |
-| Python 3 (3.9+) | Internal checkers (palette sync, TikZ prevention) | Preinstalled on macOS/Linux; [python.org](https://www.python.org/) for Windows |
-| XeLaTeX | LaTeX compilation (Beamer `HelloWorld`, real lectures) | [TeX Live](https://tug.org/texlive/) or [MacTeX](https://tug.org/mactex/) |
-| [Quarto](https://quarto.org) | Web slides (Quarto `HelloWorld`, real lectures) | [quarto.org/docs/get-started](https://quarto.org/docs/get-started/) |
-| R | Figures and analysis (`/data-analysis`, `scripts/R/` template) | [r-project.org](https://www.r-project.org/) |
-| pdf2svg | TikZ → SVG for Quarto (`/extract-tikz`) | `brew install pdf2svg` (macOS), `apt install pdf2svg` (Debian) |
-| [gh CLI](https://cli.github.com/) | PR / issue workflow | `brew install gh` (macOS), `apt install gh` (Debian) |
-
-**Minimum to fork this template:** Claude Code + git + Python 3 (Python is already installed on macOS/Linux).
-
-**Minimum to run the included HelloWorld demos end-to-end:** add XeLaTeX (for `/compile-latex HelloWorld`) and Quarto (for `/deploy HelloWorld`).
-
-**Your real lectures may need more** — R for `scripts/R/` analyses, pdf2svg if you use TikZ extraction, gh CLI if you use the PR-based commit workflow. `./scripts/validate-setup.sh` reports which of these are installed and what each unlocks.
-
----
-
-## Adapting for Your Field
-
-1. **Fill in the knowledge base** (`.claude/rules/knowledge-base-template.md`) with your notation, applications, and design principles
-2. **Customize the domain reviewer** (`.claude/agents/domain-reviewer.md`) with review lenses specific to your field
-3. **Update the color palette** — this is a **two-surface contract**: change the HEX values at the top of **both** [`Preambles/header.tex`](Preambles/header.tex) (Beamer/TikZ) **and** [`Quarto/theme-template.scss`](Quarto/theme-template.scss) (Quarto slides) so they agree. Then run `./scripts/check-palette-sync.sh` to verify. Forgetting one surface silently produces mismatched Beamer vs. Quarto renderings. See [`Preambles/README.md`](Preambles/README.md) for the full contract and the TikZ style library.
-4. **Add field-specific R pitfalls** to `.claude/rules/r-code-conventions.md`
-5. **Fill in the lecture mapping** in `.claude/rules/beamer-quarto-sync.md`
-6. **Customize the workflow quick reference** (`.claude/WORKFLOW_QUICK_REF.md`) with your non-negotiables and preferences
-7. **Set up the exploration folder** (`explorations/`) for experimental work
-
----
-
-## Additional Resources
-
-- [Claude Code Documentation](https://code.claude.com/docs/en/overview)
-- [Writing a Good CLAUDE.md](https://code.claude.com/docs/en/memory) — official guidance on project memory
-
----
-
-## Origin
-
-This infrastructure was extracted from **Econ 730: Causal Panel Data** at Emory University, developed by Pedro Sant'Anna using Claude Code over 6+ sessions. The course produced 6 complete PhD lecture decks with 800+ slides, interactive Quarto versions with plotly charts, and full R replication packages — all managed through this multi-agent workflow. The patterns are domain-agnostic: the same agents, rules, and orchestrator work for any academic project.
-
----
-
-## Community & Extensions
-
-As of March 2026, **15+ research groups** across economics, energy, political science, and engineering have forked and adapted this workflow. The infrastructure (orchestrator, hooks, quality gates) transfers without modification.
-
-**Extended workflows:**
-
-- **[clo-author](https://github.com/hugosantanna/clo-author)** by Hugo Sant'Anna (UAB) — Paper-centric research workflows with 17 specialized agents (6 worker-critic pairs plus referees, data-engineer, verifier), simulated blind peer review, AEA replication compliance, and full research lifecycle management. **The `/review-paper --peer <journal>` pipeline in this template is adapted from clo-author with Hugo's permission** (pipeline shape, 6-way disposition taxonomy, journal-calibration schema, paper-type branching). Thanks, Hugo.
-- **[claudeblattman](https://github.com/chrisblattman/claudeblattman)** by Chris Blattman (U Chicago) — Comprehensive guide for non-technical academics: executive assistant workflows, proposal writing, agent debates, and self-improving configuration
-- **[MixtapeTools](https://github.com/scunning1975/MixtapeTools)** by Scott Cunningham (Baylor) — The Rhetoric of Decks: philosophy and practice of beautiful, rhetorically effective academic presentations
-- **[autoresearch](https://github.com/karpathy/autoresearch)** by Andrej Karpathy — Constraint-based autonomous research with `program.md` as constitutional document
-- **[ClaudeCodeTools](https://github.com/aspi6246/ClaudeCodeTools)** — "The Editor" persona: seven-audit sequential paper review protocol
-
-See the [guide's ecosystem section](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#sec-ecosystem) for detailed descriptions, design principles, and more resources.
-
----
-
-## Versioning & Contributing
-
-- **What's new:** see [CHANGELOG.md](CHANGELOG.md). We follow loose semver — breaking changes get major bumps so you can decide when to pull updates.
-- **How to contribute:** see [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md). PRs welcome for generalizable improvements; fork-specific work stays in your fork.
-- **Pin to a version:** `git checkout v1.3.0` (current as of 2026-04-13).
-
----
-
-## License
-
-MIT License. See [LICENSE](LICENSE).
+原始 Excel 文件存于只读目录，不纳入版本控制：  
+`/Volumes/douqianbin/0_Raw/PKU_DFIIC/北京大学数字普惠金融指数（PKU-DFIIC）2011-2023.xlsx`
