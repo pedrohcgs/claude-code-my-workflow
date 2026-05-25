@@ -4,6 +4,7 @@ description: Create a new Beamer lecture `.tex` from source papers and materials
 argument-hint: "[Topic name]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
 context: fork
+disable-model-invocation: true
 ---
 
 # Lecture Creation Workflow

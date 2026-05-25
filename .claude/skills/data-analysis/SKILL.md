@@ -2,7 +2,7 @@
 name: data-analysis
 description: End-to-end R data analysis pipeline — exploration → cleaning → regression → publication-ready tables and figures. Use when user says "analyze this dataset", "run a regression on X", "explore this CSV", "full analysis workflow", "get me summary stats and a regression", or points at a `.csv`/`.rds`/`.dta` and asks for empirical results. Produces numbered R scripts in `code/` and outputs to `code/_outputs/`.
 argument-hint: "[dataset path or description of analysis goal]"
-allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task"]
+allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Task", "Monitor"]
 ---
 
 # Data Analysis Workflow
@@ -162,3 +162,13 @@ set.seed(888)
 - **Use relative paths.** All paths relative to repository root.
 - **Use `here::here()`.** All paths via `here()` for cross-platform compatibility.
 - **No hardcoded values.** Use variables for sample restrictions, date ranges, etc.
+
+## Long-running fits: use the Monitor tool (Apr 2026)
+
+For regressions, simulations, or bootstrap loops that take more than a couple of minutes, launch via Bash with `run_in_background: true` and then use Anthropic's **Monitor tool** to stream R stdout into the conversation in real time. Pattern:
+
+1. Background-launch: `Rscript code/03_analyze.R` with `run_in_background: true`. Capture the `bash_id`.
+2. Use Monitor on the `bash_id` until a milestone fires (e.g., `Coefficients table written`, or process exit).
+3. Continue or course-correct based on what the stream reveals.
+
+This avoids the polling-loop anti-pattern (`sleep 30; check; sleep 30; check`) and avoids burning cache on idle waits. Especially useful when paired with the [Cost-Conscious Parallelism](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#cost-conscious-parallelism) section of the guide.

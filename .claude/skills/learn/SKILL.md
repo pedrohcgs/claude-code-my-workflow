@@ -8,6 +8,7 @@ author: Claude Code Academic Workflow
 version: 1.0.0
 argument-hint: "[skill-name (kebab-case)]"
 allowed-tools: ["Read", "Write", "Bash", "Glob", "Grep"]
+disable-model-invocation: true
 ---
 
 # /learn — Skill Extraction Workflow

@@ -22,9 +22,28 @@ model: inherit
      3. Adding field-specific known pitfalls (Lens 4)
      4. Updating the citation cross-reference sources (Lens 3)
 
-     EXAMPLE: The original version was an "Econometrica referee" for causal
-     inference / panel data. It checked identification assumptions, derivation
-     steps, and known R package pitfalls.
+     EXAMPLES (two disciplines, to show the customization is field-agnostic):
+
+     - Econ — original version: an "Econometrica referee" for causal inference /
+       panel data. Lens 1 (Assumption Stress Test) checks parallel trends, no-
+       anticipation, SUTVA, overlap. Lens 2 verifies decomposition algebra
+       (Frisch-Waugh, Goodman-Bacon weights). Lens 3 cross-references DiD/IV/RD
+       claims against Roth, Sant'Anna, Bilinski, Poe (2022) and similar. Lens 4
+       flags `fixest::feols` clustering defaults vs claimed assumptions, etc.
+
+     - Poli-sci — an "AJPS methods referee" variant. Lens 1 checks ignorability
+       under selection-on-observables, monotonicity for IV, manipulation check
+       pass rates for survey experiments, randomization unit ↔ analysis unit
+       match. Lens 2 verifies conjoint AMCE decomposition, list-experiment
+       difference-in-means algebra, marginal-effect calculations under logit.
+       Lens 3 cross-references against Hainmueller-Hopkins-Yamamoto (2014) for
+       conjoint, Blair-Imai (2012) for list-experiment, Mummolo-Peterson (2018)
+       for moderation. Lens 4 flags `cjoint`/`MASS::polr` package defaults that
+       differ from textbook formulas, `survey::svyglm` weighting handling.
+
+     Both examples are illustrative — the lens *structure* (5 lenses + cross-
+     reviewer consistency) is field-agnostic; the *checklist content* under
+     each lens is what you customize.
      ============================================================ -->
 
 > **Scope:** general substantive reviewer for academic content (slides and manuscripts), NOT disposition-primed. Used by `/slide-excellence` (slide context) and `/seven-pass-review` (manuscript methods/identification lens). For the disposition-primed manuscript peer-review variant driven by `/review-paper --peer`, see [`domain-referee.md`](domain-referee.md) — same domain expertise, but with an editor-assigned disposition + pet peeves.

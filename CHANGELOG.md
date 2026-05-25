@@ -6,9 +6,353 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
-## Unreleased
+## v1.9.0 — 2026-05-20
 
-Infrastructure-only. Two themes: audit-hardening (mechanical parity checks + living pet-peeves catalogue that close classes of bug the agent-based `/deep-audit` was missing) and selective incorporation of Claude Code Apr 2026 features (Routines for AFK scheduling, PreCompact blocking, `/less-permission-prompts` as a sibling to our `/permission-check`). No new user-facing skills, no new rules, no breaking changes.
+A **guide-refresh + ecosystem catch-up** minor release shipped in five passes against the plan at `quality_reports/plans/2026-05-20_v1.9.0-guide-refresh.md` (local-only; not tracked in git per the standard `quality_reports/plans/*` ignore rule). No breaking changes.
+
+**Inventory at release: 36 skills, 16 agents, 26 rules, 6 hooks** (was 30 / 14 / 24 / 6 at v1.8.0). The release adds 6 skills (`/humanize`, `/prompt`, `/prompt-only`, `/compress-session`, `/promote-memory`, `/stata-replication`), 2 agents (`humanize-auditor`, `promote-memory-council`), and 2 rules (`model-routing.md`, `stata-code-conventions.md`).
+
+### Pass 1 (PR #114, merged 2026-05-20) — guide refresh mechanical corrections
+
+Eight mechanical corrections that bring the guide in line with Anthropic shipments through May 2026 (Weeks 17–20), reframe three lingering "automatic orchestrator" mentions, refresh the clo-author citation to its current MAS v2 architecture, and add a Models / API section to TROUBLESHOOTING covering the 2026-06-15 Sonnet 4 + Opus 4 retirement and the Agent SDK credit-pool split. No new skills, agents, rules, or hooks. On-disk inventory unchanged.
+
+### Fixed
+
+- **`guide/workflow-guide.qmd` + `TROUBLESHOOTING.md` + `CHANGELOG.md`** — `/less-permission-prompts` → `/fewer-permission-prompts`. Verified against Anthropic's [Week 16 changelog](https://code.claude.com/docs/en/whats-new/2026-w16) and Boris Cherny's launch announcement: the skill shipped under `/fewer-permission-prompts` from day one. The previous template name was a typo, not a rename — historical-changelog wording rewritten for accuracy.
+- **`guide/workflow-guide.qmd:46–157`** — three lingering framings of orchestration as automatic ("Claude automatically: → Runs X, → Runs Y...") rewritten to name the invoked skill explicitly ("Claude invokes `/slide-excellence`, which internally..."). Reinforces the [orchestrator-protocol rule](.claude/rules/orchestrator-protocol.md) — there is no repo-wide daemon; orchestration lives inside the invoked skill.
+
+### Added — Anthropic shipments since 2026-04-27
+
+- **Model lineup callout** (Multi-Model Strategy section) — documents Opus 4.7 as the Max/Team Premium default (GA 2026-04-16, same pricing as 4.6: \$5/\$25 per MTok), Sonnet 4.6 as workhorse (1M context still available; the 4.5 1M beta retired 2026-04-30), Haiku 4.5 as the fast tier. Sources: [Opus 4.7 announcement](https://www.anthropic.com/news/claude-opus-4-7), [Platform release notes](https://platform.claude.com/docs/en/release-notes/overview).
+- **`xhigh` effort level** (Effort Levels table + How-to-set list) — introduced Week 16 (Apr 13–17, v2.1.105–113); recommended for Opus 4.7 coding work. Bare `/effort` now opens an interactive slider. Hooks see `effort.level` and `$CLAUDE_EFFORT` is set in Bash subprocess env (Week 19).
+- **Auto mode flag retirement** (Permission Modes table) — `--enable-auto-mode` no longer required for Max + Opus 4.7 users as of Week 16.
+- **`/goal <verifiable condition>`** (Session Management + Anthropic Utilities) — shipped Week 20, v2.1.139 (May 11). "Keep working until X holds" command, distinct from `/loop` (interval) and plan mode (strategy approval). Pairs with `/commit` quality gates. Source: [`docs.claude.com/en/goal`](https://code.claude.com/docs/en/goal).
+- **`claude agents` dashboard** (Cost-Conscious Parallelism + Anthropic Utilities) — also Week 20, v2.1.139. Single screen for all background sessions; aligned with the `/review-paper --peer` parallel-referee pattern.
+- **`/loop` alias `/proactive`** noted (Week 16).
+- **`worktree.baseRef` setting** (Pattern 12) — Week 19. New callout explains `fresh` (default; branch from remote default) vs `head` (branch from local HEAD). Surprises users with uncommitted in-flight edits — documented inline.
+
+### Added — TROUBLESHOOTING entries (Models and API section)
+
+- **Sonnet 4 / original Opus 4 retire 2026-06-15** — migration checklist covering `ANTHROPIC_MODEL` env, `.claude/settings.json` model overrides, agent frontmatter pins, and CI `claude -p --model` calls. Recommended replacements: Sonnet 4.6 and Opus 4.7 respectively.
+- **Agent SDK credit-pool split (2026-06-15)** — heads-up that `claude -p` headless subprocess calls (used by `/coarse-review` and any other `claude -p`-based skill) draw from a separate monthly Agent SDK credit pool after the cutover. Anthropic posts cited: [Apr 8 "Decoupling Brain from Hands"](https://www.anthropic.com/engineering), [Platform release notes](https://platform.claude.com/docs/en/release-notes/overview).
+
+### Changed — ecosystem references
+
+- **clo-author** (Ecosystem section) — new callout documenting v26.05 (2026-05-10): MAS v2 (second-generation multi-agent system), Skill-Centric Restructure (13 skills + 18 agents, up from 17), HTML Dashboard. The `/checkpoint` attribution to v4.2.0 remains accurate as historical record (that's where the pattern was adapted from); the callout makes clear that current forkers of clo-author get the MAS v2 / skill-centric layout.
+
+### Provenance
+
+This pass is the first slice of a research-grounded refresh. Four parallel research agents (Anthropic ecosystem, community repos, cross-vendor coding agents, internal guide audit) plus two verification agents (Anthropic claim verification, ARS source-code audit) ran on 2026-05-20. Findings, ranked recommendations, and source URLs are in `quality_reports/plans/2026-05-20_v1.9.0-guide-refresh.md` (local-only; not tracked in git per the standard `quality_reports/plans/*` ignore rule). Passes 2–5 add capability (B Cost & Caching section, C poli-sci breadth woven into guide body, D `/preregister` + `/checkpoint` patterns, E `/review-paper --variance N`, F `passport.yaml` claims provenance, G architect/editor cost-routing, H `/promote-memory` five-critic council, I HIGH-WARN claim-faithfulness blocking, J `/compress-session`, K SDK credit awareness, L Anthropic engineering-post citations, M `/prompt` port from Blattman, N `/humanize` detect-and-flag skill, plus Stata-MCP integration). All deferred to follow-up commits; nothing in this commit adds new on-disk infrastructure.
+
+### Verification
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts unchanged (30 skills / 14 agents / 24 rules / 6 hooks)
+- `./scripts/check-palette-sync.sh` — palette in sync
+- `./scripts/check-skill-integrity.py` — all checks pass
+
+### Pass 2A — guide-only capability adds (2026-05-20)
+
+Two guide-body additions: weaves the v1.8.0 political-science breadth into the user-facing guide body (previously documented only in the v1.8.0 CHANGELOG entry), and introduces a new "Cost-Conscious Composition" subsection that documents prompt-cache TTL behaviour, per-agent model routing (70/20/10 pattern), and `/cost` / `/usage` monitoring. No new skills, agents, rules, or hooks. On-disk inventory still unchanged.
+
+#### Added — political-science breadth surfaced in guide body
+
+- **5-Lens Framework table** — added Political Science as a third worked example column alongside Economics and Physics. Lens entries reflect poli-sci norms (ignorability, conjoint AMCEs under Hainmueller–Hopkins–Yamamoto, `cjoint`/`survey::svyglm` defaults, manipulation-check fidelity).
+- **Domain-reviewer ship status callout** — documents that the template ships *two* concrete customizations of `.claude/agents/domain-reviewer.md` (econ + poli-sci), both viable starting points for forkers' own fields.
+- **`/review-paper --peer [journal]` callout** (Research Skills section) — new explainer covering the editor + 2-referee + editorial-decision pipeline, the journal-profiles starter set (AER, QJE, JPE, ECMA, JoE, APSR, AJPS, JOP), and the full 6-paper-type methods-referee taxonomy with sanity checks per type (reduced-form, structural, theory+empirics, descriptive, formal-theory, survey-experiment). The v1.8.0 formal-theory + survey-experiment additions are now discoverable from the main guide, not just from the CHANGELOG.
+- **"What ships preloaded vs. what you customize" callout** (§7 Customizing for Your Domain) — explains what already ships for econ + poli-sci (journal profiles, paper types, discipline cards) and what forkers add for psych / sociology / public-health (~3 profiles + 2–3 paper types + 1 card per discipline). Points at `.claude/references/v1.9-backlog.md` as the candidate-next-breadth roadmap.
+
+#### Added — Cost-Conscious Composition subsection (§ between Multi-Model Strategy and Permissions)
+
+- **Prompt-cache TTL guidance** — documents the 60 min → 5 min default-TTL change and the opt-in `ENABLE_PROMPT_CACHING_1H` environment variable on API/Bedrock/Vertex/Foundry plans. Cites Apr 2026 community cost-analysis showing 30–60% effective input-cost increase for long pipelines without the 1-hour opt-in. Documents `cache_miss_reason` (public beta 2026-05-13) as the diagnostic.
+- **70/20/10 model-routing pattern** — explicit table of Haiku (70%, mechanical work) / Sonnet (20%, review and critique) / Opus (10%, high-judgment work). Maps each tier to specific template agents (TikZ extraction → Haiku; r-reviewer → Sonnet; editor/methods-referee → Opus). Cites Anthropic's Apr 8 2026 "Decoupling brain from hands" post for primary-source endorsement.
+- **Effort-budgeting guidance** — reach for `xhigh` (Opus 4.7) only when verified that the cheaper tier failed.
+- **`/cost` and `/usage` monitoring callout** — when to run each and how to read cache hit-rate as a TTL-misconfiguration signal.
+- **Agent SDK credit-pool 2026-06-15 callout** — links to the TROUBLESHOOTING Models / API section landed in Pass 1.
+
+#### Verification — Pass 2A
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts still unchanged (30/14/24/6)
+- `./scripts/check-skill-integrity.py` — all checks pass
+- `quarto render guide/workflow-guide.qmd` — clean render
+- `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
+
+### Pass 2B — `/preregister` + `/checkpoint` promoted to Pattern entry (2026-05-20)
+
+Promotes the v1.8.0 `/preregister` and `/checkpoint` skills from appendix entries to a first-class **Pattern 16: Preregistration and Submission Discipline** in the Workflow Patterns section. ~85 lines of new prose. Still no new skills, agents, rules, or hooks — Pattern 16 documents what already ships.
+
+#### Added — Pattern 16: Preregistration and Submission Discipline
+
+- **When-preregistration-matters checklist** — launch of experiment, observational analysis before outcome inspection, R&R PAP request, funding pre-submission.
+- **Registry-comparison table** — OSF / AsPredicted / AEA RCT side-by-side (field, length, editability). Public-health / clinical-trial registries explicitly out of scope (on v1.9-backlog).
+- **End-to-end workflow diagram** — `/interview-me` spec → `/preregister --style` → user uploads → `/checkpoint preregistration-submitted` → data collection begins.
+- **Per-registry mandatory-field matrix** — 10 rows × 3 styles, showing MUST / SHOULD / MAY for each field. Captures registry-specific differences (e.g., AEA mandates intervention description and data-sharing plan; AsPredicted allows looser covariate specification).
+- **`/checkpoint` pairing protocol** — explicit `pre-submit` → `submitted [registration-id]` → `data-arrived` snapshot sequence so the boundary between confirmatory and exploratory is structurally visible.
+- **Post-flight `/verify-claims` integration** — every cited reference in the preregistration runs through Chain-of-Verification before submission. Hallucinated citations are the most common preregistration failure mode.
+- **Anti-pattern protections enumerated** — HARKing, p-hacking, forking paths, selective reporting — and which fields of the preregistered document defend against each.
+- **Field-specific guidance** — pointers to Christensen & Miguel (2018) for development economics, Monogan (2015) for political science, OSF Preregistration Guide for psychology.
+
+#### Verification — Pass 2B
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts unchanged (30/14/24/6)
+- `./scripts/check-skill-integrity.py` — all checks pass
+- `quarto render guide/workflow-guide.qmd` — clean render
+- `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
+
+### Pass 2C — `/review-paper --variance N` reviewer-disposition variance mode (2026-05-20)
+
+Adds a fourth `--peer` mode to `/review-paper`: **`--variance` (with integer N, default 3)** runs N referees with independently sampled dispositions from the 6-way taxonomy, then the editor synthesizes the results into a **decision distribution** (not a point estimate). Motivated by AgentReview (ACL 2024, [arXiv:2406.12708](https://arxiv.org/abs/2406.12708)), which found ~37% of paper decisions vary purely from reviewer-disposition sampling.
+
+#### Changed — `/review-paper` SKILL.md
+
+- New `--variance` flag in argument-hint and the sub-flags list under "Peer-review mode."
+- New "Variance mode (`--peer --variance N`)" subsection: motivation (AgentReview), procedure (sample with replacement + stratification override that always includes a SKEPTIC if none drawn for N ≥ 3), output files (`referee_1.md` … `referee_N.md`, `decision_distribution.md`, `editor_synthesis.md`), cost discipline (referee-tier cost × N relative to default `--peer`; hard cap N=5; route referees to Sonnet for variance runs), and mutual-exclusivity rules (cannot combine with `--stress` or `--r2`/`--r3`).
+- When-to-reach-for-it guidance: pre-submission "how confidently will this survive," cross-journal target comparison, post-rejection sanity check.
+
+#### Changed — `editor.md` agent
+
+- **Phase 1b (Referee selection)** now branches: default 2-referee deliberate-diversity sampling (existing) vs. variance-mode N-referee independent sampling **with replacement** (new). Stratification rule: if N ≥ 3 and the realised draw includes no SKEPTIC, replace one randomly chosen referee with a SKEPTIC. Realised-disposition table and stratification-override metadata are recorded for `decision_distribution.md`.
+- **New "Variance synthesis mode" section** documents the two-file output (`decision_distribution.md` + `editor_synthesis.md`). The distribution file contains a realised-disposition table, a verdict-distribution table (counts and shares), a concern-frequency table (K-of-N), and an interpretation guide (tight modal majority + robust concerns; wide spread + high-K skeptic objection; bimodal "love-it-or-hate-it"). The editorial letter explicitly references the variance instead of collapsing it.
+
+#### Verification — Pass 2C
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts unchanged (30/14/24/6)
+- `./scripts/check-skill-integrity.py` — all checks pass (forward + reverse flag-parity OK after one cycle of integrity feedback — original `` `--variance N` `` single code-span fixed to ``--variance`` standalone code-span with `N` documented in prose)
+- No on-disk inventory change
+
+### Pass 2D — `/humanize` detect-and-flag skill (2026-05-20)
+
+Ships a new skill and a new agent to audit academic prose for AI-voice tells. **Detect-only by design** — there is no `--rewrite` mode. The author edits manually after reading the report; auto-rewriting prose to strip AI tells degrades quality (cross-vendor research finding) and introduces *new* AI tells.
+
+#### Added — new skill
+
+- **`.claude/skills/humanize/`** — `/humanize [file] [--severity low|med|high]` runs a read-only audit on `.tex`, `.qmd`, or `.md` prose against 10 detection categories: (1) boilerplate transitions, (2) AI-cliché lexicon, (3) em-dash/punctuation overuse, (4) symmetric paragraph shapes, (5) tricolon abuse, (6) hedging stacking, (7) "Not only X, but also Y" frames, (8) formulaic openers, (9) hyphenation excess, (10) sycophancy/self-important framing. Output: `quality_reports/humanize_<filename>_report.md` (gitignored) with per-finding line numbers, severity (LOW / MED / HIGH), and suggested rewrites. Carries `disable-model-invocation: true`. Documents the no-`--rewrite` anti-pattern explicitly in the SKILL body.
+
+#### Added — new agent
+
+- **`.claude/agents/humanize-auditor.md`** — read-only auditor that runs the 10-category protocol and returns a structured report (per-category counts, per-finding table, concentration analysis identifying the top-3 most-affected paragraphs, recommendation thresholds for "rewrite" vs "strip" vs "cosmetic"). Calibration heuristics built in (~1000 words: 0 HIGH clean; 3 HIGH manageable; 8+ HIGH recommend rewrite). Reads `style-profile.md` if present to respect documented author preferences. Will not auto-flag single-mention idioms or discipline-legitimate constructions.
+
+#### Changed — count-bearing surfaces
+
+- **Inventory:** **31 skills, 15 agents, 24 rules, 6 hooks** (was 30 / 14 / 24 / 6). All count-bearing surfaces updated: `README.md`, `CLAUDE.md`, `guide/workflow-guide.qmd` (×3 places: capability table, You-Don't-Need-All-Of-This callout, Customizing-Skills section), `docs/index.html` (landing page), `templates/skill-template.md`. Verified via `./scripts/check-surface-sync.sh`.
+- **`CLAUDE.md` Skills Quick Reference** — added `/humanize` row.
+- **`guide/workflow-guide.qmd` Appendix** — added `Humanize Auditor` row to All Agents; added `/humanize` row to All Skills.
+
+#### Verification — Pass 2D
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts now **31 / 15 / 24 / 6**
+- `./scripts/check-skill-integrity.py` — all checks pass on the new SKILL.md
+- `quarto render guide/workflow-guide.qmd` — clean render
+
+### Pass 3A — claims provenance + HIGH-WARN gate + `/prompt` port (2026-05-20)
+
+Strategic additions to the paper-pipeline lens: (a) machine-readable claims provenance via a new `passport.yaml` contract, (b) HIGH/MED/LOW-WARN severity tiers on `/verify-claims` with HIGH-WARN gate-refusing `/commit`, and (c) two new skills (`/prompt`, `/prompt-only`) ported from Chris Blattman's claudeblattman v2.1 with the Blattman-specific tool-routing and council elements stripped.
+
+#### Added — new template
+
+- **`templates/passport-template.yaml`** — starter passport file for per-paper claims provenance. Forkers copy once per paper to `quality_reports/passports/<paper-slug>.yaml`. Schema records claim text, manuscript location, source script + line, output file + field, tolerance overrides, last-verified timestamp, and PASS / FAIL / STALE / UNVERIFIED status per claim.
+
+#### Added — new skills (2)
+
+- **`.claude/skills/prompt/`** — `/prompt [text] [depth:light|standard|deep]` reformats an informal or dictated request into a structured six-section prompt (Role / Task / Context / Constraints / Output format / Bookend) then **executes** it immediately. Depth heuristic: Light (< 40 words, no jargon) emits Role + Task + Output + Bookend; Standard (40–200 words, 1+ domain term) adds Context + Constraints + Assumptions block; Deep (> 200 words, specific paper/dataset/submission target) adds Investigation pre-step. Always shows the formatted prompt to the user before executing.
+- **`.claude/skills/prompt-only/`** — `/prompt-only [text] [depth] [--save path]` is the same skill **without execution**. Emits the formatted prompt as a reusable artifact. Optional `--save` writes to disk. Use for prompts you'll run later (different conversation, different model, recurring task).
+
+Both ported with attribution from [`chrisblattman/claudeblattman`](https://github.com/chrisblattman/claudeblattman) v2.1. **Deliberately stripped:** Blattman's tool-routing table (ChatGPT / Perplexity / Gemini dispatch) and his `council` token (his `/council` skill is not in this template). Documented in [`.claude/references/prompt-formatting-core.md`](.claude/references/prompt-formatting-core.md) "What we don't ship" section.
+
+#### Added — new reference
+
+- **`.claude/references/prompt-formatting-core.md`** — shared reference used by `/prompt` and `/prompt-only`. Defines the six-section skeleton (Role / Task / Context / Constraints / Output format / Bookend), the depth-calibration heuristic, a worked example, and the explicit boundary with `/interview-me` (single-shot input shaping vs. multi-turn project specification).
+
+#### Changed — claims provenance integration
+
+- **`.claude/rules/replication-protocol.md`** — new "Claims Provenance: `passport.yaml`" section. Documents the YAML schema (paper metadata + per-claim entries with `id`, `claim`, `location`, `source_file`, `source_line`, `output_file`, `output_field`, `tolerance`, `last_verified_on`, `status`, `notes`), the `status` semantics (PASS / FAIL / STALE / UNVERIFIED), integration with `/audit-reproducibility` (passport-mode), `/commit` (advisory by default, gate-refuse on `--strict-passport`), and `/review-paper` (summary section). Attributes the pattern to [Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills) "Material Passport" while scoping our schema to numeric-claim provenance only (theirs threads ~13 contracts through ~6 agents; ours stays narrow).
+- **`.claude/skills/audit-reproducibility/SKILL.md`** — new "Passport-mode (v1.9.0)" section. When a passport file exists, the skill reads + updates + rewrites it in place rather than emitting a one-shot report. Updates `status` per claim (PASS / FAIL / STALE), records discrepancies in `notes`, refreshes timestamps, refuses to auto-populate (passport scope is author-curated to avoid bad inferences).
+
+#### Changed — HIGH-WARN claim-faithfulness tier
+
+- **`.claude/skills/verify-claims/SKILL.md`** Phase 4 — three severity tiers introduced (HIGH-WARN: fabricated reference / direct contradiction / not-found retrieval interpreted as hallucination; MED-WARN: transient retrieval failure; LOW-WARN: source genuinely inaccessible). Tier aggregation table maps to PASS / PARTIAL / FAIL outcomes. **HIGH-WARN gate-refuses `/commit`** for files the skill was just run against unless `--no-fail-closed` or `verifyClaims.allowHighWarn: true` in settings.
+- **`.claude/agents/claim-verifier.md`** — output schema extended to include a per-claim `Tier` column (HIGH / MED / LOW / —). New "Tier-assignment rules" section codifies the assignment logic: fabricated citation → HIGH; numerical contradiction → HIGH; directional contradiction → HIGH; transient retrieval failure → MED; genuine inaccessibility → LOW; reasonable paraphrase → no tier. "Be conservative on HIGH-WARN" — false positives erode the gate's authority.
+
+#### Changed — count-bearing surfaces
+
+- **Inventory:** **33 skills, 15 agents, 24 rules, 6 hooks** (was 31 / 15 / 24 / 6 after Pass 2D). Both new skills (`/prompt`, `/prompt-only`) propagated through README.md, CLAUDE.md, guide capability table, You-Don't-Need-All-Of-This callout, Customizing-Skills section, docs/index.html, templates/skill-template.md, guide appendix tables.
+- **CLAUDE.md Skills Quick Reference** — added `/prompt` and `/prompt-only` rows.
+- **Guide Appendix** — added `/prompt` and `/prompt-only` rows to All Skills table.
+
+#### Verification — Pass 3A
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts now **33 / 15 / 24 / 6**
+- `./scripts/check-skill-integrity.py` — all checks pass on both new SKILL.md files
+- `quarto render guide/workflow-guide.qmd` — clean render
+- `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
+
+### Pass 3B — per-agent model routing + `/compress-session` + `/promote-memory` (2026-05-20)
+
+Three additions to the cost-discipline and memory-management lenses:
+
+- **G** — new `.claude/rules/model-routing.md` codifying the 70/20/10 architect/editor split (Haiku for mechanical work; Sonnet for review/critique; Opus for high-judgment work). Cites the Anthropic Apr 8 "Decoupling brain from hands" post for primary-source endorsement.
+- **J** — new `/compress-session` skill that distils a long-session into a structured note before auto-compaction (motivated by Drew Breunig's "How Long Contexts Fail" four-mode taxonomy). Distinct from `/checkpoint` (explicit stop-point) and from auto-compaction (lossy truncation).
+- **H** — new `/promote-memory` skill that runs a five-critic council (generality / staleness / redundancy / evidence / format) on candidate `[LEARN]` entries in `.claude/state/personal-memory.md` to decide what graduates to MEMORY.md. Pattern adapted from Chris Blattman's claudeblattman v2.1 five-critic council with attribution.
+
+#### Added — new rule
+
+- **`.claude/rules/model-routing.md`** — path-scoped on `.claude/agents/**/*.md` and `.claude/skills/**/SKILL.md`. Documents the 70/20/10 pattern with per-tier recipe (mechanical → Haiku 4.5; review/critique → Sonnet 4.6; high-judgment → Opus 4.7). Tags agents per tier (e.g., editor / methods-referee / claim-verifier / quarto-critic → Opus; r-reviewer / slide-auditor / proofreader / humanize-auditor → Sonnet; quarto-fixer / mechanical TikZ extraction → Haiku). Documents two anti-patterns: pushing Opus down a tier (defeats hallucination defence) and the self-as-architect-and-editor pairing (same-model self-pairings produce correlated errors).
+
+#### Added — new skills (2)
+
+- **`.claude/skills/compress-session/`** — `/compress-session [slug]` distils the current session into a structured note (Active state, Decisions made, Files touched, Open questions, Next actions, **Discarded as noise**, Proposed `[LEARN]` entries) and writes to `quality_reports/session_logs/YYYY-MM-DD_compression_<slug>.md`. Defends against [Drew Breunig's four failure modes](https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html): poisoning, distraction, confusion, clash. Explicit "Discarded as noise" section is the novel contribution — failed hypotheses don't carry forward as ghost context. Optional PreCompact-hook integration that surfaces a reminder (does NOT auto-invoke — preserves the user's review step).
+- **`.claude/skills/promote-memory/`** — `/promote-memory [filter]` runs a five-critic council in parallel (forked contexts via `Task`) on candidate `[LEARN]` entries. Each critic votes YES/NO on one dimension; majority (3+ of 5) promotes. Critics run on Haiku by default (per `model-routing.md`); the user is the final gate even on 5-of-5 unanimous votes. Saves an audit file at `quality_reports/memory_promotion_<date>.md` for forensics. Pattern adapted from Chris Blattman's claudeblattman v2.1 with attribution.
+
+#### Added — new agent
+
+- **`.claude/agents/promote-memory-council.md`** — implements the five-critic protocol. One agent file, five role specs (Generality / Staleness / Redundancy / Evidence / Format), dispatched in parallel via `Task` with `context: fork`. Each critic returns a strict `**Vote:** YES | NO` + one-sentence rationale; the calling skill aggregates. Architectural isolation: each critic sees only its dimension's relevant context (no cross-pollination, no groupthink).
+
+#### Changed — count-bearing surfaces
+
+- **Inventory:** **35 skills, 16 agents, 25 rules, 6 hooks** (was 33 / 15 / 24 / 6 after Pass 3A). All 6 count-bearing surfaces updated: README.md, CLAUDE.md, guide capability table, You-Don't-Need-All-Of-This callout, Customizing-Skills section, docs/index.html, templates/skill-template.md, guide appendix tables.
+- **CLAUDE.md Skills Quick Reference** — added `/compress-session` and `/promote-memory` rows.
+- **Guide Appendix** — added `Promote-Memory Council` row to All Agents, `/compress-session` + `/promote-memory` rows to All Skills, `Model Routing` row to path-scoped All Rules.
+
+#### Verification — Pass 3B
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts now **35 / 16 / 25 / 6**
+- `./scripts/check-skill-integrity.py` — all checks pass on both new SKILL.md files
+- `quarto render guide/workflow-guide.qmd` — clean render
+- `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
+- `./scripts/check-skill-integrity.py` — all checks pass on both new SKILL.md files
+- `quarto render guide/workflow-guide.qmd` — clean render
+- `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
+
+### Pass 4 — Stata expansion: stata-mcp + `/stata-replication` + audit-reproducibility extension (2026-05-20)
+
+User-driven expansion of the template to support Stata-first projects (correction to the original v1.9.0 plan: AEA does not *mandate* Stata; the expansion targets users whose pipelines are Stata-first for reasons of audience reach or original-replication-package fidelity). Three sub-items:
+
+#### Added — new skill
+
+- **`.claude/skills/stata-replication/`** — `/stata-replication [paper-or-data]` scaffolds a numbered Stata pipeline (`00_install.do` through `99_run_all.do`) in `scripts/stata/` and executes via the [`stata-mcp`](https://github.com/SepineTam/stata-mcp) MCP server. Mirrors `/data-analysis` for R-first projects. `--from-r` flag ports an existing R pipeline. `--no-execute` produces scaffolding only. Phase 0 pre-flight halts if `stata-mcp` is not registered (with install instructions); Phase 4 (optional) runs R cross-check on `--from-r` translations to surface clustering-df / default-option drift.
+
+#### Added — new rule
+
+- **`.claude/rules/stata-code-conventions.md`** — path-scoped on `**/*.do` and `scripts/stata/**`. Codifies: standard header (`version 18`, `clear all`, `set seed`, `set sortseed`, `cap log close`, log capture); numbered pipeline (00–99); outputs convention (`scripts/stata/_outputs/` with `sessionInfo.txt`); `esttab` for publication-ready tables with `\input{}` mechanical-update pattern; significance-stars convention (`* 0.10 ** 0.05 *** 0.01`); clustering / SE discipline (`reghdfe`, cluster bootstrap for < 50 groups); balance + attrition via `iebaltab`; graph export to vector + raster; AEA Data Editor compliance checklist. Common Stata-to-R-or-AEA traps table.
+
+#### Changed — `/audit-reproducibility` source-language coverage
+
+- **`.claude/skills/audit-reproducibility/SKILL.md`** — new "Source-language coverage" section documents the three supported ecosystems (R / Stata / Python) with default outputs directories and read-output method per language. Stata-specific notes added: `.dta` outputs read via `haven::read_dta()` (R) or `pyreadstat.read_dta()` (Python); `esttab` `.tex` table-cell values as strongest provenance signal when manuscript uses `\input{}`; clustering-df discrepancy diagnosis (`reghdfe` vs `reg, cluster()`).
+
+#### Added — TROUBLESHOOTING entry
+
+- **`TROUBLESHOOTING.md`** — new "/stata-replication halts at 'stata-mcp not registered'" section. Documents the one-command install (`claude mcp add stata-mcp --scope user -- uvx stata-mcp`), the `uv` prerequisite, and the verify step (`claude mcp list`).
+
+#### Added — Ecosystem entry
+
+- **`guide/workflow-guide.qmd` Ecosystem section** — new "stata-mcp: MCP server for Stata execution" subsection (before ClaudeCodeTools). Documents SepineTam's project, install command, why it matters for v1.9.0's Stata expansion, and the parallel-skill relationship between `/data-analysis` (R) and `/stata-replication` (Stata).
+
+#### Changed — count-bearing surfaces
+
+- **Inventory:** **36 skills, 16 agents, 26 rules, 6 hooks** (was 35 / 16 / 25 / 6 after Pass 3B). All 6 count-bearing surfaces updated. Note: rules count rises only by 1 (the Stata convention rule); skills count rises only by 1 (`/stata-replication` itself); agents unchanged.
+- **`CLAUDE.md` Skills Quick Reference** — added `/stata-replication` row.
+- **Guide Appendix** — added `/stata-replication` row to All Skills, `Stata Code Conventions` row to path-scoped All Rules.
+
+#### Verification — Pass 4
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts now **36 / 16 / 26 / 6**
+- `./scripts/check-skill-integrity.py` — all checks pass on the new SKILL.md
+- `quarto render guide/workflow-guide.qmd` — clean render
+- `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
+
+### Pass 5 — verification follow-ups: SDK credit awareness + Anthropic engineering-post citations (2026-05-20)
+
+Closes the v1.9.0 cycle with two small but load-bearing additions:
+
+#### K — Agent SDK credit-pool split (2026-06-15)
+
+Already partially shipped in **Pass 1** (TROUBLESHOOTING "Models and API" section) and **Pass 2A** (Cost-Conscious Composition callout in the guide). Pass 5 confirms the coverage is complete — the `/coarse-review` skill is a Claude Code plugin (not in this template's `.claude/skills/`), so no SKILL.md callout was needed; the TROUBLESHOOTING entry and the guide callout already document the cutover, the affected pattern (`claude -p` headless subprocesses), and the diagnostic ("check the Agent SDK credit balance separately if `/coarse-review` fails with credit-exhaustion errors even though your interactive session works"). **K is closed.**
+
+#### L — Anthropic engineering-post citations
+
+- **Apr 8, 2026 — "Scaling Managed Agents: Decoupling the brain from the hands."** Already cited as primary-source endorsement of the architect/editor split in `.claude/rules/model-routing.md` (Pass 3B) and in the guide's Cost-Conscious Composition section (Pass 2A). No additional citation needed.
+- **Apr 23, 2026 — "An update on recent Claude Code quality reports."** New callout added to the guide between the "Mandatory Verification" / "Don't Skip Verification" section and "Creating Your Own Domain Reviewer." Frames the post as a reminder that **model quality can regress** and that the template's verification patterns (`/verify-claims` with forked verifier, `/audit-reproducibility` with `passport.yaml`, cross-artifact review, HIGH-WARN gate-refuse, `/review-paper --variance N`) all assume drift rather than treating any specific checkpoint as a stable baseline.
+
+#### Verification — Pass 5 (and final v1.9.0)
+
+- `./scripts/check-surface-sync.sh` — 26/26 assertions pass; counts at release: **36 skills / 16 agents / 26 rules / 6 hooks**
+- `./scripts/check-skill-integrity.py` — all checks pass
+- `quarto render guide/workflow-guide.qmd` — clean render
+- `python3 scripts/quality_score.py guide/workflow-guide.qmd` — 100/100 [EXCELLENCE]
+
+### Release summary
+
+| Pass | PR | Net additions to disk | What it shipped |
+|---:|---:|---|---|
+| 1 | #114 | 0 | Mechanical guide refresh, Anthropic Apr–May 2026 catch-up, clo-author v26.05 citation, Models / API TROUBLESHOOTING section |
+| 2A | #115 | 0 | Poli-sci breadth woven into guide body, Cost-Conscious Composition subsection |
+| 2B | #116 | 0 | Pattern 16: Preregistration and Submission Discipline |
+| 2C | #117 | 0 | `/review-paper --variance N` reviewer-disposition variance mode |
+| 2D | #118 | +1 skill, +1 agent | `/humanize` detect-and-flag for AI-voice tells |
+| 3A | #119 | +2 skills, +1 template | `passport.yaml` claims provenance, HIGH-WARN claim-faithfulness gate, `/prompt` + `/prompt-only` port from Blattman |
+| 3B | #120 | +2 skills, +1 agent, +1 rule | Model-routing rule (70/20/10), `/compress-session`, `/promote-memory` five-critic council |
+| 4 | #121 | +1 skill, +1 rule | Stata expansion: `/stata-replication`, `stata-code-conventions.md`, `audit-reproducibility` source-language coverage, stata-mcp ecosystem entry |
+| 5 | (this PR) | 0 | Apr 23 Anthropic post citation in verification section; closes SDK-credit awareness loop |
+
+**Total v1.9.0 additions:** 6 skills, 2 agents, 2 rules, 1 reference, 1 template. No breaking changes. All count-bearing surfaces verified in sync. Provenance: every addition traceable to the research-grounded plan at `quality_reports/plans/2026-05-20_v1.9.0-guide-refresh.md` (local-only).
+
+---
+
+## v1.8.0 — 2026-04-27
+
+A **disciplinary breadth + audit-hardening + Apr 2026 incorporation** minor release. The cycle landed in two passes: (1) infrastructure-only audit-hardening (mechanical parity checks via `check-skill-integrity.py`, living pet-peeves catalogue, PreCompact blocking, Routines awareness) and (2) capability work (two new skills `/checkpoint` and `/preregister`, political-science breadth via three journal profiles + two paper types + a discipline-cards reference, and Apr 2026 documentation: auto mode promotion, protected-paths gate explainer, session-management commands, Computer Use sidebar, Monitor tool integration, `disable-model-invocation` discipline). No breaking changes; counts updated across all monitored surfaces.
+
+### Added — new skills
+
+- **`.claude/skills/checkpoint/`** — `/checkpoint` produces a structured state snapshot (active plan, recent decisions, file pointers with line numbers, open questions, next 1–3 actions) into `quality_reports/checkpoints/YYYY-MM-DD_<slug>.md`. Companion to (NOT replacement for) the narrative session-log workflow under `quality_reports/session_logs/`. Carries `disable-model-invocation: true` (writes to a persistent state file — must be user-intent). Pattern adapted from Hugo Sant'Anna's [clo-author v4.2.0](https://github.com/hugosantanna/clo-author) with permission; reimplemented in original prose against this template's narrative-session-log + plan-on-disk + auto-memory architecture. Attribution header on the SKILL.md.
+- **`.claude/skills/preregister/`** + **`templates/preregistration-template.md`** — `/preregister` drafts a registry-ready preregistration document in OSF, AsPredicted, or AEA RCT Registry style. Extracts hypotheses, design, sampling plan, exclusions, and analysis plan from a research spec (`/interview-me` output) or free-form description. MUST/SHOULD/MAY clarity annotation per section. Pre-flight cross-checks: directional hypothesis, named estimator, ex-ante exclusion rules, sample-size stopping rule. Post-flight CoVe verification of any cited literature (re-uses `/verify-claims`). Output: `quality_reports/preregistrations/YYYY-MM-DD_<slug>.md` (gitignored). Refuses retrospective preregistration (description containing realised results). Greenfield — not ported.
+
+### Added — political-science breadth
+
+- **`.claude/references/journal-profiles.md`** +3 profiles: **APSR** (highest theoretical bar; THEORY-disposition pool weight 0.30; methods-referee tilts toward formal-theory comparative-static sharpness), **AJPS** (methods-emphasis; CREDIBILITY 0.30, replication policy enforced), **JOP** (clarity-of-contribution bar; SKEPTIC 0.25). Each profile is ~40–45 lines following the existing schema.
+- **`.claude/agents/methods-referee.md`** +2 paper types: **`formal-theory`** (pure theory; weights tilt toward model originality and comparative-static sharpness; sanity checks include equilibrium existence, assumption tractability, robustness to assumption relaxation) and **`survey-experiment`** (vignette/conjoint/list/factorial; weights tilt toward design, sampling, and attrition+manipulation checks; sanity checks include balance, manipulation-check pass rate, attrition asymmetry, sampling-frame validity). The 4 prior paper types (reduced-form / structural / theory+empirics / descriptive) are unchanged — additions are purely additive.
+- **`.claude/agents/domain-reviewer.md`** template-marker comment now ships **two** customization examples (econ + poli-sci) to illustrate that the 5-lens structure is field-agnostic. Lens content under each example reflects field-specific norms (poli-sci: ignorability, conjoint AMCE algebra, Hainmueller-Hopkins-Yamamoto for cross-reference, `cjoint`/`survey::svyglm` package defaults).
+- **`.claude/references/discipline-cards.md`** — new reference. Two cards: `econ` and `poli-sci`. Each card: paper-type frequency table, dominant journals (cross-referenced to `journal-profiles.md`), preregistration norms (cross-referenced to `/preregister --style`), method conventions (significance-stars conventions, SE conventions, dominant code language). Read by `/research-ideation`, `/interview-me`, `/preregister`, and the `editor` agent when paper-type or discipline is given without a target journal. Forkers extend for psych / sociology / public-health / etc.
+
+### Changed — research-side skill paper-type awareness
+
+- **`.claude/skills/research-ideation/SKILL.md`** — new Step 3 tags each generated RQ with a likely paper type from the 6-type taxonomy. Output format adds a `**Paper type:**` field per RQ. `discipline-cards.md` informs the default distribution.
+- **`.claude/skills/interview-me/SKILL.md`** — Phase 1 ("Big Picture") now optionally asks the researcher what kind of paper they envision (same 6-type taxonomy). Saved to spec frontmatter as `paper_type:` so downstream skills (`/preregister`, `/data-analysis`, `/review-paper --peer`) can read it.
+
+### Added — Apr 2026 feature documentation
+
+- **`TROUBLESHOOTING.md`** +2 sections under Permissions:
+  - **Bypass mode still prompts on protected paths** — explains the protected-path list (`.git`, `.vscode`, `.idea`, `.husky`, `.claude` with carve-outs for `commands/agents/skills/worktrees`) and that **auto mode** is the only mode that routes protected paths through the classifier instead of prompting. Documents the auto-mode requirements (Max/Team/Enterprise/API + Sonnet 4.6 / Opus 4.6 / Opus 4.7 + Anthropic API). Includes two workarounds for users without auto-mode access: edit through Bash (`python3` heredoc) or move edits out of `.claude/`.
+  - **`.vscode/settings.json` key typo** — `claudeCode.allowDangerouslySkipPermissions` is silently ignored; the canonical key is `allowDangerouslySkipPermissions` (no `claudeCode.` prefix). The typo leaves the protected-paths gate active even with broad CLI bypass. Reload window after fixing.
+- **`.vscode/settings.json`** — fixed the typo: `allowDangerouslySkipPermissions: true` (was incorrectly prefixed). Takes effect on next VSCode window reload.
+
+### Changed — `disable-model-invocation` audit
+
+- **`.claude/skills/create-lecture/`**, **`.claude/skills/new-diagram/`**, **`.claude/skills/learn/`** — added `disable-model-invocation: true` to frontmatter. Rationale: each writes a load-bearing persistent file (a new lecture `.tex`, a new TikZ source, a new SKILL.md respectively) that should only be created on explicit user intent. `/deep-audit` also gains the flag in this release (its body writes audit reports + applies fixes). The new `/checkpoint` and `/preregister` skills carry the flag too.
+
+### Added — Apr 2026 doc additions (guide + onboarding)
+
+- **`guide/workflow-guide.qmd`** — new `### Session Management` subsection under "Settings — Permissions and Hooks": `/btw` for side questions outside conversation history, `/rewind` and `Esc+Esc` for checkpoint navigation, `/clear` and `/compact <instruction>` for context resets, `Ctrl+G` for in-editor plan editing, `claude --continue` / `--resume` / `/rename` for cross-session continuity, plus `/checkpoint <slug>` (this template). Three composition patterns documented.
+- **`guide/workflow-guide.qmd`** — added `auto` mode row to the permission-modes table; documented bypass mode's protected-path gate inline (`.git`, `.vscode`, `.idea`, `.husky`, `.claude` minus `commands/agents/skills/worktrees` carve-outs).
+- **`guide/workflow-guide.qmd`** — Computer Use callout in the Adversarial Pattern section (Apr 2026 Week 14, research preview, optional). Frames Computer Use as the *visual loop* extension when text-level `/qa-quarto` and `/visual-audit` aren't enough.
+- **`guide/workflow-guide.qmd`** — Monitor-tool subsection in "Cost-Conscious Parallelism" (Apr 2026 Week 15). Replaces polling-loop anti-pattern for long-running R fits, replication batch reruns, etc.
+- **`guide/workflow-guide.qmd`** — new "Anthropic-Shipped Apr 2026 Utilities" section in the ecosystem area: `/team-onboarding`, `/autofix-pr`, `/powerup`, Ultraplan, `/fewer-permission-prompts`. Framed as off-ramps when this template's scope doesn't fit.
+- **`README.md`** — Quick Start callout pointing forkers heavily diverging from academic content at Anthropic's `/init` to re-derive `CLAUDE.md`.
+- **`templates/skill-template.md`** — new "When to set `disable-model-invocation: true`" subsection codifying the rule (write-load-bearing-persistent-file → set the flag) and the new "CLAUDE.md `@import` syntax" subsection documenting the Anthropic Apr 2026 import feature, with explicit guidance that this template's CLAUDE.md deliberately does NOT use it (under-150-line CLAUDE.md is better monolithic).
+- **`.claude/skills/data-analysis/SKILL.md`**, **`.claude/skills/audit-reproducibility/SKILL.md`** — new "Long-running fits / batch reruns: use the Monitor tool" subsections. Document the background-launch + Monitor pattern for jobs that take more than a couple of minutes.
+
+### Surface-sync
+
+- Skills 28 → 30 (`/checkpoint`, `/preregister`). Agents unchanged at 14. Rules unchanged at 24. Hooks unchanged at 6. Counts updated across all 6 monitored surfaces (README, CLAUDE.md, guide `.qmd` + rendered `.html`, `docs/index.html`, `docs/workflow-guide.html`, `templates/skill-template.md`). `scripts/check-surface-sync.sh` clean; `scripts/check-skill-integrity.py` clean. Guide re-rendered with Quarto 1.8.x; `docs/workflow-guide.html` synced.
+
+### Attribution
+
+`/checkpoint` shape: adapted from Hugo Sant'Anna's [clo-author v4.2.0](https://github.com/hugosantanna/clo-author) with permission. Attribution header on `.claude/skills/checkpoint/SKILL.md`.
+
+---
+
+### Pre-v1.8.0 infrastructure (folded into this release)
+
+Two themes that landed in the working tree before the v1.8.0 capability work: audit-hardening (mechanical parity checks + living pet-peeves catalogue that close classes of bug the agent-based `/deep-audit` was missing) and selective incorporation of Claude Code Apr 2026 features (Routines for AFK scheduling, PreCompact blocking, `/fewer-permission-prompts` as a sibling to our `/permission-check`).
 
 ### Added — mechanical integrity checks
 
@@ -35,7 +379,7 @@ Infrastructure-only. Two themes: audit-hardening (mechanical parity checks + liv
 - **PreCompact hook can now block compaction** (`.claude/hooks/pre-compact.py`). Opt-in via env var `CLAUDE_PRECOMPACT_BLOCK_ON_DRAFT=1`: blocks once per DRAFT plan so the user can approve before losing mid-plan context. Uses the modern Claude Code block protocol (exit 0 + JSON `{"decision":"block","reason":"..."}` on stdout). Fires at most once per plan path — no lock-out loops. Default off; existing users get no change.
 - **MEMORY.md `[LEARN:scheduling]` + `[LEARN:hooks]`** capturing two lessons from Apr 2026: (a) `CronCreate` is session-only in practice — use Claude Code Routines (launched Apr 14) for any autonomous work that must survive session termination; (b) PreCompact hooks can now block, which is the right primitive for "don't lose this context."
 - **`.claude/references/audit-pet-peeves.md` entry 17** — don't use `CronCreate` for long-delay autonomous work; Routines is the right primitive.
-- **TROUBLESHOOTING.md scheduling section** — explains `CronCreate` vs Routines tradeoff (short-delay in-session vs AFK work on web infra) and documents the PreCompact blocking guard. Plus a pointer to the built-in `/less-permission-prompts` skill as a sibling to our `/permission-check` (diagnose with `/permission-check`, remediate with `/less-permission-prompts`).
+- **TROUBLESHOOTING.md scheduling section** — explains `CronCreate` vs Routines tradeoff (short-delay in-session vs AFK work on web infra) and documents the PreCompact blocking guard. Plus a pointer to the built-in `/fewer-permission-prompts` skill as a sibling to our `/permission-check` (diagnose with `/permission-check`, remediate with `/fewer-permission-prompts`).
 
 No stale model references audited — all 14 agents already use `model: inherit`, so they auto-adapt to Opus 4.7 / Sonnet 4.6 / Haiku 4.5 without changes.
 
@@ -414,4 +758,4 @@ git merge upstream/main           # or: git rebase upstream/main
 
 Files you almost certainly customized — `CLAUDE.md`, `Bibliography_base.bib`, `Quarto/theme-template.scss`, your lecture files in `Slides/` and `Quarto/`, `.claude/agents/domain-reviewer.md` — may produce merge conflicts. Resolve in favor of your customizations; pull only the infrastructure improvements.
 
-To pin to a specific version: `git checkout v1.6.0` (latest as of 2026-04-15).
+To pin to a specific version: `git checkout v1.8.0` (latest as of 2026-04-27).

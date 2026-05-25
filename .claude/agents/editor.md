@@ -101,7 +101,7 @@ Write to `quality_reports/peer_review_[sanitized_paper_name]/desk_review.md`:
 
 Only if Phase 1 verdict is SEND OUT.
 
-From the journal profile's `Referee pool` weights, **draw two DIFFERENT dispositions**. Sampling procedure:
+**Default mode (2 referees, deliberately different):** From the journal profile's `Referee pool` weights:
 
 1. Draw disposition D1 according to weights. Record.
 2. Remove D1 from the pool; re-normalize remaining weights.
@@ -110,6 +110,15 @@ From the journal profile's `Referee pool` weights, **draw two DIFFERENT disposit
 **Do not draw the same disposition twice** — the whole point is cognitive diversity.
 
 For each referee, draw **1 critical peeve + 1 constructive peeve** from the pools defined later in this file. In `--stress` mode, draw **2 critical + 1 constructive** per referee.
+
+**Variance mode (`--variance N`, N ∈ {3, 4, 5}):** Different sampling rule — the goal is to *estimate variance*, not enforce diversity. Procedure:
+
+1. Draw **N dispositions WITH replacement** from the journal profile's `Referee pool` weights. Repeated dispositions are allowed (and informative — two STRUCTURAL referees who reach different verdicts is a meaningful signal).
+2. **Stratification rule (N ≥ 3):** if no SKEPTIC was drawn after step 1, replace one randomly chosen referee with a SKEPTIC. Rationale: avoids a misleadingly friendly N-referee draw that would understate publication risk.
+3. For each of the N referees, draw 1 critical + 1 constructive peeve (same rule as default).
+4. Record the realized disposition distribution + the stratification override (if any) — this metadata goes into `decision_distribution.md`.
+
+`--variance` cannot combine with `--stress` (which would force-fix SKEPTIC × 2, defeating sampling) or `--r2`/`--r3` (which reuses prior dispositions). The `/review-paper` skill enforces this — if you receive a Phase 1b call with both flags set, halt and report the conflict.
 
 Append to `desk_review.md`:
 
@@ -121,6 +130,8 @@ Append to `desk_review.md`:
 | Referee A (domain) | [D1] | [peeve] | [peeve] |
 | Referee B (methods) | [D2] | [peeve] | [peeve] |
 ```
+
+For `--variance N` mode, the table has N rows (Referee 1 … Referee N). Mark the stratification-override referee with a footnote (e.g., `† SKEPTIC inserted by stratification rule`).
 
 ## Phase 3 — Editorial synthesis
 
@@ -194,6 +205,66 @@ Write to `quality_reports/peer_review_[paper]/editorial_decision.md`:
 **SHOULD address:** [TASTE concerns the editor finds reasonable.]
 **MAY push back:** [TASTE concerns the editor thinks the author can defend.]
 ```
+
+## Variance synthesis mode (`--variance N`)
+
+When invoked with `--variance N`, Phase 3 is replaced with a distribution-aggregation pass instead of the binary point-estimate synthesis above.
+
+After all N referees have submitted reports (`referee_1.md` … `referee_N.md`), do **not** write `editorial_decision.md`. Instead write **two** files:
+
+### `decision_distribution.md`
+
+```markdown
+# Reviewer-Disposition Variance: [Paper Title]
+
+**Calibrated to:** [Journal Full Name]
+**Referees drawn:** N = [3 / 4 / 5]
+**Stratification override applied:** [Yes — SKEPTIC inserted as Referee K | No]
+
+## Realized disposition draw
+
+| Referee | Disposition | Verdict | Score | Critical concerns flagged |
+|---|---|---|---|---|
+| Referee 1 | [D1] | [Accept / Minor / Major / Reject] | X/100 | N |
+| Referee 2 | [D2] | ... | ... | ... |
+| Referee N | [DN] | ... | ... | ... |
+
+## Decision distribution
+
+| Verdict | Count | Share |
+|---|---:|---:|
+| Accept | a | a/N |
+| Minor revision | b | b/N |
+| Major revision | c | c/N |
+| Reject | d | d/N |
+
+**Modal verdict:** [most-frequent verdict] ([share]%)
+**Verdict range:** [most lenient → most strict]
+**Spread:** [Tight (all within one tier) / Wide (spans ≥ 3 tiers) / Bimodal (clusters at extremes)]
+
+## Concern-frequency table
+
+Concerns appearing in K-of-N reports. High K = robust criticism (any disposition flags it). Low K (1-of-N) = disposition-dependent (one referee's pet issue).
+
+| Concern | K-of-N | First raised by | Disposition tag |
+|---|:---:|---|---|
+| Identification not credible | 3-of-3 | Referee 2 (CREDIBILITY) | robust |
+| Prose lacks polish | 1-of-3 | Referee 1 (STRUCTURAL) | disposition-dependent |
+
+## Interpretation guide
+
+- **Tight modal majority + robust concerns** — the paper has clear strengths and clear weaknesses; address the high-K concerns even if the modal verdict is favourable.
+- **Wide spread, high-K skeptic objection** — the paper polarises. Lead the revision with the skeptic's objection; the friendly verdicts won't carry the day if a real referee shares the skeptic's view.
+- **Bimodal (clusters at extremes)** — a "love-it-or-hate-it" paper. Variance estimate is itself a finding. Consider whether to reframe for a journal whose disposition distribution skews favourable.
+```
+
+### `editor_synthesis.md`
+
+A short editorial letter (≤ 2 pages) that explicitly references the variance:
+
+> "Across N=3 simulated referees, the modal verdict is **Major Revision** (2-of-3); one Referee dissented with **Reject**. The dissent (SKEPTIC, methods angle) flags identification credibility, which two other referees also raised though they framed it as addressable. Recommendation: treat the identification concern as MUST-address even though the majority verdict is revision-survivable. The variance itself signals that a real-world referee panel containing a methods skeptic is plausible — and that panel would likely escalate."
+
+The synthesis should NOT collapse the distribution into a single point verdict — surfacing the variance is the *purpose* of variance mode.
 
 ## R&R continuation mode
 

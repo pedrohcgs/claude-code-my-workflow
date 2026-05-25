@@ -1,0 +1,63 @@
+# Passport: claims-provenance template
+#
+# Copy to quality_reports/passports/<paper-slug>.yaml and fill in.
+# Each `claims:` entry records ONE numeric claim from the manuscript
+# along with the script + output file + tolerance that produced it.
+#
+# See .claude/rules/replication-protocol.md "Claims Provenance" section
+# for the full contract, status semantics, and integration points
+# (/audit-reproducibility, /commit, /review-paper).
+
+paper:
+  slug: example-paper            # used in filename + report headings
+  title: "Replace with the full paper title"
+  branch: main                   # git branch on which this passport is current
+  last_audit: 2026-05-20T00:00:00Z
+  last_audit_by: human           # human / /audit-reproducibility / other
+
+claims:
+  # Example claim 1 — point estimate from a regression table
+  - id: C1
+    claim: "ATT = -1.632 (SE 0.584, N=4291)"
+    location: "manuscript.tex:Table 2, Col 3"
+    source_file: scripts/R/03_analyze.R
+    source_line: 147
+    output_file: scripts/R/_outputs/main_did.rds
+    output_field: att_overall
+    tolerance:
+      point_estimate: 0.01         # absolute tolerance for the headline value
+      standard_error: 0.05         # absolute tolerance for SE / CI half-width
+      n: exact                     # sample-size mismatch is never tolerated
+    last_verified_on: 2026-05-20T00:00:00Z
+    last_verified_by: "/audit-reproducibility"
+    status: UNVERIFIED             # PASS | FAIL | STALE | UNVERIFIED
+    notes: |
+      Optional notes. Use this field to record:
+      - Known small discrepancies and why they're within tolerance
+        (e.g., "SE differs in 4th decimal due to clustering df
+        adjustment").
+      - Cross-references to other claims that depend on this one
+        (e.g., "C5 derives a derived quantity from C1; both must
+        update together").
+
+  # Example claim 2 — a percentage figure from a robustness check
+  - id: C2
+    claim: "Effect persists at 73% magnitude in the leave-one-out
+            specification (Appendix Table A.3)."
+    location: "manuscript.tex:Appendix A, A.3"
+    source_file: scripts/R/04_robustness.R
+    source_line: 89
+    output_file: scripts/R/_outputs/loo_robustness.rds
+    output_field: avg_retention_pct
+    tolerance:
+      point_estimate: 0.1          # 0.1 percentage points for percentages
+      n: exact
+    last_verified_on: 2026-05-20T00:00:00Z
+    last_verified_by: "/audit-reproducibility"
+    status: UNVERIFIED
+    notes: ""
+
+# When you run /audit-reproducibility against this passport, the skill
+# will update last_verified_on, last_verified_by, and status per claim.
+# If a tolerance is exceeded, status flips to FAIL and the discrepancy
+# is recorded in notes.

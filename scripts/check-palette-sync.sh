@@ -10,5 +10,9 @@
 
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" 2>/dev/null && pwd -P)"
+if [ -z "$SCRIPT_DIR" ] || [ ! -d "$SCRIPT_DIR" ]; then
+    echo "check-palette-sync.sh: cannot resolve script directory" >&2
+    exit 2
+fi
 exec python3 "$SCRIPT_DIR/check-palette-sync.py" "$@"

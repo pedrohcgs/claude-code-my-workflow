@@ -289,8 +289,11 @@ def check_file(path: Path) -> int:
     try:
         text = path.read_text(encoding="utf-8", errors="replace")
     except OSError as e:
+        # Return 2 (input error), not 1 (violation) — read failure is "couldn't do
+        # the job" not "did the job and found problems". main() uses max(rc, ...)
+        # so 2 correctly dominates any prior 1.
         print(f"ERROR: cannot read {path}: {e}", file=sys.stderr)
-        return 1
+        return 2
 
     stripped = strip_comments(text)
     p3 = check_p3(stripped)

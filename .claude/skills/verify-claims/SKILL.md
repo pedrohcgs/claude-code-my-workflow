@@ -72,13 +72,23 @@ The forked agent runs the CoVe independent-answer step. It has never seen the dr
 
 ### Phase 4 — Reconcile
 
-Based on the report:
+The verifier returns a per-claim verdict in **one of three severity tiers** (v1.9.0):
 
-- **PASS** (all claims match source): produce a green Post-Flight block and return.
-- **PARTIAL** (unverifiable claims remain): produce a yellow block flagging which claims need manual review.
-- **FAIL** (at least one contradiction): produce a red block listing discrepancies with evidence. If the draft is writeable and the user asked for auto-correction, regenerate the affected sections using the verifier's evidence. Otherwise return the report and let the user decide.
+- **HIGH-WARN** — fabricated reference (the cited paper doesn't exist at the named venue/year), draft claim directly contradicted by the source, or `not_found` retrieval that the verifier interprets as a hallucinated citation. **Gate-refuse** — these block `/commit` for any file `/verify-claims` was just run against, unless the user explicitly overrides with `--no-fail-closed` or sets `verifyClaims.allowHighWarn: true` in `.claude/settings.json`.
+- **MED-WARN** — transient infrastructure / retrieval failure (paywall the verifier can normally bypass via cached metadata; DOI resolver timeout; partial PDF read). Surface for the author; do not gate-refuse.
+- **LOW-WARN** — source genuinely inaccessible (paywalled and not in cache; private dataset; pre-print server transient). Surface with `cannot-verify` flag; do not gate-refuse.
 
-Respect `--no-fail-closed`: on FAIL, produce the warning but do not regenerate.
+Verdict aggregation by tier across all extracted claims:
+
+| Tier counts | Outcome | `/commit` behaviour |
+|---|---|---|
+| 0 HIGH, 0 MED, ≥ 0 LOW | **PASS** (green block) | proceeds |
+| 0 HIGH, ≥ 1 MED, any LOW | **PARTIAL** (yellow block) | proceeds with warning |
+| ≥ 1 HIGH | **FAIL** (red block) | **halts** unless override |
+
+`--no-fail-closed` opts out of the gate-refuse behaviour on HIGH-WARN. Use sparingly — it's there for offline / hallucination-sensitive contexts where the user accepts the risk in writing.
+
+If the draft is writeable and the user asked for auto-correction, regenerate the affected sections using the verifier's evidence. Otherwise return the report and let the user decide.
 
 ## Example
 

@@ -101,6 +101,40 @@ Beyond the basic fields shown above, skills support additional YAML frontmatter 
 
 See the [guide's Skill Frontmatter Reference](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#skill-frontmatter) for details and examples.
 
+### When to set `disable-model-invocation: true` {#when-to-disable-model-invocation}
+
+Set this flag whenever the skill writes a **persistent, load-bearing file** that the user must explicitly intend to create. Otherwise, Claude may auto-trigger the skill in response to a vaguely-matching prompt and produce a file that's hard to undo without manual cleanup.
+
+**Set it for skills that:**
+
+- Create new persistent source files (`/create-lecture` → new `.tex`, `/new-diagram` → new TikZ source).
+- Write a self-modifying artifact (`/learn` → new SKILL.md, `/checkpoint` → state snapshot, `/preregister` → preregistration document).
+- Run a destructive cycle (`/deep-audit` → repo-wide fix loop).
+
+**Don't set it for skills that:**
+
+- Produce transient analysis output (`/proofread`, `/review-r`, `/visual-audit` — write reports under `quality_reports/` that are easy to delete).
+- Are read-only diagnostics (`/permission-check`, `/context-status`).
+- Compile / render / deploy from existing source (`/compile-latex`, `/deploy`, `/extract-tikz`).
+
+The flag still allows direct invocation as `/skill-name` — it only blocks the model from auto-triggering on a heuristic match.
+
+### CLAUDE.md `@import` syntax (Anthropic Apr 2026)
+
+Anthropic's `CLAUDE.md` supports `@path/to/import` to pull in additional files. Example:
+
+```markdown
+See @README.md for project overview and @package.json for available commands.
+
+# Personal overrides
+@~/.claude/my-project-instructions.md
+
+# Domain-specific instructions
+@docs/git-instructions.md
+```
+
+**This template's `CLAUDE.md` deliberately does NOT use `@import`** — at 146 lines it's already lean, and importing fragments fractures the onboarding context (forkers expect "one file to load at session start"). Mention this here for forkers whose customization grows large enough to warrant splitting; for short CLAUDE.md files, splitting tends to hurt more than help.
+
 ---
 
 ## Writing Effective Descriptions
@@ -403,4 +437,4 @@ When adapting this template to your domain:
 - **Purpose:** Starter for domain-specific skills
 - **Usage:** Copy to `.claude/skills/[name]/SKILL.md`, customize for your field
 
-For existing skills examples, see `.claude/skills/` directory (28 skills for LaTeX, R, Quarto, and research workflows).
+For existing skills examples, see `.claude/skills/` directory (36 skills for LaTeX, R, Quarto, and research workflows).

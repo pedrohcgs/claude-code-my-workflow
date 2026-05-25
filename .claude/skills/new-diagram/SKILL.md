@@ -4,6 +4,7 @@ description: Scaffold a new TikZ diagram from the snippet gallery with preventio
 argument-hint: "[snippet-name] [output.tex] (both optional; interactive if omitted)"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Task"]
 effort: high
+disable-model-invocation: true
 ---
 
 # Create a New TikZ Diagram

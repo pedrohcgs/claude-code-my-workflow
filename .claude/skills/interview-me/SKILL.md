@@ -26,6 +26,7 @@ This is a **conversational** skill. Instead of producing a report immediately, y
 ### Phase 1: The Big Picture (1-2 questions)
 - "What phenomenon or puzzle are you trying to understand?"
 - "Why does this matter? Who should care about the answer?"
+- After the user answers, optionally ask: "Do you have a sense of what *kind* of paper this would be — reduced-form / structural / theory+empirics / descriptive / formal-theory / survey-experiment / unsure?" (See `.claude/agents/methods-referee.md` for the type definitions and `.claude/references/discipline-cards.md` for field-default frequencies.) Record the answer in the saved spec under the `**Paper type:**` header field; "unsure" is fine and is recorded as `**Paper type:** unsure`.
 
 ### Phase 2: Theoretical Motivation (1-2 questions)
 - "What's your intuition for why X happens / what drives Y?"
@@ -57,6 +58,7 @@ Once you have enough information (typically 5-8 exchanges), produce a **Research
 
 **Date:** [YYYY-MM-DD]
 **Researcher:** [from conversation context]
+**Paper type:** [reduced-form | structural | theory+empirics | descriptive | formal-theory | survey-experiment | unsure]
 
 ## Research Question
 

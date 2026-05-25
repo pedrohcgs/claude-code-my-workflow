@@ -112,3 +112,64 @@ This rule is enforced by the [`/audit-reproducibility`](../skills/audit-reproduc
 - **As a pre-commit gate** — wire into `/commit` when the diff touches both manuscript and analysis files.
 
 The skill exits 1 on any tolerance violation, so it integrates cleanly with quality gates.
+
+---
+
+## Claims Provenance: `passport.yaml`
+
+A passport is a single per-paper, per-branch YAML file at `quality_reports/passports/<paper-slug>.yaml` that records, for each verified numeric claim in the manuscript, the script invocation and output file that produced it. The contract is intentionally narrow: numeric claims only (point estimates, standard errors, p-values, sample sizes, percentages from tables/figures), not prose claims (which `/verify-claims` handles separately).
+
+`templates/passport-template.yaml` is the starter file. Forkers should copy it once per paper.
+
+### Schema
+
+```yaml
+paper:
+  slug: <paper-slug>                              # used in filename + report headings
+  title: <full paper title>
+  branch: <git branch on which this passport is current>
+  last_audit: <ISO-8601 timestamp>
+  last_audit_by: "/audit-reproducibility"         # or human, or another skill
+
+claims:
+  - id: C1                                        # stable identifier (used in cross-references)
+    claim: "ATT = -1.632 (SE 0.584, N=4291)"     # exact text or paraphrase from manuscript
+    location: "manuscript.tex:Table 2, Col 3"     # where it appears in the paper
+    source_file: code/03_analyze.R           # script that produced the value
+    source_line: 147                              # nearest line in the script
+    output_file: code/_outputs/main_did.rds  # where the value lives on disk
+    output_field: att_overall                      # field within the output (e.g., list element, column)
+    tolerance:
+      point_estimate: 0.01                         # absolute tolerance per Phase 3 above
+      standard_error: 0.05
+      n: exact
+    last_verified_on: <ISO-8601>
+    last_verified_by: "/audit-reproducibility"
+    status: PASS                                   # PASS | FAIL | STALE | UNVERIFIED
+    notes: |
+      Optional notes — e.g., "matches paper to 3 decimals; SE differs in 4th
+      decimal due to clustering df adjustment, within tolerance."
+```
+
+### `status` semantics
+
+- **PASS** — last audit confirmed the claim within tolerance.
+- **FAIL** — last audit detected a discrepancy outside tolerance. Blocks `/commit` for the affected files unless explicit override.
+- **STALE** — the underlying `source_file` or `output_file` was modified after `last_verified_on`. Re-run `/audit-reproducibility` to refresh.
+- **UNVERIFIED** — the claim was added to the manuscript but never run through `/audit-reproducibility`. Should not appear in a submission-ready passport.
+
+### Integration
+
+- **`/audit-reproducibility`** reads the passport at start, writes back after every claim audit. Failed claims are reported with their `id` and `location` so the author can find them in the manuscript instantly.
+- **`/commit`** reads the passport when a diff touches both `manuscript.tex` (or .qmd) and any `source_file` listed. If the passport contains any FAIL or STALE for a claim whose `source_file` is in the diff, `/commit` halts (advisory by default; gate-refuse if `--strict-passport` is set in `.claude/settings.json`).
+- **`/review-paper`** (default mode + `--peer`) appends a summary section to its report when the passport exists: `claims: N total, PASS: A, FAIL: B, STALE: C, UNVERIFIED: D`. Editors and referees know whether numeric claims have been independently verified at draft time.
+
+### Inspiration
+
+The pattern is borrowed from [Imbad0202/academic-research-skills](https://github.com/Imbad0202/academic-research-skills)'s "Material Passport" concept (a YAML state-file threaded through their pipeline). Their schema is heavier (13 contracts, threaded through ~6 agents); ours is deliberately scoped to numeric-claim provenance only. Forkers who need broader provenance tracking can extend the schema or vendor ARS's design directly.
+
+### Anti-patterns
+
+- **Do not auto-populate** the passport at `/audit-reproducibility` time without showing the user the inferred mapping. Source-line inference is best-effort; the author confirms.
+- **Do not promote UNVERIFIED claims to PASS** without running the actual numeric audit. The passport is a verified-state artifact; bypassing the verification defeats the purpose.
+- **Do not use the passport as a substitute for `/verify-claims`.** The passport handles numeric claims with code provenance; `/verify-claims` handles citation and named-entity claims with literature provenance. Both run.

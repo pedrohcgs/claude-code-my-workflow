@@ -24,7 +24,18 @@ Generate structured research questions, testable hypotheses, and empirical strat
    - **Mechanism:** Why does the effect exist? (e.g., "Through what channel does X affect Y?")
    - **Policy:** What are the implications? (e.g., "Would policy X improve outcome Y?")
 
-3. **For each research question, develop:**
+3. **Tag each RQ with a likely paper type** (drawn from `methods-referee.md`):
+   - `reduced-form` (DiD, IV, RD, event study, synthetic control)
+   - `structural` (estimation of a fully-specified model)
+   - `theory+empirics` (formal model + empirical test of its predictions)
+   - `descriptive` (measurement, data construction, pattern documentation)
+   - `formal-theory` (pure theory, no empirical test in this paper)
+   - `survey-experiment` (vignette, conjoint, list-experiment)
+   - `unsure` (when multiple types are plausible — the user can pick later via `/interview-me`)
+
+   Use `.claude/references/discipline-cards.md` to bias the distribution by field (econ vs poli-sci default frequencies differ — e.g., poli-sci skews more toward `survey-experiment` and `formal-theory` than econ does).
+
+4. **For each research question, develop:**
    - **Hypothesis:** A testable prediction with expected sign/magnitude
    - **Identification strategy:** How to establish causality (DiD, IV, RDD, synthetic control, etc.)
    - **Data requirements:** What data would be needed? Is it available?
@@ -32,9 +43,9 @@ Generate structured research questions, testable hypotheses, and empirical strat
    - **Potential pitfalls:** Common threats to identification
    - **Related literature:** 2-3 papers using similar approaches
 
-4. **Rank the questions** by feasibility and contribution.
+5. **Rank the questions** by feasibility and contribution.
 
-5. **Save the output** to `quality_reports/research_ideation_[sanitized_topic].md`
+6. **Save the output** to `quality_reports/research_ideation_[sanitized_topic].md`
 
 ---
 
@@ -55,6 +66,7 @@ Generate structured research questions, testable hypotheses, and empirical strat
 ### RQ1: [Question] (Feasibility: High/Medium/Low)
 
 **Type:** Descriptive / Correlational / Causal / Mechanism / Policy
+**Paper type:** reduced-form / structural / theory+empirics / descriptive / formal-theory / survey-experiment / unsure
 
 **Hypothesis:** [Testable prediction]
 

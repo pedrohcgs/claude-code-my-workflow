@@ -42,7 +42,11 @@ Thumbs.db
 CLAUDE.local.md
 
 # IDE
-.vscode/
+# .vscode/settings.json ships in the template (carries shipped Claude Code permission-mode
+# recommendations — see TROUBLESHOOTING.md "Permissions / bypass / statusline" for the typo
+# fix forkers need). Other .vscode/ content is developer-machine-specific.
+.vscode/*
+!.vscode/settings.json
 .idea/
 *.swp
 *.swo
@@ -59,11 +63,15 @@ quality_reports/specs/*
 quality_reports/session_logs/*
 quality_reports/merges/*
 quality_reports/decisions/*
+quality_reports/checkpoints/*
+quality_reports/preregistrations/*
 !quality_reports/plans/.gitkeep
 !quality_reports/specs/.gitkeep
 !quality_reports/session_logs/.gitkeep
 !quality_reports/merges/.gitkeep
 !quality_reports/decisions/.gitkeep
+!quality_reports/checkpoints/.gitkeep
+!quality_reports/preregistrations/.gitkeep
 
 # R analysis outputs (generated artifacts; keep scripts, ignore outputs)
 scripts/R/_outputs/

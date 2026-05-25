@@ -214,6 +214,35 @@
 
 ---
 
+## 18. Enumerative-table drift (surface-sync's blind spot)
+
+**Example:** v1.8.0 deep-audit. Lede counts said "30 skills, 14 agents" and `check-surface-sync.py` confirmed all 26 numeric-count assertions matched disk. But the guide's appendix "All Skills" table tabulated 28 rows (missing `/checkpoint` + `/preregister`) and "All Agents" table tabulated 11 rows (missing the v1.5.0 peer-review trio editor / domain-referee / methods-referee — pre-existing drift inherited across 3 releases). Surface-sync gate is blind to this class because it looks for phrasing patterns like `"30 skills, 14 agents"`, not at whether enumerative tables actually contain N items.
+
+**How to catch.** When adding a skill/agent/rule/hook, audit ALL these surfaces, not just count phrasings:
+- `guide/workflow-guide.qmd` "All Skills" / "All Agents" / "All Rules" appendix tables (count rows = expected N).
+- `CLAUDE.md` "Skills Quick Reference" table (rows = N).
+- `README.md` skills/agents tables.
+- `docs/index.html` inline bullet lists that enumerate skills.
+A future mechanical check could count `.claude/{skills,agents,rules}/*` and grep table rows in these surfaces; until then, deep-audit Agent 1 + Agent 4 should explicitly check appendix table row counts.
+
+**Why deep-audit missed it (until v1.8.0).** Agent 1's prompt asked about counts, not row counts. Agent 4's prompt asked about feature counts agreeing across documents, not about whether enumerative tables tabulate the same set as the count claims. Both agents looked at the lede counts (which were correct) and stopped.
+
+**When to apply.** Whenever a release adds or removes a skill/agent/rule/hook. Surface-sync clean ≠ enumerative tables current. Run a quick `wc -l` style check of appendix tables vs `ls .claude/skills/ | wc -l`.
+
+---
+
+## 19. Tool-name parity beyond `Task` (generalize peeve #1)
+
+**Example:** v1.8.0 deep-audit. Two skills (`/data-analysis`, `/audit-reproducibility`) gained "use the Monitor tool" guidance in their bodies but didn't add `Monitor` to `allowed-tools`. Same class as PR #92's `Task` parity bug from v1.7.0 (peeve #1) but a different tool, so the `check-skill-integrity.py` regex (which specifically looks for `Task` patterns) didn't catch it.
+
+**How to catch.** Generalize the parity check: for EVERY tool name mentioned in a skill body (`Task`, `Bash`, `Edit`, `Write`, `Read`, `Grep`, `Glob`, `WebFetch`, `WebSearch`, `Monitor`, `NotebookEdit`, `TodoWrite`, etc.), verify it appears in `allowed-tools`. The script should maintain a list of known tool names rather than hard-coding `Task` only. New Anthropic tools (Monitor in Apr 2026 Week 15) ship faster than the audit script.
+
+**Why deep-audit missed it (until v1.8.0).** `check-skill-integrity.py` Phase 0 check 1 is hard-coded to look for `Task`. Body language like "use the Monitor tool" reads as English; the script doesn't pattern-match it. Audit Agent 3's prompt now explicitly checks for non-`Task` tool references too — but the right fix is to extend the mechanical script with a known-tool list.
+
+**When to apply.** When adding a body reference to any Anthropic-shipped tool, add the tool to the skill's `allowed-tools` array as you write the body. When extending `check-skill-integrity.py`, add new tool names to the parity check whenever Anthropic ships a new tool primitive.
+
+---
+
 ## Meta — how this file is maintained
 
 - After any PR where a review bot catches something deep-audit missed, append a new entry (or extend an existing one with new evidence).

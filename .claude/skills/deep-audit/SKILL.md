@@ -10,6 +10,7 @@ description: |
 author: Claude Code Academic Workflow
 version: 1.0.0
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Task"]
+disable-model-invocation: true
 ---
 
 # /deep-audit — Repository Infrastructure Audit
