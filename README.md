@@ -172,7 +172,7 @@ The guide covers Claude Code's latest capabilities:
 ## What's Included
 
 <details>
-<summary><strong>16 agents, 36 skills, 27 rules, 7 hooks</strong> (click to expand)</summary>
+<summary><strong>16 agents, 37 skills, 27 rules, 7 hooks</strong> (click to expand)</summary>
 
 ### Agents (`.claude/agents/`)
 
@@ -235,6 +235,7 @@ The guide covers Claude Code's latest capabilities:
 | `/compress-session` (v1.9.0) | Distil current session into structured notes (decisions, next actions, *discarded-as-noise*) before auto-compaction |
 | `/promote-memory` (v1.9.0) | Five-critic council that votes on which `[LEARN]` entries graduate from personal-memory.md to MEMORY.md |
 | `/stata-replication` (v1.9.0) | End-to-end Stata pipeline via the `stata-mcp` MCP server (mirrors `/data-analysis` for R-first projects) |
+| `/codex` | Drive the OpenAI Codex CLI (`codex exec` / `resume --last`) for a task, choosing model / effort / sandbox, then critically evaluate its output as a peer |
 
 ### Research Workflow
 

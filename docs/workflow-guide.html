@@ -2757,7 +2757,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>You talk, Claude orchestrates.</strong> The 16 agents, 36 skills, and 27 rules exist so you don’t have to think about them. Describe your goal, approve the plan, and let the system work.</p>
+<p><strong>You talk, Claude orchestrates.</strong> The 16 agents, 37 skills, and 27 rules exist so you don’t have to think about them. Describe your goal, approve the plan, and let the system work.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -2770,7 +2770,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures. Score: 85/100.&quot;</cod
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This guide describes the full system — 16 agents, 36 skills, 27 rules. That is the ceiling, not the floor. <strong>Start with just CLAUDE.md and 2–3 skills</strong> (<code>/compile-latex</code>, <code>/proofread</code>, <code>/commit</code>). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you’re ready.</p>
+<p>This guide describes the full system — 16 agents, 37 skills, 27 rules. That is the ceiling, not the floor. <strong>Start with just CLAUDE.md and 2–3 skills</strong> (<code>/compile-latex</code>, <code>/proofread</code>, <code>/commit</code>). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you’re ready.</p>
 </div>
 </div>
 <hr>
@@ -3596,7 +3596,7 @@ APPROVED   NEEDS WORK
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Claude Code ships with built-in skills beyond this template’s 36: <code>/batch</code> orchestrates parallel refactoring across your codebase (using git worktrees for isolation), <code>/simplify</code> runs 3-agent code review and applies fixes, and <code>/debug</code> helps troubleshoot sessions. These complement the academic skills above.</p>
+<p>Claude Code ships with built-in skills beyond this template’s 37: <code>/batch</code> orchestrates parallel refactoring across your codebase (using git worktrees for isolation), <code>/simplify</code> runs 3-agent code review and applies fixes, and <code>/debug</code> helps troubleshoot sessions. These complement the academic skills above.</p>
 </div>
 </div>
 </section>
@@ -6869,6 +6869,11 @@ research-spec.md  ─────────────→  preregistration-dr
 <td><code>/stata-replication</code></td>
 <td><code>.claude/skills/stata-replication/</code></td>
 <td>End-to-end Stata pipeline scaffold + execution via the <code>stata-mcp</code> MCP server (mirrors <code>/data-analysis</code> for R-first projects; v1.9.0)</td>
+</tr>
+<tr class="odd">
+<td><code>/codex</code></td>
+<td><code>.claude/skills/codex/</code></td>
+<td>Drive the OpenAI Codex CLI for code analysis, refactoring, editing, or a plan-refinement debate (Claude and Codex iterate up to 5 rounds, or <code>--interactive</code>); critically evaluates Codex output as a peer</td>
 </tr>
 </tbody>
 </table>

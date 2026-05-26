@@ -155,13 +155,13 @@ Most of the time, you just describe what you want and Claude handles the rest. E
 ::: {.callout-important}
 ## The Bottom Line
 
-**You talk, Claude orchestrates.** The 16 agents, 36 skills, and 27 rules exist so you don't have to think about them. Describe your goal, approve the plan, and let the system work.
+**You talk, Claude orchestrates.** The 16 agents, 37 skills, and 27 rules exist so you don't have to think about them. Describe your goal, approve the plan, and let the system work.
 :::
 
 ::: {.callout-note}
 ## You Don't Need All of This on Day One
 
-This guide describes the full system --- 16 agents, 36 skills, 27 rules. That is the ceiling, not the floor. **Start with just CLAUDE.md and 2--3 skills** (`/compile-latex`, `/proofread`, `/commit`). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you're ready.
+This guide describes the full system --- 16 agents, 37 skills, 27 rules. That is the ceiling, not the floor. **Start with just CLAUDE.md and 2--3 skills** (`/compile-latex`, `/proofread`, `/commit`). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you're ready.
 :::
 
 ---
@@ -695,7 +695,7 @@ argument-hint: "[filename without .tex extension]"
 ::: {.callout-note}
 ## Built-In Skills
 
-Claude Code ships with built-in skills beyond this template's 36: `/batch` orchestrates parallel refactoring across your codebase (using git worktrees for isolation), `/simplify` runs 3-agent code review and applies fixes, and `/debug` helps troubleshoot sessions. These complement the academic skills above.
+Claude Code ships with built-in skills beyond this template's 37: `/batch` orchestrates parallel refactoring across your codebase (using git worktrees for isolation), `/simplify` runs 3-agent code review and applies fixes, and `/debug` helps troubleshoot sessions. These complement the academic skills above.
 :::
 
 ## Agents --- Specialized Reviewers {#agents---specialized-reviewers}
@@ -2686,6 +2686,7 @@ Claude Code supports **plugins** --- bundled collections of skills, agents, hook
 | `/compress-session` | `.claude/skills/compress-session/` | Distil the current session into a structured note (decisions, files, open questions, next actions, discarded-as-noise) before auto-compaction (v1.9.0) |
 | `/promote-memory` | `.claude/skills/promote-memory/` | Five-critic council that votes on whether candidate `[LEARN]` entries should be promoted from personal-memory.md to MEMORY.md (v1.9.0) |
 | `/stata-replication` | `.claude/skills/stata-replication/` | End-to-end Stata pipeline scaffold + execution via the `stata-mcp` MCP server (mirrors `/data-analysis` for R-first projects; v1.9.0) |
+| `/codex` | `.claude/skills/codex/` | Drive the OpenAI Codex CLI for code analysis, refactoring, editing, or a plan-refinement debate (Claude and Codex iterate up to 5 rounds, or `--interactive`); critically evaluates Codex output as a peer |
 
 ## All Rules
 

@@ -189,6 +189,20 @@ FLAG_RE = re.compile(r"--[a-z][a-z0-9-]*\b(?!=)")
 # flag token so the lookahead checks the next char, not a mid-token char.
 # If a future skill needs a kwarg-style flag, document it explicitly.
 
+# Skills that drive an external CLI document that CLI's own flags (e.g. /codex
+# documents `codex`'s --skip-git-repo-check). Those are the wrapped tool's
+# flags, not slash-command flags of the skill, so they are exempt from forward
+# argument-hint parity. Keyed by skill directory name. (Same per-entity shape
+# as RULE_KEYWORDS in Check 4; a forker adding a CLI-wrapper skill adds an entry
+# here rather than polluting the skill's frontmatter with a non-standard key.)
+WRAPPED_CLI_FLAGS: dict[str, set[str]] = {
+    "codex": {
+        "--skip-git-repo-check",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--sandbox", "--config", "--model", "--cd", "--last",
+    },
+}
+
 
 def check_flag_parity() -> list[tuple[str, str, str]]:
     """Bidirectional argument-hint ↔ body flag parity.
@@ -204,6 +218,12 @@ def check_flag_parity() -> list[tuple[str, str, str]]:
     Reverse (hint → body): a flag advertised in argument-hint must appear
     somewhere in the body as a code-span (more permissive than forward —
     a flag listed in a reference table without option-verbs still counts).
+
+    Wrapped-CLI exemption: a skill that drives an external CLI (e.g. /codex
+    documenting `codex`'s own `--skip-git-repo-check`) documents that CLI's
+    flags, which are not slash-command flags of this skill. Those are listed
+    per skill in WRAPPED_CLI_FLAGS above and are exempt from forward
+    argument-hint parity.
     """
     findings: list[tuple[str, str, str]] = []
     # Pattern: another skill's name followed by its flag (e.g. "/review-paper
@@ -245,6 +265,10 @@ def check_flag_parity() -> list[tuple[str, str, str]]:
         if not isinstance(hint, str):
             continue
         hint_flags = set(FLAG_RE.findall(hint))
+        # Flags belonging to a wrapped external CLI (see WRAPPED_CLI_FLAGS) are
+        # the wrapped tool's flags, not slash-command flags of this skill, so
+        # they are exempt from forward argument-hint parity.
+        external_cli_flags = WRAPPED_CLI_FLAGS.get(skill_md.parent.name, set())
         documented_flags: set[str] = set()
         for line in body.splitlines():
             # Skip lines that describe another skill's flag
@@ -261,7 +285,11 @@ def check_flag_parity() -> list[tuple[str, str, str]]:
                 for cf in code_flag_re.findall(cleaned):
                     documented_flags.add(cf)
         # Forward: flags documented in body but missing from argument-hint
-        missing_from_hint = {f for f in documented_flags - hint_flags if len(f) > 3}
+        # (flags declared as belonging to a wrapped external CLI are exempt).
+        missing_from_hint = {
+            f for f in documented_flags - hint_flags - external_cli_flags
+            if len(f) > 3
+        }
         if missing_from_hint:
             findings.append((
                 "P2",
