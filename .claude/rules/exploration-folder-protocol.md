@@ -29,13 +29,13 @@ explorations/
 2. **Develop** -- work entirely within the exploration folder
 3. **Decide:**
 
-   - **Graduate to production** -- copy to `R/`, `scripts/`; requires quality >= 80, tests pass, code clear. Move to `ARCHIVE/completed_[project]/`
+   - **Graduate to production** -- copy to `R/`, `scripts/`; requires quality >= 90, tests pass, code clear. Move to `ARCHIVE/completed_[project]/`
    - **Keep exploring** -- document next steps in README
    - **Abandon** -- move to `ARCHIVE/abandoned_[project]/` with explanation (use `templates/archive-readme.md`)
 
 ## Graduate Checklist
 
-- [ ] Quality score >= 80
+- [ ] Quality score >= 90
 - [ ] All tests pass
 - [ ] Results replicate within tolerance
 - [ ] Code is clear without deep context

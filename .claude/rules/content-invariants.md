@@ -13,11 +13,13 @@ Numbered non-negotiable rules for content produced in this repository. Critic ag
 
 ## Slide invariants
 
-- **INV-1: Palette sync.** Color names in `Preambles/header.tex` must match SCSS variables in `Quarto/theme-template.scss`. Verify with `./scripts/check-palette-sync.sh`. Any new color added to one must be added to the other.
-- **INV-2: Beamer↔Quarto notation parity.** Every math symbol, variable name, and subscript in a Beamer `.tex` slide must appear identically in its Quarto `.qmd` mirror. Notation drift between the two is a critical bug.
-- **INV-3: Quarto CSS override contract.** Styles that must override Bootstrap defaults (e.g., inline code color, code block background) go in `include-in-header` as a raw `<style>` tag, never in the SCSS file. SCSS is only for styles that do not need to beat Bootstrap's cascade — Bootstrap's own selectors win specificity wars otherwise.
-- **INV-4: TikZ as SVG.** Browsers cannot render PDF images inline. All TikZ diagrams in Quarto/HTML must be SVG, produced via `/extract-tikz`. Never embed a `.pdf` in a `.qmd` slide.
-- **INV-5: Single bibliography.** `Bibliography_base.bib` is the canonical bibliography. No per-lecture `.bib` files. All citations must resolve against this one file.
+> **Build-direction note.** This project renders a single Quarto `.qmd` to a **Beamer PDF** (no RevealJS-HTML target). INV-1 through INV-4 below were written for the upstream HTML-mirror workflow; their status under QMD→Beamer-PDF is annotated inline. See [`single-source-of-truth.md`](single-source-of-truth.md).
+
+- **INV-1: Styling source (was: palette sync).** Beamer styling comes solely from `Preambles/header.tex`; `Quarto/theme-template.scss` is HTML-only and vestigial here. Change colors/fonts in `header.tex`. The `header.tex ↔ SCSS` palette contract (`./scripts/check-palette-sync.sh`) is now **advisory** — keep it in sync only if you ever restore an HTML target.
+- **INV-2: PDF fidelity to source.** The rendered Beamer PDF must faithfully reflect the `.qmd`: every equation, symbol, and citation in the source appears correctly in the PDF. (There is no separate `.tex` mirror to drift from — the risk is a stale/failed render, so re-render after every content edit.)
+- **INV-3: Quarto CSS override contract — INACTIVE.** Applies only to RevealJS-HTML output (Bootstrap cascade). Not relevant to Beamer PDF.
+- **INV-4: Figures are PDF, not SVG.** Beamer embeds **PDF** figures and renders TikZ natively; no SVG conversion is needed (SVG was an HTML-only requirement). Reference `.pdf` figures directly from the `.qmd`.
+- **INV-5: Single bibliography.** `Bibliography_base.bib` is the canonical bibliography. No per-deck `.bib` files. All citations must resolve against this one file.
 
 ## Slide design invariants
 

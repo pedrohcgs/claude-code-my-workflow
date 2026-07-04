@@ -54,6 +54,11 @@ CLAUDE.local.md
 
 # Quarto rendering artifacts
 .quarto/
+# HTML render output — this project targets Beamer PDF, not RevealJS HTML
+Quarto/*.html
+Quarto/*_files/
+paper/*.html
+paper/*_files/
 
 # quality_reports/ — per-project session logs, plans, specs, merges, audits,
 # diagnoses. The directory structure ships in the template (via .gitkeep), but
@@ -81,6 +86,22 @@ quality_reports/diagnoses/*
 
 # R analysis outputs (generated artifacts; keep scripts, ignore outputs)
 scripts/R/_outputs/
+
+# ==============================================================================
+# Confidential / licensed data (WRDS) — NEVER commit raw extracts or credentials.
+# See .claude/rules/confidential-data.md. Commit code + derived aggregates only.
+# ==============================================================================
+.Renviron
+data/wrds/
+data/raw/
+data/restricted/
+data/**/*.parquet
+data/**/*.dta
+data/**/*.rds
+data/**/*.sas7bdat
+data/**/*.csv
+# Keep a documented, non-confidential data manifest if you add one:
+!data/README.md
 
 # Output artifacts — uncomment lines below based on your preference
 # *.rds

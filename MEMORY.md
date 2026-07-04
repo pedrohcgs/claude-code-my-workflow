@@ -169,3 +169,18 @@ The key insight: each pattern enforces independence differently. Critic-fixer us
 [LEARN:research] **Research-grounded plans beat eyeballed roadmaps.** v1.9.0 started with 4 parallel research agents (Anthropic ecosystem / community repos / cross-vendor / internal audit) producing a 17-item ranked recommendation set, then 2 verification agents resolving uncertainties (rename history, ARS schema details). The plan that emerged was traceable to specific URLs and verified facts. By contrast, the original "let me brainstorm what could improve the guide" cycle would have produced opinions, not citations. Lesson: when scope is "what should we add?" not "fix this bug", invest in research before planning. Cost: ~30 min of agent dispatch; value: confidence that each item was non-redundant and currently true.
 
 [LEARN:workflow] **Surface-sync gate must check enumerative tables too, not just numeric assertions.** v1.9.0 added 6 skills + 2 agents; each addition needed manual surface-sync verification PLUS manual appendix-table updates. `check-surface-sync.sh` caught count drift but not row-by-row table drift. This is pet-peeves entry #18 + v2.0-backlog "enumerative-table consistency check." Until that ships, every new skill / agent addition requires: (1) update count assertions; (2) update appendix table in guide; (3) update README skill/agent table. The cost of forgetting is silent drift that compounds across releases (the v1.5.0 peer-review trio of agents was missing from README for 3 releases before v1.8.0 caught it).
+
+---
+
+## Project Decisions (IPO Returns — working project, not template)
+
+> These are SPECIFIC to this fork's working project (per meta-governance, specific
+> decisions normally live in personal-memory.md; kept here because CLAUDE.md routes
+> project [LEARN] entries to MEMORY.md and this is now a working repo). Full context:
+> `quality_reports/plans/snuggly-zooming-pascal.md`.
+
+[LEARN:project] Build direction INVERTED vs. template: a single Quarto `.qmd` is the source of truth and renders to a **Beamer PDF** (`format: beamer`, `pdf-engine: xelatex`, `include-in-header: ../Preambles/header.tex`). No hand-authored `.tex`, no RevealJS-HTML / GitHub-Pages. `single-source-of-truth.md`, `beamer-quarto-sync.md`, `content-invariants.md` (INV-1..4), `verification-protocol.md`, and `header.tex` were rewritten accordingly. Beamer-bridge skills/agents kept on disk but marked INACTIVE in CLAUDE.md. SCSS + palette-sync are vestigial/advisory.
+
+[LEARN:project] Quality gates raised to **90 commit / 95 PR / 98 excellence** (template default 80/90/95). Changed in quality_score.py, .githooks/pre-commit, quality-gates.md, CLAUDE.md, commit/SKILL.md, WORKFLOW_QUICK_REF.md, and exploration/orchestrator rule references. Exploration sandbox stays at 60.
+
+[LEARN:project] WRDS data is LICENSED — never commit raw extracts (CRSP/Compustat/SDC/Datastream) or credentials; commit code + derived aggregates only. Credentials in gitignored `.Renviron`. Ritter IPO data is public-with-attribution. See `.claude/rules/confidential-data.md` and `.gitignore`.

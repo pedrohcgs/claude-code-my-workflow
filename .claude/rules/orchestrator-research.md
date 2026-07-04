@@ -24,7 +24,7 @@ Plan approved → orchestrator activates
   │
   Step 3: SCORE — Apply quality-gates rubric
   │
-  └── Score >= 80?
+  └── Score >= 90?
         YES → Done (commit when user signals)
         NO  → Fix blocking issues, re-verify, re-score
 ```
@@ -39,4 +39,4 @@ Plan approved → orchestrator activates
 - [ ] `set.seed()` once at top if stochastic
 - [ ] Output files created at expected paths
 - [ ] Tolerance checks pass (if applicable)
-- [ ] Quality score >= 80
+- [ ] Quality score >= 90

@@ -13,7 +13,7 @@
 # failure:
 #   1. Surface-sync (ALWAYS): count + enumerative-table-row consistency,
 #      skill integrity, model-version currency — deterministic and fast.
-#   2. Quality score (>= 80) on staged .qmd / .tex / .R files with rubrics.
+#   2. Quality score (>= 90) on staged .qmd / .tex / .R files with rubrics.
 #
 # Escape hatches (use sparingly; record the reason in the commit message):
 #   SKIP_QUALITY_GATE=1 git commit ...   # skip only the quality score
@@ -64,7 +64,7 @@ else
     if [ -n "$STAGED" ]; then
         n="$(printf '%s\n' "$STAGED" | grep -c .)"
         echo ""
-        echo "── pre-commit: quality score (>= 80) on ${n} staged file(s) ──"
+        echo "── pre-commit: quality score (>= 90) on ${n} staged file(s) ──"
         # Score each file individually: portable (no mapfile/bash4), handles
         # spaces in paths, and gives a per-file exit code we can classify.
         while IFS= read -r f; do
@@ -73,10 +73,10 @@ else
             python3 scripts/quality_score.py "$f"
             rc=$?
             # quality_score.py: rc 2 = auto-fail (compile/syntax FAILURE), rc 1 =
-            # score < 80 (or scorer error / file-not-found). BOTH must block — a
+            # score < 90 (or scorer error / file-not-found). BOTH must block — a
             # file that fails to compile is the worst case, not an "infra error".
             if [ "$rc" -ne 0 ]; then
-                echo "✗ quality gate: '$f' failed (rc=$rc — 2=compile/syntax failure, 1=score<80 or scorer error)." >&2
+                echo "✗ quality gate: '$f' failed (rc=$rc — 2=compile/syntax failure, 1=score<90 or scorer error)." >&2
                 FAIL=1
             fi
         done <<< "$STAGED"

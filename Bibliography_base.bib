@@ -1,33 +1,182 @@
 % ==============================================================================
-% Bibliography Template
+% Bibliography — IPO Returns in the US and Europe
 % ==============================================================================
 %
-% Add your bibliography entries here.
-% This file is referenced by both Beamer (.tex) and Quarto (.qmd) slides.
+% Canonical IPO-returns references (US and Europe/UK). Shared by the slide deck
+% (Quarto/*.qmd) and the descriptive note (paper/*.qmd). One bibliography only
+% (INV-5). Citation-key convention: AuthorYear_keyword.
 %
-% Naming convention: AuthorYear_keyword
-% Example: Smith2024_causal_inference
-%
+% Metadata verified against publisher pages / RePEc / DOI (2026-07-04). A few
+% DOIs are intentionally omitted where the exact string could not be confirmed;
+% two moderate-confidence fields are flagged inline. Extend with WRDS/data-source
+% and any additional EU/UK references as the project develops; run
+% `/validate-bib --semantic` before submission.
 % ==============================================================================
 
-% ------------------------------------------------------------------------------
-% EXAMPLE ENTRIES — delete these and add your own
-% ------------------------------------------------------------------------------
+% ---------- Underpricing: theory ----------
 
-@book{Example2024_book,
-  author    = {Lastname, Firstname},
-  title     = {An Example Book Title},
-  publisher = {Example University Press},
-  year      = {2024},
-  address   = {City, State}
+@article{Baron1982_demandmodel,
+  author  = {Baron, David P.},
+  title   = {A Model of the Demand for Investment Banking Advising and Distribution Services for New Issues},
+  journal = {Journal of Finance},
+  year    = {1982},
+  volume  = {37},
+  number  = {4},
+  pages   = {955--976},
+  doi     = {10.1111/j.1540-6261.1982.tb03591.x}
 }
 
-@article{Example2025_article,
-  author  = {Lastname, Firstname and Coauthor, Name},
-  title   = {An Example Journal Article Title},
-  journal = {Journal of Example Studies},
-  volume  = {10},
+@article{Rock1986_underpriced,
+  author  = {Rock, Kevin},
+  title   = {Why New Issues Are Underpriced},
+  journal = {Journal of Financial Economics},
+  year    = {1986},
+  volume  = {15},
+  number  = {1--2},
+  pages   = {187--212},
+  doi     = {10.1016/0304-405X(86)90054-1}
+}
+
+@article{BeattyRitter1986_reputation,
+  author  = {Beatty, Randolph P. and Ritter, Jay R.},
+  title   = {Investment Banking, Reputation, and the Underpricing of Initial Public Offerings},
+  journal = {Journal of Financial Economics},
+  year    = {1986},
+  volume  = {15},
+  number  = {1--2},
+  pages   = {213--232},
+  doi     = {10.1016/0304-405X(86)90055-3}
+}
+
+% ---------- Underpricing: evidence and surveys ----------
+
+@article{Ibbotson1975_priceperformance,
+  author  = {Ibbotson, Roger G.},
+  title   = {Price Performance of Common Stock New Issues},
+  journal = {Journal of Financial Economics},
+  year    = {1975},
+  volume  = {2},
+  number  = {3},
+  pages   = {235--272},
+  doi     = {10.1016/0304-405X(75)90015-X}
+}
+
+@article{RitterWelch2002_review,
+  author  = {Ritter, Jay R. and Welch, Ivo},
+  title   = {A Review of {IPO} Activity, Pricing, and Allocations},
+  journal = {Journal of Finance},
+  year    = {2002},
+  volume  = {57},
+  number  = {4},
+  pages   = {1795--1828},
+  doi     = {10.1111/1540-6261.00478}
+}
+
+@article{LoughranRitter2004_changedovertime,
+  author  = {Loughran, Tim and Ritter, Jay R.},
+  title   = {Why Has {IPO} Underpricing Changed Over Time?},
+  journal = {Financial Management},
+  year    = {2004},
+  volume  = {33},
+  number  = {3},
+  pages   = {5--37}
+  % DOI unconfirmed for this Financial Management vintage; omitted deliberately.
+}
+
+@incollection{Ljungqvist2007_underpricing,
+  author    = {Ljungqvist, Alexander},
+  title     = {{IPO} Underpricing},
+  editor    = {Eckbo, B. Espen},
+  booktitle = {Handbook of Corporate Finance: Empirical Corporate Finance},
+  volume    = {1},
+  series    = {Handbooks in Finance},
+  chapter   = {7},
+  pages     = {375--422},
+  publisher = {North-Holland (Elsevier)},
+  address   = {Amsterdam},
+  year      = {2007},
+  doi       = {10.1016/B978-0-444-53265-7.50021-4}
+}
+
+% ---------- Long-run performance ----------
+
+@article{Ritter1991_longrun,
+  author  = {Ritter, Jay R.},
+  title   = {The Long-Run Performance of Initial Public Offerings},
+  journal = {Journal of Finance},
+  year    = {1991},
+  volume  = {46},
+  number  = {1},
+  pages   = {3--27},
+  doi     = {10.1111/j.1540-6261.1991.tb03743.x}
+}
+
+@article{LoughranRitter1995_newissues,
+  author  = {Loughran, Tim and Ritter, Jay R.},
+  title   = {The New Issues Puzzle},
+  journal = {Journal of Finance},
+  year    = {1995},
+  volume  = {50},
+  number  = {1},
+  pages   = {23--51},
+  doi     = {10.1111/j.1540-6261.1995.tb05166.x}
+}
+
+% ---------- International / Europe / UK ----------
+
+@article{LoughranRitterRydqvist1994_international,
+  author  = {Loughran, Tim and Ritter, Jay R. and Rydqvist, Kristian},
+  title   = {Initial Public Offerings: International Insights},
+  journal = {Pacific-Basin Finance Journal},
+  year    = {1994},
+  volume  = {2},
+  number  = {2--3},
+  pages   = {165--199},
+  doi     = {10.1016/0927-538X(94)90016-7},
+  note    = {The authors maintain updated country-return tables (posted on Jay Ritter's website) that revise the original 1994 print figures; cite the updated version when using current statistics.}
+}
+
+@article{Levis1993_ukexperience,
+  author  = {Levis, Mario},
+  title   = {The Long-Run Performance of Initial Public Offerings: The {UK} Experience 1980--1988},
+  journal = {Financial Management},
+  year    = {1993},
+  volume  = {22},
+  number  = {1},
+  pages   = {28--41},
+  doi     = {10.2307/3665964}
+  % DOI is moderate-confidence (inferred from JSTOR/FMA catalog); drop if strict verification required.
+}
+
+@article{EllulPagano2006_liquidity,
+  author  = {Ellul, Andrew and Pagano, Marco},
+  title   = {{IPO} Underpricing and After-Market Liquidity},
+  journal = {Review of Financial Studies},
+  year    = {2006},
+  volume  = {19},
   number  = {2},
-  pages   = {100--125},
-  year    = {2025}
+  pages   = {381--421},
+  doi     = {10.1093/rfs/hhj018}
+}
+
+@article{LjungqvistJenkinsonWilhelm2003_globalintegration,
+  author  = {Ljungqvist, Alexander P. and Jenkinson, Tim and Wilhelm, William J.},
+  title   = {Global Integration in Primary Equity Markets: The Role of {U.S.} Banks and {U.S.} Investors},
+  journal = {Review of Financial Studies},
+  year    = {2003},
+  volume  = {16},
+  number  = {1},
+  pages   = {63--99}
+  % DOI omitted: older RFS DOI string could not be confirmed unambiguously.
+}
+
+@techreport{GajewskiGresse2006_europeansurvey,
+  author      = {Gajewski, Jean-Fran{\c c}ois and Gresse, Carole},
+  title       = {A Survey of the European {IPO} Market},
+  institution = {Centre for European Policy Studies (CEPS), European Capital Markets Institute (ECMI)},
+  type        = {ECMI Research Paper},
+  number      = {2},
+  year        = {2006},
+  month       = aug,
+  note        = {Available at SSRN: https://ssrn.com/abstract=2005056}
 }

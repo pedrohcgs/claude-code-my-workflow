@@ -11,9 +11,11 @@ paths:
 
 ## Thresholds
 
-- **80/100 = Commit** -- good enough to save
-- **90/100 = PR** -- ready for deployment
-- **95/100 = Excellence** -- aspirational
+- **90/100 = Commit** -- good enough to save
+- **95/100 = PR** -- ready for deployment
+- **98/100 = Excellence** -- aspirational
+
+> This project runs **stricter-than-default** gates (the template default is 80/90/95). The bar is raised because the deliverables — a Beamer slide deck and a descriptive note — are publication-facing.
 
 ## Quarto Slides (.qmd)
 
@@ -49,9 +51,9 @@ paths:
 
 ## Enforcement (the /commit skill + an optional pre-commit hook)
 
-- **Score < 80:** Halt within `/commit`. List blocking issues. User may override with an explicit natural-language signal ("commit anyway" / "skip quality gate") and a reason — the override is logged in the commit body.
-- **Score < 90:** Allow commit within `/commit`, warn. List recommendations.
-- **Direct `git commit`:** unenforced *until* you run `./scripts/install-hooks.sh`, which points `core.hooksPath` at the version-controlled `.githooks/pre-commit`. After that, every commit (skill or not) runs the surface-sync + quality (≥80) gates. Bypass sparingly with `SKIP_QUALITY_GATE=1` (quality only) or `git commit --no-verify` (all hooks); record the reason in the commit body.
+- **Score < 90:** Halt within `/commit`. List blocking issues. User may override with an explicit natural-language signal ("commit anyway" / "skip quality gate") and a reason — the override is logged in the commit body.
+- **Score < 95:** Allow commit within `/commit`, warn. List recommendations.
+- **Direct `git commit`:** unenforced *until* you run `./scripts/install-hooks.sh`, which points `core.hooksPath` at the version-controlled `.githooks/pre-commit`. After that, every commit (skill or not) runs the surface-sync + quality (≥90) gates. Bypass sparingly with `SKIP_QUALITY_GATE=1` (quality only) or `git commit --no-verify` (all hooks); record the reason in the commit body.
 
 ## Quality Reports
 

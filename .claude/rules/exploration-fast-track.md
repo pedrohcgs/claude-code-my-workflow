@@ -5,7 +5,7 @@ paths:
 
 # Exploration Fast-Track
 
-**Lightweight workflow for experimental work.** Quality threshold: 60/100 (vs 80 for production). No planning needed.
+**Lightweight workflow for experimental work.** Quality threshold: 60/100 (vs 90 for production). No planning needed.
 
 ## Steps
 
@@ -13,7 +13,7 @@ paths:
 2. **Create folder** -- `mkdir -p explorations/[name]/{R,scripts,output}` + README + SESSION_LOG.md
 3. **Code immediately** -- no plan needed. Must-haves: code runs, results correct, goal documented. Not needed: Roxygen docs, full tests, perfect style.
 4. **Log progress** -- append 2-3 lines to SESSION_LOG.md as you work
-5. **Decision point** -- keep exploring, graduate to production (upgrade to 80/100), or archive with brief explanation
+5. **Decision point** -- keep exploring, graduate to production (upgrade to 90/100), or archive with brief explanation
 
 ## When to Stop (Kill Switch)
 

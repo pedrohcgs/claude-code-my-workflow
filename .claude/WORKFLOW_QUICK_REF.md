@@ -43,8 +43,8 @@ Repeat
 
 | Score | Action |
 |-------|--------|
-| >= 80 | Ready to commit |
-| < 80  | Fix blocking issues |
+| >= 90 | Ready to commit |
+| < 90  | Fix blocking issues |
 
 ---
 
