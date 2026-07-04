@@ -38,9 +38,13 @@ and Orbis. Set credentials in a gitignored `.Renviron` at the repo root, then un
 ```
 WRDS_USER=your_wrds_login
 WRDS_PASS=...              # or use ~/.pgpass
-DS_LIB=...                 # your WRDS Datastream library name (browse WRDS to find it)
-ORBIS_LIB=...              # your WRDS Orbis/BvD library (only if IPO_USE_ORBIS=1)
 ```
+
+The WRDS schema names are now **confirmed defaults in the code** (no per-institution
+library guessing needed), overridable via env only if your WRDS layout differs:
+`IPO_DS_SCHEMA` (default `tr_ds_equities`), `IPO_ORBIS_TIERS`
+(default `bvd_orbis_large,bvd_orbis_medium,bvd_orbis_small`), `IPO_CG_SCHEMA`
+(`comp`), `IPO_WS_SCHEMA` (`tr_ws`).
 
 Optional switches: `IPO_SAMPLE_START` / `IPO_SAMPLE_END` (default 1995 / 2024);
 `IPO_USE_ORBIS=1` to enable the optional Orbis cross-check.
@@ -50,10 +54,11 @@ Optional switches: `IPO_SAMPLE_START` / `IPO_SAMPLE_END` (default 1995 / 2024);
 | **CRSP** (US) | daily+monthly stock, names, delisting, market index (`crsp.msi`), FF rf (`ff.factors_monthly`) | `permno`, `shrcd` (10/11), `exchcd` (1/2/3), first `date`, `prc`, `ret`, `dlret`, `dlstcd`, `vwretd` |
 | **Compustat NA + CCM** (US) | firm characteristics via `crsp.ccmxpf_lnkhist` | `gvkey`, `ipodate`, `sale`, `at`, `sich` |
 | **Ritter files** (US) | public download → `data/raw/ritter/` (offer prices, founding dates, underwriter rank, VC/dual-class); needs a `permno`↔`offer_price` crosswalk | from site.warrington.ufl.edu/ritter/ipo-data (cite with attribution) |
-| **Datastream** (EU/UK, via WRDS `$DS_LIB`) | `RI` (returns), `UP` (UK offer price @ `BDATE`), `P#S` (first-trade dating), `BDATE`; **union active + dead lists** | confirm the `$DS_LIB` table/column names in WRDS; validated by `assert_fields()` |
-| **Compustat Global + Worldscope** (EU/UK) | `comp.g_company.ipodate`, incorporation (Worldscope field **18273** = `item18273`), accounting | verify the Worldscope IPO/first-traded code (research flagged `WC05905` as likely wrong — use Compustat `ipodate` + Datastream instead) |
-| **Orbis** (EU/UK, via WRDS `$ORBIS_LIB`) — **OPTIONAL** | robustness cross-check only: BvD-ID linking + incorporation date | OFF by default; not a returns/offer-price source, not load-bearing |
+| **Datastream** (EU/UK, `tr_ds_equities`) | Security master `wrds_ds_names_full` (`infocode`, `cmpyctrycode` ISO-2 [UK=`GB`], `typecode='EQ'`, `isprimqt=1`, `statuscode` A/D/S, `isin`); daily file `wrds_ds2dsf` (`ri` total-return index, `ret` local daily return, `close` **unadjusted** [UK offer-price proxy at first trade], `adjclose`, `numshrs`, `mktcap`, `currency`) | first-trade = MIN `marketdate` per `infocode` (never `startdate` — it clusters at the DS2 extract start); **union active+dead** = keep all `statuscode`; coverage confirmed 1964→present |
+| **Compustat Global + Worldscope** (EU/UK) | `comp.g_company.ipodate` (`loc` ISO-3), incorporation (Worldscope `tr_ws.wrds_ws_company.item18273`), ISIN link (`item6105`) | Compustat `ipodate` cross-checks the DS first-trade date; the Worldscope IPO/first-traded code stays unused (research flagged `WC05905` as likely wrong) |
+| **Orbis** (EU/UK, `bvd_orbis_{large,medium,small}`) — **OPTIONAL** | robustness cross-check only: `ob_identifiers_*.sd_isin`→`bvdid`, `ob_legal_info_*` (`dateinc`, `ipo_date`, `delisted_date`); unioned across tiers | OFF by default (`IPO_USE_ORBIS=1`); not a returns/offer-price source, not load-bearing |
 
-**Confirm before trusting** (assertions fire at load — see `functions_data.R::assert_fields`):
-the Worldscope IPO field code; Compustat `ipodate` release history; the UK-only
-`BDATE`−1 offset (verify per Continental venue).
+All schema/field names above were **confirmed against the live WRDS data dictionary on
+2026-07-04**; `assert_fields()` re-validates them at load. Still to confirm on the first
+full run: the EU per-venue benchmark index `infocode`s, the ISIN link policy across
+DS/CG/WS/Orbis, and (for Continental underpricing, a later extension) the offer-price source.

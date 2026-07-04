@@ -9,9 +9,10 @@
 # (see .claude/rules/confidential-data.md).
 #
 # ALL sources are on WRDS (single RPostgres connection): CRSP, Compustat NA +
-# Global, Worldscope, Datastream, and Orbis. The Datastream/Orbis WRDS library
-# names vary by institution and are set via env (DS_LIB / ORBIS_LIB) in the
-# loaders, then validated with assert_fields().
+# Global, Worldscope, Datastream, and Orbis. The WRDS schema names were CONFIRMED
+# against the live data dictionary on 2026-07-04 (Datastream = tr_ds_equities;
+# Orbis = bvd_orbis_{large,medium,small}) and are set as env-overridable defaults
+# in 01_load_eu.R, then validated with assert_fields() at load time.
 # =============================================================================
 
 #' Open a WRDS connection (or return NULL if unconfigured)
