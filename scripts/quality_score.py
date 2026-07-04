@@ -249,12 +249,20 @@ class IssueDetector:
 
     @staticmethod
     def check_hardcoded_paths(content: str) -> List[int]:
-        """Detect absolute paths in R scripts."""
+        """Detect *absolute* paths in R scripts.
+
+        Matches a genuine rooted path — `"/seg/..."` (a leading slash followed by
+        a path segment and another separator) or a Windows drive `"C:\\..."` — not
+        idiomatic string literals that merely start with a separator/escape, e.g.
+        `"/"`, `"\\n"`, or a regex like `"\\.tex$"` (those are false positives).
+        """
         issues = []
         lines = content.split('\n')
-
+        # Unix absolute path with at least one segment: quote, /, non-quote chars, /
+        # OR a Windows drive letter path: quote, letter, :, separator.
+        abs_path = re.compile(r'''["']/[^"']*/|["'][A-Za-z]:[\\/]''')
         for i, line in enumerate(lines, 1):
-            if re.search(r'["\'][/\\]|["\'][A-Za-z]:[/\\]', line):
+            if abs_path.search(line):
                 if not re.search(r'http:|https:|file://|/tmp/', line):
                     issues.append(i)
 

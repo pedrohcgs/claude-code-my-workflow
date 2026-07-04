@@ -33,18 +33,30 @@ dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 # script using `exists("varname", inherits = FALSE)` to check ONLY the
 # pipeline env, never the user's global state.
 #
-# 01_load.R produces raw_main; 02_clean.R consumes it and produces df;
-# 03_analyze.R consumes df and writes results.rds; 04 and 05 read from disk.
+# 01_load_us.R + 01_load_eu.R produce us_raw / eu_raw; 02_build_sample.R
+# combines + screens them into ipo_sample / ipo_monthly; 03_returns.R writes
+# returns.rds; 04 and 05 read from disk.
 pipeline_env <- new.env(parent = globalenv())
 # Propagate the orchestrator's seed + OUT_DIR into the shared env so scripts
 # can reference them without re-computing.
 pipeline_env$PROJECT_SEED <- PROJECT_SEED
 pipeline_env$OUT_DIR      <- OUT_DIR
+# Sample window (project scope ~1995-2024); used by the WRDS loaders.
+pipeline_env$SAMPLE_START <- Sys.getenv("IPO_SAMPLE_START", "1995")
+pipeline_env$SAMPLE_END   <- Sys.getenv("IPO_SAMPLE_END", "2024")
+
+# Source the pure/helper function files into the shared env FIRST, so every
+# pipeline script (and the tests) can call them. These define functions only —
+# no side effects.
+for (fn in c("functions_returns.R", "functions_data.R", "functions_synth.R")) {
+  source(here("scripts", "R", fn), local = pipeline_env)
+}
 
 pipeline <- c(
-  "01_load.R",
-  "02_clean.R",
-  "03_analyze.R",
+  "01_load_us.R",
+  "01_load_eu.R",
+  "02_build_sample.R",
+  "03_returns.R",
   "04_tables.R",
   "05_figures.R"
 )
