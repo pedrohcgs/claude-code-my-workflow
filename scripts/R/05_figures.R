@@ -1,71 +1,85 @@
 # =============================================================================
-# 05_figures.R — Figures → PDF and SVG.
+# 05_figures.R — Publication-ready figures -> PDF (for the Beamer deck / note).
 #
-# PDF for Beamer (crisp vector). SVG for Quarto slides (native browser render).
-# Both from the same ggplot object so there's one source of truth per figure.
+# PDF only: this project renders Quarto -> Beamer (no HTML/SVG target). Figures
+# use the project palette (kept in sync with Preambles/header.tex) and a
+# transparent background so they sit cleanly on slides.
 # =============================================================================
 
-if (!exists("df", inherits = FALSE)) {
-  stop("05_figures.R: df missing. Run 00_run_all.R (not this script directly).")
+for (obj in c("returns", "OUT_DIR")) {
+  if (!exists(obj, inherits = FALSE)) {
+    stop("05_figures.R: `", obj, "` missing. Run 00_run_all.R, not this script directly.")
+  }
 }
-if (!exists("OUT_DIR", inherits = FALSE)) {
-  stop("05_figures.R: OUT_DIR missing. Run 00_run_all.R (not this script directly).")
-}
-# Re-seed for reproducibility if geom_jitter or anything else pulls RNG.
-if (exists("PROJECT_SEED", inherits = FALSE)) {
-  set.seed(PROJECT_SEED)
-}
+if (exists("PROJECT_SEED", inherits = FALSE)) set.seed(PROJECT_SEED)
 
-# ggplot2 is a HARD dependency — figure quality is not negotiable and silent
-# fallback to base-R plotting breaks the reproducibility contract (two forks
-# would emit different outputs with no failure signal). See scripts/R/README.md.
 if (!requireNamespace("ggplot2", quietly = TRUE)) {
-  stop(
-    "05_figures.R: 'ggplot2' is required for figure generation and is not installed.\n",
-    "Install with: install.packages('ggplot2')\n",
-    "The pipeline will not silently fall back to base-R plots."
-  )
+  stop("05_figures.R: 'ggplot2' is required and not installed.\n",
+       "Install with: install.packages('ggplot2'). No silent base-R fallback.")
 }
-
-# svglite is OPTIONAL but documented. If absent, fail LOUDLY (warning + explicit
-# note in the output list) rather than silently skipping a promised artifact.
-has_svg   <- requireNamespace("svglite", quietly = TRUE)
-has_cairo <- tryCatch(capabilities("cairo"), error = function(e) FALSE)
-
-fig_main_pdf <- file.path(OUT_DIR, "fig_main.pdf")
-fig_main_svg <- file.path(OUT_DIR, "fig_main.svg")
-
-# Choose the best available PDF device. cairo_pdf gives nicer anti-aliasing
-# and font embedding but isn't compiled into every R build.
-pdf_device <- if (has_cairo) grDevices::cairo_pdf else grDevices::pdf
-
 library(ggplot2)
 
-p <- ggplot(df, aes(x = factor(treated, labels = c("Control", "Treated")),
-                    y = delta)) +
-  geom_boxplot(width = 0.5, fill = "#E8EDF5", color = "#012169") +
-  geom_jitter(width = 0.1, alpha = 0.4, color = "#1A1A1A") +
-  labs(x = NULL, y = expression(Delta == y[post] - y[pre])) +
-  theme_minimal(base_size = 12) +
-  theme(
-    panel.grid.minor = element_blank(),
-    axis.text = element_text(color = "#1A1A1A")
-  )
+# ---- Project palette (MUST match Preambles/header.tex \definecolor names) ---
+primary_blue   <- "#012169"  # primary-blue
+highlight_gold <- "#B9975B"  # primary-gold
+jet            <- "#1A1A1A"  # body text
+positive_green <- "#15803D"  # positive
+negative_red   <- "#B91C1C"  # negative
+neutral_gray   <- "#525252"  # neutral
 
-ggsave(fig_main_pdf, p, width = 5, height = 3.5, device = pdf_device)
-message("Wrote ", fig_main_pdf)
+theme_ipo <- function(base_size = 14) {  # >= 14 for Beamer projection legibility
+  theme_minimal(base_size = base_size) +
+    theme(
+      plot.title      = element_text(face = "bold", color = primary_blue),
+      axis.text       = element_text(color = jet),
+      axis.title      = element_text(color = jet),
+      panel.grid.minor = element_blank(),
+      legend.position = "bottom",
+      plot.background  = element_rect(fill = "transparent", color = NA),
+      panel.background = element_rect(fill = "transparent", color = NA),
+      legend.background = element_rect(fill = "transparent", color = NA)
+    )
+}
 
-if (has_svg) {
-  ggsave(fig_main_svg, p, width = 5, height = 3.5, device = svglite::svglite)
-  message("Wrote ", fig_main_svg)
+has_cairo  <- tryCatch(capabilities("cairo"), error = function(e) FALSE)
+pdf_device <- if (has_cairo) grDevices::cairo_pdf else grDevices::pdf
+
+save_fig <- function(plot, file, width = 8, height = 4.5) {
+  path <- file.path(OUT_DIR, file)
+  ggsave(path, plot, width = width, height = height, device = pdf_device, bg = "transparent")
+  message("Wrote ", path)
+}
+
+# ---- Figure 1: mean first-day underpricing by IPO year, US vs UK ------------
+up <- returns$underpricing[!is.na(returns$underpricing$underpricing), , drop = FALSE]
+if (nrow(up) > 0L) {
+  up_year <- stats::aggregate(underpricing ~ ipo_year + region, data = up,
+                              FUN = function(x) mean(x, na.rm = TRUE))
+  fig_up <- ggplot(up_year, aes(x = ipo_year, y = underpricing, color = region)) +
+    geom_line(linewidth = 0.8) +
+    geom_point(size = 1.5) +
+    scale_color_manual(values = c(US = primary_blue, UK = highlight_gold)) +
+    scale_y_continuous(labels = function(v) paste0(round(100 * v), "%")) +
+    labs(title = "First-day IPO underpricing by year", x = NULL,
+         y = "Mean initial return", color = NULL) +
+    theme_ipo()
+  save_fig(fig_up, "fig_underpricing_by_year.pdf")
 } else {
-  # Loud skip — warning() not message() so it shows up in `summary(sessionInfo())`
-  # and in any CI log that collects warnings.
-  warning(
-    "05_figures.R: 'svglite' not installed — skipping fig_main.svg.\n",
-    "Quarto slides that expect the SVG will fail to render this figure.\n",
-    "Install with: install.packages('svglite')",
-    call. = FALSE
-  )
-  message("SKIPPED: ", fig_main_svg, " (svglite missing)")
+  warning("05_figures.R: no underpricing observations to plot.", call. = FALSE)
+}
+
+# ---- Figure 2: 36-month BHAR distribution by region -------------------------
+lr <- returns$longrun[!is.na(returns$longrun$bhar), , drop = FALSE]
+if (nrow(lr) > 0L) {
+  fig_bhar <- ggplot(lr, aes(x = region, y = bhar)) +
+    geom_hline(yintercept = 0, color = neutral_gray, linewidth = 0.4) +
+    geom_boxplot(width = 0.55, fill = "#E8EDF5", color = primary_blue, outlier.alpha = 0.3) +
+    stat_summary(fun = mean, geom = "point", shape = 18, size = 2.4, color = negative_red) +
+    scale_y_continuous(labels = function(v) paste0(round(100 * v), "%")) +
+    labs(title = "36-month buy-and-hold abnormal returns by region",
+         x = NULL, y = "BHAR vs benchmark") +
+    theme_ipo()
+  save_fig(fig_bhar, "fig_bhar_by_region.pdf")
+} else {
+  warning("05_figures.R: no BHAR observations to plot.", call. = FALSE)
 }

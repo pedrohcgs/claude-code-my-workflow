@@ -54,6 +54,11 @@ CLAUDE.local.md
 
 # Quarto rendering artifacts
 .quarto/
+# Rendered deck/note output — the .qmd is the source of truth; PDFs regenerate.
+# (Scoped to Quarto/ and paper/ — Figures/*.pdf are committed source figures.)
+# To distribute a specific PDF, force-add it: git add -f Quarto/<deck>.pdf
+Quarto/*.pdf
+paper/*.pdf
 # HTML render output — this project targets Beamer PDF, not RevealJS HTML
 Quarto/*.html
 Quarto/*_files/
