@@ -1,17 +1,21 @@
 % =============================================================================
-% Preambles/header.tex — shared LaTeX/Beamer preamble for this project
+% Preambles/header.tex — Beamer preamble for this project (SINGLE styling source)
 %
-% Use from a Beamer lecture by prepending:
-%     \input{header}
-% and compiling with TEXINPUTS=../Preambles:$TEXINPUTS (the /compile-latex
-% skill does this automatically).
+% This project renders a Quarto .qmd directly to a Beamer PDF. This file is
+% pulled into the render via the deck's YAML:
+%     format:
+%       beamer:
+%         pdf-engine: xelatex
+%         include-in-header: ../Preambles/header.tex
+% It is therefore the AUTHORITATIVE source of colors, fonts, and theme for the
+% Beamer PDF. (You can also \input{header} from a standalone .tex compiled with
+% TEXINPUTS=../Preambles:$TEXINPUTS, but that is not this project's build path.)
 %
-% PALETTE CONTRACT. Color names defined here MUST match the names in
-% Quarto/theme-template.scss so Beamer and Quarto renderings use the same
-% palette. The scripts/check-palette-sync.sh script enforces this.
-%
-% To customize: edit the HEX values below AND the matching $variable in
-% Quarto/theme-template.scss, then run scripts/check-palette-sync.sh.
+% PALETTE CONTRACT — ADVISORY ONLY. Quarto/theme-template.scss styles RevealJS
+% HTML output, which this project does NOT produce; the SCSS file is vestigial
+% here. scripts/check-palette-sync.sh still runs but only matters if you restore
+% an HTML target. To customize the look: edit the HEX values below — that alone
+% changes the Beamer PDF.
 % =============================================================================
 
 % -----------------------------------------------------------------------------

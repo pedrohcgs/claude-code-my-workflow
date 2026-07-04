@@ -4,66 +4,20 @@ paths:
   - "Quarto/**/*.qmd"
 ---
 
-# Beamer → Quarto Auto-Sync Rule (MANDATORY)
+# Beamer ↔ Quarto Sync — INACTIVE for this project
 
-**Every edit to a Beamer `.tex` file MUST be immediately synced to the corresponding Quarto `.qmd` file — automatically, without the user asking.** This is non-negotiable.
+**This project has no Beamer `.tex` ↔ Quarto `.qmd` bridge to keep in sync.** The deck is authored in a single Quarto `.qmd` and rendered directly to a Beamer **PDF** (`quarto render --to beamer`). There is no hand-authored `.tex` source and no RevealJS-HTML mirror, so the upstream template's two-way auto-sync rule does not apply here.
 
-## The Rule
+## What replaces it
 
-When you modify a Beamer `.tex` file, you MUST also apply the equivalent change to the Quarto `.qmd` (if it exists) **in the same task**, before reporting completion. Do NOT wait to be asked. Do NOT just "flag the drift." Just do it.
+There is only one source (`.qmd`) and one derived artifact (the PDF). The "sync" step is simply **re-rendering the PDF** after a content edit. The authoritative protocol is [`single-source-of-truth.md`](single-source-of-truth.md):
 
-## Lecture Mapping
+1. Edit content in the `.qmd`.
+2. `quarto render Quarto/<deck>.qmd --to beamer`.
+3. Verify the PDF (render succeeds, no overflow, citations resolve).
 
-<!-- Customize this table for your lectures -->
-| Lecture | Beamer | Quarto |
-|---------|--------|--------|
-| 1 | `Slides/Lecture1_Topic.tex` | `Quarto/Lecture1_Topic.qmd` |
-| 2 | `Slides/Lecture2_Topic.tex` | `Quarto/Lecture2_Topic.qmd` |
-<!-- Add rows as you create lectures -->
+Do not hand-edit the intermediate `.tex` Quarto emits, and do not treat any `.tex` as a content source.
 
-## Workflow (Every Time)
+## If you restore the HTML path
 
-1. Apply fix to Beamer `.tex`
-2. **Immediately** apply equivalent fix to Quarto `.qmd`
-3. Compile Beamer (3-pass xelatex)
-4. Render Quarto (`./scripts/sync_to_docs.sh LectureN`)
-5. Only then report task complete
-
-## LaTeX → Quarto Translation Reference
-
-| Beamer | Quarto Equivalent |
-| ------ | ----------------- |
-| `\muted{text}` | `[text]{style="color: #525252;"}` |
-| `\key{text}` | `[**text**]{.emorygold}` |
-| `\textcolor{positive}{text}` | `[text]{.positive}` |
-| `\textcolor{negative}{text}` | `[text]{.negative}` |
-| `\item text` | `- text` |
-| `\begin{highlightbox}` | `::: {.highlightbox}` |
-| `\begin{methodbox}` | `::: {.methodbox}` |
-| `$formula$` | `$formula$` (same) |
-
-## When NOT to Sync
-
-- Quarto file doesn't exist yet
-- Change is LaTeX-only infrastructure (preamble, theme files)
-- Explicitly told to skip Quarto sync
-
-## Precedence when the Quarto file has manual post-translation edits
-
-This rule (auto-sync) and [`single-source-of-truth.md`](single-source-of-truth.md) (Beamer is authoritative) can conflict after a human has hand-edited the Quarto file. Resolution:
-
-1. **Beamer remains authoritative.** Hand-edits to Quarto that add *content* (new slides, different equations) are a violation of SSOT and should be backported to Beamer first, then re-synced down.
-2. **Presentation-only divergence is allowed.** HTML-specific callouts (e.g., `.smaller`, `{.scrollable}`, plotly embeds) can live only in Quarto. Auto-sync should not delete them when propagating Beamer edits — diff before overwriting.
-3. **On ambiguity, regenerate the Quarto file from Beamer** (e.g. `/translate-to-quarto [file]` into a scratch path, then diff against the existing Quarto) so you can compare structurally. Merge manually, keeping HTML-only decorations.
-4. **If the two files have drifted structurally** (slide count mismatch, reordered sections), treat as a bug and fix Beamer first, then regenerate Quarto from scratch via `/translate-to-quarto`.
-
-## Enforcement
-
-Before marking any Beamer editing task as complete, check:
-> "Did I also update the Quarto file?"
-
-If the answer is no and a Quarto file exists, **you are NOT done.**
-
-## When to Update This Table
-
-After creating a new Quarto translation, add it to the mapping table above.
+If a future direction re-adds a RevealJS-HTML mirror (or a hand-authored Beamer source), restore the upstream version of this rule and of `single-source-of-truth.md` together — the two-way sync and the SSOT direction must agree.

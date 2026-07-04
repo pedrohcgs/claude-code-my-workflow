@@ -1,29 +1,34 @@
 cff-version: 1.2.0
-message: "If this template contributed to your research workflow, please cite it as below."
-title: "Claude Code Academic Workflow: a verification-gated research template for economists"
+message: "If you use this project or its code, please cite it as below."
+title: "IPO Returns in the United States and Europe"
 type: software
 authors:
-  - family-names: "Sant'Anna"
-    given-names: "Pedro H. C."
-    website: "https://psantanna.com"
-repository-code: "https://github.com/pedrohcgs/claude-code-my-workflow"
-url: "https://psantanna.com/claude-code-my-workflow/"
+  - family-names: "Gassen"
+    given-names: "Joachim"
+    affiliation: "Humboldt-Universität zu Berlin, School of Business and Economics"
+repository-code: "https://github.com/joachim-gassen/claude_code_pground"
 license: MIT
-version: 2.1.0
-date-released: 2026-06-10
+version: 0.1.0
+date-released: 2026-07-04
 keywords:
-  - claude-code
-  - economics
-  - econometrics
+  - initial-public-offerings
+  - IPO-underpricing
+  - long-run-performance
+  - empirical-corporate-finance
+  - WRDS
   - reproducible-research
-  - causal-inference
-  - difference-in-differences
-  - academic-writing
-  - research-workflow
 abstract: >-
-  A ready-to-fork Claude Code template for academic research — slides, papers,
-  data analysis, and Monte Carlo simulation studies. Verification-gated by
-  design: fan-out review fleets with hallucination gates, numeric-claim
-  reproducibility audits against code, an enforcing pre-commit quality gate,
-  and a validated difference-in-differences / event-study workflow built on
-  the Callaway–Sant'Anna ecosystem.
+  A descriptive study of initial-public-offering (IPO) returns for issuers in the
+  United States and Europe (including the UK), using WRDS data together with Jay
+  Ritter's public IPO data. The repository contains the reproducible analysis
+  pipeline, a Quarto-to-Beamer slide deck of key findings, and a short descriptive
+  note documenting the data sources, situating the work in the IPO literature, and
+  reporting the results.
+
+# ---------------------------------------------------------------------------
+# This repository was bootstrapped from the "claude-code-my-workflow" academic
+# template by Pedro H. C. Sant'Anna
+# (https://github.com/pedrohcgs/claude-code-my-workflow), MIT-licensed. The
+# workflow infrastructure is credited to that project; the research content
+# here is original work by the author above.
+# ---------------------------------------------------------------------------

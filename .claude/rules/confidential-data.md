@@ -22,6 +22,34 @@ This is a **template** — replace the placeholder thresholds and providers with
 2. **Nothing leaves without disclosure clearance.** Any table, figure, coefficient, or count built on restricted data must pass disclosure-avoidance review *before* it appears in a draft, a slide, a commit, or an email. Pre-screen with [`/disclosure-check`](../skills/disclosure-check/SKILL.md); the data provider's official review is still mandatory and final.
 3. **Access is per-person, per-agreement.** A co-author without the DUA cannot receive the data, the identifiers, or outputs that fail disclosure rules. Handoffs ([`/coauthor-brief`](../skills/coauthor-brief/SKILL.md)) carry *instructions to obtain access*, never the data.
 
+## WRDS / licensed commercial data (this project's primary constraint)
+
+This project pulls from **WRDS** (Wharton Research Data Services). WRDS data —
+CRSP, Compustat / Compustat Global, SDC Platinum (new issues / IPOs), Datastream /
+Worldscope, and similar — is **licensed, not public**. The binding concern is
+**redistribution**, not statistical disclosure. The rules:
+
+1. **Never commit raw WRDS extracts.** Not vendor tables, not row-level pulls, not
+   merged panels that still contain licensed row-level data — not even once, not in a
+   private repo. `.gitignore` covers `data/wrds/`, `data/raw/`, and `*.parquet` /
+   `*.dta` / `*.rds` under those paths. Commit **code** and **derived, aggregated
+   outputs** (summary tables, coefficients, figures) only.
+2. **Credentials never touch git or code.** WRDS username/password live in a
+   gitignored `.Renviron` (`WRDS_USER=` / `WRDS_PASS=`) or the OS keychain, read at
+   runtime (e.g. `Sys.getenv("WRDS_USER")` / `RPostgres`). Never hardcode them.
+3. **Redistribution is per-subscription.** A collaborator without a WRDS
+   subscription cannot receive the raw data. A handoff carries the *pull scripts* and
+   *access instructions*, never the extract. The replication package deposits code +
+   derived outputs + a data-access note, never the WRDS tables (this is the AEA Data
+   Editor's "third-party licensed data" path).
+4. **Attribution / terms.** Cite the WRDS source and vendor per the subscription
+   terms. **Jay Ritter's IPO data** (his website) is public-with-attribution — usable
+   and citable, but still not "yours" to relabel; cite it.
+
+Aggregated outputs derived from WRDS (e.g. mean underpricing by year × region) are
+publishable — they are not row-level licensed data. When in doubt about an output's
+granularity, treat it as licensed until you confirm it is aggregate.
+
 ## Disclosure avoidance (the short version)
 
 The thresholds your provider enforces — encode them in `/disclosure-check`'s config:

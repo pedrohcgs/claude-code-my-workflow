@@ -1,28 +1,40 @@
 ---
-title: "HelloWorld: Academic Workflow Sample"
-author: "Your Name"
-institute: "Your Institution"
+title: "HelloWorld: QMD → Beamer PDF Smoke Test"
+author: "Joachim Gassen"
+institute: "Humboldt-Universität zu Berlin"
+date: last-modified
 format:
-  revealjs:
-    theme: [default, theme-template.scss]
-    slide-number: true
-    incremental: false
+  beamer:
+    pdf-engine: xelatex
+    include-in-header: ../Preambles/header.tex
+    slide-level: 2
+    toc: false
 ---
 
-# Why This Sample Exists
+## Why This Smoke Test Exists
 
-- Verifies that Quarto is installed and working
-- Confirms `/deploy HelloWorld` produces a valid HTML deck
-- Provides a starting point before you build real lectures
+- Verifies the project's build path: **Quarto `.qmd` → Beamer PDF** via XeLaTeX
+- Confirms `Preambles/header.tex` is picked up as the styling source
+- A clean render here means the toolchain (Quarto + XeLaTeX + preamble) works
 
-# Next Steps
+## Verify the Build
 
-1. Render this deck: `/deploy HelloWorld`
-2. Preview locally: `quarto preview Quarto/HelloWorld.qmd`
-3. Delete this file and create your own lectures
+Render to a Beamer PDF:
+
+```bash
+quarto render Quarto/HelloWorld.qmd --to beamer
+```
+
+A math check renders too:
+$$\text{underpricing}_i = \frac{P_{1,i} - P_{0,i}}{P_{0,i}}.$$
+
+## Next Steps
+
+1. Confirm `Quarto/HelloWorld.pdf` opens and looks correct
+2. Delete this file once the real findings deck exists
+3. Author the deck as a single `.qmd`; the PDF is the derived deliverable
 
 <!--
-  DELETE THIS FILE and replace with your own lectures once you're ready.
-  This sample has no dependencies beyond Quarto/theme-template.scss so it
-  works on a fresh fork.
+  DELETE THIS FILE and replace with the real deck once the toolchain is verified.
+  Single source of truth: edit the .qmd, never the intermediate .tex Quarto emits.
 -->

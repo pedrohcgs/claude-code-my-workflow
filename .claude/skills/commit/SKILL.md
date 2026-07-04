@@ -19,8 +19,8 @@ Stage changes, verify quality gates, commit with a descriptive message, create a
 python3 scripts/quality_score.py <changed-file-paths>
 ```
 
-- If any file scores below **80**, halt and report the findings. The user must either fix the issues or explicitly override with phrases like *"commit anyway"* or *"skip quality gate"*.
-- If all files score 80+, continue.
+- If any file scores below **90**, halt and report the findings. The user must either fix the issues or explicitly override with phrases like *"commit anyway"* or *"skip quality gate"*.
+- If all files score 90+, continue.
 
 Spawn the **verifier** agent (via `Task` with `subagent_type=verifier`) to run compilation/render checks on the changed files. Report pass/fail before committing.
 
