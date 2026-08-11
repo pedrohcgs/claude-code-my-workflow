@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Validates text provider mappings before the version scan.
 # Flags SUPERSEDED Claude model versions that are presented as CURRENT in the
 # template's user-facing surfaces. The single source of truth is the
 # `<!-- CURRENT: ... -->` marker in .claude/references/model-versions.md.
@@ -21,6 +22,17 @@ if [ ! -f "$SSOT" ]; then
     echo "check-model-versions: SSoT missing: $SSOT" >&2
     exit 2
 fi
+
+PROVIDER_REGISTRY="$REPO/.claude/references/model-providers.json"
+PROVIDER_CHECK="$REPO/scripts/check-model-providers.py"
+if [ ! -f "$PROVIDER_CHECK" ]; then
+    echo "check-model-versions: provider checker missing: $PROVIDER_CHECK" >&2
+    exit 2
+fi
+
+python3 "$PROVIDER_CHECK" "$PROVIDER_REGISTRY"
+PROVIDER_RC=$?
+[ "$PROVIDER_RC" -eq 0 ] || exit "$PROVIDER_RC"
 
 CURRENT_LINE="$(grep -E "<!-- CURRENT:" "$SSOT" | head -1)"
 if [ -z "$CURRENT_LINE" ]; then
