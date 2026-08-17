@@ -96,6 +96,14 @@ Stata (`/stata-replication`), R packages (`/r-package-check`), TikZ (`/extract-t
 
 ---
 
+## Standing References
+
+Default resources to consult when designing an empirical strategy (e.g. via `/interview-me`, `/did-event-study`, `/lit-review`) — check for a newer edition/version before citing a specific page or chapter.
+
+- **Causal inference / impact evaluation:** [*Causal Inference: The Remix*](https://mixtape.scunning.com), Scott Cunningham — DAGs & potential outcomes, cross-sectional designs (matching, RD, IV), panel designs (DiD, synthetic control), R + Stata code. In-progress 2nd edition as of 2026.
+
+---
+
 <!-- CUSTOMIZE: Replace placeholder rows ([your-env], [.your-class]) with your own.
      Delete the rows marked "(example — delete)" once you've added yours. -->
 
