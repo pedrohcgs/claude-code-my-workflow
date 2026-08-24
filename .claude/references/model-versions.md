@@ -9,6 +9,8 @@ This file is the **one place** that names current Claude model point versions. E
 
 The machine-readable `<!-- CURRENT: ... -->` marker at the top is parsed by the checker — keep it in sync with the table.
 
+Text provider models and regional compatibility endpoints live in [`model-providers.json`](model-providers.json). The same CI-wired gate validates that registry before scanning current-state surfaces.
+
 | Tier | Current version | Model ID | Notes |
 |------|-----------------|----------|-------|
 | Fable (Mythos-class; hardest, long-horizon) | **Fable 5** | `claude-fable-5` (alias `fable`; 1M variant `claude-fable-5[1m]`) | most capable model in Claude Code; **opt-in** (`/model fable` or the `best` alias) — NOT the default on any account type; GA 2026-06-09; $10/$50 per MTok; 1M context (128k max output); defaults to `high`; requires Claude Code ≥ 2.1.170; falls back to the current Opus tier on flagged cyber/bio content |
