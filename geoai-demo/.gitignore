@@ -5,10 +5,15 @@
 .Ruserdata
 *.Rproj.bak
 
-# data — not redistributed via git (Volve file is downloaded per data/README.md)
+# data & reference docs — not redistributed via git
+# (Volve file is downloaded per data/README.md; KAZ-RC / regulatory PDFs are the
+#  user's local reference copies and are third-party/government documents)
 data/*.xlsx
 data/*.xls
 data/*.csv
+data/*.pdf
+data/*.doc
+data/*.docx
 data/processed/
 data/SYNTHETIC_sample_delete_me.csv
 
