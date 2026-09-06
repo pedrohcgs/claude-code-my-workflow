@@ -48,6 +48,16 @@ raise unlocks") — hire the engineer, build the localisation layer, add a Kazak
 - **Well logs tab** — `R/09_las.R`: a base-R LAS 2.0 reader + depth-track plot
   (GR / resistivity / density / neutron / sonic / caliper) + a basic curve-QC
   table (null %, range, spikes, monotonic depth).
+- **KAZ-RC report** — `R/05_report.R` `build_kazrc_html()`: a public-report
+  template in the KAZ-RC / CRIRSCO shape (Competent Person, the three principles,
+  an assessment checklist) with a PRMS **1P / 2P / 3P** table mapped from the
+  P90 / P50 / P10 EUR. Flagged in-report as illustrative — KAZ-RC and Order MID RK
+  No.374 are the *solid-minerals* codes; petroleum reserves go through the State
+  (ГКЗ) classification. Sidebar download button.
+- **RU / EN toggle** — a lightweight client-side localisation (`GEOAI_I18N`
+  dictionary + a small script in `app.R`): switches tab names, sidebar labels,
+  buttons, value-box titles and section headers. A demonstration of the
+  localisation layer; full i18next comes with the build.
 
 Deliberately **not** built into the demo (need the engineering hire / infra):
 auth + multi-tenant, a database, cloud infra, subscription billing/monitoring,

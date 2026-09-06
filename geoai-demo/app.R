@@ -45,12 +45,84 @@ ui <- page_sidebar(
   window_title = "GeoAI — Decline-Curve Explorer",
   theme = bs_theme(version = 5, primary = BRAND, base_font = font_google("Inter")),
 
-  tags$head(tags$style(HTML(
-    ".shiny-plot-output img { max-width: 100%; height: auto; }
-     .demo-intro { font-size: 13.5px; color: #5a5a5a; margin: 2px 0 12px; }
-     .demo-foot  { font-size: 11.5px; color: #8a8a8a; margin-top: 22px;
-                   border-top: 1px solid #e6e6e6; padding-top: 10px; }
-     .src-label  { font-size: 12px; color: #666; margin-top: -4px; }"))),
+  tags$head(
+    tags$style(HTML(
+      ".shiny-plot-output img { max-width: 100%; height: auto; }
+       .demo-intro { font-size: 13.5px; color: #5a5a5a; margin: 2px 0 12px; }
+       .demo-foot  { font-size: 11.5px; color: #8a8a8a; margin-top: 22px;
+                     border-top: 1px solid #e6e6e6; padding-top: 10px; }
+       .src-label  { font-size: 12px; color: #666; margin-top: -4px; }")),
+    tags$script(HTML("
+/* lightweight EN<->RU UI localisation (demo). Full i18next comes with the build. */
+var GEOAI_I18N = {
+ 'Well':'Скважина',
+ 'Economic oil rate (bopd)':'Экономический дебит нефти (барр/сут)',
+ 'Fit window':'Окно аппроксимации',
+ 'Auto':'Авто','Post-peak':'После пика','Last stable':'Последний стабильный','All history':'Вся история',
+ 'Max b (hyperbolic tail)':'Макс. b (гиперболический хвост)',
+ 'Rate axis':'Ось дебита','Log':'Лог','Linear':'Линейная',
+ 'Max forecast horizon (yr)':'Макс. горизонт прогноза (лет)',
+ 'Upload production data':'Загрузить данные добычи',
+ 'Browse…':'Обзор…','no file':'нет файла','CSV or Excel':'CSV или Excel',
+ '↺ back to Volve sample':'↺ вернуться к примеру Volve',
+ 'Well report (HTML)':'Отчёт по скважине (HTML)',
+ 'KAZ-RC report (HTML)':'Отчёт KAZ-RC (HTML)',
+ 'Field report (HTML)':'Отчёт по месторождению (HTML)',
+ 'Forecast (CSV)':'Прогноз (CSV)',
+ 'Open a report and press Ctrl/Cmd-P → Save as PDF.':'Откройте отчёт и нажмите Ctrl/Cmd-P → Сохранить как PDF.',
+ 'Forecast table':'Таблица прогноза','Fit details':'Параметры аппроксимации',
+ 'Production data':'Данные добычи','Well screening':'Скрининг скважин',
+ 'Field KPIs':'KPI месторождения','ML attention':'ML-приоритизация',
+ 'Analog & new well':'Аналоги и новая скважина','Field portfolio':'Портфель месторождения',
+ 'Well logs':'Каротаж (LAS)','About & method':'О методе',
+ 'Model':'Модель','qi (bopd)':'qi (барр/сут)','Di /yr':'Di /год',
+ 'EUR (MMbbl)':'ИЗ (млн барр)',
+ 'Rate vs time — history, fit, forecast & P90–P10 range':'Дебит во времени — история, аппроксимация, прогноз и диапазон P90–P10',
+ 'Train / refresh model':'Обучить / обновить модель',
+ 'Run 6-month backtest':'Ретро-тест (6 мес.)',
+ 'Nearest analogs to the selected well':'Ближайшие аналоги выбранной скважины',
+ 'New-well estimate from analogs':'Оценка новой скважины по аналогам',
+ 'Expected peak rate (bopd)':'Ожидаемый пиковый дебит (барр/сут)',
+ 'Guess Di (/yr)':'Оценка Di (/год)','Guess b':'Оценка b',
+ 'What this is':'Что это','Decline model':'Модель падения дебита',
+ 'P90 / P50 / P10 range':'Диапазон P90 / P50 / P10',
+ 'Well screening score (0–100)':'Балл скрининга скважин (0–100)',
+ 'ML attention (XGBoost)':'ML-приоритизация (XGBoost)',
+ 'Field KPIs & backtest':'KPI месторождения и ретро-тест',
+ 'Analog wells & new-well estimate':'Скважины-аналоги и оценка новой скважины',
+ 'What it does not do (yet)':'Что пока не делается',
+ 'Data & licence':'Данные и лицензия'
+};
+var geoaiBusy = false, geoaiMO = null;
+function geoaiApplyLang(lang){
+ if(geoaiBusy) return; geoaiBusy = true;
+ if(geoaiMO) geoaiMO.disconnect();
+ document.querySelectorAll('.nav-link, .control-label, label, .btn, .demo-intro, .card-header, h5, h6, .bslib-value-box .value-box-title, .help-block')
+  .forEach(function(el){
+    if(el.children.length > 1) return;              // skip container elements
+    if(!el.dataset.i18nEn){
+      var t = el.textContent.trim();
+      if(GEOAI_I18N[t] !== undefined) el.dataset.i18nEn = t;
+    }
+    if(el.dataset.i18nEn){
+      var want = (lang==='ru') ? GEOAI_I18N[el.dataset.i18nEn] : el.dataset.i18nEn;
+      if(el.textContent !== want) el.textContent = want;
+    }
+  });
+ if(geoaiMO) geoaiMO.observe(document.body, {childList:true, subtree:true});
+ geoaiBusy = false;
+}
+$(document).on('shiny:connected', function(){
+ setTimeout(function(){ geoaiApplyLang('en'); }, 500);
+ $(document).on('change', 'input[name=lang]', function(){ geoaiApplyLang(this.value); });
+ geoaiMO = new MutationObserver(function(){
+   var l = ($('input[name=lang]:checked').val()) || 'en';
+   if(l==='ru') geoaiApplyLang('ru');
+ });
+ geoaiMO.observe(document.body, {childList:true, subtree:true});
+});
+    "))
+  ),
 
   sidebar = sidebar(
     width = 300,
@@ -61,6 +133,7 @@ ui <- page_sidebar(
           " and in the R console run ", code('source("run_day1.R")'), ".")
     } else {
       tagList(
+        radioButtons("lang", NULL, c("EN" = "en", "RU" = "ru"), selected = "en", inline = TRUE),
         selectInput("well", "Well", choices = volve_wells, selected = DEFAULT_WELL),
         sliderInput("q_econ", "Economic oil rate (bopd)",
                     min = 10, max = 500, value = 50, step = 10),
@@ -81,9 +154,10 @@ ui <- page_sidebar(
         div(class = "src-label", textOutput("src_label")),
         actionLink("reset_sample", "↺ back to Volve sample"),
         hr(),
-        downloadButton("dl_report",   "Well report (HTML)",  class = "btn-sm"),
-        downloadButton("dl_portfolio", "Field report (HTML)", class = "btn-sm"),
-        downloadButton("dl_forecast", "Forecast (CSV)",       class = "btn-sm"),
+        downloadButton("dl_report",    "Well report (HTML)",   class = "btn-sm"),
+        downloadButton("dl_kazrc",     "KAZ-RC report (HTML)", class = "btn-sm"),
+        downloadButton("dl_portfolio", "Field report (HTML)",  class = "btn-sm"),
+        downloadButton("dl_forecast",  "Forecast (CSV)",       class = "btn-sm"),
         helpText("Open a report and press Ctrl/Cmd-P → Save as PDF.")
       )
     }
@@ -651,6 +725,15 @@ server <- function(input, output, session) {
     filename = function() sprintf("report_%s.html", safe_well()),
     content  = function(path) {
       writeLines(build_report_html(input$well, active(),
+                   q_econ = input$q_econ, window = input$window,
+                   max_years = input$max_years, b_max = input$b_max),
+                 path, useBytes = TRUE)
+    }
+  )
+  output$dl_kazrc <- downloadHandler(
+    filename = function() sprintf("kazrc_report_%s.html", safe_well()),
+    content  = function(path) {
+      writeLines(build_kazrc_html(input$well, active(),
                    q_econ = input$q_econ, window = input$window,
                    max_years = input$max_years, b_max = input$b_max),
                  path, useBytes = TRUE)
