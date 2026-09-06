@@ -22,6 +22,9 @@ app_files <- c(
   "R/03_decline_curve.R",
   "R/05_report.R",
   "R/06_screening.R",
+  "R/07_analytics.R",
+  "R/08_ml.R",
+  "R/09_las.R",
   "R/ingest.R",
   "R/_disable_autoload.R",
   "data/processed/volve_monthly.rds"

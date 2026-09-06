@@ -9,6 +9,9 @@ library(bslib)
 source("R/05_report.R")      # -> 03_decline_curve.R -> utils.R, dplyr, ggplot2, minpack.lm, htmltools
 source("R/ingest.R")         # ingest_production() for user uploads
 source("R/06_screening.R")   # screen_wells()
+source("R/07_analytics.R")   # field_kpis(), backtest_field(), analogs(), estimate_new_well()
+source("R/08_ml.R")          # ml_build_training/train/score  (gradient-boosted "attention")
+source("R/09_las.R")         # read_las(), las_qc(), guess_track()
 
 scroll_table <- function(id, height = "430px") {
   div(style = sprintf("max-height:%s; overflow:auto;", height), tableOutput(id))
@@ -92,10 +95,11 @@ ui <- page_sidebar(
     tagList(
       p(class = "demo-intro",
         "Loaded with Equinor's ", strong("Volve"), " field — real North Sea production, ",
-        "2008–2016 (open data) — or ", strong("upload your own"), " production file in the ",
-        "sidebar. Pick a well; the fitted Arps decline, P90–P10 range and EUR update live. ",
-        "The ", strong("Well screening"), " and ", strong("Field portfolio"), " tabs work the ",
-        "whole asset; ", strong("About & method"), " explains the model."),
+        "2008–2016 (open data) — or ", strong("upload your own"), " production file (and a ",
+        strong("LAS log"), " under Well logs). Pick a well for its Arps decline, P90–P10 range ",
+        "and EUR. The field tabs — ", strong("KPIs"), ", ", strong("screening"), ", ",
+        strong("ML attention"), ", ", strong("analog / new-well"), ", ", strong("portfolio"),
+        " — work the whole asset. ", strong("About & method"), " explains every number."),
       layout_columns(
         fill = FALSE, col_widths = c(4, 4, 4, 4, 4, 4),
         value_box("Model",       textOutput("v_model"), theme = "primary"),
@@ -124,6 +128,50 @@ ui <- page_sidebar(
           scroll_table("screenTable", "460px")
         ),
         nav_panel(
+          "Field KPIs",
+          p(class = "text-muted small",
+            "Per-well operating snapshot + a forecast-vs-actual backtest: the decline is ",
+            "re-fitted on all but the last 6 months and scored against what actually happened ",
+            "(MAPE = mean abs. % error; bias + = forecast ran high)."),
+          scroll_table("kpiTable", "300px"),
+          actionButton("run_bt", "Run 6-month backtest", class = "btn-sm"),
+          plotOutput("backtestPlot", height = "300px")
+        ),
+        nav_panel(
+          "ML attention",
+          p(class = "text-muted small",
+            "Gradient-boosted (XGBoost) classifier trained on the loaded dataset. Target: ",
+            "does a well's average rate over the next 6 months fall >15% below its own decline ",
+            "forecast. Well-grouped cross-validation. Training re-fits every well-month, so it ",
+            "is on a button."),
+          actionButton("train_ml", "Train / refresh model", class = "btn-primary btn-sm"),
+          uiOutput("mlHeader"),
+          layout_columns(
+            fill = FALSE, col_widths = c(6, 6),
+            plotOutput("mlRiskPlot", height = "300px"),
+            plotOutput("mlImpPlot",  height = "300px")
+          ),
+          scroll_table("mlShapTable", "260px")
+        ),
+        nav_panel(
+          "Analog & new well",
+          h6("Nearest analogs to the selected well"),
+          p(class = "text-muted small",
+            "k-nearest neighbours on a standardised feature vector (log peak rate, Di, b, ",
+            "log cumulative oil, ending water cut, water-cut slope). Small field — 6 wells — ",
+            "so treat as illustrative."),
+          tableOutput("analogTable"),
+          hr(),
+          h6("New-well estimate from analogs"),
+          layout_columns(
+            fill = FALSE, col_widths = c(4, 4, 4),
+            sliderInput("nw_peak", "Expected peak rate (bopd)", 500, 40000, 8000, 500),
+            sliderInput("nw_di",   "Guess Di (/yr)", 0.1, 2, 0.6, 0.05),
+            sliderInput("nw_b",    "Guess b", 0, 1.5, 0.3, 0.1)
+          ),
+          tableOutput("newWellTable")
+        ),
+        nav_panel(
           "Field portfolio",
           layout_columns(
             fill = FALSE, col_widths = c(6, 6),
@@ -132,6 +180,18 @@ ui <- page_sidebar(
           ),
           plotOutput("portfolioBar", height = "320px"),
           tableOutput("portfolioTable")
+        ),
+        nav_panel(
+          "Well logs",
+          p(class = "text-muted small",
+            "Upload a LAS 2.0 well-log file to view depth tracks and a basic curve-QC ",
+            "report. (Volve's production spreadsheet has no logs; the full 40 GB Volve ",
+            "bundle does.)"),
+          fileInput("las", NULL, accept = c(".las", ".LAS", ".txt"),
+                    buttonLabel = "Browse LAS…", placeholder = "no file"),
+          uiOutput("lasNote"),
+          plotOutput("lasPlot", height = "520px"),
+          scroll_table("lasQcTable", "240px")
         ),
         nav_panel(
           "About & method",
@@ -166,11 +226,28 @@ ui <- page_sidebar(
               tags$li("20% — rate of change of water cut (rising = actionable)")
             ),
             p("The ", em("signal"), " column is a plain if-then reading of those same numbers."),
+            h5("ML attention (XGBoost)"),
+            p("A gradient-boosted classifier trained on this dataset. Target: does a well's ",
+              "average rate over the next 6 months fall more than 15% below what a decline ",
+              "curve fitted up to that month would predict. Evaluation is ", strong("well-grouped"),
+              " cross-validation (a whole well held out) so the score is not inflated by a ",
+              "well's own months leaking across the split. SHAP values show which features drive ",
+              "each well's prediction. On a 6-well demo field the sample is small and ",
+              "autocorrelated — the AUC shown is illustrative of the method, not a production number."),
+            h5("Field KPIs & backtest"),
+            p("Per-well operating snapshot. The backtest re-fits each decline on all but the ",
+              "last 6 months and compares the forecast to what actually happened (MAPE, and a ",
+              "bias sign)."),
+            h5("Analog wells & new-well estimate"),
+            p("k-nearest-neighbour matching on a standardised well-shape vector; the new-well ",
+              "estimate is an analog-distance-weighted average of the neighbours' fitted ",
+              "parameters and EUR. With six wells this is a demonstration of the method."),
             h5("What it does not do (yet)"),
             tags$ul(
-              tags$li("Machine-learning production prediction, physics-based reservoir / EOR modelling, or type-curve analogues."),
+              tags$li("Physics-based reservoir / EOR modelling (e.g. waterflood optimisation), LSTM production forecasting, or seismic."),
               tags$li("Field-level abandonment economics — several Volve wells were shut in above their economic rate when the platform left in 2016, so per-well “remaining” is an upper bound."),
-              tags$li("KazSRE / state-reserve reporting formats, or a Russian / Kazakh interface — the localisation layer is the next build.")
+              tags$li("KazSRE / state-reserve reporting formats, or a Russian / Kazakh interface — the localisation layer is the next build."),
+              tags$li("User accounts / multi-tenant isolation, a database, or billing — infrastructure for the engineering hire, not the demo.")
             ),
             h5("Data & licence"),
             p("Equinor Volve field production data, © Equinor and the former Volve licence partners, ",
@@ -392,7 +469,167 @@ server <- function(input, output, session) {
     rbind(as.data.frame(tab), total)
   }, striped = TRUE, spacing = "xs", width = "100%")
 
+  # field KPIs + backtest --------------------------------
+  output$kpiTable <- renderTable({
+    k <- field_kpis(active(), portfolio()$fits)
+    k |> dplyr::transmute(
+      Well = well, `Months` = months_prod,
+      `Current bopd` = ifelse(is.finite(current_bopd), formatC(round(current_bopd), format = "d", big.mark = ","), "—"),
+      `Peak bopd` = ifelse(is.finite(peak_bopd), formatC(round(peak_bopd), format = "d", big.mark = ","), "—"),
+      `3-mo decl` = pct(decl_3mo), `6-mo decl` = pct(decl_6mo), `12-mo decl` = pct(decl_12mo),
+      `Cum oil MMbbl` = ifelse(is.finite(cum_oil_mmbbl), sprintf("%.2f", cum_oil_mmbbl), "—"),
+      `Water cut` = pct(wct), `WC trend/yr` = pct(wct_trend_yr, 1),
+      `Months to econ` = ifelse(is.finite(months_to_econ), as.character(round(months_to_econ)), "—"),
+      `EUR MMbbl` = ifelse(is.finite(eur_mmbbl), sprintf("%.2f", eur_mmbbl), "—"),
+      `EUR P90–P10` = ifelse(is.finite(eur_p90_mmbbl), sprintf("%.2f–%.2f", eur_p90_mmbbl, eur_p10_mmbbl), "—")
+    )
+  }, striped = TRUE, spacing = "xs", width = "100%")
+
+  backtest <- eventReactive(input$run_bt, {
+    withProgress(message = "Backtesting…", value = 0.5,
+      backtest_field(active(), holdout_months = 6, q_econ = input$q_econ,
+                     window = input$window, max_years = input$max_years, b_max = input$b_max))
+  }, ignoreNULL = TRUE)
+  output$backtestPlot <- renderPlot({
+    validate(need(input$run_bt > 0, "Press “Run 6-month backtest”."))
+    b <- dplyr::filter(backtest(), backtest_ok)
+    validate(need(nrow(b) > 0, "Not enough history in this dataset to backtest."))
+    ggplot(b, aes(stats::reorder(well, -mape), mape, fill = bias > 0)) +
+      geom_col() +
+      scale_y_continuous(labels = scales::percent) +
+      scale_fill_manual(values = c(`TRUE` = "#c62828", `FALSE` = BRAND),
+                        labels = c(`TRUE` = "forecast ran high", `FALSE` = "forecast ran low"),
+                        name = NULL) +
+      labs(title = "Backtest error — 6-month hold-out", x = NULL, y = "MAPE") +
+      theme_geoai()
+  }, width = 900, height = 300, res = 96)
+
+  # ML attention ----------------------------------------
+  mlModel <- eventReactive(input$train_ml, {
+    if (!isTRUE(.ml_pkg)) return(list(ok = FALSE, note = "xgboost not available on this server"))
+    withProgress(message = "Training attention model…", value = 0.4, {
+      td <- ml_build_training(active(), thresh = 0.15, horizon = 6,
+                              q_econ = input$q_econ, window = input$window,
+                              max_years = input$max_years, b_max = input$b_max)
+      if (!nrow(td)) return(list(ok = FALSE, note = "not enough history to build a training set"))
+      incProgress(0.5, detail = "fitting")
+      ml_train(td)
+    })
+  }, ignoreNULL = TRUE)
+
+  output$mlHeader <- renderUI({
+    if (input$train_ml == 0)
+      return(div(class = "small text-muted", em("Press “Train / refresh model”.")))
+    m <- mlModel()
+    if (!isTRUE(m$ok))
+      return(div(class = "alert alert-warning", strong("Model not trained: "), m$note))
+    div(class = "small text-muted",
+        strong(m$note),
+        ". Small demo field — the accuracy figure is illustrative of the method, not a ",
+        "production benchmark.")
+  })
+  output$mlRiskPlot <- renderPlot({
+    m <- mlModel(); validate(need(isTRUE(m$ok), " "))
+    sc <- ml_score_current(m, active()); validate(need(!is.null(sc), "No wells to score."))
+    d <- tibble::tibble(well = sc$well, risk = sc$risk)
+    ggplot(d, aes(stats::reorder(well, risk), risk)) +
+      geom_col(fill = BRAND) + coord_flip() +
+      scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+      labs(title = "Predicted attention risk", x = NULL, y = NULL) + theme_geoai()
+  }, width = 460, height = 300, res = 96)
+  output$mlImpPlot <- renderPlot({
+    m <- mlModel(); validate(need(isTRUE(m$ok) && !is.null(m$importance), "No importance available."))
+    imp <- as.data.frame(m$importance)
+    ggplot(imp, aes(stats::reorder(Feature, Gain), Gain)) +
+      geom_col(fill = "#37474f") + coord_flip() +
+      labs(title = "Feature importance (gain)", x = NULL, y = NULL) + theme_geoai()
+  }, width = 460, height = 300, res = 96)
+  output$mlShapTable <- renderTable({
+    m <- mlModel(); req(isTRUE(m$ok))
+    sc <- ml_score_current(m, active()); req(!is.null(sc))
+    cc <- sc$contrib[, setdiff(colnames(sc$contrib), "BIAS"), drop = FALSE]
+    top <- t(apply(cc, 1, function(row) {
+      o <- order(abs(row), decreasing = TRUE)[1:3]
+      sprintf("%s (%+.2f)", colnames(cc)[o], row[o])
+    }))
+    data.frame(Well = sc$well, Risk = sprintf("%.0f%%", 100 * sc$risk),
+               `Top drivers (SHAP)` = apply(top, 1, paste, collapse = ",  "),
+               check.names = FALSE)
+  }, striped = TRUE, spacing = "xs", width = "100%")
+
+  # analogs + new well --------------------------------
+  featR <- reactive(well_features(active(), portfolio()$fits))
+  output$analogTable <- renderTable({
+    a <- analogs(featR(), input$well, k = 3)
+    validate(need(!is.null(a) && nrow(a) > 0, "No analogs (need at least 2 fitted wells)."))
+    a |> dplyr::transmute(Analog = analog, Distance = distance,
+                          `Di /yr` = di, b = b,
+                          `Peak bopd` = formatC(peak_bopd, format = "d", big.mark = ","),
+                          `Cum MMbbl` = cum_mmbbl)
+  }, striped = TRUE, spacing = "xs", width = "100%")
+  output$newWellTable <- renderTable({
+    e <- estimate_new_well(featR(),
+      list(log_peak = log10(max(input$nw_peak, 1)), di = input$nw_di, b = input$nw_b),
+      portfolio()$fits, k = 3)
+    data.frame(
+      Field = c("Analog wells used", "Estimated qi (bopd)", "Estimated Di (/yr)",
+                "Estimated b", "Estimated EUR (MMbbl)"),
+      Value = c(paste(e$analogs, collapse = ", "),
+                formatC(round(e$qi_bopd), format = "d", big.mark = ","),
+                sprintf("%.2f", e$di), sprintf("%.2f", e$b),
+                sprintf("%.2f", e$eur_mmbbl)))
+  }, striped = TRUE, spacing = "xs", width = "100%")
+
+  # well logs (LAS) ----------------------------------
+  lasData <- reactive({
+    req(input$las)
+    tryCatch(read_las(input$las$datapath), error = function(e) structure(list(err = conditionMessage(e)), class = "las_err"))
+  })
+  output$lasNote <- renderUI({
+    if (is.null(input$las)) return(NULL)
+    l <- lasData()
+    if (inherits(l, "las_err"))
+      return(div(class = "alert alert-danger", strong("Could not read LAS: "), l$err))
+    wname <- l$well$value[toupper(l$well$mnem) == "WELL"]
+    div(class = "small text-muted",
+        sprintf("%s — %d curves, %d depth samples: %s",
+                if (length(wname)) wname else "well", length(l$curves), l$nrows,
+                paste(l$curves, collapse = ", ")))
+  })
+  output$lasPlot <- renderPlot({
+    l <- lasData(); validate(need(!inherits(l, "las_err"), " "))
+    g <- guess_track(l$curves); d <- l$data
+    depth <- d[[g$depth %||% names(d)[1]]]
+    tracks <- list()
+    add <- function(nm, lab, logx = FALSE) {
+      if (is.null(nm) || is.na(nm) || !nm %in% names(d)) return(invisible())
+      tracks[[lab]] <<- data.frame(depth = depth, val = d[[nm]], track = lab, logx = logx)
+    }
+    add(g$gr, "GR (GAPI)")
+    if (length(g$res)) add(g$res[1], "Resistivity (OHMM)", TRUE)
+    add(g$rhob, "RHOB (g/cm3)"); add(g$nphi, "NPHI (v/v)")
+    add(g$sonic, "DT (us/ft)"); add(g$cali, "Caliper (in)")
+    validate(need(length(tracks) > 0, "No recognisable GR / resistivity / density / neutron curves."))
+    df <- do.call(rbind, tracks)
+    ggplot(df, aes(val, depth)) +
+      geom_path(colour = BRAND, linewidth = 0.5, na.rm = TRUE) +
+      scale_y_reverse() +
+      facet_wrap(~ track, scales = "free_x", nrow = 1) +
+      labs(x = NULL, y = "Depth", title = "Well-log tracks") +
+      theme_geoai() + theme(panel.spacing = grid::unit(1, "lines"))
+  }, width = 900, height = 520, res = 96)
+  output$lasQcTable <- renderTable({
+    l <- lasData(); req(!inherits(l, "las_err"))
+    las_qc(l) |> dplyr::transmute(Curve = curve, Unit = unit,
+      `Null %` = null_pct, Min = min, Max = max, Spikes = spikes, Flag = flag)
+  }, striped = TRUE, spacing = "xs", width = "100%")
+
+  # keep cheap tab contents live even while hidden; leave the expensive ones
+  # (ML training, per-well backtest, LAS) lazy so they only run when their tab opens
   for (id in c("fcTable", "fitDetails", "prodTable", "screenTable",
+               "kpiTable", "backtestPlot", "analogTable", "newWellTable",
+               "mlHeader", "mlRiskPlot", "mlImpPlot", "mlShapTable",
+               "lasNote", "lasPlot", "lasQcTable",
                "pf_eur", "pf_rem", "portfolioBar", "portfolioTable")) {
     outputOptions(output, id, suspendWhenHidden = FALSE)
   }

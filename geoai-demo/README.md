@@ -26,7 +26,7 @@ Full plan: [`PLAN_two-week-demo.md`](PLAN_two-week-demo.md)
 **The two-week build is complete.** Next steps are in `demo/ONE_PAGER.md` ("what the
 raise unlocks") — hire the engineer, build the localisation layer, add a Kazakhstan field.
 
-**Post-build additions:**
+**Post-build additions (`geoai-demo/` sub-project):**
 - **Upload your own data** — `fileInput` in the sidebar; `R/ingest.R` parses a
   CSV/Excel of production (tolerant of column names; oil as volume Sm³/bbl or as a
   rate; daily or monthly). "↺ back to Volve sample" resets.
@@ -34,8 +34,24 @@ raise unlocks") — hire the engineer, build the localisation layer, add a Kazak
   (`.decline_bands` in `R/03_decline_curve.R`): a shaded range on the chart, P90–P10
   on every EUR figure, P90/P10 columns in the forecast table.
 - **Well screening tab** — `R/06_screening.R`: a transparent rule-based
-  attention score (0–100) + plain-language signal per well. Not ML — the four
-  inputs and weights are shown in *About & method*.
+  attention score (0–100) + plain-language signal per well. Not ML.
+- **Field KPIs tab** — `R/07_analytics.R` `field_kpis()`: per-well operating
+  snapshot; a **forecast-vs-actual backtest** (`backtest_field()`, 6-month hold-out,
+  MAPE + bias).
+- **ML attention tab** — `R/08_ml.R`: an XGBoost classifier (target = "will the
+  well fall >15% below its own decline over the next 6 months"), **well-grouped**
+  cross-validation, SHAP contributions per well. On a 6-well field the AUC is
+  illustrative of the method. Behind a "Train" button (re-fits every well-month).
+- **Analog & new-well tab** — `R/07_analytics.R`: k-NN analog matching on a
+  standardised well-shape vector; a new-well estimate = analog-weighted average of
+  the neighbours' fitted parameters and EUR.
+- **Well logs tab** — `R/09_las.R`: a base-R LAS 2.0 reader + depth-track plot
+  (GR / resistivity / density / neutron / sonic / caliper) + a basic curve-QC
+  table (null %, range, spikes, monotonic depth).
+
+Deliberately **not** built into the demo (need the engineering hire / infra):
+auth + multi-tenant, a database, cloud infra, subscription billing/monitoring,
+LSTM production forecasting, physics-based reservoir/EOR modelling.
 
 **Day 4 changes:** qi is now anchored to the fit-window start (fixed F-11's
 back-extrapolation blow-up); forecast horizon auto-caps at 10 yr for weak / short /

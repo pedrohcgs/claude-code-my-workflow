@@ -13,6 +13,7 @@
 #   html_to_pdf(html_path, pdf_path)           -> TRUE if a headless browser made a PDF
 
 source("R/03_decline_curve.R")
+if (file.exists("R/07_analytics.R")) source("R/07_analytics.R")   # for backtest_well() in the KAZ-RC report
 suppressPackageStartupMessages(library(htmltools))
 
 # --- branding (edit here, or drop a report/logo.png) --------------------
@@ -295,6 +296,112 @@ build_portfolio_html <- function(monthly,
     .footer()
   )
   .doc(paste(brand$company, "- Field portfolio"), brand, body)
+}
+
+# --- KAZ-RC-style public reserves report (petroleum adaptation) ----------
+#
+# The KAZ-RC code and Order MID RK No.374 the user supplied are the *solid
+# minerals* public-reporting framework (CRIRSCO family). Kazakhstan oil & gas
+# reserves are reported through the State reserve classification (GKZ) and
+# PRMS-family categories. This report borrows the KAZ-RC public-report skeleton
+# — Competent Person statement, the three principles, an assessment checklist —
+# and populates a PRMS 1P/2P/3P table from the P90/P50/P10 EUR. It is an
+# ILLUSTRATIVE TEMPLATE, not a filed regulatory document.
+
+build_kazrc_html <- function(well_id, monthly,
+                             q_econ = 50, window = "auto", max_years = 30, b_max = 1.5,
+                             competent_person = "[Competent Person — name, qualification, professional body]",
+                             brand = default_brand()) {
+  f <- fit_decline(dplyr::filter(monthly, well == .env$well_id),
+                   q_econ = q_econ, window = window, max_years = max_years, b_max = b_max)
+  if (!isTRUE(f$ok))
+    return(.doc(paste(brand$company, "- KAZ-RC -", well_id), brand,
+                tagList(tags$h1(paste("Well", well_id)),
+                        div(class = "callout", strong("No estimate produced. "),
+                            paste(f$flags, collapse = "; ")), .footer())))
+
+  np   <- f$np_to_date_bbl / 1e6
+  p90  <- f$eur_p90_mmbbl %||% f$eur_mmbbl
+  p50  <- f$eur_mmbbl
+  p10  <- f$eur_p10_mmbbl %||% f$eur_mmbbl
+  rr   <- function(x) max(x - np, 0)                       # remaining recoverable
+
+  res_tbl <- data.frame(
+    Category = c("Produced to date (Np)",
+                 "Proved (1P)  —  ≈ P90",
+                 "Proved + Probable (2P)  —  ≈ P50",
+                 "Proved + Probable + Possible (3P)  —  ≈ P10"),
+    `Confidence` = c("actual", "high (conservative)", "best estimate", "high case"),
+    `EUR (MMbbl)` = c(sprintf("%.2f", np), sprintf("%.2f", p90),
+                      sprintf("%.2f", p50), sprintf("%.2f", p10)),
+    `Remaining recoverable (MMbbl)` = c("—", sprintf("%.2f", rr(p90)),
+                                        sprintf("%.2f", rr(p50)), sprintf("%.2f", rr(p10)),
+                                        check.names = FALSE),
+    check.names = FALSE)
+
+  bt <- tryCatch(backtest_well(dplyr::filter(monthly, well == .env$well_id),
+                               holdout_months = 6, q_econ = q_econ, window = window,
+                               max_years = max_years, b_max = b_max),
+                 error = function(e) list(ok = FALSE))
+  bt_txt <- if (isTRUE(bt$ok))
+    sprintf("6-month blind back-test: mean abs. error %.0f%%, bias %+.0f%%.",
+            100 * bt$mape, 100 * bt$bias) else "Back-test not available (insufficient history)."
+
+  check_tbl <- data.frame(
+    Criterion = c("Data source & integrity", "Measurement", "Estimation method",
+                  "Key assumptions", "Uncertainty treatment", "Fit quality",
+                  "Classification basis", "Audit / verification status"),
+    Commentary = c(
+      "Monthly oil production history for the well; source dataset as loaded into the tool.",
+      "Volumetric production as reported; no re-metering or allocation review performed here.",
+      sprintf("Arps decline-curve analysis (%s model, window “%s”), Levenberg–Marquardt fit; EUR by closed-form Arps cumulative to the economic rate.",
+              f$model, f$fit_quality$window),
+      sprintf("Economic rate %s bopd; forecast horizon cap %s yr; time origin = start of the fitted decline.",
+              q_econ, max_years),
+      "P90/P50/P10 from parameter-covariance sampling (~300 draws) plus residual-scaled scatter.",
+      sprintf("R² = %.2f on %d fitted months. %s", f$fit_quality$r2, f$fit_quality$n_points, bt_txt),
+      "1P/2P/3P mapped from P90/P50/P10 EUR per PRMS convention.",
+      "Not independently audited. No State expertise (GKZ) or Competent Person sign-off obtained.")
+  )
+
+  body <- tagList(
+    tags$h1(paste0("Public Report — Petroleum Reserves (KAZ-RC-style template)")),
+    tags$p(class = "subtitle", paste0("Well ", well_id, "  ·  prepared ",
+                                      format(Sys.Date(), "%Y-%m-%d"))),
+    div(class = "callout",
+        strong("Status: illustrative template, not a filed report. "),
+        "The KAZ-RC code and Order MID RK No.374/2018 are the ", strong("solid-minerals"),
+        " public-reporting framework. Kazakhstan petroleum reserves are reported through the ",
+        "State reserve classification (ГКЗ) and PRMS-family categories; the filed ",
+        "template and a licensed Competent Person / State expertise are required."),
+    tags$h2("Competent Person"),
+    tags$p(competent_person, tags$br(),
+           tags$span(class = "subtitle",
+                     "This report must not be issued without the written consent of a Competent Person as to its form, content and date.")),
+    tags$h2("Principles"),
+    tags$p(HTML("<strong>Transparency</strong> — the reader is given enough clear information to understand the report and is not misled. <strong>Materiality</strong> — it contains the information a reader reasonably needs to form a balanced judgement. <strong>Competence</strong> — it is based on work by suitably qualified and experienced persons bound by a professional code of ethics.")),
+    tags$h2("1. The asset"),
+    tags$p(sprintf("Well %s. Producing history %s to %s (%d producing months). Last observed oil rate %s bopd. Cumulative oil produced to date %.2f MMbbl.",
+                   well_id, format(min(f$series$date[f$series$phase == "history"])),
+                   format(f$last_date), f$fit_quality$n_points,
+                   formatC(round(f$last_rate_bopd), big.mark = ","), np)),
+    tags$h2("2. Basis of estimate"),
+    tags$p(sprintf("Estimated ultimate recovery (EUR) is derived by decline-curve analysis on the monthly oil rate. Best-estimate (2P) EUR is %.2f MMbbl, of which %.2f MMbbl remains to be produced to an economic limit of %s bopd. Low (1P) and high (3P) cases are %.2f and %.2f MMbbl.",
+                   p50, rr(p50), q_econ, p90, p10)),
+    tags$h2("3. Reserve classification"),
+    .html_table(res_tbl),
+    tags$h2("4. Assessment checklist"),
+    .html_table(check_tbl),
+    tags$h2("5. Caveats"),
+    tags$ul(
+      tags$li("Single-well decline-curve analysis; no field-level abandonment economics, infill or intervention upside."),
+      tags$li("Deterministic decline with a sampled uncertainty band — not a full probabilistic reserves study."),
+      tags$li("Not reserves as certified under SPE-PRMS or the Kazakhstan State classification. No Competent Person sign-off."),
+      if (length(f$flags)) tags$li(paste("Model flags:", paste(f$flags, collapse = "; ")))
+    ),
+    .footer()
+  )
+  .doc(paste(brand$company, "- KAZ-RC -", well_id), brand, body)
 }
 
 # --- file writers ---------------------------------------------
