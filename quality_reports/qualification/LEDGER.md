@@ -46,6 +46,9 @@ meaningless:
 | 2026-08-21 | `check-repo-hygiene.py` | tracked tree | root scratch · `_old` copy · numbered duplicate (sibling) · `_v2` filename · tracked `.aux` · unexpected top-level dir | 6 | 6/6 | **0/2** on controls (numbered pipeline stage; numbered file with no sibling) | `git status` alone sees none of these | **PASS** |
 | 2026-08-21 | `check-derived-counts.py` | README/guide/index | wrong journal count · wrong phase count · wrong snippet count · wrong gate count | 4 | 4/4 | 0/0 | bare grep cannot map claim→source-of-truth | **PASS** |
 | 2026-08-22 | `check-spec-conformance.py` | temp skill | empty `description:` (the greedy-regex bug had masked it) | 1 | 1/1 | 0/0 on clean control | — | **PASS** |
+| 2026-09-08 | `check-surface-sync.py` Codex inventory table | isolated copy of `README.md` | native skill count changed from 54 to 53 while disk remained 54 | 1 | 1/1, named `README.md` and both values | 0/1 on restored copy | manual inventory counting is not a repeatable gate | **PASS** |
+| 2026-09-08 | `scripts/check-links.py` migrated-skill references | isolated copy of `.agents/skills/strategize/SKILL.md` | design-checklist link changed to a nonexistent local file | 1 | 1/1, named file, line, and missing target | 0/1 on restored copy | existence-only grep cannot resolve relative targets | **PASS** |
+| 2026-09-08 | `check-spec-conformance.py` creator sandbox contract | isolated copy of `.codex/agents/writer.toml` | writable creator changed to `sandbox_mode = "read-only"` | 1 | 1/1, named the agent and required role policy | 0/1 on restored copy | TOML parsing alone cannot distinguish creator from reviewer policy | **PASS** |
 | 2026-08-21 | `check-staleness.py` | README, guide/docs HTML | stale auto-mode claim · unfalsifiable superlative · hand-edited render · source-without-render · expired SSoT (date-shimmed) | 5 | 5/5 | 0/0 | mtime comparison (the approach it replaced) fails on fresh clones | **PASS** |
 | 2026-08-21 | `quality_score.py` | `.qmd` | broken R chunk + placeholder text (auto-fail path) | 1 | 1/1 (exit 2) | 0/1 — clean control scored 100/exit 0 | — | **PASS** |
 
@@ -75,6 +78,13 @@ output as unverified.
 | `.claude/hooks/pre-compact.py` | passive (PreCompact) — the save-to-disk checklist before compression |
 | `.claude/hooks/post-compact-restore.py` | passive (SessionStart) — re-injects context after compaction |
 | `.claude/hooks/log-reminder.py` | passive (Stop) — session-log reminder |
+| `.codex/hooks/git-guardrails.py` | native PreToolUse policy has smoke fixtures but has not received an independent seeded-defect qualification |
+| `.codex/hooks/root-of-trust-guard.py` | native PreToolUse control-surface policy has smoke fixtures but has not received an independent seeded-defect qualification |
+| `.codex/hooks/claim-reconcile.py` | native PostToolUse provenance nudge has a positive fixture but no independent recall/FPR study |
+| `.codex/hooks/session-log.py` | passive native Stop hook — auto-log persistence and throttling remain unmeasured |
+| `.codex/hooks/notify.sh` | passive native SessionEnd convenience hook — a missed notification cannot clear work |
+| `.codex/hooks/pre-compact.py` | passive native PreCompact checkpoint; optional one-shot block remains unqualified |
+| `.codex/hooks/restore-context.py` | passive native SessionStart restoration and context injection remain unqualified |
 | `.githooks/pre-commit` | entry point that delegates to the gate suite; the delegation is exercised on every commit, its own logic (bypass envs, exit-code roll-up) is unmeasured |
 
 The five hooks above are **passive**: they emit a nudge and never make a decision, so a dead one

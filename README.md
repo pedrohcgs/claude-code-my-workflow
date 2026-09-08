@@ -1,14 +1,53 @@
-# My Claude Code Setup
+# My Claude Code + Codex Setup
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Changelog](https://img.shields.io/badge/See-CHANGELOG-blue.svg)](CHANGELOG.md)
 [![Contributing](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](.github/CONTRIBUTING.md)
 
-> **Actively maintained.** A summary of how I use Claude Code for academic work — slides, papers, data analysis, and more — packaged so you can fork it for your own research. See [CHANGELOG.md](CHANGELOG.md) for the latest changes.
+> **Actively maintained.** A dual-runtime research workflow for Claude Code and Codex—papers, data analysis, presentations, reproducibility, and more—packaged so you can fork it for your own work. See [CHANGELOG.md](CHANGELOG.md) for the latest changes.
 
 **Live site:** [psantanna.com/claude-code-my-workflow](https://psantanna.com/claude-code-my-workflow/)
 
-A ready-to-fork foundation for AI-assisted academic work. You describe what you want — lecture slides, a research paper, a data analysis, a replication package — and Claude plans the approach, runs specialized agents, fixes issues, verifies quality, and presents results. Like a contractor who handles the entire job. Extracted from a production PhD course and extended by a growing [community](#community--extensions).
+A ready-to-fork foundation for AI-assisted academic work. The original Claude Code setup remains intact, and a native Codex setup now supports research papers, data analysis, replication packages, and research presentations with the same plan-review-verify discipline.
+
+---
+
+## Codex Quick Start
+
+The Codex port is native rather than a compatibility shim: `AGENTS.md` supplies repository guidance, `.agents/skills/` contains `$skill` workflows, and `.codex/` contains project configuration, custom agents, hooks, command rules, and deeper guidance. See OpenAI's documentation for [Codex customization](https://learn.chatgpt.com/docs/customization/overview), [AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md), and [Agent Skills](https://learn.chatgpt.com/docs/build-skills).
+
+```bash
+git clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project
+cd my-project
+./scripts/validate-setup.sh --platform codex
+codex
+```
+
+Trust the project when Codex asks, review `AGENTS.md` and `.codex/config.toml`, then inspect registered hooks with `/hooks`. Invoke a workflow with `$skill-name`—for example, `$strategize`, `$draft-paper`, `$create-talk`, or `$data-analysis`. Use `/status` or `/statusline` for live context instead of a custom context-monitor hook. To validate both installations, run `./scripts/validate-setup.sh --platform all`; calling the script without `--platform` retains the original Claude-only behavior.
+
+This Codex edition is deliberately research-focused for a PhD student. R,
+Python, Markdown, LaTeX/Beamer, TikZ, manuscripts, reproducibility, and seminar
+preparation are supported. Quarto RevealJS is an explicit option for creating
+research talks only; lecture translation, Beamer-to-Quarto synchronization,
+Quarto QA/deployment, course sites, Stata, syllabus and lecture creation, and
+pedagogy/evaluation workflows remain excluded. Quarto, XeLaTeX, and R are
+optional unless the workflow you invoke needs them.
+
+The creation-side path is intentionally staged: `$strategize` records an
+estimand-first analysis contract, `$draft-paper` writes from verified evidence,
+and `$create-talk` derives a finished Beamer or Quarto research deck from the
+approved manuscript and analysis outputs. Project-specific conventions live in
+`.codex/references/project-profile.md`; the stages do not auto-chain.
+
+The Codex model pins are intentional defaults recorded in `.codex/port-manifest.toml`. Review them on the manifest's stated review date, and override them in the relevant `.codex/agents/*.toml` file when your account or workload calls for a different supported model.
+
+<!-- surface-sync-counts: codex -->
+| Codex component | Count |
+|-----------------|------:|
+| Skills | 54 |
+| Agents | 17 |
+| Guidance | 36 |
+| Hooks | 7 |
 
 ---
 
@@ -220,7 +259,7 @@ This workflow is designed as a **single hub for an entire research program** —
 <!-- surface-sync-table: skills -->
 | Skill | What It Does |
 |-------|-------------|
-| `/compile-latex` | 3-pass XeLaTeX compilation with bibtex |
+| `/compile-latex` | Three-pass XeLaTeX compilation, with BibTeX when cited |
 | `/deploy` | Render Quarto + sync to GitHub Pages |
 | `/extract-tikz` | TikZ diagrams to PDF to SVG pipeline |
 | `/proofread` | Launch proofreader on a file |

@@ -6,7 +6,11 @@ claims that were true once and are not any more, plus source/render divergence.
 
 Exit: 0 clean, 1 stale content found, 2 internal error.
 """
-import re, os, sys, glob, subprocess
+import datetime, re, os, sys, glob, subprocess
+try:
+    import tomllib
+except ImportError:
+    tomllib = None
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # defect-library.md is a CATALOGUE of anti-patterns to seed — it contains them by design.
@@ -14,7 +18,10 @@ SKIP = re.compile(r'(^|/)(CHANGELOG\.md|defect-library\.md|\.git/|node_modules/|
 
 def surfaces():
     out = []
-    for pat in ["*.md", ".claude/**/*.md", "templates/**/*.md", "guide/*.qmd", "docs/*.html", ".github/**/*.md"]:
+    for pat in [
+        "*.md", ".claude/**/*.md", ".agents/**/*.md", ".codex/**/*.md",
+        "templates/**/*.md", "guide/*.qmd", "docs/*.html", ".github/**/*.md",
+    ]:
         out += glob.glob(os.path.join(ROOT, pat), recursive=True)
     return [p for p in sorted(set(out)) if not SKIP.search(os.path.relpath(p, ROOT))]
 
@@ -89,6 +96,46 @@ def main():
             today = subprocess.run(["date","+%Y-%m-%d"],capture_output=True,text=True).stdout.strip()
             if today > m.group(1):
                 expired.append(f"model-versions.md expired {m.group(1)} (today {today}) — re-verify against the docs")
+
+    # Codex pins are reviewed independently from Claude's model SSoT. The port
+    # manifest must carry a next-review date so an otherwise-valid TOML pin
+    # cannot remain "current" indefinitely.
+    codex_manifest = os.path.join(ROOT, ".codex", "port-manifest.toml")
+    if os.path.exists(codex_manifest):
+        if tomllib is None:
+            expired.append("Codex model pins cannot be checked: Python 3.11+ tomllib unavailable")
+        else:
+            try:
+                with open(codex_manifest, "rb") as fh:
+                    manifest = tomllib.load(fh)
+            except (OSError, tomllib.TOMLDecodeError) as e:
+                expired.append(f"port-manifest.toml cannot be parsed for model review ({e})")
+            else:
+                def dated_items(node, prefix=""):
+                    if not isinstance(node, dict):
+                        return []
+                    out = []
+                    for key, value in node.items():
+                        dotted = f"{prefix}.{key}" if prefix else key
+                        if key in {"review_after", "model_review_date", "next_review", "review_date"}:
+                            out.append((dotted, value))
+                        out.extend(dated_items(value, dotted))
+                    return out
+                review_dates = dated_items(manifest)
+                if not review_dates:
+                    expired.append("port-manifest.toml has no model review date (expected review_after/next_review)")
+                today_date = datetime.date.today()
+                for key, value in review_dates:
+                    try:
+                        date = value if isinstance(value, datetime.date) else datetime.date.fromisoformat(str(value))
+                    except ValueError:
+                        expired.append(f"port-manifest.toml {key} is not an ISO date: {value!r}")
+                        continue
+                    if today_date > date:
+                        expired.append(
+                            f"Codex model pins expired {date.isoformat()} (today {today_date.isoformat()}) "
+                            "— re-verify against official OpenAI documentation"
+                        )
 
     # guide version <-> CHANGELOG parity (Oracle review, 2026-08-22: the source
     # shipped with no version and a stale date; this pins it to the release).

@@ -1,0 +1,21 @@
+# Project-local Codex defaults. This layer loads only after the repository is trusted.
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+approval_policy = "never"
+
+[sandbox_workspace_write]
+network_access = false
+
+[features]
+hooks = true
+multi_agent = true
+
+[agents]
+max_concurrent_threads_per_session = 6
+
+[tui]
+notifications = true
+notification_condition = "unfocused"
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-remaining"]
+

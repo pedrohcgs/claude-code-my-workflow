@@ -1,0 +1,89 @@
+{
+  "description": "Research-workflow safety, provenance, and continuity hooks.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/git-guardrails.py\"",
+            "timeout": 20,
+            "statusMessage": "Checking Git safety"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/root-of-trust-guard.py\"",
+            "timeout": 10,
+            "statusMessage": "Protecting workflow controls"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^(apply_patch|Edit|Write)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/claim-reconcile.py\"",
+            "timeout": 5,
+            "statusMessage": "Checking claim dependencies",
+            "additionalContextLimit": 2000
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/session-log.py\"",
+            "timeout": 10,
+            "statusMessage": "Recording the session"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/pre-compact.py\"",
+            "timeout": 10,
+            "statusMessage": "Saving research context"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "^(compact|resume)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/restore-context.py\"",
+            "timeout": 5,
+            "statusMessage": "Restoring research context",
+            "additionalContextLimit": 4000
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$(git rev-parse --show-toplevel)/.codex/hooks/notify.sh\"",
+            "timeout": 3,
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
+

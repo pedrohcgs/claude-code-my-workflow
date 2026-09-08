@@ -1,0 +1,127 @@
+version = 1
+source_runtime = "claude-code"
+target_runtime = "codex"
+created = 2026-09-08
+model_review_date = 2026-12-07
+principle = "Native dual-runtime port; original Claude surfaces remain authoritative for Claude."
+
+[paths]
+instructions = "CLAUDE.md => AGENTS.md"
+skills = ".claude/skills/*/SKILL.md => .agents/skills/*/SKILL.md"
+agents = ".claude/agents/*.md => .codex/agents/*.toml"
+guidance = ".claude/rules/*.md => .codex/guidance/*.md"
+references = ".claude/references/* => .codex/references/*"
+hooks = ".claude/hooks/* => .codex/hooks/*"
+command_policy = "Codex-native Starlark in .codex/rules/*.rules"
+
+[skills]
+direct = [
+  "adjudicate-review", "audit-reproducibility", "blast-radius",
+  "capture-environment", "challenge", "checkpoint", "coauthor-brief", "commit",
+  "compile-latex", "compress-session", "credible-claims", "data-analysis",
+  "data-management-plan", "deep-audit", "devils-advocate", "diagnose",
+  "differential-audit", "disclosure-check", "extract-tikz", "grant-proposal",
+  "humanize", "interview-me", "learn", "lit-review", "new-diagram", "new-skill",
+  "oracle-review", "permission-check", "power-analysis", "preregister",
+  "promote-memory", "proofread", "r-package-check", "replication-package",
+  "research-ideation", "respond-to-referees", "review-paper", "review-r",
+  "seven-pass-review", "simulation-study", "slide-excellence",
+  "submission-disclosures", "triage-inbox", "vaccinate", "validate-bib",
+  "verify-artifact", "verify-claims", "visual-audit", "voice-profile",
+]
+renamed = ["teach-from-paper => present-paper"]
+added = [
+  "academic-writing (from the former academic-writing output style)",
+  "strategize (curated from to-migrate/.claude/skills/strategize)",
+  "draft-paper (curated from to-migrate/.claude/skills/write)",
+  "create-talk (curated from to-migrate/.claude/skills/talk)",
+]
+folded = ["referee output style => review-paper"]
+replaced_by_builtin = ["context-status => /status and /statusline"]
+excluded = [
+  "deploy", "qa-quarto", "translate-to-quarto", "stata-replication", "syllabus",
+  "respond-to-eval", "create-lecture", "pedagogy-review", "scaffold-exercises",
+]
+
+[agents]
+direct = [
+  "claim-verifier", "domain-referee", "editor", "humanize-auditor",
+  "methods-referee", "promote-memory-council", "proofreader", "r-package-reviewer",
+  "r-reviewer", "sim-reviewer", "slide-auditor", "tikz-reviewer", "verifier",
+]
+renamed = ["domain-reviewer => presentation-domain-reviewer"]
+added = [
+  "strategist (curated from to-migrate/.claude/agents/strategist.md)",
+  "writer (curated from to-migrate/.claude/agents/writer.md)",
+  "storyteller (curated from to-migrate/.claude/agents/storyteller.md)",
+]
+excluded = ["beamer-translator", "pedagogy-reviewer", "quarto-critic", "quarto-fixer"]
+
+[guidance]
+direct = [
+  "agent-authored-code", "confidential-data", "content-invariants",
+  "cross-artifact-review", "exploration-fast-track", "exploration-folder-protocol",
+  "inference-robustness", "issue-ledger", "meta-governance", "model-routing",
+  "no-pause-beamer", "orchestrator-protocol", "orchestrator-research",
+  "pdf-processing", "plan-first-workflow", "post-flight-verification",
+  "progress-reports", "prompt-shaping", "proofreading-protocol", "quality-gates",
+  "r-code-conventions", "r-package-conventions", "replication-protocol",
+  "repo-hygiene", "review-fencing", "session-logging", "simulation-conventions",
+  "single-source-of-truth", "summary-parity", "tikz-measurement", "tikz-prevention",
+  "tikz-visual-quality", "verification-protocol", "writing-with-ai",
+]
+added = [
+  "research-lifecycle (curated lifecycle and handoff contracts)",
+  "manuscript-authoring (curated display and authoring standards)",
+]
+excluded = ["beamer-quarto-sync", "knowledge-base-template", "stata-code-conventions"]
+
+[hooks]
+behaviors = [
+  "git-guardrails", "root-of-trust-guard", "claim-reconcile", "session-log",
+  "notify", "pre-compact", "restore-context",
+]
+replaced_by_builtin = ["context-monitor => tui.status_line"]
+
+[models]
+"gpt-6-astra" = [
+  "claim-verifier", "editor", "domain-referee", "methods-referee", "sim-reviewer",
+  "strategist", "tikz-reviewer",
+]
+"gpt-5.6-sol" = [
+  "presentation-domain-reviewer", "r-package-reviewer", "r-reviewer", "storyteller",
+  "verifier", "writer",
+]
+"gpt-5.6-terra" = ["humanize-auditor", "slide-auditor", "promote-memory-council"]
+"gpt-5.6-luna" = ["proofreader"]
+
+[supplemental_migration]
+source_root = "to-migrate"
+selected = [
+  "strategize => .agents/skills/strategize + .codex/agents/strategist.toml",
+  "write => .agents/skills/draft-paper + .codex/agents/writer.toml",
+  "talk => .agents/skills/create-talk + .codex/agents/storyteller.toml",
+  ".claude/references/domain-profile.md => .codex/references/project-profile.md",
+]
+reused = [
+  "methods-referee for strategy review",
+  "academic-writing, voice-profile, audit-reproducibility, verify-claims, proofread, humanize, and review-paper for manuscripts",
+  "present-paper, compile-latex, visual-audit, slide-excellence, slide-auditor, presentation-domain-reviewer, and tikz-reviewer for talks",
+  "templates/decision-record.md rather than the supplemental duplicate",
+  "preregister and power-analysis rather than supplemental PAP templates",
+]
+omitted = [
+  "strategist-critic and writer/storyteller critic duplicates",
+  "formal-theory authoring mode",
+  "autonomous new-project pipeline and auto-commit behavior",
+  "voice extraction and cleanup resources superseded by voice-profile and humanize",
+  "lecture translation, Beamer-Quarto synchronization, Quarto QA/deployment, teaching, Stata, and site workflows",
+]
+curation = [
+  "Beamer remains the default; Quarto RevealJS is explicit research-talk-only support",
+  "pacing is time- and audience-based because the supplemental talk files conflict on fixed slide counts",
+  "the Quarto scaffold was rebuilt without its missing apa.csl dependency and project-specific paper paths",
+  "the IV checklist rejects reduced-form significance as evidence for exclusion",
+  "research slides use explicit complete states rather than Beamer overlays or RevealJS fragments",
+  "venue-specific word counts, stars, bibliography stack, and section lengths are not global rules",
+]

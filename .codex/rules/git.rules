@@ -1,0 +1,101 @@
+# These policies govern requests to run commands outside the sandbox. Hooks provide
+# the second line of defense for shell strings and dirty-tree history operations.
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "forbidden",
+    justification = "Hard reset can silently discard research work",
+    match = ["git reset --hard", "git reset --hard HEAD~1"],
+    not_match = ["git reset --soft HEAD~1", "git status"],
+)
+
+prefix_rule(
+    pattern = ["git", "clean"],
+    decision = "forbidden",
+    justification = "Git clean can delete untracked data and artifacts",
+    match = ["git clean -f", "git clean -fdx"],
+    not_match = ["git status", "git diff"],
+)
+
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "forbidden",
+    justification = "Force push can overwrite shared history",
+    match = ["git push --force", "git push --force origin main"],
+    not_match = ["git push", "git push origin main"],
+)
+
+prefix_rule(
+    pattern = ["git", "push", "--force-with-lease"],
+    decision = "forbidden",
+    justification = "Lease-protected force push still rewrites shared history",
+    match = ["git push --force-with-lease", "git push --force-with-lease origin main"],
+    not_match = ["git push", "git push origin main"],
+)
+
+prefix_rule(
+    pattern = ["git", "add", "-A"],
+    decision = "forbidden",
+    justification = "Blanket staging hides the exact commit boundary",
+    match = ["git add -A"],
+    not_match = ["git add README.md", "git diff --cached"],
+)
+
+prefix_rule(
+    pattern = ["git", "add", "--all"],
+    decision = "forbidden",
+    justification = "Blanket staging hides the exact commit boundary",
+    match = ["git add --all"],
+    not_match = ["git add AGENTS.md"],
+)
+
+prefix_rule(
+    pattern = ["git", "add", "."],
+    decision = "forbidden",
+    justification = "Blanket staging hides the exact commit boundary",
+    match = ["git add ."],
+    not_match = ["git add ./README.md"],
+)
+
+# The explicit-only $commit skill may use these non-force operations.
+prefix_rule(
+    pattern = ["git", "status"], decision = "allow",
+    justification = "Read repository state",
+    match = ["git status", "git status --short"], not_match = ["git diff"],
+)
+prefix_rule(
+    pattern = ["git", "diff"], decision = "allow",
+    justification = "Review repository changes",
+    match = ["git diff", "git diff --cached"], not_match = ["git status"],
+)
+prefix_rule(
+    pattern = ["git", "add"], decision = "allow",
+    justification = "Stage named paths only",
+    match = ["git add README.md", "git add AGENTS.md .codex/config.toml"],
+    not_match = ["git status"],
+)
+prefix_rule(
+    pattern = ["git", "commit"], decision = "allow",
+    justification = "Explicit commit workflow",
+    match = ["git commit -m message"], not_match = ["git status"],
+)
+prefix_rule(
+    pattern = ["git", "push"], decision = "allow",
+    justification = "Explicit non-force push workflow",
+    match = ["git push", "git push origin main"], not_match = ["git fetch"],
+)
+prefix_rule(
+    pattern = ["gh", "pr", "create"], decision = "allow",
+    justification = "Explicit pull-request workflow",
+    match = ["gh pr create --fill"], not_match = ["gh pr view 123"],
+)
+prefix_rule(
+    pattern = ["gh", "pr", "view"], decision = "allow",
+    justification = "Inspect pull requests",
+    match = ["gh pr view 123"], not_match = ["gh pr create --fill"],
+)
+prefix_rule(
+    pattern = ["gh", "pr", "checks"], decision = "allow",
+    justification = "Inspect pull-request checks",
+    match = ["gh pr checks 123"], not_match = ["gh pr view 123"],
+)

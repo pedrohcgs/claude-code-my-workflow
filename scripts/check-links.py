@@ -9,7 +9,10 @@ import re, os, sys, glob
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCAN = []
-for pat in ["*.md", ".claude/**/*.md", "templates/**/*.md", ".github/**/*.md", "guide/*.qmd"]:
+for pat in [
+    "*.md", ".claude/**/*.md", ".agents/**/*.md", ".codex/**/*.md",
+    "templates/**/*.md", ".github/**/*.md", "guide/*.qmd",
+]:
     SCAN += glob.glob(os.path.join(ROOT, pat), recursive=True)
 SCAN = sorted(set(SCAN))
 

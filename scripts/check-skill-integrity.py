@@ -353,6 +353,8 @@ def check_anchor_resolution() -> list[tuple[str, str, str]]:
     findings: list[tuple[str, str, str]] = []
     scan_roots = [
         REPO / ".claude",
+        REPO / ".agents",
+        REPO / ".codex",
         REPO / "guide",
         REPO / "templates",
         REPO / "CHANGELOG.md",

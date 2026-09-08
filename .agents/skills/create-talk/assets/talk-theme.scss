@@ -1,0 +1,31 @@
+/*-- scss:defaults --*/
+$presentation-font-size-root: 38px;
+$presentation-heading-color: #17365d;
+$link-color: #1f6f8b;
+
+/*-- scss:rules --*/
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal h1,
+.reveal h2 {
+  font-weight: 650;
+}
+
+.reveal .source,
+.reveal .aside,
+.reveal figcaption {
+  color: #4a4a4a;
+  font-size: 0.55em;
+}
+
+.reveal table {
+  font-size: 0.72em;
+}
+
+.reveal .key-result {
+  border-left: 0.18em solid #d28e00;
+  font-size: 1.15em;
+  padding-left: 0.7em;
+}

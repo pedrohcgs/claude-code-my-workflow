@@ -41,6 +41,16 @@ GROUND_TRUTH = {
         len(list((REPO / ".claude/hooks").glob("*.py"))) +
         len(list((REPO / ".claude/hooks").glob("*.sh")))
     ),
+    # Codex is intentionally counted separately: a generic "N skills" claim
+    # still means the original Claude surface unless it is explicitly labeled
+    # by the Codex inventory marker below.
+    "codex-skills": len(list((REPO / ".agents/skills").glob("*/SKILL.md"))),
+    "codex-agents": len(list((REPO / ".codex/agents").glob("*.toml"))),
+    "codex-guidance": len(list((REPO / ".codex/guidance").glob("*.md"))),
+    "codex-hooks": (
+        len(list((REPO / ".codex/hooks").glob("*.py"))) +
+        len(list((REPO / ".codex/hooks").glob("*.sh")))
+    ),
 }
 
 # Surfaces to scan + the phrasings that count as "making a claim."
@@ -184,7 +194,8 @@ SINGULAR_PHRASINGS: list[tuple[str, str]] = [
 # `|---|` separator excluded) must equal the on-disk count for that kind.
 # Only markdown sources should carry the marker — do NOT add it to the
 # rendered .html surfaces (their tables are <table>, not pipe rows).
-TABLE_MARKER_RE = re.compile(r"<!--\s*surface-sync-table:\s*([a-z]+)\s*-->")
+TABLE_MARKER_RE = re.compile(r"<!--\s*surface-sync-table:\s*([a-z-]+)\s*-->")
+COUNT_TABLE_MARKER_RE = re.compile(r"<!--\s*surface-sync-counts:\s*codex\s*-->")
 
 
 def _is_table_row(line: str) -> bool:
@@ -270,6 +281,43 @@ def scan_tables(path: Path) -> list[tuple[int, str, int | None, str]]:
     return hits
 
 
+def scan_codex_count_table(path: Path) -> list[tuple[int, str, int | None]]:
+    """Read a compact Codex inventory table from a marked Markdown surface.
+
+    Format: ``| Component | Count |`` followed by rows whose first cell is
+    skill/agent/guidance/hook (singular or plural). This avoids a 50-row README
+    table while still making every native inventory claim machine-checkable.
+    """
+    if not path.exists():
+        return []
+    lines = path.read_text(encoding="utf-8").splitlines()
+    hits: list[tuple[int, str, int | None]] = []
+    for i, line in enumerate(lines):
+        if not COUNT_TABLE_MARKER_RE.search(line):
+            continue
+        j = i + 1
+        while j < len(lines) and not _is_table_row(lines[j]):
+            j += 1
+        if j + 1 >= len(lines) or "---" not in lines[j + 1]:
+            hits.append((i + 1, "codex-inventory", None))
+            continue
+        k = j + 2
+        while k < len(lines) and _is_table_row(lines[k]):
+            cells = [c.strip() for c in lines[k].strip().strip("|").split("|")]
+            if len(cells) >= 2:
+                kind = cells[0].strip("`*").lower().rstrip("s")
+                key = {"skill": "codex-skills", "agent": "codex-agents",
+                       "guidance": "codex-guidance", "hook": "codex-hooks"}.get(kind)
+                if key:
+                    try:
+                        count = int(cells[1].strip("`*"))
+                    except ValueError:
+                        count = None
+                    hits.append((k + 1, key, count))
+            k += 1
+    return hits
+
+
 def main() -> int:
     rel = lambda p: p.relative_to(REPO)
     drift: list[str] = []
@@ -281,7 +329,7 @@ def main() -> int:
             print(f"ERROR: surface file missing: {rel(p)}", file=sys.stderr)
         return 2
 
-    print("Ground truth (counted from disk):")
+    print("Ground truth (counted from disk; platform-qualified):")
     for k, v in GROUND_TRUTH.items():
         print(f"  {k:<8} {v}")
     print()
@@ -327,6 +375,27 @@ def main() -> int:
                     f"[marker: {raw!r}]"
                 )
 
+    codex_count_hits = []
+    for path in SURFACES:
+        for lineno, kind, count in scan_codex_count_table(path):
+            codex_count_hits.append((path, lineno, kind, count))
+            if kind == "codex-inventory" or count is None:
+                drift.append(f"  {rel(path)}:{lineno} malformed Codex inventory count table")
+            elif count != GROUND_TRUTH[kind]:
+                drift.append(
+                    f"  {rel(path)}:{lineno} asserts {count} {kind} "
+                    f"(actual: {GROUND_TRUTH[kind]})"
+                )
+    if (REPO / ".codex/port-manifest.toml").exists():
+        present = {kind for _, _, kind, count in codex_count_hits if count is not None}
+        required = {"codex-skills", "codex-agents", "codex-guidance", "codex-hooks"}
+        missing_kinds = sorted(required - present)
+        if missing_kinds:
+            drift.append(
+                "  native Codex port has no complete marked inventory table; missing "
+                + ", ".join(missing_kinds)
+            )
+
     if drift:
         print("DRIFT DETECTED:", file=sys.stderr)
         for d in drift:
@@ -340,8 +409,9 @@ def main() -> int:
         return 1
 
     total_assertions = sum(len(v) for v in per_file.values())
-    print(f"All {total_assertions} count assertions + {table_hits} enumerative-"
-          f"table row counts match ground truth across {len(SURFACES)} surfaces.")
+    print(f"All {total_assertions} count assertions + {table_hits} enumerative-table "
+          f"row counts + {len(codex_count_hits)} Codex inventory counts match ground "
+          f"truth across {len(SURFACES)} surfaces.")
     return 0
 
 

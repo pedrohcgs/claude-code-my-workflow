@@ -1,0 +1,55 @@
+---
+title: "[Talk title]"
+author: "[Author]"
+institute: "[Institution]"
+date: "[Venue and date]"
+format:
+  revealjs:
+    theme: [default, talk-theme.scss]
+    slide-number: true
+    navigation-mode: linear
+    controls: true
+    progress: true
+    center: false
+    incremental: false
+    transition: none
+    width: 1600
+    height: 900
+    scrollable: false
+---
+
+## Research question {.center}
+
+[One question, one contribution, and why it matters.]
+
+::: {.notes}
+Point: [ ]. Time: [ ]. Likely question: [ ].
+:::
+
+## What we learn
+
+[Verified principal finding with magnitude, units, and scope.]
+
+::: {.notes}
+Point: [ ]. Time: [ ]. Evidence: [source location].
+:::
+
+## Evidence
+
+::: {.callout-note appearance="minimal"}
+[Insert a verified figure from `../Figures/` and add descriptive alt text.]
+:::
+
+::: {.notes}
+Point: [ ]. Time: [ ].
+:::
+
+## Takeaway {.center}
+
+[One supported takeaway.]
+
+## Backup: [topic] {.smaller}
+
+[Evidence for an anticipated question.]
+
+## References

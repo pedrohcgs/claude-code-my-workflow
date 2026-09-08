@@ -36,6 +36,7 @@ SCRIPTS = os.path.join(ROOT, "scripts")
 
 LEDGER = "quality_reports/qualification/LEDGER.md"
 SETTINGS = ".claude/settings.json"
+CODEX_HOOKS = ".codex/hooks.json"
 BACKTEST = "scripts/backtest.sh"
 PRECOMMIT = ".githooks/pre-commit"
 
@@ -54,7 +55,7 @@ INTERPRETERS = {"python", "python3", "bash", "sh", "zsh", "node", "Rscript", "pe
 SCRIPT_TOKEN = re.compile(r'^[\w./-]+\.(?:py|sh)$')
 
 # Where an unqualified (directory-less) ledger name may live.
-SEARCH_DIRS = ["", "scripts", ".claude/hooks", ".claude/scripts", ".githooks"]
+SEARCH_DIRS = ["", "scripts", ".claude/hooks", ".claude/scripts", ".codex/hooks", ".githooks"]
 
 
 class CannotRun(Exception):
@@ -76,6 +77,14 @@ def expand(tok):
 
 def script_of(command, where):
     """The script a shell command actually runs, and the interpreter it runs under."""
+    # Project-local Codex hook commands resolve the root at runtime with
+    # ``$(git rev-parse --show-toplevel)``. shlex correctly splits the shell
+    # words but cannot evaluate the substitution; extract the stable suffix.
+    dynamic = re.search(r'(?:^|["\s])(?:[^"\s]*/)?(\.codex/hooks/[\w.-]+\.(?:py|sh))', command)
+    if dynamic:
+        toks0 = shlex.split(command)
+        interp0 = os.path.basename(toks0[0]) if toks0 and os.path.basename(toks0[0]) in INTERPRETERS else None
+        return os.path.join(ROOT, dynamic.group(1)), interp0
     try:
         toks = shlex.split(command)
     except ValueError as e:
@@ -120,6 +129,27 @@ def registered():
                     continue
                 path, interp = script_of(h.get("command", ""), f"{SETTINGS} {event}")
                 out.append(("settings hook", path, interp, event))
+
+    # The native Codex port has an independent lifecycle registry. It becomes
+    # mandatory when the port manifest exists, and every command hook joins the
+    # same qualification/wiring accounting as the Claude registry.
+    codex_manifest = os.path.join(ROOT, ".codex", "port-manifest.toml")
+    codex_hooks_path = os.path.join(ROOT, CODEX_HOOKS)
+    if os.path.exists(codex_manifest) or os.path.exists(codex_hooks_path):
+        try:
+            codex_cfg = json.loads(read(CODEX_HOOKS))
+        except json.JSONDecodeError as e:
+            raise CannotRun(f"{CODEX_HOOKS}: invalid JSON ({e})")
+        codex_hooks = codex_cfg.get("hooks")
+        if not isinstance(codex_hooks, dict) or not codex_hooks:
+            raise CannotRun(f"{CODEX_HOOKS}: no `hooks` object")
+        for event in sorted(codex_hooks):
+            for group in codex_hooks[event] or []:
+                for h in group.get("hooks") or []:
+                    if h.get("type") != "command":
+                        continue
+                    path, interp = script_of(h.get("command", ""), f"{CODEX_HOOKS} {event}")
+                    out.append(("codex hook", path, interp, event))
 
     out.append(("entry point", os.path.join(ROOT, PRECOMMIT), None, "pre-commit"))
     return out
@@ -180,10 +210,15 @@ def ledger_names(known):
     return qualified, debt
 
 
-def named_by(path, names):
-    """Does `names` (basename -> {tokens}) name this path? A token with a directory must match it."""
+def named_by(path, names, require_qualified_path=False):
+    """Does `names` name this path?
+
+    Codex hooks deliberately require a directory-qualified token because four
+    filenames overlap the Claude registry. A bare ``git-guardrails.py`` row
+    proves one implementation, not both platform-specific event adapters.
+    """
     rel = os.path.relpath(path, ROOT)
-    return any("/" not in tok or rel.endswith(tok)
+    return any((not require_qualified_path and "/" not in tok) or rel.endswith(tok)
                for tok in names.get(os.path.basename(path), ()))
 
 
@@ -220,16 +255,18 @@ def main():
 
     print("check-ledger-coverage: the qualification ledger vs. what actually runs")
     print(f"  derived live from source: {n('backtest gate')} backtest gate(s), "
-          f"{n('settings hook')} settings.json hook(s), {n('entry point')} entry point(s)")
+          f"{n('settings hook')} Claude hook(s), {n('codex hook')} Codex hook(s), "
+          f"{n('entry point')} entry point(s)")
 
     print("\n  DIRECTION 1 — every registered check needs a ledger row")
     for source, path, _, where in checks:
+        qualified_path = source == "codex hook"
         # Debt wins over a qualified mention: an explicit 'not yet qualified' row
         # is a stronger statement than any incidental backticked reference.
-        if named_by(path, debt):
+        if named_by(path, debt, qualified_path):
             status = "visible debt — 'Not yet qualified'"
             warns.append(f"{rel(path)}: relied upon as {art(source)} ('{where}') and never measured")
-        elif named_by(path, qualified):
+        elif named_by(path, qualified, qualified_path):
             status = "ledger row"
         else:
             status = "NO LEDGER ROW"

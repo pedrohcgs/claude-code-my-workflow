@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Academic review finding",
+  "description": "One confirmed defect from a review lens. Reports are ARRAYS of these objects, not {\"findings\": [...]} wrappers. Validate with scripts/validate-findings.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "file",
+    "line",
+    "locus",
+    "lens",
+    "severity",
+    "rule",
+    "claim",
+    "evidence",
+    "failing_case",
+    "suggested_fix",
+    "mechanical",
+    "confidence"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "sha1('file:line:locus') \u2014 deterministic and LENS-INDEPENDENT, so the same defect found by two different lenses, or rediscovered in a later round, gets the SAME id. Lens is metadata about who found it, not part of what it is."
+    },
+    "file": {
+      "type": "string",
+      "description": "repo-relative path"
+    },
+    "line": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "locus": {
+      "type": "string",
+      "description": "the named thing: a theorem label, table id, function name, slide title, or claim identifier"
+    },
+    "lens": {
+      "enum": [
+        "identification",
+        "estimation",
+        "inference",
+        "reproducibility",
+        "measurement",
+        "citation",
+        "numeric-claim",
+        "prose",
+        "presentation",
+        "visual",
+        "code-quality",
+        "parity",
+        "disclosure",
+        "abstract",
+        "intro",
+        "methods",
+        "results",
+        "robustness",
+        "structure"
+      ],
+      "description": "which review lens produced this. Metadata only \u2014 NOT part of the finding id, so two lenses finding the same defect dedup to one. Enum extended 2026-08-21 to cover the seven-pass structural lenses; a producer with a genuinely new lens extends the enum in the same commit that introduces the producer."
+    },
+    "credibility_question": {
+      "enum": [
+        "reproducibility",
+        "implementation-fidelity",
+        "statistical-performance",
+        "measurement-validity",
+        "identification"
+      ],
+      "description": "which of the five credibility questions this bears on. Evidence for one never clears another."
+    },
+    "severity": {
+      "enum": [
+        "blocker",
+        "major",
+        "minor",
+        "nit"
+      ]
+    },
+    "rule": {
+      "type": "string",
+      "description": "the specific documented rule or standard violated. A finding that cites no rule is an opinion."
+    },
+    "claim": {
+      "type": "string",
+      "description": "one sentence: what is wrong"
+    },
+    "evidence": {
+      "type": "string",
+      "description": "what was actually inspected \u2014 a quote, a computed value, a command and its output"
+    },
+    "failing_case": {
+      "type": "string",
+      "description": "a concrete configuration under which the claim breaks, or the exact missing hypothesis. Not 'this could be clearer'."
+    },
+    "suggested_fix": {
+      "type": "string"
+    },
+    "mechanical": {
+      "type": "boolean",
+      "description": "true ONLY for the fixer whitelist (see orchestration-schemas.md). Anything touching an estimand, assumption, specification, or reporting language is NEVER mechanical."
+    },
+    "confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        "confirmed",
+        "refuted",
+        "downgraded",
+        "held"
+      ],
+      "description": "set by the verifier pass; only 'confirmed' findings ship"
+    }
+  }
+}

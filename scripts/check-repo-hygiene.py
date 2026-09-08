@@ -13,7 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Files permitted at the repository root. Anything else is clutter until allowlisted.
 ROOT_ALLOW = {
-    "README.md", "CLAUDE.md", "MEMORY.md", "CHANGELOG.md", "TROUBLESHOOTING.md",
+    "README.md", "CLAUDE.md", "AGENTS.md", "MEMORY.md", "CHANGELOG.md", "TROUBLESHOOTING.md",
     "LICENSE", "CITATION.cff", ".gitignore", ".gitattributes",
     "Bibliography_base.bib", ".DS_Store",
     # Records which source produced the current rendered artifacts. Must live at
@@ -25,7 +25,7 @@ ROOT_ALLOW = {
     "voice-profile.md",
 }
 ROOT_ALLOW_DIRS = {
-    ".claude", ".git", ".github", ".githooks", ".vscode", "Figures", "Preambles",
+    ".agents", ".claude", ".codex", ".git", ".github", ".githooks", ".vscode", "Figures", "Preambles",
     "Quarto", "Slides", "docs", "explorations", "guide", "master_supporting_docs",
     "quality_reports", "scripts", "templates",
 }

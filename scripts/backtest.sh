@@ -4,21 +4,21 @@
 # Run this after ANY change. It is the difference between a maintained repo and
 # one that merely looks maintained. Ten gates:
 #
-#   1. surface-sync        counts + enumerative tables match what is on disk
+#   1. surface-sync        Claude + Codex counts/inventories match what is on disk
 #   2. skill-integrity     frontmatter <-> body tool parity, anchors, flag parity
 #   3. model-versions      no superseded model presented as current (internal
 #                         consistency against the model SSoT; the EXPIRY on that
 #                         SSoT is enforced by gate 6, staleness)
 #   4. links               every relative link and heading anchor resolves
-#   5. spec-conformance    every skill obeys the Agent Skills spec
+#   5. spec-conformance    every skill obeys the Agent Skills spec; native Codex
+#                         config/agents/hooks/manifest and port leakage are checked
 #   6. staleness           stale recommendations, source/render divergence, expired currency
 #   7. repo-hygiene       no scratch-as-main, no root clutter, archives documented
 #   8. derived-counts     enumerable claims (journals, patterns, phases, snippets)
 #                         verified against their own source of truth
 #   9. ledger-coverage    the qualification ledger and the checks that actually run
-#                         agree in BOTH directions, and every hook in settings.json
-#                         is wired to a file that exists (a mistyped path there
-#                         disables a hook in silence)
+#                         agree in BOTH directions, and every Claude/Codex hook
+#                         registry points to a live, tracked file
 #  10. hook-battery       the active guard hooks are driven with synthetic events
 #                         and must still go red on the failure each one targets —
 #                         gate 9 proves a hook is wired, this proves it still acts
