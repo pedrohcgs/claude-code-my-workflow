@@ -1,33 +1,398 @@
 % ==============================================================================
-% Bibliography Template
+% Bibliography — Surfacing Data Value
 % ==============================================================================
 %
-% Add your bibliography entries here.
-% This file is referenced by both Beamer (.tex) and Quarto (.qmd) slides.
+% Citekeys used in Manuscript/paper.md. Entries fall into two states, each
+% marked in its own `note` field:
+%   - VERIFIED entries (§3a's data-valuation literature, 2026-09-02 lit-review
+%     pass): checked against Crossref/OpenAlex/Semantic Scholar independently,
+%     including a forked-agent CoVe pass per post-flight-verification.md.
+%     Full report: quality_reports/lit_review_data_valuation.md.
+%   - STUB entries (everything else — EoW, Q-methodology-design, hybrid-org,
+%     value-capture citations): author surnames + year as given in the
+%     abstract draft; title/venue still `TODO: verify`, never fabricated.
+%     Resolve before citing in anything submitted.
 %
-% Naming convention: AuthorYear_keyword
-% Example: Smith2024_causal_inference
+% Naming convention: firstAuthorSecondAuthorYEAR (camelCase surnames + year)
 %
 % ==============================================================================
 
-% ------------------------------------------------------------------------------
-% EXAMPLE ENTRIES — delete these and add your own
-% ------------------------------------------------------------------------------
-
-@book{Example2024_book,
-  author    = {Lastname, Firstname},
-  title     = {An Example Book Title},
-  publisher = {Example University Press},
-  year      = {2024},
-  address   = {City, State}
+@article{alaimoKallinikosAaltonen2020,
+  author = {Alaimo and Kallinikos and Aaltonen},
+  year   = {2020},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
 }
 
-@article{Example2025_article,
-  author  = {Lastname, Firstname and Coauthor, Name},
-  title   = {An Example Journal Article Title},
-  journal = {Journal of Example Studies},
-  volume  = {10},
-  number  = {2},
-  pages   = {100--125},
-  year    = {2025}
+@article{ammannHess2025,
+  author = {Ammann and Hess},
+  year   = {2025},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@inproceedings{badewitz2020,
+  author    = {Badewitz, Wladislaw and Kloker, Simon and Weinhardt, Christof},
+  year      = {2020},
+  title     = {The Data Provision Game: Researching Revenue Sharing in Collaborative Data Networks},
+  booktitle = {2020 IEEE 22nd Conference on Business Informatics (CBI)},
+  note      = {Verified via web search, 2026-09-03. Reframed in the manuscript as an applied extension (Shapley-based revenue-sharing) alongside the canonical Data Shapley source (ghorbaniZou2019) -- this paper's own topic is revenue allocation in collaborative data networks, not per-datapoint contribution to model performance.}
+}
+
+@inproceedings{ghorbaniZou2019,
+  author    = {Ghorbani, Amirata and Zou, James},
+  year      = {2019},
+  title     = {Data Shapley: Equitable Valuation of Data for Machine Learning},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning (ICML)},
+  pages     = {2242--2251},
+  note      = {New addition (2026-09-03, verification-queue pass): the canonical source for estimating individual data points' contribution to model performance, which the draft had attributed solely to badewitz2020. Verified via web search (arXiv:1904.02868, ICML 2019 proceedings).}
+}
+
+@article{battilanaLee2014,
+  author = {Battilana and Lee},
+  year   = {2014},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@book{boltanskiChiapello2005,
+  author = {Boltanski and Chiapello},
+  year   = {2005},
+  title  = {TODO: verify full title, publisher (likely "The New Spirit of Capitalism")},
+  note   = {STUB — verify before citing in submission}
+}
+
+@book{boltanskiThevenot2006,
+  author = {Boltanski and Thévenot},
+  year   = {2006},
+  title  = {TODO: verify full title, publisher (likely "On Justification: Economies of Worth")},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{bowmanAmbrosini2000,
+  author = {Bowman and Ambrosini},
+  year   = {2000},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{castroFernandez2025,
+  author  = {Castro Fernandez, Raul},
+  year    = {2025},
+  title   = {What is the Value of Data? A Theory and Systematization},
+  journal = {ACM/IMS Journal of Data Science},
+  volume  = {2},
+  number  = {1},
+  pages   = {1--25},
+  doi     = {10.1145/3728476},
+  note    = {Verified via Crossref/OpenAlex/Semantic Scholar, 2026-09-02}
+}
+
+@article{cloutierLangley2013,
+  author = {Cloutier and Langley},
+  year   = {2013},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{coyleManley2024,
+  author  = {Coyle, Diane and Manley, Annabel},
+  year    = {2024},
+  title   = {What Is the Value of Data? A Review of Empirical Methods},
+  journal = {Journal of Economic Surveys},
+  volume  = {38},
+  number  = {4},
+  pages   = {1317--1337},
+  doi     = {10.1111/joes.12585},
+  note    = {Verified via Crossref/OpenAlex + full OA text (Cambridge Apollo repository), 2026-09-02}
+}
+
+@techreport{deloitte2024,
+  author = {{Deloitte}},
+  year   = {2024},
+  title  = {TODO: verify full title and publication},
+  note   = {STUB — verify before citing in submission; likely an organizational report, not @article}
+}
+
+@techreport{eurostat2025,
+  author = {{Eurostat}},
+  year   = {2025},
+  title  = {TODO: verify full title (companion handbook to the 2025 System of National Accounts revision)},
+  note   = {STUB — verify before citing in submission; likely an organizational report, not @article}
+}
+
+@article{fourcade2011,
+  author = {Fourcade},
+  year   = {2011},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{gronroos2011,
+  author  = {Grönroos, Christian},
+  year    = {2011},
+  title   = {Value Co-creation in Service Logic: A Critical Analysis},
+  journal = {Marketing Theory},
+  volume  = {11},
+  number  = {3},
+  pages   = {279--301},
+  doi     = {10.1177/1470593111408177},
+  note    = {Verified via Crossref/OpenAlex, 2026-09-02}
+}
+
+@article{hunkeHeinzSatzger2021,
+  author  = {Hunke, Fabian and Heinz, Daniel and Satzger, Gerhard},
+  year    = {2021},
+  title   = {Creating Customer Value from Data: Foundations and Archetypes of Analytics-Based Services},
+  journal = {Electronic Markets},
+  volume  = {32},
+  pages   = {503--521},
+  doi     = {10.1007/s12525-021-00506-y},
+  note    = {Verified via Crossref/OpenAlex, 2026-09-02. Year kept as online-first (2021) per original draft's own citation convention -- print issue is volume 32 (2022).}
+}
+
+@book{wattsStenner2012,
+  author    = {Watts, Simon and Stenner, Paul},
+  year      = {2012},
+  title     = {Doing Q Methodological Research: Theory, Method and Interpretation},
+  publisher = {SAGE Publications},
+  note      = {New addition (2026-09-04, adversarial-challenge response): the standard modern Q-methodology reference, cited for its account of operant subjectivity as a viewpoint articulable at a given moment rather than a fixed trait. Also cited by the adversarial referee's own report. Verified via web search.}
+}
+
+@article{pacheSantos2013,
+  author  = {Pache, Anne-Claire and Santos, Filipe},
+  year    = {2013},
+  title   = {Inside the Hybrid Organization: Selective Coupling as a Response to Competing Institutional Logics},
+  journal = {Academy of Management Journal},
+  volume  = {56},
+  number  = {4},
+  pages   = {972--1001},
+  note    = {New addition (2026-09-07, adversarial-challenge Concern 3 response): verified via web search. Cited as an institutional-logics rival, not as a stub -- the point it is used to make is that this framework, even here, does not ask why one logic's claims prove more defensible than another's in a dispute.}
+}
+
+@article{besharovSmith2014,
+  author  = {Besharov, Marya L. and Smith, Wendy K.},
+  year    = {2014},
+  title   = {Multiple Institutional Logics in Organizations: Explaining Their Varied Nature and Implications},
+  journal = {Academy of Management Review},
+  volume  = {39},
+  number  = {3},
+  pages   = {364--381},
+  doi     = {10.5465/amr.2011.0431},
+  note    = {New addition (2026-09-07, adversarial-challenge Concern 3 response): verified via web search.}
+}
+
+@article{dorobatMcCaffreyTopan2024,
+  author  = {Dorobat, Carmen-Elena and McCaffrey, Matthew and Topan, Mihail},
+  year    = {2024},
+  title   = {Exploring the Microfoundations of Hybridity: A Judgment-Based Approach},
+  journal = {Journal of Business Venturing},
+  volume  = {39},
+  number  = {4},
+  pages   = {106406},
+  note    = {New addition (2026-09-07, adversarial-challenge Concern 3 response): the most current institutional-logics microfoundations work, verified via web search. Cited to show that even this recent turn works at the level of individual entrepreneurial judgment over monetary/psychic profit, not at the level of justificatory defensibility in a dispute -- strengthening rather than undermining the paper's distinguishing claim.}
+}
+
+@article{espelandStevens1998,
+  author  = {Espeland, Wendy Nelson and Stevens, Mitchell L.},
+  year    = {1998},
+  title   = {Commensuration as a Social Process},
+  journal = {Annual Review of Sociology},
+  volume  = {24},
+  pages   = {313--343},
+  note    = {New addition (2026-09-07, adversarial-challenge Concern 3 response): verified via web search. The sharpest rival mechanism to investments of form -- cited to establish the contrast (commensuration absorbs plurality into one metric; EoW's expected finding is that plurality persists, unevenly instrumented).}
+}
+
+@article{vanBommelRascheSpicer2023,
+  author  = {Van Bommel, Koen and Rasche, Andreas and Spicer, Andre},
+  year    = {2023},
+  title   = {From Values to Value: The Commensuration of Sustainability Reporting and the Crowding Out of Morality},
+  journal = {Organization \& Environment},
+  doi     = {10.1177/10860266221086617},
+  note    = {New addition (2026-09-07, adversarial-challenge Concern 3 response): current empirical application of commensuration theory, verified via web search. Documents the crowding-out outcome this paper's expected finding contrasts with.}
+}
+
+@book{stark2009,
+  author    = {Stark, David},
+  year      = {2009},
+  title     = {The Sense of Dissonance: Accounts of Worth in Economic Life},
+  publisher = {Princeton University Press},
+  note      = {New addition (2026-09-07, adversarial-challenge Concern 3 response): verified via web search. Added to the §2 example-application list as an EoW application organizationally closer to this paper's population than Fourcade or Sharon.}
+}
+
+@article{lafayeThevenot1993,
+  author  = {Lafaye, Claudette and Thévenot, Laurent},
+  year    = {1993},
+  title   = {Une Justification Écologique? Conflits dans l'Aménagement de la Nature},
+  journal = {Revue Française de Sociologie},
+  volume  = {34},
+  number  = {4},
+  pages   = {495--524},
+  note    = {New addition (2026-09-03, substance-review pass): corrects the draft's misattribution of the green order of worth to Boltanski \& Chiapello (2005), which introduces only the projective/connexionist order. Verified via web search.}
+}
+
+@incollection{thevenotMoodyLafaye2000,
+  author    = {Thévenot, Laurent and Moody, Michael and Lafaye, Claudette},
+  year      = {2000},
+  title     = {Forms of Valuing Nature: Arguments and Modes of Justification in French and American Environmental Disputes},
+  booktitle = {Rethinking Comparative Cultural Sociology: Repertoires of Evaluation in France and the United States},
+  editor    = {Lamont, Michèle and Thévenot, Laurent},
+  publisher = {Cambridge University Press},
+  note      = {New addition (2026-09-03, substance-review pass): develops the green order of worth first proposed in lafayeThevenot1993. Verified via web search.}
+}
+
+@article{kvalvik2026,
+  author  = {Kvalvik, Petter and Misra, Sanjay and Mishra, Biswajeeban and Dash, Satyen},
+  year    = {2026},
+  title   = {Data as an Asset: Economic Traits, Market Dynamics, and Monetization Challenges},
+  journal = {WIREs Data Mining and Knowledge Discovery},
+  volume  = {16},
+  number  = {1},
+  doi     = {10.1002/widm.70072},
+  note    = {Verified via Crossref/OpenAlex/Semantic Scholar, 2026-09-02. Corrects the draft's 3-author, 2-property citation: paper has 4 authors (Mishra was omitted) and names non-rivalry/non-excludability/scalability as its three economic traits.}
+}
+
+@article{mohanBharathyJalan2026,
+  author  = {Mohan, Sai Krishnan and Bharathy, Gnana and Jalan, Akanksha},
+  year    = {2026},
+  title   = {Enterprise Data Valuation---A Targeted Literature Review},
+  journal = {Journal of Economic Surveys},
+  volume  = {40},
+  number  = {1},
+  pages   = {73--92},
+  doi     = {10.1111/joes.12705},
+  note    = {New addition (2026-09-02 lit-review pass), verified via Crossref/OpenAlex}
+}
+
+@article{pikeEtAl2015,
+  author  = {Pike, Kate and Wright, Paul and Wink, Brian and Fletcher, Stephen},
+  year    = {2015},
+  title   = {The Assessment of Cultural Ecosystem Services in the Marine Environment Using Q Methodology},
+  journal = {Journal of Coastal Conservation},
+  volume  = {19},
+  number  = {5},
+  pages   = {667--675},
+  doi     = {10.1007/s11852-014-0350-z},
+  note    = {Replaces the non-existent "Fletcher et al., 2014" (verified 2026-09-02: this is the closest real paper, but Fletcher is the LAST of four authors, not first, and the journal issue year is 2015 -- 2014 was only the online-first date).}
+}
+
+@article{zabalaSandbrookMukherjee2018,
+  author  = {Zabala, Aiora and Sandbrook, Chris and Mukherjee, Nibedita},
+  year    = {2018},
+  title   = {When and How to Use Q Methodology to Understand Perspectives in Conservation Research},
+  journal = {Conservation Biology},
+  volume  = {32},
+  number  = {5},
+  pages   = {1185--1194},
+  doi     = {10.1111/cobi.13123},
+  note    = {New addition (2026-09-02 lit-review pass), replacing the non-existent "Fletcher et al., 2014"; verified via Crossref/OpenAlex}
+}
+
+@article{nabben2025,
+  author = {Nabben},
+  year   = {2025},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{nienstedtTrenz2025,
+  author = {Nienstedt and Trenz},
+  year   = {2025},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{sharon2018,
+  author = {Sharon},
+  year   = {2018},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{siffels2020,
+  author = {Siffels},
+  year   = {2020},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@techreport{sna2025,
+  author = {{System of National Accounts}},
+  year   = {2025},
+  title  = {TODO: verify full title (2025 SNA revision bringing data into the asset boundary)},
+  note   = {STUB — verify before citing in submission; likely an organizational report, not @article}
+}
+
+@article{spiekermannKorunovska2017,
+  author = {Spiekermann and Korunovska},
+  year   = {2017},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{thevenot1984,
+  author = {Thévenot},
+  year   = {1984},
+  title  = {TODO: verify full title and venue (investments of form)},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{trevisanMouritsen2023,
+  author = {Trevisan and Mouritsen},
+  year   = {2023},
+  title  = {TODO: verify full title and venue},
+  note   = {STUB — verify before citing in submission}
+}
+
+@article{vargoLusch2004,
+  author  = {Vargo, Stephen L. and Lusch, Robert F.},
+  year    = {2004},
+  title   = {Evolving to a New Dominant Logic for Marketing},
+  journal = {Journal of Marketing},
+  volume  = {68},
+  number  = {1},
+  pages   = {1--17},
+  doi     = {10.1509/jmkg.68.1.1.24036},
+  note    = {Verified via Crossref/OpenAlex, 2026-09-02}
+}
+
+@article{vargoLusch2008,
+  author  = {Vargo, Stephen L. and Lusch, Robert F.},
+  year    = {2008},
+  title   = {Service-Dominant Logic: Continuing the Evolution},
+  journal = {Journal of the Academy of Marketing Science},
+  volume  = {36},
+  number  = {1},
+  pages   = {1--10},
+  doi     = {10.1007/s11747-007-0069-6},
+  note    = {Verified via Crossref/OpenAlex, 2026-09-02. Online-first 2007; journal issue year 2008, matching the draft's citation.}
+}
+
+@techreport{wef2021,
+  author = {{World Economic Forum}},
+  year   = {2021},
+  title  = {TODO: verify full title and publication},
+  note   = {STUB — verify before citing in submission; likely an organizational report, not @article}
+}
+
+@book{wixomBeathOwens2023,
+  author    = {Wixom, Barbara H. and Beath, Cynthia M. and Owens, Leslie},
+  year      = {2023},
+  title     = {Data Is Everybody's Business: The Fundamentals of Data Monetization},
+  publisher = {MIT Press},
+  doi       = {10.7551/mitpress/14867.001.0001},
+  isbn      = {9780262048217},
+  note      = {Verified via Crossref/OpenAlex/publisher record, 2026-09-02. Corrected from @article to @book.}
+}
+
+@article{xuEtAl2024,
+  author  = {Xu, Dingting and Indulska, Marta and Asadi Someh, Ida and Shanks, Graeme},
+  year    = {2024},
+  title   = {Time to Reassess Data Value: The Many Faces of Data in Organizations},
+  journal = {Journal of Strategic Information Systems},
+  volume  = {33},
+  number  = {4},
+  pages   = {101863},
+  doi     = {10.1016/j.jsis.2024.101863},
+  note    = {Verified via Crossref/OpenAlex, 2026-09-02. Full author list recovered (draft cited "Xu, et al.").}
 }

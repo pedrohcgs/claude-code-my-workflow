@@ -1,11 +1,7 @@
 # CLAUDE.MD -- Academic Project Development with Claude Code
 
-<!-- HOW TO USE: Replace [BRACKETED PLACEHOLDERS] with your project info.
-     Customize Beamer environments and CSS classes for your theme.
-     Keep this file under ~150 lines — Claude loads it every session.
-     See the guide at docs/workflow-guide.html for full documentation. -->
-
-**Project:** [YOUR PROJECT NAME]
+**Project:** Surfacing Data Value — What Makes Data Valuable to Hybrid Organizations under the
+Economies of Worth Lens (A Q Methodology Study)
 **Institution:** [YOUR INSTITUTION]
 **Branch:** main
 
@@ -28,8 +24,8 @@ and the usual outcome is that all four get thrown away.
 ## Core Principles
 
 - **Plan first** -- enter plan mode before non-trivial tasks; save plans to `quality_reports/plans/`
-- **Verify after** -- compile/render and confirm output at the end of every task
-- **Single source of truth** -- Beamer `.tex` is authoritative; Quarto `.qmd` derives from it
+- **Verify after** -- confirm rendered output and citation integrity at the end of every task
+- **Single source of truth** -- `Manuscript/paper.md` is the authoritative text; `Manuscript/original_draft/` holds the superseded `.docx` for reference only, never edited
 - **Quality gates** -- nothing ships below 80/100
 - **[LEARN] tags** -- when corrected, save `[LEARN:category] wrong → right` to [MEMORY.md](MEMORY.md)
 
@@ -57,25 +53,34 @@ Cross-session context lives in [MEMORY.md](MEMORY.md); past plans, specs, and se
 
 Nothing clears work until it has a row in [`quality_reports/qualification/LEDGER.md`](quality_reports/qualification/LEDGER.md) — run [`/vaccinate`](.claude/skills/vaccinate/SKILL.md) to put one there.
 
+**A note on method scope (see [`meta-governance.md`](.claude/rules/meta-governance.md)):** the
+owner's veto on unvetted prescriptive guidance is scoped to **causal identification methods**
+(difference-in-differences, regression discontinuity, synthetic control, instrumental
+variables, event studies, matching-as-identification). **Q methodology is not in that scope** —
+it is a technique for surfacing structured subjectivity (viewpoints on value), not for causal
+identification — so the domain reviewer and skills in this repo give real, current
+methodological guidance on Q-methodology design rather than declining to judge it.
+
 ---
 
 ## Folder Structure
 
 ```
-[YOUR-PROJECT]/
+data-value-paper/
 ├── CLAUDE.MD                    # This file
 ├── .claude/                     # Rules, skills, agents, hooks
-├── Bibliography_base.bib        # Centralized bibliography
-├── Figures/                     # Figures and images
-├── Preambles/header.tex         # LaTeX headers
-├── Slides/                      # Beamer .tex files
-├── Quarto/                      # RevealJS .qmd files + theme
-├── docs/                        # GitHub Pages (auto-generated)
-├── scripts/                     # Utility scripts + R code
-├── quality_reports/             # Plans, session logs, merge reports, decision records
-├── explorations/                # Research sandbox (see rules)
-├── templates/                   # Session log, quality report templates
-└── master_supporting_docs/      # Papers and existing slides
+├── Bibliography_base.bib        # Centralized bibliography (pandoc/BibTeX citekeys)
+├── Manuscript/
+│   ├── paper.md                 # SINGLE SOURCE OF TRUTH — the manuscript
+│   └── original_draft/          # Superseded .docx, kept for reference (never edited)
+├── Figures/                     # Figures (e.g., Q-sort factor loadings, once produced)
+├── scripts/R/                   # Dormant — reserved for the eventual by-person factor
+│                                 #   analysis on Q-sort data (not econometrics)
+├── quality_reports/             # Plans, session logs, reviews, decision records
+├── explorations/                # Research sandbox (see rules) — e.g., draft Q-set statements
+├── templates/                   # Session log, plan, requirements-spec templates
+└── master_supporting_docs/      # Source PDFs of literature cited/reviewed
+    └── supporting_papers/
 ```
 
 ---
@@ -83,28 +88,17 @@ Nothing clears work until it has a row in [`quality_reports/qualification/LEDGER
 ## Commands
 
 ```bash
-# LaTeX (3-pass, XeLaTeX only)
-cd Slides && TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-BIBINPUTS=..:$BIBINPUTS bibtex file
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-TEXINPUTS=../Preambles:$TEXINPUTS xelatex -interaction=nonstopmode file.tex
-
-# Deploy Quarto to GitHub Pages
-./scripts/sync_to_docs.sh LectureN
-
-# Quality score
-python scripts/quality_score.py Quarto/file.qmd
-
-# Palette sync (LaTeX ↔ SCSS)
-./scripts/check-palette-sync.sh
-
-# Backtest: is the repo internally consistent and currently true?
-# (surface-sync + skill-integrity + model-versions + links + spec-conformance + staleness + repo-hygiene + derived-counts + ledger-coverage + hook-battery)
-# Run this after ANY change. Also runs in pre-commit and CI.
+# Quality gate suite (repo hygiene, surface-sync, staleness, ledger coverage, hook battery, etc.)
+# Run this after ANY change. Also runs in pre-commit once ./scripts/install-hooks.sh has been run.
 ./scripts/backtest.sh
 ```
 
-**Palette contract:** color names in `Preambles/header.tex` must match SCSS variables in `Quarto/theme-template.scss`. See [`Preambles/README.md`](Preambles/README.md).
+There is currently no compile/render step — the manuscript is plain Markdown, and no
+manuscript-specific entry in `quality_score.py` exists yet (see "Proposed further
+customizations" in `quality_reports/plans/2026-09-02_workflow-setup-and-abstract-conversion.md`
+for why that's deferred rather than guessed at). Once Q-sort data collection begins,
+`scripts/R/` will hold the by-person factor-analysis pipeline and its own run commands will be
+documented here.
 
 ---
 
@@ -122,43 +116,41 @@ Enforced by `/commit` (halts + asks for override) **and** — once you run `./sc
 
 ## Skills Quick Reference
 
-The full table of all skills lives in [README.md](README.md#skills-claudeskills). Most-used, by workflow:
+The full table of all skills lives in [README.md](README.md#skills-claudeskills). Most-used, by workflow, for a single-manuscript paper project:
 
-- **Slides / teaching:** `/create-lecture` `/compile-latex` `/deploy` `/qa-quarto` `/slide-excellence` `/syllabus` `/teach-from-paper` `/scaffold-exercises`
-- **Papers / review:** `/review-paper` (`--peer`) `/seven-pass-review` `/respond-to-referees` `/verify-claims` `/proofread` `/humanize` `/submission-disclosures`
-- **Data / reproducibility:** `/data-analysis` `/simulation-study` `/audit-reproducibility` `/diagnose` `/replication-package` `/capture-environment` `/power-analysis` `/disclosure-check`
-- **Research / writing:** `/interview-me` `/lit-review` `/research-ideation` `/preregister` `/grant-proposal` `/data-management-plan`
-- **Verification / rigor:** `/vaccinate` `/challenge` `/oracle-review` `/adjudicate-review` `/differential-audit` `/blast-radius` `/verify-artifact` `/credible-claims` `/deep-audit`
-- **Meta / workflow:** `/commit` `/learn` `/new-skill` `/checkpoint` `/context-status` `/deep-audit` `/coauthor-brief` `/triage-inbox`
+- **Writing / ideation:** `/interview-me` `/research-ideation` `/lit-review`
+- **Review:** `/review-paper` (`--peer`, `--adversarial`) `/seven-pass-review` `/respond-to-referees` `/verify-claims` `/proofread` `/humanize`
+- **Submission prep:** `/submission-disclosures` `/preregister` `/data-management-plan` `/coauthor-brief`
+- **Verification / rigor:** `/vaccinate` `/challenge` `/oracle-review` `/adjudicate-review` `/credible-claims` `/deep-audit`
+- **Meta / workflow:** `/commit` `/learn` `/new-skill` `/checkpoint` `/context-status` `/triage-inbox`
 
-Stata (`/stata-replication`), R packages (`/r-package-check`), TikZ (`/extract-tikz`, `/new-diagram`), and more — see the README for the complete index.
+Other skills (slide/LaTeX/Quarto workflow, R/Stata replication, simulation studies) remain on
+disk and available but aren't relevant to this project's current phase — see the "Proposed
+further customizations" note in the setup plan if you want them pruned.
 
 ---
 
-<!-- CUSTOMIZE: Replace placeholder rows ([your-env], [.your-class]) with your own.
-     Delete the rows marked "(example — delete)" once you've added yours. -->
+## Key Terminology & Notation Conventions
 
-## Beamer Custom Environments
+The paper leans on precise technical vocabulary from two literatures. Keep usage consistent —
+this table replaces the slide-template's Beamer/Quarto formatting tables with the drift-prone
+terms that actually matter here.
 
-| Environment | Effect | Use Case |
+| Term | Meaning | Convention |
 | --- | --- | --- |
-| `[your-env]` | [Description] | [When to use] |
-| `keybox` | Gold background box | Key points *(example — delete)* |
-| `definitionbox[Title]` | Blue-bordered titled box | Formal definitions *(example — delete)* |
-
-## Quarto CSS Classes
-
-| Class | Effect | Use Case |
-| --- | --- | --- |
-| `[.your-class]` | [Description] | [When to use] |
-| `.smaller` | 85% font | Dense content *(example — delete)* |
-| `.positive` | Green bold | Good annotations *(example — delete)* |
+| Order of worth | One of Boltanski & Thévenot's shared, mutually irreducible value systems (market, industrial, civic, domestic, inspired, fame, green, project) | Lowercase in running prose: "the market order," "the civic order" |
+| Investments of form | Durable, standardized proof devices (prices, statistics, certifications) that make a worth claim defensible (Thévenot, 1984) | Always "investments of form" — do not shorten to "form" alone |
+| Compromise vs. prioritization | Two distinct ways EoW disputes resolve: compromise treats an object as satisfying several orders at once; prioritization ranks one order above the others | Keep the two terms distinct — do not use "compromise" loosely |
+| Concourse | The full universe of statements/viewpoints on data value, from which the Q-set is sampled | Q-methodology term of art |
+| Q-set | The ~40 statements sampled from the concourse for sorting | |
+| P-set | The ~30 participants who complete the Q-sort | |
+| Q-sort | One participant's forced ranking of the Q-set against the fixed-distribution grid | |
+| Value creation / value capture | Bowman & Ambrosini's (2000) dyad: enlarging total value available vs. determining who gets what share of it | Keep hyphenated, lowercase |
 
 ---
 
 ## Current Project State
 
-| Lecture | Beamer | Quarto | Key Content |
+| Artifact | File | Status | Content |
 | --- | --- | --- | --- |
-| HelloWorld *(sample — delete when ready)* | `HelloWorld.tex` | `HelloWorld.qmd` | Minimal deck to verify setup |
-| 1: [Topic] | `Lecture01_Topic.tex` | `Lecture1_Topic.qmd` | [Brief description] |
+| The paper | `Manuscript/paper.md` | Draft — §3a "The Data Value Literature" is WIP and needs a substantive rewrite | Introduction, Research Gap, Conceptual Background (Data Value Literature / Economies of Worth / Value Creation & Capture), Methodology (Q methodology design), Expected Results, Future Research |
