@@ -1335,7 +1335,11 @@ def _compose_dash_c(parts: list[str]) -> str | None:
         if cur is None or os.path.isabs(expanded):
             cur = raw
             continue
-        cur = os.path.join(cur, raw)
+        # Compose with a FORWARD slash, not os.sep: is_protected() matches on
+        # "/"-separated segments, so an os.path.join on Windows produced
+        # ".claude\hooks" and the fold silently stopped being protected
+        # (a54 fails exactly this way under Git Bash).
+        cur = os.path.join(cur, raw).replace(os.sep, "/")
     return cur
 
 

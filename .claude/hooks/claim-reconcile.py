@@ -123,7 +123,10 @@ def main() -> int:
     # otherwise scripts/R/results.rds and scripts/stata/results.rds throttle
     # each other, and clean.R spuriously matches data_clean.R.
     try:
-        changed = str(Path(fp).resolve().relative_to(Path(project_dir).resolve()))
+        # as_posix(): passports declare "scripts/analysis.R", so a Windows
+        # backslash spelling here never matched the `changed in ln` test and
+        # every provenance claim went unflagged (battery case d1).
+        changed = Path(fp).resolve().relative_to(Path(project_dir).resolve()).as_posix()
     except Exception:
         changed = Path(fp).name
 
