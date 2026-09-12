@@ -91,6 +91,30 @@ fi
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/hook-battery.XXXXXX")" || exit 2
 trap 'rm -rf "$TMP"' EXIT INT TERM
 
+# ── Windows: the harness sends NATIVE paths in the event JSON ──────────────
+# Under Git Bash the fixtures are built at POSIX paths (/tmp/..., /c/...), but
+# the hooks run under a NATIVE python3, for which "/tmp/hook-battery.X/repo" is
+# not a directory at all. A guard asked about a path it cannot resolve fails
+# OPEN, so every fixture reads as clean and the battery reports the guards
+# silent when the shipped guards are in fact firing correctly — measured on
+# Windows 11 / Git Bash, where 30 of 234 cases failed this way while the same
+# events with native paths denied exactly as specified.
+#
+# Real Claude Code always sends the native spelling (C:/Users/...), so
+# rewriting the event's paths is what makes the battery measure the behaviour
+# that actually ships. cygpath -m yields forward slashes, which need no JSON
+# escaping. On POSIX cygpath is absent and _ev is an exact no-op.
+if command -v cygpath >/dev/null 2>&1; then
+    _TMP_NATIVE="$(cygpath -m "$TMP")"
+    _ROOT_NATIVE="$(cygpath -m "$ROOT")"
+    _ev() {
+        sed -e "s|$TMP|$_TMP_NATIVE|g" -e "s|$ROOT|$_ROOT_NATIVE|g" "$1" > "$1.native"
+        printf '%s' "$1.native"
+    }
+else
+    _ev() { printf '%s' "$1"; }
+fi
+
 # ── --fixture-selftest: the child half of cases e1-e3 ──────────────────────
 # Cases e1-e3 re-enter THIS script with git's hook environment deliberately
 # exported at a decoy repository, and check that the fixture build lands in the
@@ -126,7 +150,7 @@ fire() {  # fire <hook-file> <event-json> [VAR=VAL ...]  -> sets OUT, RC
     # trailing VAR=VAL assignments second, so a case that wants one back gets it.
     local hook="$1" ev="$2"; shift 2
     OUT="$(env -u ALLOW_ROOT_OF_TRUST_WRITE -u ALLOW_DIRTY_MERGE -u CLAUDE_STRICT_PATHS \
-           "${UNSET_GIT_ENV[@]}" "$@" python3 "$HOOKS/$hook" < "$ev" 2>/dev/null)"
+           "${UNSET_GIT_ENV[@]}" "$@" python3 "$HOOKS/$hook" < "$(_ev "$ev")" 2>/dev/null)"
     RC=$?
 }
 fire_in() {  # fire_in <hook-process-cwd> <hook-file> <event-json> -> sets OUT, RC
@@ -136,7 +160,7 @@ fire_in() {  # fire_in <hook-process-cwd> <hook-file> <event-json> -> sets OUT, 
     local dir="$1" hook="$2" ev="$3"
     OUT="$(cd "$dir" && env -u ALLOW_ROOT_OF_TRUST_WRITE -u ALLOW_DIRTY_MERGE \
            -u CLAUDE_STRICT_PATHS "${UNSET_GIT_ENV[@]}" \
-           python3 "$HOOKS/$hook" < "$ev" 2>/dev/null)"
+           python3 "$HOOKS/$hook" < "$(_ev "$ev")" 2>/dev/null)"
     RC=$?
 }
 
@@ -149,7 +173,7 @@ fire_from() {  # fire_from <hook-dir> <hook-file> <event-json> -> sets OUT, RC
     # HOOK_DIR still reaches these cases.
     local dir="$1" hook="$2" ev="$3"
     OUT="$(env -u ALLOW_ROOT_OF_TRUST_WRITE -u ALLOW_DIRTY_MERGE -u CLAUDE_STRICT_PATHS \
-           "${UNSET_GIT_ENV[@]}" python3 "$dir/$hook" < "$ev" 2>/dev/null)"
+           "${UNSET_GIT_ENV[@]}" python3 "$dir/$hook" < "$(_ev "$ev")" 2>/dev/null)"
     RC=$?
 }
 
@@ -2359,6 +2383,11 @@ SYM_CLEAN="$TMP/sym-clean"
 mkdir -p "$SYM_CLEAN/sub"
 git -C "$SYM_CLEAN" init -q >/dev/null 2>&1
 printf 'k\n' > "$SYM_CLEAN/sub/keep.txt"
+# MSYS `ln -s` COPIES unless asked for a native symlink, and a copy cannot
+# exercise a case about what a link resolves to. nativestrict makes it fail
+# loudly instead of copying silently; Windows grants the privilege only under
+# Developer Mode or elevation, which cases c57-c64 then report as unreached.
+export MSYS="${MSYS:-}${MSYS:+ }winsymlinks:nativestrict"
 ln -s "$SYM_DIRTY/sub" "$SYM_CLEAN/link"        # -> the DIRTY repo's subdirectory
 ln -s "$SYM_CLEAN/sub" "$SYM_CLEAN/selflink"    # -> this CLEAN repo's own subdirectory
 git -C "$SYM_CLEAN" add sub/keep.txt link selflink >/dev/null 2>&1
