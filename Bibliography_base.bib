@@ -1,165 +1,349 @@
 % ==============================================================================
-% Bibliography — Essay 2 (Brand-Influencer Collaborations)
+% Bibliography — Online Review Ratings project
+% (theory 2×2 solicitation model + "The Silence of the Satisfied" + experiment)
 % ==============================================================================
-% Core set transcribed from the submitted-draft reference list (author-verified)
-% plus two verified web additions (Leung et al. 2022; Burgoon 1993).
-% Full 60-entry list: quality_reports/lit_review_essay2.md.
-% Naming convention: AuthorYear_keyword
+% Source: docs/Review_Ratings_Literature_Review.docx (Part 1 table, 43 papers),
+%   author-checked at source 2026-09-12. Titles, page ranges, and DOIs verified
+%   against the Crossref REST API on 2026-09-14; every author/year/journal/volume/
+%   issue matched the source unless flagged in the notes below.
+% Naming convention: AuthorYear_keyword. INV-5: this is the ONE canonical .bib.
+%
+% Verification notes (discrepancies vs. the lit-review one-liners):
+%   * Huang (2026, NRL) is cited in the note as single-author "Huang (2026)"; the
+%     published record is THREE authors — Huang, Guo & Wang. Full list used here.
+%   * Shin, Vaccari & Zeevi: year is 2023 (the note omitted it).
+%   * Chen, Du & Lei: year is 2025 (the note omitted it).
+%   * Zhao et al.: POMS 31(10) (issue confirmed).
+%   * Fradkin & Holtz (2023): Marketing Science 42(5) (the note omitted vol/issue).
+%   * Martin & Shelegia (2021): IJIO vol. 79, article 102775.
+%   * De Langhe et al.: the JCR 42(6) record at 834–839 is Kozinets' COMMENTARY;
+%     the actual paper ("Navigating by the Stars") is 42(6):817–833 — used here.
+%   * Two source-flagged corrections confirmed: Hollenbeck 2018 = JMR 55(5),
+%     636–654 (not Marketing Science); Gao et al. 2015 = "Vocal Minority and
+%     Silent Majority", MISQ 39(3).
+%   * Luca (2016) is an HBS working paper (no DOI) — @techreport below.
+% 2026-09-14: added 4 gap-fill entries via /lit-review (Crossref-verified) — Xie
+%   et al. 2024, Marinescu et al. 2021, and an "LLM text measurement (methods)"
+%   stream (Gilardi et al. 2023; Ziems et al. 2024). See
+%   quality_reports/lit_review_review_ratings_gap_fill.md. Total: 48 entries.
 % ==============================================================================
 
-% --- Influencer marketing: effectiveness & context ---------------------------
-@article{HughesSwaminathanBrooks2019_influencer_engagement,
-  author  = {Hughes, Christian and Swaminathan, Vanitha and Brooks, Gillian},
-  title   = {Driving Brand Engagement Through Online Social Influencers: An Empirical Investigation of Sponsored Blogging Campaigns},
-  journal = {Journal of Marketing}, volume = {83}, number = {5}, pages = {78--96}, year = {2019}}
 
-@article{Leungetal2022_influencer_effectiveness,
-  author  = {Leung, Fine F. and Gu, Flora F. and Li, Yiwei and Zhang, Jonathan Z. and Palmatier, Robert W.},
-  title   = {Influencer Marketing Effectiveness},
-  journal = {Journal of Marketing}, volume = {86}, number = {6}, pages = {93--115}, year = {2022}}
+% --- Why ratings are biased ---------------------------------------------------
 
-@article{DeVeirmanCaubergheHudders2017_instagram_influencers,
-  author  = {De Veirman, Marijke and Cauberghe, Veroline and Hudders, Liselot},
-  title   = {Marketing through Instagram Influencers: The Impact of Number of Followers and Product Divergence on Brand Attitude},
-  journal = {International Journal of Advertising}, volume = {36}, number = {5}, pages = {798--828}, year = {2017}}
+@article{HuPavlouZhang2009_jshaped,
+  author  = {Hu, Nan and Pavlou, Paul A. and Zhang, Jennifer},
+  title   = {{Overcoming the J-shaped Distribution of Product Reviews}},
+  journal = {Communications of the ACM}, volume = {52}, number = {10}, pages = {144--147}, year = {2009},
+  doi     = {10.1145/1562764.1562800}}
 
-@article{LouYuan2019_influencer_credibility,
-  author  = {Lou, Chen and Yuan, Shupei},
-  title   = {Influencer Marketing: How Message Value and Credibility Affect Consumer Trust of Branded Content on Social Media},
-  journal = {Journal of Interactive Advertising}, volume = {19}, number = {1}, pages = {58--73}, year = {2019}}
+@article{HuPavlouZhang2017_selfselection,
+  author  = {Hu, Nan and Pavlou, Paul A. and Zhang, Jie},
+  title   = {{On Self-Selection Biases in Online Product Reviews}},
+  journal = {MIS Quarterly}, volume = {41}, number = {2}, pages = {449--471}, year = {2017},
+  doi     = {10.25300/MISQ/2017/41.2.06}}
 
-@article{Shankaretal2022_digital_marketing_review,
-  author  = {Shankar, Venkatesh and Grewal, Dhruv and Sunder, Sarang and Fossen, Beth and Peters, Kay and Agarwal, Amit},
-  title   = {Digital Marketing Communication in Global Marketplaces: A Review of Extant Research, Future Directions, and Potential Approaches},
-  journal = {International Journal of Research in Marketing}, volume = {39}, number = {2}, pages = {541--565}, year = {2022}}
+@article{LiHitt2008_selfselection,
+  author  = {Li, Xinxin and Hitt, Lorin M.},
+  title   = {{Self-Selection and Information Role of Online Product Reviews}},
+  journal = {Information Systems Research}, volume = {19}, number = {4}, pages = {456--474}, year = {2008},
+  doi     = {10.1287/isre.1070.0154}}
 
-% --- Sponsorship disclosure --------------------------------------------------
-@article{ErshovHeSeiler2025_undisclosed,
-  author  = {Ershov, Daniel and He, Yanting and Seiler, Stephan},
-  title   = {Frontiers: How Much Influencer Marketing Is Undisclosed? Evidence from Twitter},
-  journal = {Marketing Science}, volume = {44}, number = {3}, pages = {505--515}, year = {2025}}
+@article{GaoEtal2015_vocal_minority,
+  author  = {Gao, Guodong (Gordon) and Greenwood, Brad N. and Agarwal, Ritu and McCullough, Jeffrey S.},
+  title   = {{Vocal Minority and Silent Majority: How Do Online Ratings Reflect Population Perceptions of Quality?}},
+  journal = {MIS Quarterly}, volume = {39}, number = {3}, pages = {565--588}, year = {2015},
+  doi     = {10.25300/MISQ/2015/39.3.03}}
 
-@article{BoermanWillemsenVanDerAa2017_this_post_sponsored,
-  author  = {Boerman, Sophie C. and Willemsen, Lotte M. and Van Der Aa, Eva P.},
-  title   = {``This Post Is Sponsored'': Effects of Sponsorship Disclosure on Persuasion Knowledge and Electronic Word of Mouth in the Context of Facebook},
-  journal = {Journal of Interactive Marketing}, volume = {38}, number = {1}, pages = {82--92}, year = {2017}}
+@article{SchoenmuellerNetzerStahl2020_polarity,
+  author  = {Schoenmueller, Verena and Netzer, Oded and Stahl, Florian},
+  title   = {{The Polarity of Online Reviews: Prevalence, Drivers and Implications}},
+  journal = {Journal of Marketing Research}, volume = {57}, number = {5}, pages = {853--877}, year = {2020},
+  doi     = {10.1177/0022243720941832}}
 
-@article{CampbellMohrVerlegh2013_resist_covert,
-  author  = {Campbell, Margaret C. and Mohr, Gina S. and Verlegh, Peeter W. J.},
-  title   = {Can Disclosures Lead Consumers to Resist Covert Persuasion? The Important Roles of Disclosure Timing and Type of Response},
-  journal = {Journal of Consumer Psychology}, volume = {23}, number = {4}, pages = {483--495}, year = {2013}}
+@article{BrandesGodesMayzlin2022_attrition,
+  author  = {Brandes, Leif and Godes, David and Mayzlin, Dina},
+  title   = {{Extremity Bias in Online Reviews: The Role of Attrition}},
+  journal = {Journal of Marketing Research}, volume = {59}, number = {4}, pages = {675--695}, year = {2022},
+  doi     = {10.1177/00222437211073579}}
 
-@article{Eisendetal2020_disclosure_metaanalysis,
-  author  = {Eisend, Martin and Van Reijmersdal, Eva A. and Boerman, Sophie C. and Tarrahi, Farid},
-  title   = {A Meta-Analysis of the Effects of Disclosing Sponsored Content},
-  journal = {Journal of Advertising}, volume = {49}, number = {3}, pages = {344--366}, year = {2020}}
+@article{GodesSilva2012_dynamics,
+  author  = {Godes, David and Silva, Jos{\'e} C.},
+  title   = {{Sequential and Temporal Dynamics of Online Opinion}},
+  journal = {Marketing Science}, volume = {31}, number = {3}, pages = {448--473}, year = {2012},
+  doi     = {10.1287/mksc.1110.0653}}
 
-@article{Evansetal2017_disclosing_instagram,
-  author  = {Evans, Nathaniel J. and Phua, Joe and Lim, Jay and Jun, Hyoyeun},
-  title   = {Disclosing Instagram Influencer Advertising: The Effects of Disclosure Language on Advertising Recognition, Attitudes, and Behavioral Intent},
-  journal = {Journal of Interactive Advertising}, volume = {17}, number = {2}, pages = {138--149}, year = {2017}}
+@article{MoeSchweidel2012_incidence,
+  author  = {Moe, Wendy W. and Schweidel, David A.},
+  title   = {{Online Product Opinions: Incidence, Evaluation, and Evolution}},
+  journal = {Marketing Science}, volume = {31}, number = {3}, pages = {372--386}, year = {2012},
+  doi     = {10.1287/mksc.1110.0662}}
 
-@article{EvansWojdynskiGrubbsHoy2019_transparency,
-  author  = {Evans, Nathaniel J. and Wojdynski, Bartosz W. and Grubbs Hoy, Mariea},
-  title   = {How Sponsorship Transparency Mitigates Negative Effects of Advertising Recognition},
-  journal = {International Journal of Advertising}, volume = {38}, number = {3}, pages = {364--382}, year = {2019}}
+@article{FilippasHortonGolden2022_reputation_inflation,
+  author  = {Filippas, Apostolos and Horton, John J. and Golden, Joseph M.},
+  title   = {{Reputation Inflation}},
+  journal = {Marketing Science}, volume = {41}, number = {4}, pages = {733--745}, year = {2022},
+  doi     = {10.1287/mksc.2022.1350}}
 
-@article{CaoBelo2023_disclosure_engagement,
-  author  = {Cao, Zike and Belo, Rodrigo},
-  title   = {Effects of Explicit Sponsorship Disclosure on User Engagement in Social Media Influencer Marketing},
-  journal = {MIS Quarterly}, note = {Forthcoming}, year = {2023}}
+@article{XieYeohWang2024_selfselection_satisfaction,
+  author  = {Xie, Yancong and Yeoh, William and Wang, Jingguo},
+  title   = {{How Self-Selection Bias in Online Reviews Affects Buyer Satisfaction: A Product-Type Perspective}},
+  journal = {Decision Support Systems}, volume = {181}, pages = {114199}, year = {2024},
+  doi     = {10.1016/j.dss.2024.114199}}
 
-@article{ChengZhang2025_reputation_burning,
-  author  = {Cheng, Mengjie and Zhang, Shunyuan},
-  title   = {Reputation Burning: Analyzing the Impact of Brand Sponsorship on Social Influencers},
-  journal = {Management Science}, volume = {71}, number = {7}, pages = {5910--5932}, year = {2025}}
 
-% --- Persuasion knowledge & mechanism ----------------------------------------
-@article{FriestadWright1994_pkm,
-  author  = {Friestad, Marian and Wright, Peter},
-  title   = {The Persuasion Knowledge Model: How People Cope with Persuasion Attempts},
-  journal = {Journal of Consumer Research}, volume = {21}, number = {1}, pages = {1--31}, year = {1994}}
+% --- Changing who reviews -----------------------------------------------------
 
-@article{WojdynskiEvans2020_care_model,
-  author  = {Wojdynski, Bartosz W. and Evans, Nathaniel J.},
-  title   = {The Covert Advertising Recognition and Effects (CARE) Model: Processes of Persuasion in Native Advertising and Other Masked Formats},
-  journal = {International Journal of Advertising}, volume = {39}, number = {1}, pages = {4--31}, year = {2020}}
+@article{AskalidisKimMalthouse2017_biases,
+  author  = {Askalidis, Georgios and Kim, Su Jung and Malthouse, Edward C.},
+  title   = {{Understanding and Overcoming Biases in Online Review Systems}},
+  journal = {Decision Support Systems}, volume = {97}, pages = {23--30}, year = {2017},
+  doi     = {10.1016/j.dss.2017.03.002}}
 
-@article{GrigsbyMellema2020_native_storytelling,
-  author  = {Grigsby, Jamie L. and Mellema, Hillary N.},
-  title   = {Negative Consequences of Storytelling in Native Advertising},
-  journal = {Journal of Interactive Marketing}, volume = {52}, pages = {61--78}, year = {2020}}
+@article{Karaman2021_solicitation_extremity,
+  author  = {Karaman, H{\"u}lya},
+  title   = {{Online Review Solicitations Reduce Extremity Bias in Online Review Distributions and Increase Their Representativeness}},
+  journal = {Management Science}, volume = {67}, number = {7}, pages = {4420--4445}, year = {2021},
+  doi     = {10.1287/mnsc.2020.3758}}
 
-@article{MainDahlDarke2007_suspicion,
-  author  = {Main, Kelley J. and Dahl, Darren W. and Darke, Peter R.},
-  title   = {Deliberative and Automatic Bases of Suspicion: Empirical Evidence of the Sinister Attribution Error},
-  journal = {Journal of Consumer Psychology}, volume = {17}, number = {1}, pages = {59--69}, year = {2007}}
+@article{WangAnderson2023_firm_strategies,
+  author  = {Wang, Frances Xinhua and Anderson, Chris},
+  title   = {{How Firm Strategies Affect Consumer Biases in Online Reviews}},
+  journal = {Service Science}, volume = {15}, number = {3}, pages = {172--187}, year = {2023},
+  doi     = {10.1287/serv.2023.0316}}
 
-% --- Expectancy violation / disconfirmation ("surprise") ---------------------
-@article{Burgoon1993_expectancy_violations,
-  author  = {Burgoon, Judee K.},
-  title   = {Interpersonal Expectations, Expectancy Violations, and Emotional Communication},
-  journal = {Journal of Language and Social Psychology}, volume = {12}, number = {1--2}, pages = {30--48}, year = {1993}}
+@article{BurtchEtal2018_incentives_norms,
+  author  = {Burtch, Gordon and Hong, Yili and Bapna, Ravi and Griskevicius, Vladas},
+  title   = {{Stimulating Online Reviews by Combining Financial Incentives and Social Norms}},
+  journal = {Management Science}, volume = {64}, number = {5}, pages = {2065--2082}, year = {2018},
+  doi     = {10.1287/mnsc.2016.2715}}
 
-@article{Oliver1980_expectancy_disconfirmation,
-  author  = {Oliver, Richard L.},
-  title   = {A Cognitive Model of the Antecedents and Consequences of Satisfaction Decisions},
-  journal = {Journal of Marketing Research}, volume = {17}, number = {4}, pages = {460--469}, year = {1980}}
+@article{FradkinGrewalHoltz2021_reciprocity,
+  author  = {Fradkin, Andrey and Grewal, Elena and Holtz, David},
+  title   = {{Reciprocity and Unveiling in Two-Sided Reputation Systems: Evidence from an Experiment on Airbnb}},
+  journal = {Marketing Science}, volume = {40}, number = {6}, pages = {1013--1029}, year = {2021},
+  doi     = {10.1287/mksc.2021.1311}}
 
-@article{ChurchillSurprenant1982_satisfaction,
-  author  = {Churchill Jr, Gilbert A. and Surprenant, Carol},
-  title   = {An Investigation into the Determinants of Customer Satisfaction},
-  journal = {Journal of Marketing Research}, volume = {19}, number = {4}, pages = {491--504}, year = {1982}}
+@article{FradkinHoltz2023_incentives_market,
+  author  = {Fradkin, Andrey and Holtz, David},
+  title   = {{Do Incentives to Review Help the Market? Evidence from a Field Experiment on Airbnb}},
+  journal = {Marketing Science}, volume = {42}, number = {5}, pages = {853--865}, year = {2023},
+  doi     = {10.1287/mksc.2023.1439}}
 
-% --- Engagement typology: amplification vs conversation ----------------------
-@article{ZhangMoeSchweidel2017_rebroadcasting,
-  author  = {Zhang, Yuchi and Moe, Wendy W. and Schweidel, David A.},
-  title   = {Modeling the Role of Message Content and Influencers in Social Media Rebroadcasting},
-  journal = {International Journal of Research in Marketing}, volume = {34}, number = {1}, pages = {100--119}, year = {2017}}
+@article{WoolleySharif2021_incentives_positivity,
+  author  = {Woolley, Kaitlin and Sharif, Marissa A.},
+  title   = {{Incentives Increase Relative Positivity of Review Content and Enjoyment of Review Writing}},
+  journal = {Journal of Marketing Research}, volume = {58}, number = {3}, pages = {539--558}, year = {2021},
+  doi     = {10.1177/00222437211010439}}
 
-@article{Choietal2018_disclosure_sharing,
-  author  = {Choi, Dongwon and Bang, Hyejin and Wojdynski, Bartosz W. and Lee, Yen-I and Keib, Kate M.},
-  title   = {How Brand Disclosure Timing and Brand Prominence Influence Consumer's Intention to Share Branded Entertainment Content},
-  journal = {Journal of Interactive Marketing}, volume = {42}, number = {1}, pages = {18--31}, year = {2018}}
+@article{MarinescuEtal2021_incentives_bias,
+  author  = {Marinescu, Ioana and Chamberlain, Andrew and Smart, Morgan and Klein, Nadav},
+  title   = {{Incentives Can Reduce Bias in Online Employer Reviews}},
+  journal = {Journal of Experimental Psychology: Applied}, volume = {27}, number = {2}, pages = {393--407}, year = {2021},
+  doi     = {10.1037/xap0000342}}
 
-@article{GongZhangZhaoJiang2017_tweeting_field,
-  author  = {Gong, Shiyang and Zhang, Juanjuan and Zhao, Ping and Jiang, Xuping},
-  title   = {Tweeting as a Marketing Tool: A Field Experiment in the TV Industry},
-  journal = {Journal of Marketing Research}, volume = {54}, number = {6}, pages = {833--850}, year = {2017}}
 
-@article{LambrechtTuckerWiertz2018_twitter,
-  author  = {Lambrecht, Anja and Tucker, Catherine and Wiertz, Caroline},
-  title   = {Advertising to Early Trend Propagators: Evidence from Twitter},
-  journal = {Marketing Science}, volume = {37}, number = {2}, pages = {177--199}, year = {2018}}
+% --- How consumers read ratings ----------------------------------------------
 
-% --- Engagement drivers / virality (background) ------------------------------
-@article{BergerMilkman2012_viral,
-  author  = {Berger, Jonah and Milkman, Katherine L.},
-  title   = {What Makes Online Content Viral?},
-  journal = {Journal of Marketing Research}, volume = {49}, number = {2}, pages = {192--205}, year = {2012}}
+@article{Sun2012_variance,
+  author  = {Sun, Monic},
+  title   = {{How Does the Variance of Product Ratings Matter?}},
+  journal = {Management Science}, volume = {58}, number = {4}, pages = {696--707}, year = {2012},
+  doi     = {10.1287/mnsc.1110.1458}}
 
-@article{Tellisetal2019_virality,
-  author  = {Tellis, Gerard J. and MacInnis, Deborah J. and Tirunillai, Seshadri and Zhang, Yanwei},
-  title   = {What Drives Virality (Sharing) of Online Digital Content? The Critical Role of Information, Emotion, and Brand Prominence},
-  journal = {Journal of Marketing}, volume = {83}, number = {4}, pages = {1--20}, year = {2019}}
+@article{DeLangheFernbachLichtenstein2016_navigating_stars,
+  author  = {De Langhe, Bart and Fernbach, Philip M. and Lichtenstein, Donald R.},
+  title   = {{Navigating by the Stars: Investigating the Actual and Perceived Validity of Online User Ratings}},
+  journal = {Journal of Consumer Research}, volume = {42}, number = {6}, pages = {817--833}, year = {2016},
+  doi     = {10.1093/jcr/ucv047}}
 
-@article{VanDoornetal2010_engagement,
-  author  = {Van Doorn, Jenny and Lemon, Katherine N. and Mittal, Vikas and Nass, Stephan and Pick, Doreen and Pirner, Peter and Verhoef, Peter C.},
-  title   = {Customer Engagement Behavior: Theoretical Foundations and Research Directions},
-  journal = {Journal of Service Research}, volume = {13}, number = {3}, pages = {253--266}, year = {2010}}
+@article{HeBond2015_dispersion,
+  author  = {He, Stephen X. and Bond, Samuel D.},
+  title   = {{Why Is the Crowd Divided? Attribution for Dispersion in Online Word of Mouth}},
+  journal = {Journal of Consumer Research}, volume = {41}, number = {6}, pages = {1509--1527}, year = {2015},
+  doi     = {10.1086/680667}}
 
-@article{CascioRizzoetal2024_arousal_influencers,
-  author  = {Cascio Rizzo, Giovanni Luca and Villarroel Ordenes, Francisco and Pozharliev, Rumen and De Angelis, Matteo and Costabile, Michele},
-  title   = {How High-Arousal Language Shapes Micro- Versus Macro-Influencers' Impact},
-  journal = {Journal of Marketing}, year = {2024}, note = {Online first}}
 
-% --- Author's related work & methods -----------------------------------------
-@article{FossenMallapragadaDe2021_political_tv,
-  author  = {Fossen, Beth L. and Mallapragada, Girish and De, Anwesha},
-  title   = {Impact of Political Television Advertisements on Viewers' Response to Subsequent Advertisements},
-  journal = {Marketing Science}, volume = {40}, number = {2}, pages = {305--324}, year = {2021}}
+% --- Manipulation -------------------------------------------------------------
 
-@article{Roodman2011_cmp,
-  author  = {Roodman, David},
-  title   = {Estimating Fully Observed Recursive Mixed-Process Models with cmp},
-  journal = {Stata Journal}, volume = {11}, number = {2}, pages = {159--206}, year = {2011}}
+@article{Mayzlin2006_promotional_chat,
+  author  = {Mayzlin, Dina},
+  title   = {{Promotional Chat on the Internet}},
+  journal = {Marketing Science}, volume = {25}, number = {2}, pages = {155--163}, year = {2006},
+  doi     = {10.1287/mksc.1050.0137}}
+
+@article{Dellarocas2006_manipulation,
+  author  = {Dellarocas, Chrysanthos},
+  title   = {{Strategic Manipulation of Internet Opinion Forums: Implications for Consumers and Firms}},
+  journal = {Management Science}, volume = {52}, number = {10}, pages = {1577--1593}, year = {2006},
+  doi     = {10.1287/mnsc.1060.0567}}
+
+@article{MayzlinDoverChevalier2014_promotional_reviews,
+  author  = {Mayzlin, Dina and Dover, Yaniv and Chevalier, Judith},
+  title   = {{Promotional Reviews: An Empirical Investigation of Online Review Manipulation}},
+  journal = {American Economic Review}, volume = {104}, number = {8}, pages = {2421--2455}, year = {2014},
+  doi     = {10.1257/aer.104.8.2421}}
+
+@article{LucaZervas2016_fake_it,
+  author  = {Luca, Michael and Zervas, Georgios},
+  title   = {{Fake It Till You Make It: Reputation, Competition, and Yelp Review Fraud}},
+  journal = {Management Science}, volume = {62}, number = {12}, pages = {3412--3427}, year = {2016},
+  doi     = {10.1287/mnsc.2015.2304}}
+
+@article{HeHollenbeckProserpio2022_fake_reviews,
+  author  = {He, Sherry and Hollenbeck, Brett and Proserpio, Davide},
+  title   = {{The Market for Fake Reviews}},
+  journal = {Marketing Science}, volume = {41}, number = {5}, pages = {896--921}, year = {2022},
+  doi     = {10.1287/mksc.2022.1353}}
+
+@article{ZhangEtal2025_platform_governance,
+  author  = {Zhang, Wen and Zhang, Xuan and Wang, Qiang and Li, Jian and Ma, Zhenzhong},
+  title   = {{Stop It or Not? Effect of Platform's Governance on Firms' Online Review Manipulation}},
+  journal = {Information \& Management}, volume = {62}, number = {7}, pages = {104200}, year = {2025},
+  doi     = {10.1016/j.im.2025.104200}}
+
+
+% --- Theory of firms and reviews ---------------------------------------------
+
+@article{Dellarocas2003_digitization,
+  author  = {Dellarocas, Chrysanthos},
+  title   = {{The Digitization of Word of Mouth: Promise and Challenges of Online Feedback Mechanisms}},
+  journal = {Management Science}, volume = {49}, number = {10}, pages = {1407--1424}, year = {2003},
+  doi     = {10.1287/mnsc.49.10.1407.17308}}
+
+@article{ChenXie2008_wom_mix,
+  author  = {Chen, Yubo and Xie, Jinhong},
+  title   = {{Online Consumer Review: Word-of-Mouth as a New Element of Marketing Communication Mix}},
+  journal = {Management Science}, volume = {54}, number = {3}, pages = {477--491}, year = {2008},
+  doi     = {10.1287/mnsc.1070.0810}}
+
+@article{KuksovXie2010_pricing_frills,
+  author  = {Kuksov, Dmitri and Xie, Ying},
+  title   = {{Pricing, Frills, and Customer Ratings}},
+  journal = {Marketing Science}, volume = {29}, number = {5}, pages = {925--943}, year = {2010},
+  doi     = {10.1287/mksc.1100.0571}}
+
+@article{JiangGuo2015_review_system_design,
+  author  = {Jiang, Yabing and Guo, Hong},
+  title   = {{Design of Consumer Review Systems and Product Pricing}},
+  journal = {Information Systems Research}, volume = {26}, number = {4}, pages = {714--730}, year = {2015},
+  doi     = {10.1287/isre.2015.0594}}
+
+@article{MartinShelegia2021_underpromise,
+  author  = {Martin, Simon and Shelegia, Sandro},
+  title   = {{Underpromise and Overdeliver? Online Product Reviews and Firm Pricing}},
+  journal = {International Journal of Industrial Organization}, volume = {79}, pages = {102775}, year = {2021},
+  doi     = {10.1016/j.ijindorg.2021.102775}}
+
+@article{IfrachEtal2019_bayesian_learning,
+  author  = {Ifrach, Bar and Maglaras, Costis and Scarsini, Marco and Zseleva, Anna},
+  title   = {{Bayesian Social Learning from Consumer Reviews}},
+  journal = {Operations Research}, volume = {67}, number = {5}, pages = {1209--1221}, year = {2019},
+  doi     = {10.1287/opre.2019.1861}}
+
+@article{AcemogluEtal2022_learning_from_reviews,
+  author  = {Acemoglu, Daron and Makhdoumi, Ali and Malekian, Azarakhsh and Ozdaglar, Asuman},
+  title   = {{Learning from Reviews: The Selection Effect and the Speed of Learning}},
+  journal = {Econometrica}, volume = {90}, number = {6}, pages = {2857--2899}, year = {2022},
+  doi     = {10.3982/ecta15847}}
+
+@article{ShinVaccariZeevi2023_dynamic_pricing,
+  author  = {Shin, Dongwook and Vaccari, Stefano and Zeevi, Assaf},
+  title   = {{Dynamic Pricing with Online Reviews}},
+  journal = {Management Science}, volume = {69}, number = {2}, pages = {824--845}, year = {2023},
+  doi     = {10.1287/mnsc.2022.4387}}
+
+@article{ChenDuLei2025_reviews_price_quality,
+  author  = {Chen, Yuxin and Du, Jinzhao and Lei, Ying},
+  title   = {{The Interactions of Customer Reviews and Price and Their Dual Roles in Conveying Quality Information}},
+  journal = {Marketing Science}, volume = {44}, number = {1}, pages = {155--175}, year = {2025},
+  doi     = {10.1287/mksc.2022.0380}}
+
+@article{ZhaoEtal2022_competition_quality_price,
+  author  = {Zhao, Cui and Wang, Xiaojun and Xiao, Yongbo and Sheng, Jie},
+  title   = {{Effects of Online Reviews and Competition on Quality and Pricing Strategies}},
+  journal = {Production and Operations Management}, volume = {31}, number = {10}, pages = {3840--3858}, year = {2022},
+  doi     = {10.1111/poms.13791}}
+
+@article{HuangGuoWang2026_reporting_bias,
+  author  = {Huang, Fengfeng and Guo, Pengfei and Wang, Yulan},
+  title   = {{Customer Reviews Subject to Reporting Bias: Its Influence on Customers, Firms, and Platform}},
+  journal = {Naval Research Logistics}, year = {2026},
+  doi     = {10.1002/nav.70056},
+  note    = {Advance online publication. Cited in the source note as ``Huang (2026)''; the record has three authors.}}
+
+
+% --- Stakes -------------------------------------------------------------------
+
+@article{ChevalierMayzlin2006_wom_sales,
+  author  = {Chevalier, Judith A. and Mayzlin, Dina},
+  title   = {{The Effect of Word of Mouth on Sales: Online Book Reviews}},
+  journal = {Journal of Marketing Research}, volume = {43}, number = {3}, pages = {345--354}, year = {2006},
+  doi     = {10.1509/jmkr.43.3.345}}
+
+@article{AndersonMagruder2012_learning_crowd,
+  author  = {Anderson, Michael and Magruder, Jeremy},
+  title   = {{Learning from the Crowd: Regression Discontinuity Estimates of the Effects of an Online Review Database}},
+  journal = {The Economic Journal}, volume = {122}, number = {563}, pages = {957--989}, year = {2012},
+  doi     = {10.1111/j.1468-0297.2012.02512.x}}
+
+@techreport{Luca2016_reviews_reputation_revenue,
+  author      = {Luca, Michael},
+  title       = {{Reviews, Reputation, and Revenue: The Case of Yelp.com}},
+  institution = {Harvard Business School},
+  type        = {Working Paper}, number = {12-016}, year = {2016},
+  note        = {First version 2011.}}
+
+@article{Hollenbeck2018_chain_affiliation,
+  author  = {Hollenbeck, Brett},
+  title   = {{Online Reputation Mechanisms and the Decreasing Value of Chain Affiliation}},
+  journal = {Journal of Marketing Research}, volume = {55}, number = {5}, pages = {636--654}, year = {2018},
+  doi     = {10.1177/0022243718802844}}
+
+@article{ProserpioZervas2017_management_responses,
+  author  = {Proserpio, Davide and Zervas, Georgios},
+  title   = {{Online Reputation Management: Estimating the Impact of Management Responses on Consumer Reviews}},
+  journal = {Marketing Science}, volume = {36}, number = {5}, pages = {645--665}, year = {2017},
+  doi     = {10.1287/mksc.2017.1043}}
+
+
+% --- Social influence ---------------------------------------------------------
+
+@article{MuchnikAralTaylor2013_social_influence_bias,
+  author  = {Muchnik, Lev and Aral, Sinan and Taylor, Sean J.},
+  title   = {{Social Influence Bias: A Randomized Experiment}},
+  journal = {Science}, volume = {341}, number = {6146}, pages = {647--651}, year = {2013},
+  doi     = {10.1126/science.1240466}}
+
+
+% --- Review articles ----------------------------------------------------------
+
+@article{PocchiariProserpioDover2025_review,
+  author  = {Pocchiari, Martina and Proserpio, Davide and Dover, Yaniv},
+  title   = {{Online Reviews: A Literature Review and Roadmap for Future Research}},
+  journal = {International Journal of Research in Marketing}, volume = {42}, number = {2}, pages = {275--297}, year = {2025},
+  doi     = {10.1016/j.ijresmar.2024.08.009}}
+
+@article{BondiRossi2026_review,
+  author  = {Bondi, Tommaso and Rossi, Michelangelo},
+  title   = {{Online Reviews: Information Content, Drivers, and Platform Design}},
+  journal = {Marketing Letters}, volume = {37}, number = {1}, year = {2026},
+  doi     = {10.1007/s11002-026-09819-4}}
+
+
+% --- LLM text measurement (methods) -------------------------------------------
+% Added 2026-09-14 via /lit-review gap-fill; Crossref-verified. Supports the
+% LLM review-text classifier (validation of the "manipulation" vs "solicitation"
+% signatures, H6-H8 of the empirical proposal).
+
+@article{GilardiAlizadehKubli2023_chatgpt_annotation,
+  author  = {Gilardi, Fabrizio and Alizadeh, Meysam and Kubli, Ma{\"e}l},
+  title   = {{ChatGPT Outperforms Crowd Workers for Text-Annotation Tasks}},
+  journal = {Proceedings of the National Academy of Sciences}, volume = {120}, number = {30}, pages = {e2305016120}, year = {2023},
+  doi     = {10.1073/pnas.2305016120}}
+
+@article{ZiemsEtal2024_llm_css,
+  author  = {Ziems, Caleb and Held, William and Shaikh, Omar and Chen, Jiaao and Zhang, Zhehao and Yang, Diyi},
+  title   = {{Can Large Language Models Transform Computational Social Science?}},
+  journal = {Computational Linguistics}, volume = {50}, number = {1}, pages = {237--291}, year = {2024},
+  doi     = {10.1162/coli_a_00502}}

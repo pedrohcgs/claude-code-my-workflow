@@ -1,34 +1,14 @@
 # =============================================================================
-# 01_load.R — Load raw data. No transformations, no derivations.
+# 01_load.R — Read raw data into data frames. No transformations.
+# Sourced by 00_run_all.R into the shared pipeline env (uses PROJECT_SEED, OUT_DIR).
 #
-# This script's only job is to read files into R objects and assign them to
-# names that 02_clean.R can pick up. It should be boring and idempotent.
+# SCAFFOLDING STUB — the influencer-marketing Essay 2 pipeline was removed on
+# 2026-09-14 when the repo was repurposed. Populate this for the review-ratings
+# project: load scraped Google/Yelp rating data from data/scraped/ (and, for the
+# experiment pipeline, data/experiment/). Keep this file to loading only.
 # =============================================================================
 
-# Re-seed locally too, so running this script directly (not via 00_run_all.R)
-# still produces deterministic placeholder data. Harmless no-op under the
-# orchestrator since the seed is already set.
-if (exists("PROJECT_SEED", inherits = FALSE)) {
-  set.seed(PROJECT_SEED)
-} else {
-  set.seed(20260413L)
-}
+message("  [01_load] scaffolding stub — no data loaded yet. See scripts/R/README.md")
 
-# library(readr); library(readxl); library(haven)   # uncomment as needed
-
-# ---- Example: replace with your real load calls ----------------------------
-# raw_main <- readr::read_csv(
-#   here::here("data", "raw", "main_survey.csv"),
-#   show_col_types = FALSE
-# )
-
-# Placeholder dataset so the pipeline runs end-to-end on a fresh fork.
-# Delete this when you wire up real data.
-raw_main <- data.frame(
-  id      = 1:50,
-  treated = rep(c(0L, 1L), each = 25),   # integer 0/1, not factor
-  y_pre   = rnorm(50, mean = 10, sd = 2),
-  y_post  = rnorm(50, mean = 10, sd = 2)
-)
-
-message("Loaded ", nrow(raw_main), " rows into `raw_main`.")
+# Example shape (uncomment + adapt when data lands):
+# raw_main <- readRDS(here::here("data", "scraped", "ratings.rds"))

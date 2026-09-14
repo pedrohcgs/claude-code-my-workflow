@@ -1,30 +1,12 @@
 # =============================================================================
-# 03_analyze.R — Regressions, tests, model fits. Save everything to RDS.
+# 03_analyze.R — Models / tests. Save results to RDS in OUT_DIR.
+# Consumes `df` from 02_clean.R.
 #
-# Persist fitted objects to `_outputs/*.rds` so 04_tables.R and 05_figures.R
-# don't have to refit. Keeps the downstream steps fast and deterministic.
+# SCAFFOLDING STUB (repurposed 2026-09-14). NOTE: Stata is the PRIMARY analysis
+# for the distributional statistics (see scripts/stata/). Use R here for the
+# secondary checks, the experiment analysis (scripts/R/experiment/), and the
+# model numerics (scripts/R/theory/). The claim is about distribution SHAPE, not
+# just the mean — use distributional tests, not only a difference in means.
 # =============================================================================
 
-# inherits = FALSE so a stale `df` from the user's global environment
-# cannot satisfy this guard — matches the contract in 00_run_all.R and
-# 02_clean.R / 05_figures.R. Without this, debug reruns can silently
-# analyze the wrong dataset and persist results.rds from it.
-if (!exists("df", inherits = FALSE)) {
-  stop("03_analyze.R: df not found in the pipeline env. Run 00_run_all.R, not this script directly.")
-}
-
-# ---- Primary specification -------------------------------------------------
-fit_main <- lm(delta ~ treated, data = df)
-
-# ---- Persist for downstream scripts ---------------------------------------
-results_path <- file.path(OUT_DIR, "results.rds")
-saveRDS(
-  list(
-    fit_main = fit_main,
-    n        = nrow(df),
-    seed     = PROJECT_SEED
-  ),
-  file = results_path
-)
-
-message("Saved analysis results to ", results_path)
+message("  [03_analyze] scaffolding stub — no analysis defined yet.")

@@ -6,93 +6,103 @@ paths:
   - "scripts/**/*.py"
 ---
 
-# Project Knowledge Base: Influencer Marketing (Essay 2)
+# Project Knowledge Base: Online Review Ratings
 
 <!-- Claude reads this before drafting/analysis. Keep it current: when a metric
      is defined, a variable is constructed, or a modeling decision is locked,
      record it here so every session uses the same definitions. -->
 
-## Marketing Metrics Registry
+Metrics + decisions registry for the review-ratings project (theory 2×2 solicitation model + the
+Google-vs-Yelp field comparison "The Silence of the Satisfied" + a consumer-inference experiment).
+Fill in `(confirm)` / `(tbd)` cells as construction is finalized. The `domain-reviewer` agent reads this
+before flagging "inconsistencies."
+
+## Rating & Distribution-Shape Metrics Registry
 
 | Term | Definition | Notes / how measured here |
 |------|-----------|---------------------------|
-| Reach | Unique users who saw a post | *(confirm source)* |
-| Impressions | Total views (non-unique) | |
-| Engagement | Interaction count (likes + replies + retweets) | Outcomes here: retweets, replies |
-| Engagement rate | Engagement ÷ followers (or ÷ reach) | State denominator explicitly |
-| CPM | Cost per 1,000 impressions | |
-| CPE | Cost per engagement | |
-| CPA | Cost per acquisition/action | |
-| ROAS | Revenue ÷ ad spend | |
-| Followers / audience | Account's follower count at post time | `z_followers` = z-scored |
+| Average rating | Mean of displayed star ratings for an establishment | State whether platform-displayed or recomputed |
+| Rating distribution | Histogram over {1,2,3,4,5} stars | Primary object — the paper is about *shape*, not just mean |
+| Variance / spread | Dispersion of the rating distribution | Sun (2012): spread raises demand only when the average is low |
+| Polarization / J-shape | Mass at the extremes (1 and 5) vs. the middle | Bimodality is the organic-review signature (self-selection) |
+| Skew | Asymmetry of the distribution | |
+| Share 5-star / share 1-star | Fraction at each extreme | One-star mass is especially consequential (Chevalier & Mayzlin 2006) |
+| Compression toward truth | Reduction in spread when moderate reviewers are pulled in | The predicted effect of soliciting |
+| Not-recommended count/share | Yelp's filtered-review pile | Selection into it is non-random (Luca & Zervas 2016) — treat with care |
 
-## Outcome & Treatment Variables (this project)
+## Solicitation & Platform Variables
 
 | Variable | Meaning | Construction / notes |
 |----------|---------|----------------------|
-| `ln_retweetcount` | Log retweets | `ln(retweetcount + 1)` (zeros retained) — primary outcome |
-| `ln_replycount` | Log replies | `ln(replycount + 1)` (zeros retained) — secondary outcome (weaker in validation) |
-| `BM_handhash_NN1000val` | Brand-match / disclosure class (0/1/2/3) | 0 = no match (base); 1 = disclosed; 2 = undisclosed; 3 = organic. Treated cells rare (390 / 1,976 / 4,771) |
-| `BM_handhash_NN1000valprior_cum` | Cumulative prior on the match | control (`$prior`) |
-| `influencercode` | Influencer id | clustering + FE unit (~150 unique) |
+| `platform` | Google vs. Yelp | Policy differs: Google permits soliciting; Yelp forbids asking |
+| `solicit_regime` | Whether soliciting is permitted | Google = all four cells feasible; Yelp = consumer-driven only |
+| `solicited` (firm strategy) | Firm solicits vs. relies on organic reviews | Latent; proxied by traces (below) — validate, don't assume |
+| `solicitation_trace` | Observable signature of soliciting | e.g. review bursts, first-time-reviewer share `(confirm)` |
+| `quality_proxy` | Establishment quality independent of the ratings | MUST be independent of the ratings under study (else circular) `(tbd)` |
+| establishment id | Matching unit across platforms | Same-establishment Google↔Yelp link `(confirm match method)` |
 
-## Constructed Moderators (c1–c9 + hedonicity/tone/emotion)
+## LLM Text-Classifier Fields
 
-| Moderator | Construct | Predicted sign / role |
-|-----------|-----------|-----------------------|
-| `c1_disclose_surprise` | Disclosure surprise | **Headline moderator** — survives Holm + CV. Unstandardized; mean .003, SD .037, range 0–1 (report per-SD) |
-| `c2_brand_momentum` | Brand momentum | |
-| `c3_topic_drift` | Topic drift | |
-| `c4_voice_consistency` | Voice consistency | |
-| `c5_log_spacing` | Log post spacing | *(dropped in validation — collinear/omitted, F missing)* |
-| `c6_effort` | Post effort | |
-| `c7_brand_exclusivity` | Brand exclusivity | |
-| `c8_engagement_priming` | Engagement priming | |
-| `c9_first_pairing` | First brand pairing | |
-| `hedonicity_{50,75,90}percentilemem_stdM` | Hedonicity thresholds | standardized |
-| `tone_stdM`, `emotion_stdM` | Tone / emotion | standardized |
+| Field | Meaning | Construction / notes |
+|-------|---------|----------------------|
+| `llm_score` | LLM-assigned score of review text | Define the construct scored (sentiment? experience valence? `(confirm)`) |
+| model + version | Which model, which version, which date | Time-stamp: models are non-stationary |
+| prompt id | Prompt template used | Report sensitivity across phrasings |
+| run/seed | Repetition + sampling settings | Characterize within-model variance |
+| label (ground truth) | Human label on the hold-out | Fixed taxonomy set in advance; report inter-rater agreement |
+| validation metric | Accuracy / F1 / agreement on hold-out | On the labeled hold-out, NOT training data |
 
-## Controls & Fixed Effects (locked)
+## Experiment Variables (consumer inference)
 
-| Group | Members |
-|-------|---------|
-| `$controls` | `z_posts z_wordcount z_followers z_following topic_probs{beauty,healthandwellness,nutrition,fashion}4 multi_brand` |
-| `$fes_abs` (absorbed) | `influencercode month hour` |
-| `$prior` | `BM_handhash_NN1000valprior_cum` |
-| SEs | `vce(cluster influencercode)` via `reghdfe` |
+| Variable | Meaning | Construction / notes |
+|----------|---------|----------------------|
+| distribution shape (manipulated) | Tight solicited-looking vs. polarized | Within/between `(confirm design)` |
+| average rating (manipulated) | Varies the displayed mean | Crossed with shape |
+| collection-method disclosure | Whether the participant is told how reviews were gathered | The lever that tests design question (b) |
+| choice (outcome) | Which of two competing businesses is chosen | Maps to the model's consumer-inference assumption |
+| attention / comprehension checks | Data-quality screens | Pre-register handling |
 
 ## Decisions & Assumptions Registry
 
-<!-- The "remember our decisions" backbone. Add a row whenever a choice is made. -->
-
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2026-06-30 | Report in Word/Docs; repo holds data + analysis + Markdown drafts | Prose lives outside repo; repo is source of truth for numbers |
-| 2026-07-01 | Stata primary; R/Python secondary | Essay 2 analysis is Stata (`reghdfe`, `postfile`) |
-| 2026-07-01 | Retweets = primary outcome; replies = corroborating | Replies weaker: 57% CV replication / 74% sign-consistency vs 83% / 95% |
-| 2026-07-01 | Validation = Holm family correction + repeated 50/50 CV; single 70/30 holdout is underpowered | Thin treated cells in holdout; cite CV, not single split |
-| 2026-07-01 | Main c1 effect on undisclosed (class 2): retweets +4.94*** , replies −4.76** (`tab_main_c1`); organic (class 3) replies −3.52*** | Full-sample `reghdfe`; γ₁ (disclosed, 390 posts) drops as collinear — not identified |
-| 2026-07-01 | Per-SD (std): undisclosed +0.181*** retweets / −0.174** replies; organic −0.129*** replies (`tab_main_c1_std`) | Report per-SD (≈ +20% / −16% / −12%); raw coeffs misleading since surprise SD ≈ .037 |
-| 2026-07-01 | Mechanism = persuasion-knowledge (TENTATIVE). NOT established: `Mediation_c1_indirect_effects.csv` empty; mechanism spec uses `c1_infl_disclose_rate` ≠ main `c1_disclose_surprise` | z_pv_score main effects run opposite to c1 (−.025** rt / +.045*** rp); authentic_stdM ns. Reconcile variable + compute indirect effects before asserting |
-| 2026-07-01 | **Change-in-positivity results did NOT hold.** Headline = disclosure surprise; positivity strand demoted to background | Reason for the post-JMR-reject pivot. Positivity was the submitted paper's core IV; it did not replicate. EVT (Burgoon 1993) now the load-bearing theory, not expectancy-disconfirmation |
-| 2026-07-01 | `c1_disclose_surprise = |1{disclosed} − c1_infl_disclose_rate|`; identifying variation for class 2/3 = influencer-level disclosure rate (constant within influencer) | Reconciles c1_disclose_surprise ≡ c1_infl_disclose_rate (mechanical decomposition); explains γ₁ (class 1) collinear-drop; moderation is BETWEEN-influencer, not tweet-level surprise → temper §3 "surprise" language |
-| 2026-07-01 | Current sample = 294,557 raw tweets / 205 influencers → 281,837 English (est.) / 150 influencers, 2019, X. Brand via 943-brand LLM gazetteer (handle+hashtag); disclosure 4-class via Ershov-He-Seiler classifier | Data rebuilt & expanded vs JMR draft (73 infl / 129,519 posts). 205→150 influencer reduction still to document |
-| 2026-07-02 | Mechanism mediation NULL: indirect effects via authenticity (retweets) & persuasion (replies) all insignificant (|z|<1.1, `Mediation_propensity.csv`). Signs mostly predicted but mediator→outcome b-paths too weak | Proposed PKM/authenticity mechanisms NOT supported. Report channel as open. Paper = robust reduced-form moderation without a confirmed mechanism |
-| 2026-07-01 | CLUSTERED propensity spec (`Table1_propensity_clustered`): joint p .0010 rt / .0013 rp — SIGNIFICANT under influencer clustering (unlike within-post surprise). γ₁ reply penalty holds (−3.91**). Per-SD on the RATE is small: undisclosed +3.0%*** rt / −2.9%** rp; organic −2.1%*** rp; disclosed −2.4%** rp | Earlier "+20%/−16%" were per-SD of the WIDER |surprise| measure = overstated. Honest magnitude modest: SD(propensity)≈.006, disclosure rare (390/281,837). Statistically robust, economically small |
-| 2026-07-01 | Propensity spec (class × c1_infl_disclose_rate, `Main_NN_c1infl_SUR`) identifies ALL 3 classes (γ₁ no longer drops). Broad reply pattern: disclosed −3.9**, undisclosed −4.8, organic −3.5 (all fewer replies); retweet gain specific to undisclosed +4.9*** | Use this parameterization for Table 1. SUR robust SEs; clustered reghdfe rerun pending for γ₁ |
-| 2026-07-01 | Within-influencer residual-MAGNITUDE surprise: naive Holm sole-survivor both outcomes (p_holm .0002 rp / .023 rt), CV 61%/69%. BUT two-step cluster bootstrap (correct for generated regressor) → **marginal: joint p ≈ .078 rp / .142 rt**. Effect is SUGGESTIVE, not confirmatory | `validation_residual_surprise.do` + `ResSurprise_Boot.dta`. Generated-regressor uncertainty ~doubles SEs. Original mean-based headline was mis-identified (between-influencer); residual is right-identified but underpowered. Neither yields a clean p<.05 headline |
+| 2026-09-14 | Repo repurposed from Influencer Marketing (Essay 2) → review-ratings project (delete-and-reset) | New project; git history retains old work. See `MEMORY.md`. |
+| 2026-09-14 | Report in Word/Docs; repo holds data + analysis + Markdown drafts | Prose lives outside repo; repo is source of truth for numbers |
+| 2026-09-14 | One shared `Bibliography_base.bib` (INV-5) for theory + empirical + experiment | Single canonical bibliography |
+| 2026-09-14 | Stata primary (distributional statistics); R secondary (tables/figures, experiment, model numerics); Python for scraping + LLM classifier | Matches the work types; `(confirm Stata-primary)` |
+| `(tbd)` | **Design question (a):** firms differ in **quality** or **taste** | Quality → sorting story; taste → positioning story. Analysis branches on this — see `MEMORY.md`. |
+| `(tbd)` | **Design question (b):** whether consumers **adjust for collection method** | Settled by the experiment; the model's assumption depends on it |
+| `(tbd)` | **Design question (c):** whether soliciting is **costly and visible** | If solicited ≈ organic to consumers, there is no signal, only a different displayed rating |
 
 ## Tolerance Thresholds
 
 | Check | Tolerance |
 |-------|-----------|
 | Headline estimates reproduce | *(set when building replication package — `[confirm]`)* |
-| p-values | Report to precision claimed in text; flag near-misses |
+| Distribution-shape statistics | Report to precision claimed in text |
+| p-values | Report to precision claimed; flag near-misses |
+| LLM-classifier validation metrics | Report on the labeled hold-out with CIs |
 
 ## Analysis Pitfalls (log them as found)
 
 | Pitfall | Impact | Fix |
 |---------|--------|-----|
-| `lobal mods …` typo (dropped `g`) in do-file | Loop runs empty if the redefining line is deleted | Fix to `global`; remove duplicate `global outcomes` |
-| ln of a count with zeros | Undefined / dropped obs | State `ln(1+x)` vs drop; keep consistent |
-| Few clusters (~150) + rare treatment | Cluster-robust SEs may be anti-conservative | Consider wild-cluster bootstrap for headline |
+| Quality proxied by the ratings under study | Circular — "quality tracks the split" becomes tautological | Use a quality measure independent of the ratings |
+| Comparing means when the claim is about shape | Misses the whole point (same mean, different spread) | Use distributional tests (KS / EMD / moment tests) |
+| LLM validation on training data | Overstates classifier accuracy | Report on a held-out labeled set |
+| Treating Yelp not-recommended pile as random | Filtered reviews are systematically more extreme | Model/acknowledge selection (Luca & Zervas 2016) |
+| Unversioned/undated LLM elicitation | Not reproducible; models drift | Time-stamp model + version + prompt + seed |
+| Selection into appearing on both platforms | Biases the same-establishment comparison | Characterize who is matched; bound the selection |
+
+## Empirical Design Specifics — "The Silence of the Satisfied"
+
+From `docs/Silence_of_the_Satisfied_Proposal.docx` (Draft, Aug 2026). Draft: `report/empirical/01_silence_of_the_satisfied.md`.
+
+- **Design = platform policy as the treatment.** Yelp forbids soliciting; Google permits it (bans incentives + selective solicitation). Same establishment carries two ratings under opposing rules simultaneously. Unit of analysis = the **platform**, not the firm.
+- **Two tiers.** (1) **Histograms** — establishment-level star counts, published by both platforms; cheap, complete, identical to what consumers see → H1, H3, H4, H4b, H5. (2) **Review-level** — Yelp recommended vs not-recommended (public), expensive, returns a subset → H2, H6–H8.
+- **Identification.** Establishment fixed effects; estimand = difference in distributional *moments* across corpora. **H2 (within-Yelp recommended vs not-recommended) is the primary identification** — holds platform + user population fixed, answering the "different users" objection to H1. **H3** discriminates sampling vs manipulation by reporting *shape* and *level* separately (manipulation ⇒ mean shift + fat right tail; sampling ⇒ middle fills, centre stable). **H4b** = cross-lagged prediction (A@t → B@t+k vs reverse) ranks the two policies with **no external benchmark**.
+- **Two text signatures, scored INDEPENDENTLY** (a review may show both/neither/one — do not force onto one scale): `manipulation_signature` (generic superlatives, marketing register, absent concrete detail, atypical fluency) and `solicitation_signature` (brevity + flat affect but retains mundane concrete detail). Plus `arousal`, `incident_specificity`, `review_length`. Condition on the star rating to isolate *who writes* from *what they scored*.
+- **Classifier validation is load-bearing** (H6–H8): hand-developed codebook, human coding on a stratified sample with reported agreement before scaling; confirm the two signatures are empirically **separable, not collinear** — if not, H7/H8 fail and the paper reverts to its distributional core. Cites: [[GilardiAlizadehKubli2023_chatgpt_annotation]], [[ZiemsEtal2024_llm_css]].
+- **Frame + collection.** Restaurants across US metros with open municipal licensing/inspection records (identity/address/category independent of platforms; e.g. Chicago 11,076 licensed since Jan 2024). Match on name + street + coordinates. Collection via **Apify** actors (Google routine; Yelp slower/adversarial).
+- **Set aside:** external quality benchmark via OpenTable / delivery platforms (coverage too thin) — design deliberately needs none. Do not revive without a proper city-scoped check.
+- **Separate paper:** the consumer-response experiment (do consumers treat the two ratings as equivalent?) = model design question (b); lives in `report/experiment/`, not this paper.
