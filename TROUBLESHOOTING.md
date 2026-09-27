@@ -116,7 +116,7 @@ Claude Code on Windows can run shell commands through two tools, Bash (Git Bash)
 
 ### Hook script permission denied
 
-`chmod +x .claude/hooks/*.py .claude/hooks/*.sh`. `./scripts/validate-setup.sh` also reports non-executable hooks.
+`chmod +x .claude/hooks/*.sh`. The Python hooks are run as `python3 <file>`, so they need no executable bit; `./scripts/validate-setup.sh` reports only the shell hooks that lack it.
 
 ### Pre-compact hook didn't save the plan
 

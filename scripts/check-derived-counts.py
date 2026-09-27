@@ -78,8 +78,8 @@ def changelog_current_release():
     return m.group(1) if m else ""
 
 def n_hook_battery_cases():
-    # The battery prints "ALL PASS (N cases)" where N = TOTAL = PASS + FAIL —
-    # the `TOTAL=$((PASS + FAIL))` roll-up in the final summary block of
+    # The battery prints "ALL PASS (N cases)" where N = TOTAL = PASS + FAIL + UNREACH —
+    # the `TOTAL=$((PASS + FAIL + UNREACH))` roll-up in the final summary block of
     # scripts/hook-battery.sh (find it with `grep -n 'ALL PASS'`; it is cited
     # by name, not by line number, because line numbers rot as the battery
     # grows — this comment previously said "line ~276", which by round 7
