@@ -196,8 +196,6 @@ as co-author.
   backslash and `/c/` drive spellings, `-C .claude -C hooks` (#151), `git.exe` / `rm.exe` /
   `gh.exe`, and a CR inside a word. All hooks now read stdin as UTF-8 bytes; `issue-guard` is also
   registered for `gh.exe`.
-- **`git-guardrails` missed destructive git inside `( … )`, `$( … )` and backticks** on every
-  platform: the tokenizer now separates on them (#172).
 - **Accented file names confused the gates:** `git ls-files` / `diff` are read with `-z` and UTF-8,
   so quoted names no longer create phantom folders, hide draft names, or mark tracked hooks
   untracked (#151). Tracked paths that differ only by case or Unicode form are flagged.
@@ -352,7 +350,7 @@ as co-author.
   across lenses); all confirmed findings are fixed. **The loop was stopped after round 2 by
   owner decision, so convergence (two consecutive rounds with nothing new) is not claimed.**
 - **Gates:** `./scripts/backtest.sh` passes all 11 gates, including the hook battery
-  (319 cases, seconds to run) and the portability suite; each fix was shown to fail on the old code.
+  (312 cases, seconds to run) and the portability suite; each fix was shown to fail on the old code.
   Every checker this release changed was re-qualified on seeded defects with clean controls
   (ledger rows): `check-model-versions.sh` 5/5 recall, 0/4 false positives;
   `validate-findings.py --fill-ids` 4/4; `check-derived-counts.py` seven-pass pattern 1/1,

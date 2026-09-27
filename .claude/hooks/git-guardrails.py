@@ -333,11 +333,11 @@ one the merge runs in) — a `cd` on a history op's command line now DENIES unde
 rule 0, as does every other multi-segment form. So does an unresolved `-C`, and
 so do the `--git-dir` / `--work-tree` / `GIT_DIR=` / `GIT_WORK_TREE=` selectors,
 which the pre-r13 text wrongly implied did not exist.
-CLOSED at #172 (2026-09-27), therefore no longer residual: an op inside a
-subshell or a substitution — `(git reset --hard)`, `$(git merge main)`, the
-backtick spelling. The tokenizer read `(git` and `--hard)` as single words, so
-no `git` segment was ever identified; it now separates on `(`, `)` and
-backticks, so the deny list sees the destructive op and rule 0 denies the merge.
+  - an op inside a SUBSHELL or a SUBSTITUTION — `(git reset --hard)`,
+    `echo $(git merge main)`, the backtick spelling, the same inside double
+    quotes or an unquoted heredoc body. `(git` and `--hard)` are single words to
+    this tokenizer, so no `git` segment is identified. Open as #172; a flat-
+    separator fix was tried and backed out (see _SEG_TOKEN).
   - ANY SHELL FORM THAT PUTS THE OP SOMEWHERE THIS PARSER DOES NOT LOOK. The
     list above is the set known on 2026-08-23; it is a report of where the
     parser has been probed, not a proof of where it is complete. Round 9 found
@@ -587,13 +587,15 @@ def _op_is_exempt(words: list[str], start: int, tokens=GIT_OP_EXEMPT_TOKENS) -> 
 
 # Tokenizer: split a Bash command into per-command segments on shell
 # separators, keeping quoted spans intact so a separator inside quotes does not
-# split a segment. `(`, `)` and backticks separate too (#172): without them
-# `(git reset --hard)` read as the words `(git` … `--hard)`, was not recognised
-# as git at all, and a subshell or `$(…)` / backtick substitution carried a
-# destructive op past the deny list on a dirty tree.
+# split a segment. Open (#172): `(`, `)` and backticks are NOT separators, so
+# `(git reset --hard)` reads as the words `(git` … `--hard)` and a subshell or a
+# substitution can carry an op past both checks. Making them flat separators was
+# tried and backed out (2026-09-27): it cut comments short (false denies on
+# `git pull  # (daily sync)`) and split a command's own arguments at a
+# substitution (a new miss). The fix needs substitutions parsed as nested commands.
 _SEG_TOKEN = re.compile(
-    r"""(?P<sep>\|\||&&|;|&|\||\n|\(|\)|`)
-      | (?P<word>(?:"[^"]*"|'[^']*'|\\.|[^\s"'|;&\n()`])+)""",
+    r"""(?P<sep>\|\||&&|;|&|\||\n)
+      | (?P<word>(?:"[^"]*"|'[^']*'|\\.|[^\s"'|;&\n])+)""",
     re.VERBOSE,
 )
 # r21: the Windows branch used to need `C:\\Users\\` with DOUBLED backslashes —

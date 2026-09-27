@@ -2580,44 +2580,6 @@ expect_silent "c67 r19 CONTROL: the SAME uppercase invocation in a CLEAN reposit
 fire git-guardrails.py "$TMP/c68.json"
 expect_silent "c68 r19 CONTROL: a \$'…' word that is not a history op (git \$'log' --oneline -5) stays silent on a dirty tree — teaching the unquoter an opener did not make every quoted word a merge"
 
-# #172: a subshell or a substitution used to hide the op from the tokenizer —
-# `(git` and `--hard)` read as single words, so no git segment was identified.
-cat > "$TMP/c69.json" <<EOF
-{"tool_name":"Bash","tool_input":{"command":"(git reset --hard)"},"cwd":"$R19_DIRTY"}
-EOF
-cat > "$TMP/c70.json" <<EOF
-{"tool_name":"Bash","tool_input":{"command":"(cd sub && git push origin main --force)"},"cwd":"$R19_DIRTY"}
-EOF
-cat > "$TMP/c71.json" <<EOF
-{"tool_name":"Bash","tool_input":{"command":"echo \$(git reset --hard)"},"cwd":"$R19_DIRTY"}
-EOF
-cat > "$TMP/c72.json" <<EOF
-{"tool_name":"Bash","tool_input":{"command":"echo \`git checkout -- .\`"},"cwd":"$R19_DIRTY"}
-EOF
-cat > "$TMP/c73.json" <<EOF
-{"tool_name":"Bash","tool_input":{"command":"x=\$(git merge feature-x)"},"cwd":"$R19_DIRTY"}
-EOF
-cat > "$TMP/c74.json" <<EOF
-{"tool_name":"Bash","tool_input":{"command":"git commit -m \"fix (typo) in \\\`README\\\`\""},"cwd":"$R19_DIRTY"}
-EOF
-cat > "$TMP/c75.json" <<EOF
-{"tool_name":"Bash","tool_input":{"command":"(git status)"},"cwd":"$R19_DIRTY"}
-EOF
-fire git-guardrails.py "$TMP/c69.json"
-expect_deny   "c69 #172: a destructive op inside a subshell, (git reset --hard), is denied — (git used to read as one word"
-fire git-guardrails.py "$TMP/c70.json"
-expect_deny   "c70 #172: a force-push inside a subshell after a cd is denied"
-fire git-guardrails.py "$TMP/c71.json"
-expect_deny   "c71 #172: a destructive op carried by a \$( ) substitution is denied"
-fire git-guardrails.py "$TMP/c72.json"
-expect_deny   "c72 #172: a destructive op carried by backticks is denied"
-fire git-guardrails.py "$TMP/c73.json"
-expect_deny   "c73 #172: a merge carried by a substitution on a dirty tree is denied under rule 0"
-fire git-guardrails.py "$TMP/c74.json"
-expect_silent "c74 #172 CONTROL: parentheses and backticks inside a QUOTED commit message are data, not separators"
-fire git-guardrails.py "$TMP/c75.json"
-expect_silent "c75 #172 CONTROL: a harmless git command in a subshell stays allowed"
-
 # ── (d) claim-reconcile ────────────────────────────────────────────────────
 # One synthetic passport, one claim: produced by an analysis script, shown in
 # two places. Editing the producer stales it; editing one display puts it out
