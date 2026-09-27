@@ -4,8 +4,9 @@
 A clone's own path is spliced into every glob pattern, so a folder named
 "Paper [2026]" read as a character class. A tree whose tracked paths differ only
 by case or Unicode form is dirty for good on a macOS or Windows disk, and the
-hook's stash could never pop. validate-setup asked the shell's repository for the
-git identity, not its own.
+hook's stash could never pop; so is a CRLF blob under a later `eol=lf` rule, on
+every disk. A stash push that made no stash had the hook pop the user's own.
+validate-setup asked the shell's repository for the git identity, not its own.
 
 Every git run gets the caller's environment WITHOUT its GIT_* variables (this suite
 runs inside .githooks/pre-commit, which exports GIT_DIR and GIT_INDEX_FILE at the
@@ -23,6 +24,7 @@ import unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BASH = shutil.which("bash")
+HOOK = os.path.join(ROOT, ".githooks", "pre-commit")
 _DROP = ("PYTHONIOENCODING", "PYTHONUTF8", "PYTHONWARNDEFAULTENCODING", "PYTHONWARNINGS",
          "CLAUDE_PROJECT_DIR", "BACKTEST_SKIP_HOOK_BATTERY", "SKIP_QUALITY_GATE", "HOOK_DIR")
 
@@ -176,7 +178,7 @@ class PreCommitCollidingPaths(unittest.TestCase):
         rc, out = _run(["git", "clone", "-q", src, clone])   # "paths have collided" on APFS / NTFS
         self.assertEqual(rc, 0, out)
         os.makedirs(hooks)
-        shutil.copy2(os.path.join(ROOT, ".githooks", "pre-commit"), os.path.join(hooks, "pre-commit"))
+        shutil.copy2(HOOK, os.path.join(hooks, "pre-commit"))
         os.chmod(os.path.join(hooks, "pre-commit"), 0o755)
         # The user's work: an unstaged edit, and a staged new file.
         _write(clone, "README.md", "# Seed\n\nUnstaged work in progress.\n")
@@ -197,6 +199,112 @@ class PreCommitCollidingPaths(unittest.TestCase):
                 self.assertNotIn("could not auto-restore", out)
                 self.assertIn("differ only by case or Unicode form", out)
                 self.assertEqual(rc, 0, out)
+
+
+def _hook_dir(tmp):
+    hooks = os.path.join(tmp, "hooks")
+    os.makedirs(hooks)
+    shutil.copy2(HOOK, os.path.join(hooks, "pre-commit"))
+    os.chmod(os.path.join(hooks, "pre-commit"), 0o755)
+    return hooks
+
+
+def _seed(repo):
+    _write(repo, "README.md", "# Seed\n")
+    # The gate suite is not under test: a stand-in that passes.
+    _write(repo, "scripts/backtest.sh", "#!/bin/sh\nexit 0\n", mode=0o755)
+
+
+@unittest.skipUnless(BASH, "needs bash")
+class PreCommitDirtyForGood(unittest.TestCase):
+    """precommit-stash-leak-on-dirty-tree (G5, the cause the collision pre-check does not
+    cover): run.sh committed with CRLF before `*.sh text eol=lf` (the template's own rule)
+    stays modified after `stash push --keep-index`, on every OS. The EXIT-trap pop failed,
+    the commit went through, and each one moved the user's unstaged work into another
+    "pre-commit-gate" stash. Restoring only the paths the stash had cleaned would still
+    lose an edit to run.sh itself: the edited case pins that."""
+
+    def commit_with_hook(self, edit_the_dirty_path):
+        tmp = os.path.realpath(tempfile.mkdtemp(prefix="precommit-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        repo = os.path.join(tmp, "repo")
+        _seed(repo)
+        run = _write(repo, "run.sh", b"echo one\r\necho two\r\n")
+        _write(repo, "old.txt", "kept\n")
+        _git(repo, "init", "-q")
+        _git(repo, "add", "--", "README.md", "scripts/backtest.sh", "run.sh", "old.txt")
+        _git(repo, "commit", "-q", "--no-verify", "-m", "seed")
+        _write(repo, ".gitattributes", "*.sh text eol=lf\n")
+        _git(repo, "add", "--", ".gitattributes")
+        _git(repo, "commit", "-q", "--no-verify", "-m", "attrs")
+        # A changed mtime: while the stat cache vouches for run.sh, git never rehashes it.
+        st = os.stat(run)
+        os.utime(run, (st.st_atime, st.st_mtime - 100))
+        self.assertIn(b"run.sh", _git(repo, "diff", "--name-only"))   # dirty before any edit
+        hooks = _hook_dir(tmp)
+        # The user's work: unstaged edits (and a deletion), and a staged new file.
+        _write(repo, "README.md", "# Seed\n\nUnstaged work in progress.\n")
+        if edit_the_dirty_path:
+            _write(repo, "run.sh", b"echo one\r\necho two\r\necho three\r\n")
+            os.remove(os.path.join(repo, "old.txt"))
+        _write(repo, "notes.md", "x\n")
+        _git(repo, "add", "--", "notes.md")
+        rc, out = _run(["git", "-c", f"core.hooksPath={hooks}", "commit", "-m", "x"], cwd=repo)
+        stashes = _git(repo, "stash", "list").decode("utf-8", "replace")
+        return repo, rc, out, stashes
+
+    def test_the_unstaged_work_stays_in_the_tree(self):
+        for edited in (False, True):
+            with self.subTest(edit_the_dirty_path=edited):
+                repo, rc, out, stashes = self.commit_with_hook(edited)
+                self.assertEqual(stashes, "", out)
+                with open(os.path.join(repo, "README.md"), encoding="utf-8") as f:
+                    self.assertIn("Unstaged work in progress.", f.read(), out)
+                if edited:
+                    with open(os.path.join(repo, "run.sh"), "rb") as f:
+                        self.assertIn(b"echo three", f.read(), out)
+                    self.assertFalse(os.path.exists(os.path.join(repo, "old.txt")), out)
+                self.assertNotIn("could not auto-restore", out)
+                self.assertIn("stays modified after stashing", out)
+                self.assertEqual(rc, 0, out)
+                # Restored to the working tree only: the commit carries the staged file alone.
+                self.assertEqual(_git(repo, "show", "--format=", "--name-only", "HEAD"), b"notes.md\n")
+                self.assertEqual(_git(repo, "diff", "--cached", "--name-only"), b"")
+
+
+@unittest.skipUnless(BASH, "needs bash")
+class PreCommitMadeNoStash(unittest.TestCase):
+    """precommit-pops-a-stash-it-did-not-make: with nothing staged (`commit --amend`) and a
+    submodule's own dirty content as the only unstaged change, `stash push` exits 0 having
+    made no stash, and the EXIT trap popped the user's own newest stash into the tree."""
+
+    def test_the_users_stash_is_left_alone(self):
+        tmp = os.path.realpath(tempfile.mkdtemp(prefix="precommit-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        sub_src, repo = os.path.join(tmp, "subsrc"), os.path.join(tmp, "repo")
+        _write(sub_src, "s.txt", "s\n")
+        _git(sub_src, "init", "-q")
+        _git(sub_src, "add", "--", "s.txt")
+        _git(sub_src, "commit", "-q", "-m", "s")
+        _seed(repo)
+        _git(repo, "init", "-q")
+        _git(repo, "add", "--", "README.md", "scripts/backtest.sh")
+        _git(repo, "commit", "-q", "--no-verify", "-m", "seed")
+        _git(repo, "-c", "protocol.file.allow=always", "submodule", "add", "-q", sub_src, "sub")
+        _git(repo, "commit", "-q", "--no-verify", "-m", "sub")
+        # The user's own stash, made long before this commit.
+        _write(repo, "README.md", "# Seed\n\nOlder work, stashed.\n")
+        _git(repo, "stash", "push", "-q", "-m", "users-own-stash")
+        _write(repo, "sub/s.txt", "s\ndirty\n")
+        self.assertEqual(_git(repo, "diff", "--name-only"), b"sub\n")
+        hooks = _hook_dir(tmp)
+        rc, out = _run(["git", "-c", f"core.hooksPath={hooks}", "commit", "--amend", "-m", "reworded"],
+                       cwd=repo)
+        stashes = _git(repo, "stash", "list").decode("utf-8", "replace")
+        self.assertIn("users-own-stash", stashes, out)
+        with open(os.path.join(repo, "README.md"), encoding="utf-8") as f:
+            self.assertEqual(f.read(), "# Seed\n", out)
+        self.assertEqual(rc, 0, out)
 
 
 # ── validate-setup.sh ─────────────────────────────────────────────────────────

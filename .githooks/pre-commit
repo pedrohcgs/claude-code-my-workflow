@@ -69,9 +69,34 @@ elif [ -n "$_collide" ]; then
     echo "ℹ pre-commit: tracked paths $_collide differ only by case or Unicode form, so the" >&2
     echo "  working tree cannot be stashed clean — validating the WORKING TREE (not the pure staged index)." >&2
 elif [ -n "$_unstaged" ]; then
-    if git stash push --keep-index --quiet --message "pre-commit-gate" 2>/dev/null; then
+    # A stash is ours only if refs/stash moved. `stash push` exits 0 having made none
+    # when nothing is staged (`commit --amend`) and the only unstaged change is one it
+    # ignores (a submodule's own dirty content): the trap then popped the user's own
+    # newest stash into the tree (#171).
+    _before="$(git rev-parse -q --verify refs/stash 2>/dev/null || true)"
+    if git stash push --keep-index --quiet --message "pre-commit-gate" 2>/dev/null \
+            && [ "$(git rev-parse -q --verify refs/stash 2>/dev/null || true)" != "$_before" ]; then
         _STASHED=1
         trap 'if [ "$_STASHED" = "1" ]; then git stash pop --quiet 2>/dev/null || echo "⚠ pre-commit: could not auto-restore unstaged changes — recover with: git stash pop" >&2; fi' EXIT
+        # A path can stay modified with nothing left to stash: a CRLF blob under a later
+        # `eol=lf` rule, a clean filter that rewrites it. The pop then always failed, the
+        # commit went through, and each one moved the user's unstaged work into another
+        # "pre-commit-gate" stash (#171). Put the work back now and drop the stash:
+        # every path whose working copy differs from the stash's (a still-dirty path
+        # the user also edited included), --worktree only so nothing is staged.
+        _still=""
+        IFS= read -r -d '' _still < <(git diff --name-only -z --no-ext-diff --ignore-submodules 2>/dev/null) || true
+        if [ -n "$_still" ]; then
+            if git diff --quiet --no-ext-diff --ignore-submodules 'stash@{0}' 2>/dev/null \
+                    || git diff --name-only -z --no-ext-diff --ignore-submodules 'stash@{0}' 2>/dev/null \
+                        | git --literal-pathspecs restore --source='stash@{0}' --worktree \
+                              --pathspec-from-file=- --pathspec-file-nul 2>/dev/null; then
+                git stash drop --quiet 'stash@{0}' 2>/dev/null
+                _STASHED=0
+                echo "ℹ pre-commit: '$_still' stays modified after stashing (a line-ending or filter rule its" >&2
+                echo "  committed bytes predate?) — validating the WORKING TREE (not the pure staged index)." >&2
+            fi
+        fi
     fi
 fi
 
