@@ -58,7 +58,7 @@ def state_path() -> Path:
 
 def load_state(p: Path) -> dict:
     try:
-        st = json.loads(p.read_text())
+        st = json.loads(p.read_text(encoding="utf-8"))
         return st if isinstance(st, dict) else {}
     except Exception:
         return {}
@@ -67,7 +67,7 @@ def load_state(p: Path) -> dict:
 def save_state(p: Path, st: dict) -> None:
     tmp = p.with_suffix(".tmp")
     try:
-        tmp.write_text(json.dumps(st))
+        tmp.write_text(json.dumps(st), encoding="utf-8")
         os.replace(tmp, p)                  # atomic: a concurrent reader never sees half a file
     except OSError:
         pass
@@ -164,8 +164,13 @@ def on_start(data: dict) -> int:
 
 
 def main() -> int:
+    # Bytes, decoded as UTF-8 — what Claude Code writes. sys.stdin on Windows
+    # decodes a pipe with the ANSI code page; on a CJK one a multibyte
+    # character swallows the backslash of the next JSON escape, the event does
+    # not parse, and a prompt exited here before marking the handoff
+    # delivered — so the next startup delivered it again.
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
     except (json.JSONDecodeError, EOFError, ValueError):
         return 0
     if not isinstance(data, dict):

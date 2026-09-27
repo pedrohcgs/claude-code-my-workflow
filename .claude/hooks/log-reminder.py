@@ -53,14 +53,36 @@ def get_state_dir() -> Path:
 
 
 def _git(project_dir: str, *args: str) -> str:
+    # Bytes, decoded as UTF-8 here: `text=True` decoded with the Windows code
+    # page, which — once core.quotePath is off — raised on a name holding a byte
+    # cp1252 leaves undefined (Á is C3 81): caught below as "", read as "nothing
+    # changed", and no log was written for that turn.
     try:
         out = subprocess.run(
             ["git", "-C", project_dir, *args],
-            capture_output=True, text=True, timeout=5,
+            capture_output=True, timeout=5,
         )
-        return out.stdout if out.returncode == 0 else ""
+        return out.stdout.decode("utf-8", "replace") if out.returncode == 0 else ""
     except Exception:
         return ""
+
+
+def _porcelain_entries(status: str) -> list[str]:
+    """`git status --porcelain -z` as one readable line per entry. A rename or
+    copy is two NUL fields ("R  new", "old"), folded into "R  new <- old" so
+    the old path is not logged as an entry of its own."""
+    fields, entries, i = status.split("\0"), [], 0
+    while i < len(fields):
+        f = fields[i]
+        i += 1
+        if not f.strip():
+            continue
+        if f[:1] in "RC" or f[1:2] in "RC":
+            if i < len(fields):
+                f = f"{f} <- {fields[i]}"
+                i += 1
+        entries.append(f)
+    return entries
 
 
 def active_plan(project_dir: str) -> str | None:
@@ -104,9 +126,11 @@ def uncompiled(project_dir: str) -> list[str]:
 
 
 def main() -> int:
+    # Bytes, decoded as UTF-8 — what Claude Code writes, whatever the Windows
+    # code page sys.stdin would decode a pipe with.
     try:
-        hook_input = json.load(sys.stdin)
-    except (json.JSONDecodeError, EOFError):
+        hook_input = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
+    except (ValueError, EOFError):
         hook_input = {}
 
     # Avoid Stop-hook loops.
@@ -117,14 +141,18 @@ def main() -> int:
     if not project_dir or not Path(project_dir).is_dir():
         return 0
 
-    status = _git(project_dir, "status", "--porcelain")
-    if not status.strip():
+    # quotePath off and -z: plain porcelain C-quotes any name with a non-ASCII
+    # byte, a space or a quote, so the log read `A  "scripts/an\303\241lise.R"`.
+    # Only safe together with the UTF-8 decode in _git — quotePath off alone
+    # would hand every Windows user the code-page decode error described there.
+    status = _git(project_dir, "-c", "core.quotepath=off", "status", "--porcelain", "-z")
+    if not status.strip("\0 \n"):
         return 0  # nothing changed — nothing to log
 
     state_path = get_state_dir() / "session-log-state.json"
     status_hash = hashlib.md5(status.encode()).hexdigest()
     try:
-        prev = json.loads(state_path.read_text()).get("last_hash")
+        prev = json.loads(state_path.read_text(encoding="utf-8")).get("last_hash")
     except Exception:
         prev = None
     if status_hash == prev:
@@ -136,7 +164,7 @@ def main() -> int:
     log_file = logs / f"{today}_auto.md"
     new_file = not log_file.exists()
 
-    changed = [ln for ln in status.splitlines() if ln.strip()][:30]
+    changed = _porcelain_entries(status)[:30]
     plan = active_plan(project_dir)
     flagged = uncompiled(project_dir)
 
@@ -162,7 +190,7 @@ def main() -> int:
         return 0
 
     try:
-        state_path.write_text(json.dumps({"last_hash": status_hash}))
+        state_path.write_text(json.dumps({"last_hash": status_hash}), encoding="utf-8")
     except Exception:
         pass
 

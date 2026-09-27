@@ -61,8 +61,10 @@ def main() -> int:
         return 0
     if os.environ.get("CLAUDE_CODE_ENTRYPOINT", "").startswith("sdk"):
         return 0
+    # Bytes, decoded as UTF-8 — what Claude Code writes, whatever the Windows
+    # code page sys.stdin would decode a pipe with.
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
     except (json.JSONDecodeError, EOFError, ValueError):
         return 0
     if not isinstance(data, dict) or data.get("source") != "startup" or "cursor_version" in data:
@@ -71,9 +73,12 @@ def main() -> int:
         return 0
     project = os.environ.get("CLAUDE_PROJECT_DIR", "") or data.get("cwd", "") or None
     try:
+        # gh prints UTF-8. Decoded with the Windows code page, one issue title
+        # holding a curly quote raised, and the whole list disappeared.
         r = subprocess.run(
             ["gh", "api", "repos/{owner}/{repo}/issues?state=open&sort=updated&per_page=50"],
-            capture_output=True, text=True, timeout=TIMEOUT_S, cwd=project)
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=TIMEOUT_S, cwd=project)
     except (subprocess.TimeoutExpired, OSError):
         return 0
     if r.returncode != 0:
