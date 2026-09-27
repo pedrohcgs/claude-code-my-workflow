@@ -39,10 +39,14 @@ and #92 where bots caught parity drift the audit agents missed.
 
 from __future__ import annotations
 
+import os
 import re
+import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Iterable
+from urllib.parse import unquote
 
 REPO = Path(__file__).resolve().parent.parent
 
@@ -61,6 +65,11 @@ FM_RE = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 def parse_frontmatter(text: str) -> tuple[dict, str]:
     """Return (frontmatter_dict, body). Minimal YAML — we don't need full
     YAML, just `allowed-tools: [...]`, `argument-hint: "..."`, `paths:`."""
+    # A UTF-8 BOM (Windows PowerShell 5.1's Set-Content -Encoding UTF8 writes one)
+    # hid the whole frontmatter: a false P0 on a skill Claude Code loads fine (its
+    # loader strips the BOM), and a skill-scoped rule passed check 5 by omission.
+    if text.startswith("\ufeff"):
+        text = text[1:]
     m = FM_RE.match(text)
     if not m:
         return {}, text
@@ -306,6 +315,30 @@ def check_flag_parity() -> list[tuple[str, str, str]]:
 # ---- Check 3: Internal markdown anchor resolution ---------------------------
 
 ANCHOR_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+#[^)]+)\)")
+# What sits inside the parentheses: <a destination with spaces> or one with none,
+# then an optional "title". Without it `<` and a title were read as part of the
+# path and the anchor, and a valid link got a P1.
+DEST_RE = re.compile(r"""^\s*(?:<([^<>\n]*)>|(\S+))(?:\s+(?:"[^"]*"|'[^']*'))?\s*$""")
+
+
+def _tracked() -> set[str] | None:
+    """Paths in git's index, '/'-separated and NFC; None when git cannot say.
+    A link target is judged against what is COMMITTED, in exact case: the disk
+    accepted an untracked file, and README.MD for README.md on macOS and
+    Windows, which CI on Linux and GitHub then reject (#171)."""
+    try:
+        r = subprocess.run(["git", "-C", str(REPO), "ls-files", "-z"],
+                           capture_output=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if r.returncode != 0:
+        return None
+    return {unicodedata.normalize("NFC", f)
+            for f in r.stdout.decode("utf-8", "surrogateescape").split("\0") if f} or None
+
+
+def _rel(p: str | Path) -> str:
+    return unicodedata.normalize("NFC", os.path.relpath(p, REPO).replace(os.sep, "/"))
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)(?:\s*\{#([^}]+)\})?\s*$", re.MULTILINE)
 
@@ -321,7 +354,9 @@ def anchorize(title: str) -> str:
 
 def collect_anchors(md: Path) -> set[str]:
     try:
-        text = md.read_text(encoding="utf-8")
+        # -sig: the BOM parse_frontmatter strips also sat in front of a first
+        # '# Heading', and a valid link to its anchor got a P1 (#171).
+        text = md.read_text(encoding="utf-8-sig")
     except (OSError, UnicodeError):
         return set()
     anchors: set[str] = set()
@@ -367,9 +402,13 @@ def check_anchor_resolution() -> list[tuple[str, str, str]]:
             mds.append(root)
         elif root.is_dir():
             mds.extend(root.rglob("*.md"))
+    tracked = _tracked()
+    if tracked is not None:            # an untracked copy (a worktree under .claude/) is not the repo's
+        mds = [md for md in mds if _rel(md) in tracked]
+    folded = {t.lower(): t for t in tracked or ()}
     for md in sorted(mds):
         try:
-            raw = md.read_text(encoding="utf-8")
+            raw = md.read_text(encoding="utf-8-sig")
         except (OSError, UnicodeError) as e:
             findings.append((
                 "P2",
@@ -381,22 +420,42 @@ def check_anchor_resolution() -> list[tuple[str, str, str]]:
         # inside backticks isn't treated as a real link.
         text = strip_code(raw)
         for m in ANCHOR_LINK_RE.finditer(text):
-            target = m.group(2)
+            d = DEST_RE.match(m.group(2))
+            target = (d.group(1) if d.group(1) is not None else d.group(2)) if d else m.group(2)
             if target.startswith("http") or target.startswith("#"):
                 continue
             path_part, _, anchor = target.partition("#")
+            # Aula%201.md#se%C3%A7%C3%A3o names "Aula 1.md" and #seção.
+            path_part, anchor = unquote(path_part), unquote(anchor)
             if not anchor:
                 continue
-            target_path = (md.parent / path_part).resolve()
+            # Lexical, as GitHub resolves a link; resolve() would also let Windows
+            # hand back the on-disk case of a wrong-case target.
+            target_path = Path(os.path.normpath(md.parent / path_part))
             try:
-                target_path.relative_to(REPO)
-            except ValueError:
+                rel = _rel(target_path)
+            except ValueError:          # Windows: another drive
                 continue
-            if not target_path.exists() or not target_path.is_file():
+            if rel == ".." or rel.startswith("../"):
+                continue
+            if tracked is not None:
+                present = rel in tracked
+            else:
+                present = target_path.is_file()
+            if not present:
+                # Say WHY the index lacks it: "does not exist" for a file `ls`
+                # shows (untracked, or README.MD on a case-insensitive disk)
+                # invited a fix to a correct link.
+                why = "does not exist"
+                if tracked is not None:
+                    if rel.lower() in folded:
+                        why = f"differs in letter case from the tracked {folded[rel.lower()]}"
+                    elif target_path.exists():
+                        why = "is not tracked by git (git add it; a clone and GitHub do not have it)"
                 findings.append((
                     "P1",
                     md.relative_to(REPO).as_posix(),
-                    f"link target {path_part!r} does not exist",
+                    f"link target {path_part!r} {why}",
                 ))
                 continue
             anchors = collect_anchors(target_path)
@@ -576,4 +635,10 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    # A P2 advisory carries an em dash; on a cp932/cp949 pipe (Japanese, Korean
+    # Windows) printing it crashed with exit 1, a failure no P2 may cause (#171).
+    try:
+        sys.stdout.reconfigure(errors="replace")
+    except (AttributeError, ValueError):
+        pass
     sys.exit(main())

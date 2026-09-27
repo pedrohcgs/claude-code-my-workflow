@@ -23,7 +23,10 @@ def main():
     for f in skills:
         d = os.path.basename(os.path.dirname(f))
         rel = os.path.relpath(f, ROOT)
-        s = open(f, encoding="utf-8", errors="ignore").read()
+        # utf-8-sig drops a leading BOM (PowerShell 5.1 writes one), which otherwise
+        # hid intact frontmatter behind "no YAML frontmatter" — Claude Code's own
+        # skill loader strips it.
+        s = open(f, encoding="utf-8-sig", errors="ignore").read()
         m = re.match(r'^---\n(.*?)\n---\n(.*)$', s, re.S)
         if not m:
             errs.append(f"{rel}: no YAML frontmatter"); continue
@@ -64,4 +67,11 @@ def main():
     return 1 if errs else 0
 
 if __name__ == "__main__":
+    # The advisory header prints an em dash on every run. A pipe on Japanese or
+    # Korean Windows (cp932, cp949) cannot encode one, and the print crashed the
+    # gate (#171): replace what the code page lacks rather than die.
+    try:
+        sys.stdout.reconfigure(errors="replace")
+    except (AttributeError, ValueError):
+        pass
     sys.exit(main())
