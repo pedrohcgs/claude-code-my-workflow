@@ -291,7 +291,7 @@ absent; the debt was drift between files.
 - **awesome-ai-agents** — no scholarly tools; its restricted-data concern is adopted above,
   browser-measured slide QA is adopted (see Added), and gate mutation testing goes to the backlog.
 
-**Inventory at release: 61 skills, 18 agents, 37 rules, 11 hooks, 10 gates**
+**Inventory at release: 61 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
 (v2.5.1: 60 skills, 8 hooks; the rest unchanged).
 
 ### Verification of this release

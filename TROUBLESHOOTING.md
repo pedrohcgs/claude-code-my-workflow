@@ -104,6 +104,16 @@ Good — the pre-check caught a P3 (bare `scale=`) or P4 (missing directional ke
 
 ## Git / hooks / CI
 
+### On Windows, the guards do not see PowerShell commands
+
+Claude Code on Windows can run shell commands through two tools, Bash (Git Bash) and PowerShell. The template's guard hooks — `git-guardrails`, `root-of-trust-guard`, `issue-guard` — are wired to the **Bash** tool only, so a command Claude runs through PowerShell passes none of them.
+
+- **Install [Git for Windows](https://git-scm.com/downloads/win).** Without Git Bash, Claude Code uses PowerShell for every shell command, and none of the guards run at all.
+- **With Git Bash installed, the PowerShell tool is still on by default** for claude.ai and Console accounts. To keep every shell command on the guarded route, turn it off for your machine with `"env": { "CLAUDE_CODE_USE_POWERSHELL_TOOL": "0" }` in `.claude/settings.local.json`, or add `"PowerShell"` to your `permissions.deny`.
+- Widening the guards' matchers to `Bash|PowerShell` would not be enough: they read bash syntax, and PowerShell spells the same operations differently (`Remove-Item -Recurse`, not `rm -rf`).
+
+(Claude Code tools reference, "PowerShell tool", read 2026-09-27.)
+
 ### Hook script permission denied
 
 `chmod +x .claude/hooks/*.py .claude/hooks/*.sh`. `./scripts/validate-setup.sh` also reports non-executable hooks.
