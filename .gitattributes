@@ -1,0 +1,4 @@
+# Shell scripts must keep LF endings, or they break on macOS/Linux
+# ("bad interpreter: /bin/sh^M") after a checkout on Windows.
+*.sh text eol=lf
+.githooks/* text eol=lf

@@ -182,7 +182,7 @@ def ledger_names(known):
 
 def named_by(path, names):
     """Does `names` (basename -> {tokens}) name this path? A token with a directory must match it."""
-    rel = os.path.relpath(path, ROOT)
+    rel = os.path.relpath(path, ROOT).replace(os.sep, "/")
     return any("/" not in tok or rel.endswith(tok)
                for tok in names.get(os.path.basename(path), ()))
 
@@ -213,7 +213,7 @@ def main():
         print("  A check that could not run is not a passing check.", file=sys.stderr)
         return 2
 
-    rel = lambda p: os.path.relpath(p, ROOT)
+    rel = lambda p: os.path.relpath(p, ROOT).replace(os.sep, "/")
     errs, warns = [], []
     n = lambda src: sum(1 for s, _, _, _ in checks if s == src)
     art = lambda src: ("an " if src[0] in "aeiou" else "a ") + src
