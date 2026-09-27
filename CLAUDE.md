@@ -100,7 +100,7 @@ python3 scripts/quality_score.py Quarto/file.qmd
 ./scripts/check-palette-sync.sh
 
 # Backtest: is the repo internally consistent and currently true?
-# (surface-sync + skill-integrity + model-versions + links + spec-conformance + staleness + repo-hygiene + derived-counts + ledger-coverage + hook-battery)
+# (surface-sync + skill-integrity + model-versions + links + spec-conformance + staleness + repo-hygiene + derived-counts + ledger-coverage + hook-battery + portability)
 # Run this after ANY change. Also runs in pre-commit and CI.
 ./scripts/backtest.sh
 ```

@@ -6,5 +6,8 @@
 # an unchanged source read as stale. The tree tracks no .bat/.cmd/.ps1; one that
 # is added needs its own `text eol=crlf` line here.
 * text=auto eol=lf
+# Raw inputs are kept byte-for-byte as deposited: a CRLF CSV or fixed-width file
+# under data/ must not be rewritten (its checksum and record lengths are evidence).
+data/** -text
 *.sh text eol=lf
 .githooks/* text eol=lf

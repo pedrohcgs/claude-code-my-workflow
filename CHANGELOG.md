@@ -179,8 +179,11 @@ absent; the debt was drift between files.
 
 ### Fixed — portability: paths, encodings, line endings and git output (#171, #151, #172)
 
-A stress test of every gate, hook and script found 78 defects in 17 root causes; each was
-reproduced by a separate verifier, and each fix is pinned by a case that fails on the old code.
+A stress test of every gate, hook and script found 78 defects in 17 root causes, each reproduced
+by a separate verifier. The 74 fixed here are each pinned by a case that fails on the old code (see
+the qualification ledger). Four are not closed by this change: three need a launcher that finds
+Python on Windows (a separate change), and the PowerShell tool, which the guards cannot read, is
+documented rather than blocked (owner decision).
 PR #152 (JonOM123) had fixed two of #151's three claims; its sound parts are taken here, credited
 as co-author.
 
@@ -202,7 +205,9 @@ as co-author.
   `.r` files now count; the R file path is passed as an argument, not pasted into R source.
 - **Links were judged against the disk, not the index:** an untracked or wrong-case target no
   longer passes; `%20` and `<a b.md>` links resolve; a BOM no longer hides frontmatter or a heading.
-- **Line endings and encodings:** `* text=auto eol=lf`; the staleness gate and the render stamp
+- **Line endings and encodings:** `* text=auto eol=lf`, with `data/` exempt so raw inputs keep their
+  bytes (an existing clone checked out with `core.autocrlf=true` needs a one-time renormalise — see
+  TROUBLESHOOTING); the staleness gate and the render stamp
   hash LF-normalised text; gates and scripts read and write UTF-8 and no longer crash on a cp932
   console; `validate-setup` and `install-hooks` act on their own repository, not the caller's
   folder; the hook battery no longer depends on the folder it is run from.
@@ -294,9 +299,10 @@ as co-author.
 
 - **Portability suite, the eleventh backtest gate** (`scripts/portability-tests.py`,
   `tests/portability/`). Windows behaviour is simulated by loading the real modules with `ntpath`
-  swapped in, so a Windows defect fails on Linux CI. It adds about 20 s to a local backtest; its
-  two full re-runs of the hook battery are skipped locally under the same rule as the battery
-  itself, and always run in CI.
+  swapped in, so a Windows defect fails on Linux CI. It adds about 20 s to a pre-commit backtest
+  when no hook, hook setting or battery file is staged (its two full re-runs of the hook battery are
+  skipped there, under the battery's own rule); a direct `./scripts/backtest.sh`, a commit that
+  stages a hook, and CI run them, adding about a minute.
 - **Small edits borrowed from claudeblattman** (after reading it for ideas; it also turned up the
   defects above, #165–#169; each was filed as an issue before it was fixed):
   - **A missing lens is not a dry round** in the review loop (`orchestrator-protocol.md`).

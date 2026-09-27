@@ -687,7 +687,7 @@ And one command runs the mechanical half of all of it:
                          # hygiene, derived counts, ledger coverage, hook battery, portability
 ```
 
-The final pair check the checking layer rather than the content. **Ledger coverage** reads
+Gates 9 and 10 check the checking layer rather than the content. **Ledger coverage** reads
 the qualification ledger and the set of checks that actually run, and requires them to agree in
 both directions: a registered check with no ledger row fails the build, a row naming a checker
 that no longer exists fails the build, and a row parked under *Not yet qualified* warns — visible
@@ -696,6 +696,11 @@ points at a file that exists, is invocable, and is tracked in git. The **hook ba
 each active guard hook with synthetic events and requires it to still go red on the failure it was
 written for, alongside clean controls that must stay green. Gate 9 proves a hook is wired; gate 10
 proves it still acts.
+
+Gate 11, the **portability suite**, covers what differs on other people's machines: Windows paths,
+code pages and line endings (simulated on Linux by loading the real modules with `ntpath` swapped
+in), non-ASCII and quoted file names from git, case-varied paths. Each defect it covers is pinned
+by a case that failed on the code before its fix.
 
 Findings themselves are machine-checked rather than described: reviewers emit a JSON array
 validated against

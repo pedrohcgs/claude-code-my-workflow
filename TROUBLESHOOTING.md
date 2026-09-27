@@ -327,6 +327,16 @@ For **short-delay polling within an active session** (e.g. "check the build ever
 
 You probably have `CLAUDE_PRECOMPACT_BLOCK_ON_DRAFT=1` set in your environment. The hook blocks compaction at most **once** per DRAFT plan — subsequent compactions of the same plan proceed normally. If it's blocking repeatedly, either the plan's status line hasn't been updated from DRAFT to APPROVED/IN_PROGRESS (check the plan file header), or you've got a different DRAFT plan every time (the hook tracks by plan path). Unset the env var to disable the guard entirely: `unset CLAUDE_PRECOMPACT_BLOCK_ON_DRAFT`.
 
+### Windows / WSL: `env: bash\r: No such file or directory` after updating
+
+An existing clone that was checked out with `core.autocrlf=true` (the Git for Windows default) keeps its CRLF shell scripts after you pull v2.6: `.gitattributes` now asks for LF, but git rewrites only the files an update touches, and `git status` stays clean. Under WSL, a container or any non-MSYS bash, the unchanged `.sh` files then fail. Renormalise once, from a clean tree, in your own terminal:
+
+```bash
+git rm --cached -r -q . && git reset --hard
+```
+
+That re-checks-out every file under the current `.gitattributes` rules (LF for text, `data/` untouched). Commit or stash your work first — `reset --hard` discards uncommitted changes.
+
 ## Still stuck?
 
 - Read the [guide's troubleshooting section](https://psantanna.com/claude-code-my-workflow/workflow-guide.html#troubleshooting) for longer-form recovery scenarios.
