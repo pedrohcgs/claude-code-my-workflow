@@ -63,7 +63,10 @@ which seeds a mistyped hook path into a fixture clone's settings file. The
 deny message names the project directory it is speaking for, so the claim
 "this repository's gate-defining files" is checkable rather than asserted. If
 no project directory can be resolved at all, the guard falls back to the plain
-text match and says so in the message.
+text match and says so in the message. "Inside" is decided on the path AS
+NAMED and AS RESOLVED (either counts), without regard to case or Unicode form,
+and by file identity when the strings disagree (#171; `in_project` has the
+measurements).
 
 Denied, when the target is a protected path:
 
@@ -223,7 +226,17 @@ characters that can sit inside a word without changing which file it names (a
 variable or a substitution can too, and both are disclosed as residual below) —
 and the
 continuation splice was corrected to DELETE the backslash-newline the way the
-shell does rather than substitute a space for it.
+shell does rather than substitute a space for it. The WINDOWS SPELLINGS joined
+the caught set at #171 (2026-09-27), measured under an ntpath simulation of
+this file because Git Bash is the Bash tool's shell there: a BACKSLASH as the
+separator (`'.claude\hooks'`, `C:\…\.claude\hooks`), a Git Bash DRIVE path
+(`/c/…`), two `-C` values composed with `\` (#151), a program named by its
+real file name (`rm.exe`, `GIT.EXE`), a CR inside a word (MSYS bash deletes
+it), and an event decoded with the ANSI code page instead of UTF-8. So did two
+spellings that are not Windows-only: a name APFS folds and `lower()` does not
+(`hookſ`), and a project directory spelled in another case, another Unicode
+form, or through a link — including a `.claude` that is itself a link out of
+the tree.
 
 WHAT IT DOES NOT CATCH — disclosed residual, in scope for a future audit as
 BOUNDARY, not as a defect:
@@ -287,7 +300,10 @@ BOUNDARY, not as a defect:
     which tree a path is in, never whether it is protected. Recorded here as an
     uncovered class at r19; nothing in this file closes it, and the r16 `..`
     walk deliberately does not try to (resolving in place would LOSE denials
-    that stand today — see the block above `resolve_parents`).
+    that stand today — see the block above `resolve_parents`). The OPPOSITE
+    case is closed since #171: a link that CARRIES the protected name (`.claude`
+    itself linked to a shared config directory) used to resolve outside the
+    project and be allowed; the path as named now counts.
   - a `cd` EARLIER IN THE SAME COMMAND LINE. Relative tokens resolve against
     the tool call's cwd, not against a `cd` inside the command, so
     `cd /tmp/fixture && printf '{}' > .claude/settings.json` is scored against
@@ -302,11 +318,24 @@ BOUNDARY, not as a defect:
     an unlisted wrapper option that takes a SEPARATE value (assumed here to
     attach its value, which skips too LITTLE — a real command word is still
     scanned — rather than too much, so it fails toward catching the write).
-    A CASE-VARIED spelling of a LISTED wrapper counts as unknown here: r19
-    folded the WRITER-program names and the protected path segments, not the
-    scaffolding in front of them. Measured 2026-08-24 on a throwaway project
-    fixture, `nice rm -f .claude/hooks/git-guardrails.py` DENIED while
-    `NICE rm -f …` and `BASH -c 'rm -f …'` were ALLOWED (silent).
+    (A CASE-VARIED or `.exe` spelling of a LISTED wrapper or shell — `NICE rm
+    …`, `BASH -c …`, `bash.exe -c …` — was in this bullet until #171; every
+    table lookup now casefolds the name and drops `.exe`, see `_prog`.)
+  - WINDOWS, beyond the spellings closed at #171, none of it measured on a real
+    Windows machine (the #171 work used an ntpath simulation):
+      * the PowerShell tool. This hook is registered for `Bash` and returns at
+        once for any other tool, so on native Windows a PowerShell
+        `Remove-Item .claude\hooks -Recurse` is never seen here at all. What
+        covers that tool is the permission layer in `.claude/settings.json`,
+        not this file.
+      * a DRIVE-RELATIVE path (`C:.claude\hooks`): its first segment reads as
+        `C:.claude`, which is not a protected name.
+      * Win32 NAME ALIASING — an 8.3 short name (`CLAUDE~1`, `GITHOO~1`), a
+        trailing dot or space that Win32 strips from a component — and NTFS's
+        own upcase table, which is not Unicode casefold (the dotless `ı`
+        uppercases to `I`, so `settıngs.json` may name `settings.json` there
+        while casefold leaves it alone). Each would be a name this lexical scan
+        does not recognise; none has been probed.
   - a GLOB whose expansion depends on a shell OPTION this scan does not model
     (r15, the residual left by the glob fix). A bare wildcard segment does not
     match a DOT-name because of an EXPLICIT rule in `_segment_matches` — a
@@ -328,13 +357,15 @@ BOUNDARY, not as a defect:
     reasoning. The cwd residual is real but belongs to PATH RESOLUTION, not to
     globbing — it is the `cd` bullet above.)
   - ANY SPELLING THAT PUTS A PROTECTED PATH SOMEWHERE THIS SCAN DOES NOT LOOK.
-    The bullets above are the set known on 2026-08-24. They record where this
-    scanner has been PROBED; they do not establish where it is complete, and
-    reading the list as a closed enumeration is the mistake. Six consecutive
-    rounds each turned up a spelling every earlier round had missed — globs
-    (r15), `..` segments (r16), a shell COMMENT naming a heredoc (r17), `>&`
-    (r18), the `$'…'` openers and case (r19), quoting inside the protected NAME
-    itself (r20) — and every one of them
+    The bullets above are the set known on 2026-08-24, extended on 2026-09-27.
+    They record where this scanner has been PROBED; they do not establish where
+    it is complete, and reading the list as a closed enumeration is the
+    mistake. Seven consecutive rounds each turned up a spelling every earlier
+    round had missed — globs (r15), `..` segments (r16), a shell COMMENT naming
+    a heredoc (r17), `>&` (r18), the `$'…'` openers and case (r19), quoting
+    inside the protected NAME itself (r20), and the Windows separators, drive
+    paths, `.exe` names, CRs, code pages, Unicode fold and project spellings
+    (#171) — and every one of them
     failed toward ALLOW while its literal twin denied. Those are closed; the
     CLASS is not. Assume there are more, and that the next one also looks
     ordinary.
@@ -348,7 +379,10 @@ Decision protocol (modern PreToolUse): exit 0 + JSON
 Fail-open: any error — malformed event, unparseable command, an exception
 in this file — exits 0 with no decision (allow). A guard that hard-fails on
 its own bug takes the session down with it; failing open loses coverage for
-that one call, which is the cheaper failure for a best-effort deny.
+that one call, which is the cheaper failure for a best-effort deny. That is
+also why the event is read as UTF-8 BYTES with replacement (#171): a byte the
+machine's code page could not decode used to be exactly such an error, and so
+an allow.
 
 Escape hatch: set ALLOW_ROOT_OF_TRUST_WRITE=1 in the ENVIRONMENT OF THE
 SESSION (`ALLOW_ROOT_OF_TRUST_WRITE=1 claude`, or export it in the shell
@@ -364,6 +398,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 # --- protected paths -------------------------------------------------------
 
@@ -561,9 +596,17 @@ def _segment_matches(seg: str, name: str) -> bool:
     r19 — THE COMPARISON IS CASE-INSENSITIVE, UNCONDITIONALLY. See `normalize`
     for the measurement and for why the fold is not conditioned on a filesystem
     probe. `fnmatchcase` is kept rather than `fnmatch` (which would defer to
-    `os.path.normcase`, an identity function on POSIX): both sides are lowered
-    here, so the fold is this file's own rule and not the platform's."""
-    seg_l, name_l = seg.lower(), name.lower()
+    `os.path.normcase`, an identity function on POSIX): both sides are folded
+    here, so the fold is this file's own rule and not the platform's.
+
+    #171 — THE FOLD IS UNICODE `casefold()`, NOT `lower()`. APFS folds case the
+    Unicode way, and U+017F (LONG S) aliases `s` there while `'ſ'.lower()` is
+    still `ſ`. Measured 2026-09-27 in a throwaway fixture: `rm -rf .claude/hookſ`
+    and `echo X > .claude/settingſ.json` were ALLOWED (silent) and really
+    deleted / rewrote the protected files. Every code point that aliased an
+    ASCII letter on that volume was enumerated: only U+017F and the Kelvin sign
+    U+212A, and `casefold()` maps both."""
+    seg_l, name_l = seg.casefold(), name.casefold()
     if seg_l == name_l:
         return True
     if not _GLOB_META.search(seg):
@@ -592,8 +635,27 @@ def _matches_one(path: str) -> bool:
 
 def matches_root_of_trust(token: str) -> bool:
     """PATTERN half: does this token spell a gate-defining path at all?
-    Says nothing about WHICH tree it is in — see in_project()."""
-    return any(_matches_one(alt) for alt in _brace_expand(normalize(token)))
+    Says nothing about WHICH tree it is in — see in_project().
+
+    #171 — A BACKSLASH IS ALSO A SEPARATOR. Every walk above splits on `/`
+    only, so `'.claude\\hooks'` was ONE segment that matched nothing. On
+    Windows it is not one segment: Git Bash runs on the MSYS2/Cygwin runtime,
+    whose rule is "directory delimiters may be either forward slashes or
+    backslashes", and git.exe is a Win32 program. Measured 2026-09-27 under an
+    ntpath simulation of the shipped guard: `rm -rf '.claude\\hooks'`,
+    `echo x > '.claude\\settings.json'`, `rm -f '.githooks\\pre-commit'` and
+    `git -C '.claude\\hooks' rm …` were all ALLOWED (silent) while the `/`
+    spellings DENIED. The token is now ALSO tested with every `\\` read as `/`.
+    That is a second FORM, not a rewrite of the first, so no deny that stands
+    today can be lost (a rewrite in `normalize` would have dropped the glob
+    class in `".claude/hook[\\s]"`). It is unconditional, like the case fold:
+    on POSIX it costs a false DENY only for a QUOTED name that really contains
+    a backslash, which is the direction this guard errs in."""
+    forms = [token]
+    if "\\" in token:
+        forms.append(token.replace("\\", "/"))
+    return any(_matches_one(alt) for form in forms
+               for alt in _brace_expand(normalize(form)))
 
 
 # --- project scope ---------------------------------------------------------
@@ -637,6 +699,25 @@ def _git_root(start: str) -> str | None:
         cur = parent
 
 
+# #171 — Git Bash / MSYS2 / Cygwin spell drive C: as `/c/…` (`/cygdrive/c/…`),
+# and that is what `pwd` prints there, so it is how absolute paths get written.
+# Native Windows Python reads `/c/Users/me/proj` as a path ROOTED ON THE CURRENT
+# DRIVE — `C:\c\Users\me\proj` — which lies outside every project, so the scope
+# half answered "another tree". Measured 2026-09-27 under an ntpath simulation
+# of the shipped guard: `rm -rf /c/<proj>/.claude/hooks` and
+# `echo x > /c/<proj>/.claude/settings.json` ALLOWED (silent) while the
+# `C:/<proj>/…` spelling DENIED. A no-op wherever `\` is not the separator.
+_MSYS_DRIVE = re.compile(r"^(?:/cygdrive)?/([A-Za-z])(?=/|$)")
+
+
+def _native(p: str) -> str:
+    """`/c/x` (or `/cygdrive/c/x`) -> `C:/x` on Windows; unchanged elsewhere."""
+    if os.sep != "\\":
+        return p
+    m = _MSYS_DRIVE.match(p)
+    return f"{m.group(1).upper()}:{p[m.end():] or '/'}" if m else p
+
+
 def configure_scope(event_cwd: str = "") -> None:
     """Resolve the project root and the cwd relative tokens resolve against.
     Called once per event, before any scan."""
@@ -644,17 +725,31 @@ def configure_scope(event_cwd: str = "") -> None:
     # A cwd that does not exist tells us nothing, and trusting it would resolve
     # every relative token to a directory outside every project — i.e. silently
     # disarm the guard. Fall back to the hook process's own cwd instead.
+    event_cwd = _native(event_cwd)
     try:
         usable = bool(event_cwd) and os.path.isdir(event_cwd)
         _CWD = _real(event_cwd) if usable else _real(os.getcwd())
     except OSError:
         _CWD = ""
-    env = os.environ.get("CLAUDE_PROJECT_DIR", "")
+    env = _native(os.environ.get("CLAUDE_PROJECT_DIR", ""))
     if env and os.path.isdir(env):
         _PROJECT = _real(env)
         return
     _PROJECT = (_git_root(_CWD)
                 or _git_root(os.path.dirname(os.path.abspath(__file__))))
+
+
+def _fold(p: str) -> str:
+    """One spelling per directory name on APFS/HFS+ (and NTFS for case): NFC,
+    then Unicode casefold — the same fold the pattern half applies."""
+    return unicodedata.normalize("NFC", p).casefold()
+
+
+def _under(path: str, root: str) -> bool:
+    """`path` is `root` or lies below it, compared on folded strings. A root
+    that already ends in a separator (`/`, `D:\\`) is its own prefix."""
+    p, r = _fold(path), _fold(root)
+    return p == r or p.startswith(r if r.endswith(os.sep) else r + os.sep)
 
 
 def in_project(token: str) -> bool:
@@ -666,16 +761,59 @@ def in_project(token: str) -> bool:
     user's own config rather than read as a relative path. A token that still
     cannot be resolved to an absolute path is treated as project-relative,
     which fails toward DENYING — the safe direction for this guard.
-    """
+
+    #171 — FOUR WAYS THE SAME DIRECTORY WAS JUDGED "ANOTHER TREE". Each was
+    measured 2026-09-27 as a silent ALLOW of a write the literal spelling
+    DENIED, and each is closed here:
+
+      * CASE AND UNICODE FORM. The test was a raw string prefix after
+        `realpath`, which on macOS canonicalises neither case nor NFC/NFD while
+        APFS ignores both; `rm -rf <PROJECT-IN-OTHER-CASE>/.claude/hooks`
+        really deleted the hooks in a fixture. Both sides are now compared
+        NFC-normalised and casefolded — the scope half's version of the r19
+        fold, erring the same way (a false DENY for a sibling that differs only
+        in case on a case-sensitive disk).
+      * A LINK THAT CARRIES THE PROTECTED NAME. Only the RESOLVED path was
+        compared, so a `.claude` (or `.claude/hooks`, `.githooks`) that is a
+        symlink or junction to a shared config directory resolved outside the
+        project — yet it is still the path settings.json loads every hook from.
+        The path AS NAMED now counts as well as the path as resolved; either one
+        inside is inside. (A link with an UNPROTECTED name is still the residual
+        in the module docstring: there the pattern half sees no protected name.)
+      * A PROJECT AT A FILESYSTEM ROOT. `_PROJECT + os.sep` was `//` for a
+        project at `/` (`D:\\` on Windows), which no path starts with, so the
+        guard was inert. See `_under`.
+      * ANOTHER NAME FOR THE SAME DIRECTORY that no string test can see — the
+        macOS `/System/Volumes/Data` firmlink, a bind mount, CLAUDE_PROJECT_DIR
+        spelled through a link. When the strings disagree, each ancestor of the
+        path (as named, then as resolved) is compared with the project by file
+        IDENTITY. That costs a few `stat`s, and only for a token the pattern
+        half has already matched.
+
+    A Git Bash drive path (`/c/…`) is read as the drive it names: `_native`."""
     if _PROJECT is None:
         return True  # scope unknown: keep the pre-scoping behaviour
-    t = os.path.expandvars(os.path.expanduser(token.strip()))
+    t = _native(os.path.expandvars(os.path.expanduser(token.strip())))
     if not t:
         return False
     if not os.path.isabs(t):
         t = os.path.join(_CWD or _PROJECT, t)
-    t = _real(t)
-    return t == _PROJECT or t.startswith(_PROJECT + os.sep)
+    named, resolved = os.path.abspath(t), _real(t)
+    if _under(named, _PROJECT) or _under(resolved, _PROJECT):
+        return True
+    for start in dict.fromkeys((named, resolved)):
+        cur = start
+        while True:
+            try:
+                if os.path.samefile(cur, _PROJECT):
+                    return True
+            except (OSError, ValueError):   # a missing leaf is not an answer
+                pass
+            parent = os.path.dirname(cur)
+            if parent == cur:
+                break
+            cur = parent
+    return False
 
 
 def is_protected(token: str) -> bool:
@@ -765,6 +903,22 @@ _WRAPPER_POSITIONAL = {"timeout": 1}
 # The payload is unwrapped and re-scanned so a write hidden inside it is not
 # swallowed as one opaque quoted word.
 SHELLS = {"sh", "bash", "zsh", "dash", "ksh"}
+
+
+def _prog(word: str) -> str:
+    """The name a command word runs, as every table in this file spells it.
+
+    #171 — `.exe` AND CASE. The tables were matched on the exact basename, so
+    in Git Bash `rm.exe`, `/usr/bin/rm.exe`, `git.exe`, `bash.exe -c …` and
+    `GIT.EXE` — the programs' real file names there, looked up on a
+    case-insensitive disk — ran the same writers while matching nothing.
+    Measured 2026-09-27: `rm.exe -rf .claude/hooks` and
+    `bash.exe -c 'git reset --hard'` ALLOWED (silent), their bare twins DENIED.
+    The fold is casefold, so it also closes the case-varied WRAPPER residual
+    r19 left open (`NICE rm …`, `BASH -c …`)."""
+    b = os.path.basename(word).casefold()
+    return b[:-4] if b.endswith(".exe") else b
+
 
 DEST_LAST = {"cp", "install", "rsync", "scp", "ln"}     # last non-flag arg
 ANY_ARG = {"mv", "rm", "unlink", "shred", "tee", "truncate"}
@@ -1173,7 +1327,7 @@ def skip_wrappers(words: list[str], stop_at: set[str] | None = None) -> int:
         if _ASSIGN.match(words[i]):          # FOO=bar prefix
             i += 1
             continue
-        base = os.path.basename(words[i])
+        base = _prog(words[i])
         if base not in WRAPPERS:
             break
         if stop_at and base in stop_at:      # halt ON this wrapper, don't skip it
@@ -1234,7 +1388,7 @@ def shell_c_payload(seg: list[tuple[str, str]]) -> str | None:
     words = [t for k, t in seg if k == "word"]
     i = skip_wrappers(words)
     n = len(words)
-    if i >= n or os.path.basename(words[i]) not in SHELLS:
+    if i >= n or _prog(words[i]) not in SHELLS:
         return None
     seen_c = False
     j = i + 1
@@ -1284,7 +1438,7 @@ def env_split_payload(seg: list[tuple[str, str]]) -> str | None:
     bypass."""
     words = [t for k, t in seg if k == "word"]
     i = skip_wrappers(words, stop_at={"env"})   # skip nice/timeout/… , halt ON env
-    if i >= len(words) or os.path.basename(words[i]) != "env":
+    if i >= len(words) or _prog(words[i]) != "env":
         return None
     i += 1
     while i < len(words):
@@ -1327,16 +1481,25 @@ def _compose_dash_c(parts: list[str]) -> str | None:
     before, a relative one is appended, an empty one is a no-op. The composed
     token is what the writer's working directory will actually be, and it is
     what `is_protected` is asked about; a relative result still resolves
-    against the event cwd there, exactly as a single relative `-C` did."""
+    against the event cwd there, exactly as a single relative `-C` did.
+
+    #151 claim 1 / #171 — the fold used `os.path.join`, which on Windows joins
+    with `\\`: `git -C .claude -C hooks rm -f git-guardrails.py` composed to
+    `.claude\\hooks`, one segment to the pattern half, and was ALLOWED (silent)
+    under an ntpath simulation while the one-flag spelling DENIED. git composes
+    with `/`, so the join does too (PR #152's repair). A Git Bash drive value
+    (`-C /c/…`) is read as the drive it names before the absolute test, or it
+    would be appended to the previous value instead of replacing it."""
     cur: str | None = None
     for raw in parts:
         if not raw:                            # `-C ""` leaves the cwd alone
             continue
-        expanded = os.path.expandvars(os.path.expanduser(raw))
+        raw = _native(raw)
+        expanded = _native(os.path.expandvars(os.path.expanduser(raw)))
         if cur is None or os.path.isabs(expanded):
             cur = raw
             continue
-        cur = os.path.join(cur, raw)
+        cur = os.path.join(cur, raw).replace(os.sep, "/")
     return cur
 
 
@@ -1438,15 +1601,11 @@ def scan_segment(seg: list[tuple[str, str]]) -> tuple[str, str] | None:
     spelling the caller actually used. Unconditional, and erring toward denying,
     for the reasons in `normalize`.
 
-    Residual, disclosed rather than half-closed: the WRAPPERS and SHELLS tables
-    (`skip_wrappers`, `shell_c_payload`) are still matched case-sensitively, so
-    a case-varied WRAPPER hides the writer behind it. Measured 2026-08-24 on a
-    throwaway project fixture: `nice rm -f .claude/hooks/git-guardrails.py`
-    DENIED, while `NICE rm -f .claude/hooks/git-guardrails.py` and
-    `BASH -c 'rm -f .claude/hooks/git-guardrails.py'` were ALLOWED (silent).
-    That class predates r19 and is unchanged by it — r19 folded the WRITER
-    name, not the scaffolding in front of it. It is listed in the module
-    docstring's residual enumeration."""
+    The residual this paragraph used to disclose — the WRAPPERS and SHELLS
+    tables matched case-sensitively, so `NICE rm -f …` and `BASH -c 'rm -f …'`
+    were ALLOWED (silent) while `nice rm -f …` DENIED (measured 2026-08-24) —
+    is closed at #171: every table lookup now goes through `_prog`, which
+    casefolds the name and drops a Windows `.exe`."""
     words = [t for k, t in seg if k == "word"]
 
     # 1. Output redirection — the target is the token right after the operator.
@@ -1474,7 +1633,7 @@ def scan_segment(seg: list[tuple[str, str]]) -> tuple[str, str] | None:
     if i >= len(words):
         return None
     name = os.path.basename(words[i])
-    key = name.lower()                       # r19: see the docstring above
+    key = _prog(name)                        # r19 + #171: see the docstring above
     args = words[i + 1:]
     plain = [a for a in args if a != "--" and not a.startswith("-")]
     flags = [a for a in args if a.startswith("-")]
@@ -1527,7 +1686,7 @@ def scan_segment(seg: list[tuple[str, str]]) -> tuple[str, str] | None:
                 destructive = True
                 break
             if a in ("-exec", "-execdir") and k + 1 < len(args) \
-                    and os.path.basename(args[k + 1]).lower() in deleters:
+                    and _prog(args[k + 1]) in deleters:
                 destructive = True
                 break
         if destructive:
@@ -1603,7 +1762,11 @@ def scan(raw: str, depth: int = 0) -> tuple[str, str] | None:
                 if hit:
                     return hit
     for m in _REDIR.finditer(strip_quoted(cmd)):
-        target = m.group(1)
+        # #171: unquoted the way bash (and the tokenizer path) unquotes it. The
+        # backslash form in `matches_root_of_trust` would otherwise read the
+        # RAW `> .claude\settings.json` as the protected file, while bash
+        # strips that `\` and writes `.claudesettings.json`: a false deny.
+        target = unquote(m.group(1))
         if _is_fd_dup_target(target):
             continue                    # `>&2` / `2>&1` — a descriptor, not a path
         if is_protected(target):
@@ -1759,7 +1922,9 @@ def wrapped_git_deny(raw: str, depth: int = 0) -> str | None:
 # and does not walk the tree: the pattern half is pure text (`fnmatch`, a brace
 # expansion bounded at `_BRACE_LIMIT`, a recursion bounded at depth 2), and the
 # only filesystem work is the metadata calls in `in_project()` / `_git_root()`
-# — `realpath`, `isdir`, `exists`. Those are microseconds on a local disk and
+# — `realpath`, `isdir`, `exists`, and (#171) a `stat` per ancestor for the
+# identity fallback, only on a token the pattern half has already matched.
+# Those are microseconds on a local disk and
 # are the one thing here that a stalled network mount can hang, which is the
 # same class of slowness that produced the sibling's defect. So the
 # registration carries the headroom instead of an internal timeout, and it is
@@ -1885,7 +2050,7 @@ def _may_name_a_protected_path(cmd: str) -> bool:
     # the whole fix; the asymmetry was the defect.
     spliced = join_continuations(cmd)
     for text in (cmd, spliced, _denoise(spliced)):
-        low = text.lower()
+        low = text.casefold()                # #171: `.githookſ` — see _segment_matches
         if ".claude" in low or ".githooks" in low:
             return True
     if "$'" in spliced or '$"' in spliced:   # ANSI-C / locale quoting: see above
@@ -1897,8 +2062,18 @@ def main() -> int:
     if os.environ.get("ALLOW_ROOT_OF_TRUST_WRITE", "") == "1":
         return 0
 
+    # #171 — THE EVENT IS UTF-8 BYTES, whatever the machine's code page. Claude
+    # Code writes it as raw UTF-8, but `json.load(sys.stdin)` decoded the pipe
+    # with the locale encoding, which on Windows is the ANSI code page. Measured
+    # 2026-09-27 with the shipped guard: under cp1252 an `Á` in transcript_path
+    # (present on every event) raised UnicodeDecodeError, which escaped to the
+    # fail-open handler; an accented project path became mojibake that no longer
+    # resolved inside the project; and under cp936 `echo 中|rm -rf .claude/hooks`
+    # lost its `|` to the double-byte codec. All three ALLOWED (silent). Read
+    # bytes and decode them as UTF-8 (a leading BOM tolerated); "replace" keeps
+    # an undecodable byte from becoming a crash, which here would be an allow.
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8-sig", "replace"))
     except (json.JSONDecodeError, EOFError):
         return 0
 
@@ -1906,6 +2081,14 @@ def main() -> int:
         return 0
 
     cmd = (data.get("tool_input", {}) or {}).get("command", "") or ""
+    # #171 — A CR IS NOT A WORD BREAK TO GIT BASH. MSYS2's bash (the one Git for
+    # Windows ships, and so the Bash tool's shell on Windows) DELETES every `\r`
+    # before parsing (`__MSYS__` in shell_getc/yy_getc), so `rm -rf .clau\rde/hooks`
+    # runs as `rm -rf .claude/hooks`, while every tokenizer here read the CR as
+    # whitespace and split the word. Measured 2026-09-27 against a bash built
+    # with those branches: the guard ALLOWED (silent) and the hooks were
+    # deleted. Delete them here too, before anything reads the line.
+    cmd = cmd.replace("\r", "")
 
     # Cross-hook rule FIRST, because it is the one case with no protected path
     # in it — it has to run BEFORE the `.claude`/`.githooks` fast path below,
