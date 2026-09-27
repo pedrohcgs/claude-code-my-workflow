@@ -354,7 +354,9 @@ def anchorize(title: str) -> str:
 
 def collect_anchors(md: Path) -> set[str]:
     try:
-        text = md.read_text(encoding="utf-8")
+        # -sig: the BOM parse_frontmatter strips also sat in front of a first
+        # '# Heading', and a valid link to its anchor got a P1 (#171).
+        text = md.read_text(encoding="utf-8-sig")
     except (OSError, UnicodeError):
         return set()
     anchors: set[str] = set()
@@ -403,9 +405,10 @@ def check_anchor_resolution() -> list[tuple[str, str, str]]:
     tracked = _tracked()
     if tracked is not None:            # an untracked copy (a worktree under .claude/) is not the repo's
         mds = [md for md in mds if _rel(md) in tracked]
+    folded = {t.lower(): t for t in tracked or ()}
     for md in sorted(mds):
         try:
-            raw = md.read_text(encoding="utf-8")
+            raw = md.read_text(encoding="utf-8-sig")
         except (OSError, UnicodeError) as e:
             findings.append((
                 "P2",
@@ -440,10 +443,19 @@ def check_anchor_resolution() -> list[tuple[str, str, str]]:
             else:
                 present = target_path.is_file()
             if not present:
+                # Say WHY the index lacks it: "does not exist" for a file `ls`
+                # shows (untracked, or README.MD on a case-insensitive disk)
+                # invited a fix to a correct link.
+                why = "does not exist"
+                if tracked is not None:
+                    if rel.lower() in folded:
+                        why = f"differs in letter case from the tracked {folded[rel.lower()]}"
+                    elif target_path.exists():
+                        why = "is not tracked by git (git add it; a clone and GitHub do not have it)"
                 findings.append((
                     "P1",
                     md.relative_to(REPO).as_posix(),
-                    f"link target {path_part!r} does not exist",
+                    f"link target {path_part!r} {why}",
                 ))
                 continue
             anchors = collect_anchors(target_path)

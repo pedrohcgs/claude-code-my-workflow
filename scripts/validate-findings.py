@@ -35,16 +35,20 @@ import json, sys, os, hashlib, re, subprocess, unicodedata, difflib, posixpath
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA = os.path.join(ROOT, ".claude", "references", "finding-schema.json")
 
+def canon_path(file):
+    """A finding's `file` in one spelling: '/' separators, no './' or 'a/../'.
+    The id and --check-quotes both read the path through this, so the two halves
+    of the tool cannot disagree about what file a finding names."""
+    file = str(file)
+    return posixpath.normpath(file.replace("\\", "/")) if file else file
+
 def finding_id(file, line, locus, lens=None):
     # lens is deliberately NOT in the identity: the same defect found by two
     # lenses must dedup to one finding. (Codex review, PR #140.)
     # Nor is the spelling of the path: a reviewer on Windows writes Slides\deck.tex,
     # another ./Slides/deck.tex, and one defect got two ids and listed twice (#171).
     # A canonical Slides/deck.tex keeps the id it always had.
-    file = str(file)
-    if file:
-        file = posixpath.normpath(file.replace("\\", "/"))
-    return hashlib.sha1(f"{file}:{line}:{locus}".encode()).hexdigest()
+    return hashlib.sha1(f"{canon_path(file)}:{line}:{locus}".encode()).hexdigest()
 
 def _utf8_stdio():
     # Windows hands a pipe the ANSI code page (cp1252, cp932). The filled report
@@ -227,14 +231,18 @@ def check_quotes(args):
         if not quotes:
             continue
         where = f"findings[{i}] ({f.get('file')}:{f.get('line')}, {f.get('locus', '')})"
-        own = str(f.get("file", ""))
+        # The id folds Slides\deck.tex into Slides/deck.tex; so must the read, or a
+        # report written on Windows had its ids accepted and its quotes "file not
+        # found" on macOS and Linux (#171).
+        own = canon_path(f.get("file", ""))
         txt, why, _ = text_of(own)
         if why == "missing":
             misses.append(f"{where}: cannot check {len(quotes)} quote(s) — file not found: {own}")
             continue
         # The finding's file, plus any other file the evidence names by path (a parity
         # finding quotes the Beamer source while citing the Quarto file).
-        others = [m.group(1) for m in PATHLIKE.finditer(f["evidence"]) if m.group(1) != own]
+        others = [canon_path(m.group(1)) for m in PATHLIKE.finditer(f["evidence"])]
+        others = [o for o in others if o != own]
         sources = [own] + [o for o in dict.fromkeys(others) if os.path.isfile(os.path.join(root, o))]
         readable = [text_of(src) for src in sources if text_of(src)[0] is not None]
         if not readable:

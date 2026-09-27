@@ -220,7 +220,10 @@ class LinkResolution(Tmp):
         rc, out = self.links()
         self.assertEqual(rc, 1, out)
         self.assertIn("templates/nota.md", out)
-        self.assertIn("missing file", out)
+        # ...and says why: "[missing file]" for a file `ls` shows invited a fix to a
+        # correct link.
+        self.assertIn("[not tracked by git (git add it; a clone and GitHub do not have it)]", out)
+        self.assertNotIn("[missing file]", out)
 
     def test_wrong_case_target_is_missing(self):
         # links-gate-case-insensitive-exists: README.MD for README.md resolves on
@@ -229,8 +232,8 @@ class LinkResolution(Tmp):
                    "templates/t.md": "# T\n"})
         rc, out = self.links()
         self.assertEqual(rc, 1, out)
-        self.assertIn("README.MD", out)
-        self.assertIn("Templates/", out)
+        self.assertIn("README.MD   [letter case differs from the tracked README.md]", out)
+        self.assertIn("Templates/   [letter case differs from the tracked templates]", out)
 
     def test_untracked_markdown_is_not_scanned(self):
         # An untracked copy (a worktree under .claude/) is not the repository's to judge.
@@ -238,6 +241,19 @@ class LinkResolution(Tmp):
                   untracked={".claude/worktrees/w/notes.md": "[gone](nowhere.md)\n"})
         rc, out = self.links()
         self.assertEqual(rc, 0, out)
+
+    def test_untracked_markdown_is_named_not_silently_skipped(self):
+        # A new doc before `git add` was left out in silence, under a coverage line
+        # that read as the whole tree. A nested checkout is its own repository's.
+        self.repo({"README.md": "# Fine\n"},
+                  untracked={"templates/new.md": "[gone](nowhere.md)\n",
+                             ".claude/worktrees/w/notes.md": "[gone](nowhere.md)\n"})
+        _git(os.path.join(self.tmp, ".claude", "worktrees", "w"), "init", "-q")
+        rc, out = self.links()
+        self.assertEqual(rc, 0, out)                 # the verdict is still the index's
+        self.assertIn("1 untracked markdown file(s) not scanned (git add to check them): "
+                      "templates/new.md", out)
+        self.assertNotIn("worktrees", out)
 
     def test_directory_link_to_tracked_content_resolves(self):
         self.repo({"README.md": "[t](templates/) and [s](templates/sub/)\n",
@@ -257,7 +273,7 @@ class LinkResolution(Tmp):
         self.assertEqual(broken, ["Missing file.md", "a%20B.md#seção"], out)
         code, out, err = _winsim.run_main(os.path.join(self.tmp, "scripts", "check-skill-integrity.py"))
         self.assertEqual(code, 1, out + err)
-        self.assertIn("'a B.md' does not exist", out)
+        self.assertIn("'a B.md' differs in letter case from the tracked templates/A b.md", out)
         self.assertNotIn("'A b.md'", out)
 
     def test_report_naming_an_accented_file_survives_a_cp932_pipe(self):
@@ -285,8 +301,10 @@ class LinkResolution(Tmp):
                   untracked={"templates/nota.md": "# top\n"})
         rc, out = self.integrity()
         self.assertEqual(rc, 1, out)
-        self.assertIn("'A B.md' does not exist", out)
-        self.assertIn("'nota.md' does not exist", out)
+        # A P1 names the reason, as check-links does: both files are on the disk.
+        self.assertIn("'A B.md' differs in letter case from the tracked templates/A b.md", out)
+        self.assertIn("'nota.md' is not tracked by git (git add it; a clone and GitHub do not have it)", out)
+        self.assertNotIn("does not exist", out)
 
 
 # ── BOM before frontmatter ────────────────────────────────────────────────────
@@ -308,6 +326,21 @@ class FrontmatterBom(Tmp):
         rc, out = _run([sys.executable, os.path.join(self.tmp, "scripts", "check-spec-conformance.py")])
         self.assertNotIn("no YAML frontmatter", out)
         self.assertEqual(rc, 0, out)
+
+    def test_a_bom_does_not_hide_the_first_heading(self):
+        # The same BOM in front of a first '# Heading' kept the '#' off the line
+        # start: both link gates called a valid link to its anchor broken.
+        gates = ("check-links.py", "check-skill-integrity.py")
+        for s in gates:
+            _copy_script(self.tmp, s)
+        _write(self.tmp, "templates/A.md", b"\xef\xbb\xbf# Intro\n\nText, and [back](#intro).\n\n## Second\n")
+        _write(self.tmp, "templates/l.md", "[a](A.md#intro) and [b](A.md#second)\n")
+        _git(self.tmp, "init", "-q")
+        _git(self.tmp, "add", "--", "templates/A.md", "templates/l.md")
+        for s in gates:
+            rc, out = _run([sys.executable, os.path.join(self.tmp, "scripts", s)])
+            self.assertNotIn("intro", out, s)
+            self.assertEqual(rc, 0, (s, out))
 
     def test_spec_conformance_survives_a_cp932_pipe(self):
         # gate-stdout-emdash-codepage: the advisory header's em dash is not in cp932.
@@ -336,6 +369,18 @@ class FindingIds(Tmp):
         self.assertEqual(want, "cd7e3f99d57dd867376fdffa97d2199a4d6ac496")   # canonical ids unchanged
         self.assertEqual(fid("Slides\\deck.tex", 12, "frame-3"), want)
         self.assertEqual(fid("./Slides/deck.tex", 12, "frame-3"), want)
+
+    def test_check_quotes_reads_the_file_the_id_names(self):
+        # The id folded Slides\deck.tex into Slides/deck.tex; --check-quotes joined
+        # the raw spelling to --root and answered "file not found" on macOS and Linux.
+        _write(self.tmp, "Slides/deck.tex", "The effect is large here.\n")
+        vf = os.path.join(SCRIPTS, "validate-findings.py")
+        for spelling in ("Slides\\deck.tex", "./Slides/deck.tex", "Slides/sub/../deck.tex"):
+            f = dict(FINDING, file=spelling, evidence='The slide reads "The effect is large" there.')
+            p = _write(self.tmp, "f.json", json.dumps([f]))
+            rc, out = _run([sys.executable, vf, "--check-quotes", p, "--root", self.tmp])
+            self.assertEqual(rc, 0, (spelling, out))
+            self.assertIn("quotes OK (1 quote(s) checked)", out, spelling)
 
     def test_mixed_spelling_pair_is_a_duplicate(self):
         a = dict(FINDING, file="Slides/deck.tex", lens="visual")
@@ -601,6 +646,20 @@ class BatteryEventRewrite(Tmp):
                            PATH=fake + os.pathsep + os.environ.get("PATH", ""))
             want = '{"cwd":"C:/%s","f":"C:/msys64%s/repo","r":"C:/%s/.claude"}' % (root[3:], tmp, root[3:])
             self.assertEqual((rc, out), (0, want), (tmp, root))
+
+
+class BatteryTotalCitation(unittest.TestCase):
+    def test_comments_cite_the_total_as_it_is_computed(self):
+        # The (e) comment still said the battery prints PASS+FAIL after UNREACH
+        # joined the total; the derived-counts gate cites that roll-up by its text.
+        with open(BATTERY, encoding="utf-8") as f:
+            text = f.read()
+        total = re.search(r"^TOTAL=\$\(\((.+)\)\)$", text, re.M)
+        self.assertIsNotNone(total, "hook-battery.sh has no TOTAL roll-up")
+        spelled = " + ".join(t.strip() for t in total.group(1).split("+"))
+        for ln in text.splitlines():
+            if ln.lstrip().startswith("#") and re.search(r"\bPASS ?\+ ?FAIL\b", ln):
+                self.assertIn(spelled, ln)
 
 
 @POSIX_HOST
