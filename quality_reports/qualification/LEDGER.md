@@ -94,6 +94,7 @@ output as unverified.
 | `.claude/hooks/pre-compact.py` | passive (PreCompact) — the save-to-disk checklist before compression |
 | `.claude/hooks/post-compact-restore.py` | passive (SessionStart) — re-injects context after compaction |
 | `.claude/hooks/log-reminder.py` | passive (Stop) — session-log reminder |
+| `scripts/portability-tests.py` | the portability suite (issue #171), added 2026-09-27; qualified once its cases are shown to fail on the pre-fix code |
 | `.githooks/pre-commit` | entry point that delegates to the gate suite; the delegation is exercised on every commit, its own logic (bypass envs, exit-code roll-up) is unmeasured |
 
 The five hooks above are **passive**: they emit a nudge and never make a decision, so a dead one

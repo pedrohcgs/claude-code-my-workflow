@@ -250,7 +250,7 @@ For more, see [Troubleshooting](#troubleshooting) in the Appendix.
 The fastest way to *believe* the verification layer is to watch it catch you. From a fresh clone:
 
 ```bash
-./scripts/backtest.sh          # all ten gates green on a clean tree
+./scripts/backtest.sh          # all eleven gates green on a clean tree
 sed -i '' -E 's/[0-9]+ skills/99 skills/' README.md   # plant a lie (Linux: sed -i -E, no '')
 ./scripts/backtest.sh          # surface-sync goes RED: README claims 99 skills, disk has fewer
 git checkout -- README.md      # undo
@@ -534,7 +534,7 @@ A skeptical reader should distinguish "Claude was told to check" from "a determi
 
 | Check | Mechanism | Scope | Fail behavior | Bypass | Evidence left |
 |---|---|---|---|---|---|
-| Backtest (10 gates) | scripts, pre-commit + CI | repo-wide consistency/currency, **plus the gate layer itself** — ledger coverage and hook wiring (gate 9), the guard hooks re-fired against their target failures (gate 10) | **closed** — commit blocked | `--no-verify` | gate output, CI log |
+| Backtest (11 gates) | scripts, pre-commit + CI | repo-wide consistency/currency, **plus the gate layer itself** — ledger coverage and hook wiring (gate 9), the guard hooks re-fired against their target failures (gate 10) | **closed** — commit blocked | `--no-verify` | gate output, CI log |
 | Quality score ≥ 80 | script, pre-commit | staged `.tex`/`.qmd`/`.R` | **closed**; render checks best-effort → `UNVERIFIED` noted, not failed | `SKIP_QUALITY_GATE=1` | score report |
 | Destructive-git guard | PreToolUse hook | `git` commands in-session | **closed** — call blocked | run it yourself in a terminal | hook message |
 | Root-of-trust guard | PreToolUse hook (`Bash`) | *silent shell* writes into `.claude/settings*.json`, `.claude/hooks/`, `.githooks/` in-session (a best-effort tripwire; `Edit`/`Write` still pass) | **closed** — call blocked | `ALLOW_ROOT_OF_TRUST_WRITE=1` | hook message |
@@ -683,8 +683,8 @@ These references carry it, loaded on demand rather than living in every session'
 And one command runs the mechanical half of all of it:
 
 ```bash
-./scripts/backtest.sh    # ten gates: consistency, skill integrity, currency, links, spec, staleness,
-                         # hygiene, derived counts, ledger coverage, hook battery
+./scripts/backtest.sh    # eleven gates: consistency, skill integrity, currency, links, spec, staleness,
+                         # hygiene, derived counts, ledger coverage, hook battery, portability
 ```
 
 The final pair check the checking layer rather than the content. **Ledger coverage** reads
