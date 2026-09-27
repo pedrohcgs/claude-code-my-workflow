@@ -9,6 +9,9 @@ Windows-shaped path back to the macOS filesystem:  C:\\a\\b  <->  /a/b.
 Drive C: is mapped to the POSIX root, so the real clone is reachable as
 C:\\private\\tmp\\...\\repo  and every os.walk / relpath / join produces the
 backslash-separated strings real Windows Python produces.
+
+It also holds the host-capability skips every test file shares (last section): a
+case whose mechanism this Python or this host lacks is skipped with its reason.
 """
 import builtins
 import importlib.util
@@ -484,3 +487,58 @@ def _sffl(name, location=None, *a, **k):
 
 
 _ilu.spec_from_file_location = _sffl
+
+
+# ---- what this host can do ---------------------------------------------------
+# A case that leans on a mechanism the host lacks does not fail there: it passes,
+# and pins nothing. So it SKIPS, and the gate's verdict line names the reason.
+import locale as _locale
+import shutil as _shutil
+import tempfile as _tempfile
+import unittest as _unittest
+
+# #171 F3: below 3.10, `-W error::EncodingWarning` is "Invalid -W option ignored" and
+# -X warn_default_encoding does nothing, so a locale-default read runs as before.
+needs_encoding_warning = _unittest.skipUnless(
+    hasattr(builtins, "EncodingWarning"),
+    "EncodingWarning and -X warn_default_encoding are new in Python 3.10; "
+    "below it the strict flags turn nothing into an error")
+# ...and below 3.11 subprocess decodes text output without asking locale.getencoding,
+# so patching it (the Windows ANSI code page) changes nothing.
+needs_getencoding = _unittest.skipUnless(
+    hasattr(_locale, "getencoding"),
+    "locale.getencoding is new in Python 3.11; below it subprocess text decoding "
+    "cannot be pointed at a Windows code page")
+
+
+def in_code_page(encoding, code, *argv, env=None, cwd=None, timeout=120):
+    """Run `code` (python -c, with `argv`) in a child whose locale.getencoding() answers
+    `encoding`, as Windows answers its ANSI code page; returns the CompletedProcess.
+
+    The child is held in LOCALE mode. #171 F3 fix-up: in UTF-8 mode (PYTHONUTF8=1,
+    -X utf8, and the default from Python 3.15, PEP 686) subprocess decodes text as
+    UTF-8 without asking locale.getencoding, so the two cases that patched it in the
+    test process passed on the pre-fix gates there. Those cases and the HostMechanisms
+    probe go through here; test_gates' file-issue case sets PYTHONUTF8=0 itself."""
+    env = dict(_os.environ if env is None else env, PYTHONUTF8="0")
+    prelude = f"import locale\nlocale.getencoding = lambda: {encoding!r}\n"
+    return _sp.run([sys.executable, "-c", prelude + code, *argv], capture_output=True,
+                   env=env, cwd=cwd, timeout=timeout)
+
+
+def _can_symlink():
+    d = _tempfile.mkdtemp(prefix="winsim-symlink-")
+    try:
+        _os.symlink("target", _os.path.join(d, "link"))
+        return True
+    except (OSError, NotImplementedError, AttributeError):
+        return False
+    finally:
+        _shutil.rmtree(d, ignore_errors=True)
+
+
+# #171 F4: Windows refuses os.symlink without Developer Mode or elevation (WinError
+# 1314); one unguarded call in a setUpModule errored every case in its file.
+CAN_SYMLINK = _can_symlink()
+needs_symlink = _unittest.skipUnless(
+    CAN_SYMLINK, "os.symlink is refused on this host (Windows needs Developer Mode or elevation)")

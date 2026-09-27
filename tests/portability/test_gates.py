@@ -1,17 +1,21 @@
-"""The gates and the scripts around them (issue #171): each case fails on the code
-before the fix and passes after it, on Linux and macOS alike.
+"""The gates and the scripts around them (issue #171): a case either pins a fix (it
+fails on the code before the fix and passes after, on Linux and macOS alike) or is
+a control, an ordinary input that passes both.
 
 Windows is reached three ways. _winsim loads a real module with ntpath swapped in
 (path separators). A subprocess is handed what Windows hands it: a pipe in a
 code page (PYTHONIOENCODING=cp1252 / cp932), a locale that decodes with cp1252
-(locale.getencoding patched before the script runs), or every locale-default
-text read and write made an error (-X warn_default_encoding with EncodingWarning
-raised). Line endings, BOMs, spaces, case and the index are not Windows-specific
-and are exercised as they are.
+(locale.getencoding patched before the script runs; Python 3.11+), or every
+locale-default text read and write made an error (-X warn_default_encoding with
+EncodingWarning raised; 3.10+). A case that needs one of the last two skips where
+the interpreter lacks it. Line endings, BOMs, spaces, case and the index are not
+Windows-specific and are exercised as they are.
 
 Every subprocess gets the caller's environment WITHOUT its GIT_* variables: this
 suite runs inside .githooks/pre-commit, which exports GIT_DIR and GIT_INDEX_FILE
 at the user's repository, and a fixture's `git add` would otherwise land there.
+A script run in-process (_winsim.run_main) reads os.environ itself; the gate
+runner, scripts/portability-tests.py, clears those variables before any case runs.
 """
 import hashlib
 import importlib.util
@@ -395,7 +399,8 @@ class FindingsEncoding(Tmp):
     def test_fill_then_check_quotes_on_a_windows_code_page(self):
         # validate-findings-locale-read: the report and stdin were read, and the filled
         # report written, in the locale; a true quote read as invented, a '¶' locus
-        # broke its own id.
+        # broke its own id. Not skipped below Python 3.10: the cp1252 pipe still pins
+        # the stdout half there; only the file-read half needs EncodingWarning (#171 F3).
         _write(self.tmp, "paper.md", "The estimated effect is large \u2014 roughly 12 percent "
                                      "of the baseline for S\u00e3o Paulo firms.\n")
         block = _write(self.tmp, "block.json", json.dumps([FINDING], ensure_ascii=False))
@@ -451,6 +456,7 @@ class FileIssueEncoding(Tmp):
         with open(log, encoding="utf-8", errors="replace") as f:
             return sum(1 for ln in f if ln.startswith("ARGS issue create"))
 
+    @_winsim.needs_getencoding
     def test_look_alike_with_curly_quotes_is_listed_not_lost(self):
         # file-issue-gh-decode: the ” in a candidate's title is not cp1252; the decode
         # failed, and on Windows the check read it as "no candidates" and filed.
@@ -511,6 +517,7 @@ class SlideQaEncoding(Tmp):
         with open(md, "rb") as f:
             self.assertIn("1050\u00d7700", f.read().decode("utf-8"))
 
+    @_winsim.needs_encoding_warning
     def test_report_is_utf8_whatever_the_locale(self):
         # report.md was written in the locale: cp1252 bytes, or empty on a β title.
         rc, out, md = self.run_qa("\u03b2 \u2192 estimates", "overflow")
