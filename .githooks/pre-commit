@@ -42,9 +42,32 @@ _STASHED=0
 _staged="$(git diff --cached --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
 _unstaged="$(git diff --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
 _overlap="$(comm -12 <(printf '%s\n' "$_staged") <(printf '%s\n' "$_unstaged") | grep -c . || true)"
+# Two tracked paths that differ only by case or Unicode form are one file on a macOS
+# or Windows disk: the tree is dirty for good, the pop below always failed, and every
+# commit left one more "pre-commit-gate" stash behind (#171). Same rule as
+# scripts/check-repo-hygiene.py (NFC + casefold, each path prefix), which names the
+# pair and fails the commit. NUL-delimited: without -z git C-quotes an accented name.
+_collide=""
+if [ -n "$_unstaged" ]; then
+    _collide="$(git ls-files -z 2>/dev/null | python3 -c '
+import sys, unicodedata
+seen = {}
+for f in sys.stdin.buffer.read().decode("utf-8", "surrogateescape").split("\0"):
+    parts = f.split("/") if f else []
+    for i in range(1, len(parts) + 1):
+        p = "/".join(parts[:i])
+        first = seen.setdefault(unicodedata.normalize("NFC", p).casefold(), p)
+        if first != p:
+            sys.stdout.buffer.write((first + " and " + p).encode("utf-8", "surrogateescape"))
+            sys.exit(0)
+' 2>/dev/null || true)"
+fi
 if [ "${_overlap:-0}" -gt 0 ] 2>/dev/null; then
     echo "ℹ pre-commit: ${_overlap} file(s) have both staged and unstaged changes —" >&2
     echo "  validating the WORKING TREE (not the pure staged index) to avoid a stash conflict." >&2
+elif [ -n "$_collide" ]; then
+    echo "ℹ pre-commit: tracked paths $_collide differ only by case or Unicode form, so the" >&2
+    echo "  working tree cannot be stashed clean — validating the WORKING TREE (not the pure staged index)." >&2
 elif [ -n "$_unstaged" ]; then
     if git stash push --keep-index --quiet --message "pre-commit-gate" 2>/dev/null; then
         _STASHED=1

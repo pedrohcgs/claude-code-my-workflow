@@ -75,8 +75,15 @@ def unresolved(full):
     return "missing file"
 
 SCAN = []
+# glob.escape: the clone's own path is part of the pattern, and a folder named
+# "Paper [2026]" read as a character class — nothing matched, and "0 files
+# scanned" passed (#171). Not root_dir=: that is Python 3.10+, and 3.9 is supported.
 for pat in ["*.md", ".claude/**/*.md", "templates/**/*.md", ".github/**/*.md", "guide/*.qmd"]:
-    SCAN += glob.glob(os.path.join(ROOT, pat), recursive=True)
+    SCAN += glob.glob(os.path.join(glob.escape(ROOT), pat), recursive=True)
+if not SCAN:
+    # A scan that found nothing is a broken gate, not a clean tree.
+    print(f"check-links: no markdown found under {ROOT} — nothing was checked", file=sys.stderr)
+    sys.exit(2)
 # --others --exclude-standard names untracked, unignored files, and a nested
 # checkout (a worktree under .claude/) only as its directory, so its copies of
 # these docs are not counted as the repository's.

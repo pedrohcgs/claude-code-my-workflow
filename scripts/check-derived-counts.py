@@ -44,7 +44,9 @@ def n_gates():
 # two gates can never disagree about what a "skill" or a "hook" is. If you change
 # a definition there, change it here in the same commit.
 def _glob_count(pat):
-    return len(glob.glob(os.path.join(ROOT, pat)))
+    # glob.escape: a clone at "Paper [2026]" read its own path as a character class,
+    # counted 0 of everything, and failed on four true claims (#171).
+    return len(glob.glob(os.path.join(glob.escape(ROOT), pat)))
 
 def n_skills(): return _glob_count(".claude/skills/*/SKILL.md")
 def n_agents(): return _glob_count(".claude/agents/*.md")

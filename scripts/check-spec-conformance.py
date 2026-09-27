@@ -17,7 +17,9 @@ NAME_RE = re.compile(r'[a-z0-9]+(-[a-z0-9]+)*')
 
 def main():
     errs, warns = [], []
-    skills = sorted(glob.glob(os.path.join(ROOT, ".claude/skills/*/SKILL.md")))
+    # glob.escape: a clone at "Paper [2026]" read its own path as a character class
+    # and found "no skills" (#171).
+    skills = sorted(glob.glob(os.path.join(glob.escape(ROOT), ".claude/skills/*/SKILL.md")))
     if not skills:
         print("check-spec-conformance: no skills found", file=sys.stderr); return 2
     for f in skills:
