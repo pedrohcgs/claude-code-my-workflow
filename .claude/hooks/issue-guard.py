@@ -23,9 +23,15 @@ Allowed and silent: everything else, including gh issue list/view/comment/close/
 reopen/edit, and python3 scripts/file-issue.py (its own `gh issue create` runs
 as a child process, which hooks never see).
 
-What this is not: a security boundary. `/path/to/gh`, `sh -c '...'` or a
-script of your own can still create an issue. It stops the usual form Claude
-writes, which is the one that skips the check by accident.
+What this is not: a security boundary. The `if` filters below match the
+command's words case-sensitively from the first one (read from Claude Code
+2.1.283's matcher), so the hook is never spawned for `/path/to/gh`, a quoted
+'C:\\Program Files\\GitHub CLI\\gh.exe', or an upper-case `GH` / `GH.EXE`.
+The last two run gh on Windows, and `GH` does on a case-insensitive macOS disk
+too. `prog` would deny every one of them, but only where the filter is
+ignored (Claude Code < 2.1.85). `sh -c '...'` or a script of your own can
+still create an issue as well. It stops the usual form Claude writes, which is
+the one that skips the check by accident.
 
 Cost: the `if` filter (Claude Code >= 2.1.85; compound commands >= 2.1.89)
 spawns this hook only for commands that run `gh`. On an older version the

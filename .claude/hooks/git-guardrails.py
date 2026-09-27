@@ -589,16 +589,22 @@ _SEG_TOKEN = re.compile(
     re.VERBOSE,
 )
 # r21: the Windows branch used to need `C:\\Users\\` with DOUBLED backslashes —
-# the escaped spelling inside an R string — so Stata's native `cd "C:\Users\me"`
-# and a Python raw string `r"C:\Users\me\x.csv"` were never flagged, and
-# `c:/users/me` only by luck. Measured 2026-09-27 on ae72617 with
-# CLAUDE_STRICT_PATHS=1: every one of those ALLOWED. One or more of either
-# separator counts now, and `users` in any case — a SCOPED `(?i:...)`, because a
-# global `(?i)` also flags `https://api.github.com/users/<name>` in ordinary .py
-# code. The extension is compared lower-cased for the same reason: `a.rmd` and
-# `MASTER.DO` skipped the check entirely while `a.Rmd` and `master.do` denied.
+# the escaped spelling inside an R string — so Stata's native `cd "C:\Users\me"`,
+# a Python raw string `r"C:\Users\me\x.csv"` and lower-case `c:/users/me` were
+# never flagged; `C:/Users/me` was, but only by luck, through the `/Users/`
+# branch. Measured 2026-09-27 on ae72617 with CLAUDE_STRICT_PATHS=1: the first
+# three ALLOWED. One or more of either separator counts now, and `users` in any
+# case — a SCOPED `(?i:...)`, because a global `(?i)` also flags
+# `https://api.github.com/users/<name>` in ordinary .py code. The extension is
+# compared lower-cased for the same reason: `a.rmd` and `MASTER.DO` skipped the
+# check entirely while `a.Rmd` and `master.do` denied.
+# The drive letter must not follow a letter or digit. Without that the scheme's
+# last letter reads as a drive: `gs://users/data.csv`, `https://users/x` and
+# `{"key:/users/me": 1}` matched as `s:`, `s:` and `y:` (measured on 9d90fc3, a
+# deny under CLAUDE_STRICT_PATHS=1). A real drive follows a quote, a space, `(`,
+# `=`, `\\?\` or `file:///`, none of which the lookbehind refuses.
 HARDCODED_PATH = re.compile(r"(/Users/[^/\s'\")]+|/home/[^/\s'\")]+"
-                            r"|[A-Za-z]:[\\/]+(?i:users)[\\/]+[^\\/\s'\")]+)")
+                            r"|(?<![A-Za-z0-9])[A-Za-z]:[\\/]+(?i:users)[\\/]+[^\\/\s'\")]+)")
 CODE_EXT = {".r", ".qmd", ".do", ".py", ".rmd"}      # compared lower-cased
 
 

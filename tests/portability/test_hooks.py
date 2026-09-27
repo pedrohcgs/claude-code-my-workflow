@@ -1,7 +1,8 @@
 """Hooks and the status line on machines that are not the author's Mac (issue #171).
 
 Each class pins one finding from the 2026-09-27 stress test (its id is in the class
-docstring) and fails on the hooks as they stood at 08a7641. Three ways in:
+docstring; FindingIds, last, checks that) and fails on the hooks as they stood at
+08a7641. Three ways in:
 
   * the REAL hook as a subprocess, fed a JSON event on stdin, exactly as Claude Code
     and scripts/hook-battery.sh run it;
@@ -12,10 +13,13 @@ docstring) and fails on the hooks as they stood at 08a7641. Three ways in:
   * the real module loaded through _winsim, where os.path is ntpath and pathlib is a
     WindowsPath, for the separator cases that only exist on Windows.
 """
+import ast
 import hashlib
 import io
 import json
 import os
+import re
+import shlex
 import shutil
 import stat
 import subprocess
@@ -143,11 +147,51 @@ class ExeProgramNames(_Tmp):
     def test_git_exe_harmless_command_is_silent(self):
         self.assertEqual(self.gg("git.exe status"), "silent")
 
+    # Piped straight to the hook, so these check its reading of the program word.
+    # As deployed only `gh.exe` gets that far: the `if` filters never spawn the hook
+    # for the other two, so their deny holds only where the filter is ignored
+    # (Claude Code < 2.1.85). test_filter_misses_are_disclosed pins that.
+    GH_SPELLINGS = ("gh.exe issue create -t x -b y", "GH.EXE issue create -t x -b y",
+                    "'C:\\Program Files\\GitHub CLI\\gh.exe' issue create -t x -b y")
+
     def test_gh_exe_issue_create_is_denied(self):
-        for cmd in ("gh.exe issue create -t x -b y", "GH.EXE issue create -t x -b y",
-                    "'C:\\Program Files\\GitHub CLI\\gh.exe' issue create -t x -b y"):
+        for cmd in self.GH_SPELLINGS:
             with self.subTest(cmd=cmd):
                 self.assertEqual(self.ig(cmd), "deny")
+
+    def test_filter_misses_are_disclosed(self):
+        """A spelling the hook denies but no `if` filter spawns it for is a residual,
+        and the docstring has to say so rather than let the test above overstate the
+        cover. The filter is emulated as Claude Code 2.1.283 runs it
+        (preparePermissionMatcher): the argv joined by spaces, matched against the
+        rule as a CASE-SENSITIVE glob in which one trailing ` *` also admits the bare
+        word, so `gh *` is /^gh( .*)?$/s. `GH` runs gh on a case-insensitive disk."""
+        with open(SETTINGS, encoding="utf-8") as f:
+            cfg = json.load(f)
+        rules = [h["if"][len("Bash("):-1] for group in cfg["hooks"]["PreToolUse"]
+                 for h in group.get("hooks") or []
+                 if "issue-guard.py" in h.get("command", "") and h.get("if")]
+        self.assertTrue(rules and all(r.endswith(" *") and r.count("*") == 1 for r in rules),
+                        rules)
+
+        def reached(cmd):
+            argv = " ".join(shlex.split(cmd))
+            return any(re.fullmatch(re.escape(r[:-2]) + "( .*)?", s, re.S)
+                       for r in rules for s in (argv, "xargs " + argv))
+
+        with open(os.path.join(HOOKS, "issue-guard.py"), encoding="utf-8") as f:
+            doc = ast.get_docstring(ast.parse(f.read()))
+        residuals = doc[doc.index("What this is not"):].split("\n\n")[0]
+        self.assertTrue(reached("gh issue create -t x -b y"))
+        self.assertTrue(reached("gh.exe issue create -t x -b y"))
+        for cmd, named in ((self.GH_SPELLINGS[1], "`GH.EXE`"),
+                           ("GH issue create -t x -b y", "`GH`"),
+                           (self.GH_SPELLINGS[2], "'C:\\Program Files\\GitHub CLI\\gh.exe'"),
+                           ("/opt/homebrew/bin/gh issue create -t x -b y", "`/path/to/gh`")):
+            with self.subTest(cmd=cmd):
+                self.assertEqual(self.ig(cmd), "deny")
+                if not reached(cmd):
+                    self.assertIn(named, residuals)
 
     def test_gh_exe_issue_list_is_silent(self):
         self.assertEqual(self.ig("gh.exe issue list"), "silent")
@@ -167,8 +211,10 @@ class ExeProgramNames(_Tmp):
 
 
 class CarriageReturnInsideWords(_Tmp):
-    """Plan item 7: Git Bash drops every CR before it splits words, so
-    `git re<CR>set --hard` runs `git reset --hard`; the guards read two words."""
+    """carriage-return-in-word-bypasses-guards (the git-guardrails and issue-guard
+    halves; root-of-trust-guard's is the rot group's): Git Bash drops every CR before
+    it splits words, so `git re<CR>set --hard` runs `git reset --hard`; the guards
+    read two words."""
 
     def test_git_guardrails_joins_the_word(self):
         for cmd in ("git re\rset --hard", "gi\rt clean -fdx", "git reset \\\r\n--hard"):
@@ -190,10 +236,12 @@ class CarriageReturnInsideWords(_Tmp):
 
 # ── the event itself: stdin decoded with the Windows code page ─────────────
 class GuardStdinCodePage(_Tmp):
-    """nonguard-hooks-stdin-silent (the guard half, plan item 1): the event was
-    decoded with the ANSI code page. Western: an accented path became mojibake.
-    CJK: a multibyte character swallowed the backslash of `\\"` and the JSON did not
-    parse, so the guard exited silent."""
+    """guard-stdin-codepage-fail-open, guard-stdin-mojibake-scope-bypass and
+    hook-stdin-ansi-codepage-fail-open (the git-guardrails and issue-guard halves;
+    root-of-trust-guard's are the rot group's): the event was decoded with the ANSI
+    code page. Western: an accented path became mojibake. CJK: a multibyte character
+    swallowed the backslash of `\\"` and the JSON did not parse, so the guard exited
+    silent."""
 
     def test_accented_dirty_repo_merge_is_denied_on_cp1252(self):
         repo = self.path("Pé proj")
@@ -205,10 +253,14 @@ class GuardStdinCodePage(_Tmp):
         self.assertEqual(decision(fire("git-guardrails.py", ev, env)[0]), "deny")
 
     def test_status_read_is_not_locale_decoded(self):
-        """`git status` output decoded with the locale: on Windows with quotePath off
-        a name cp1252 cannot decode raised, read as an unanswered question, and a
-        merge on a CLEAN tree was refused. Default-encoding decoding made an error
-        trips the same call on any OS."""
+        """`git status` output decoded with the locale: on Windows with quotePath off,
+        a name the code page cannot decode raised, and the guard read that as an
+        unanswered question. A clean tree prints nothing, so it was never refused;
+        the reachable effects are a dirty tree denied for the wrong reason and a
+        `--autostash` merge over tracked-only dirt denied although it is allowed
+        (test_autostash_over_tracked_dirt_is_allowed reproduces that one). Here
+        default-encoding decoding is made an error, which trips the call itself
+        whatever git prints, on any OS."""
         repo = self.path("clean")
         os.makedirs(repo)
         git(repo, "init", "-q")
@@ -216,6 +268,26 @@ class GuardStdinCodePage(_Tmp):
         out = fire("git-guardrails.py", ev, clean_env(self.home),
                    ("-X", "warn_default_encoding", "-W", "error::EncodingWarning"))[0]
         self.assertEqual(decision(out), "silent", out)
+
+    def test_autostash_over_tracked_dirt_is_allowed(self):
+        """The Windows effect itself, with an ASCII locale standing in for a code page
+        that cannot decode the name: quotePath off, only a tracked `Á.txt` modified.
+        Rule 2b allows `--autostash` here; the undecodable status denied it."""
+        repo = self.path("tracked")
+        os.makedirs(repo)
+        git(repo, "init", "-q")
+        git(repo, "config", "core.quotePath", "off")
+        self.write("tracked/Á.txt", "a\n")
+        git(repo, "add", "-A")
+        git(repo, "commit", "-qm", "c")
+        self.write("tracked/Á.txt", "b\n")
+        env = clean_env(self.home, LC_ALL="C", PYTHONUTF8="0")
+        ev = {"tool_name": "Bash", "tool_input": {"command": "git merge --autostash feature"},
+              "cwd": repo}
+        out = fire("git-guardrails.py", ev, env)[0]
+        self.assertEqual(decision(out), "silent", out)
+        ev["tool_input"]["command"] = "git merge feature"
+        self.assertIn("must start from a clean tree", fire("git-guardrails.py", ev, env)[0])
 
     def test_cjk_command_still_parses_for_both_guards(self):
         env = clean_env(self.home, PYTHONUTF8="0", PYTHONIOENCODING="cp936:surrogateescape")
@@ -274,7 +346,8 @@ class HardcodedPaths(_Tmp):
                               ("a.do", 'use "C:\\Users\\pedro\\Dropbox\\data.dta", clear\n'),
                               ("a.py", 'pd.read_csv(r"C:\\Users\\pedro\\proj\\data.csv")\n'),
                               ("a.R", 'read.csv("c:/users/pedro/x.csv")\n'),
-                              ("a.R", 'read.csv("C:\\\\Users\\\\pedro\\\\x.csv")\n')):
+                              ("a.R", 'read.csv("C:\\\\Users\\\\pedro\\\\x.csv")\n'),
+                              ("a.py", 'open(r"\\\\?\\C:\\Users\\pedro\\x.csv")\n')):
             with self.subTest(name=name, content=content):
                 self.assertEqual(self.strict(name, content), "deny")
 
@@ -285,6 +358,9 @@ class HardcodedPaths(_Tmp):
 
     def test_controls_stay_allowed(self):
         for name, content in (("a.py", 'requests.get("https://api.github.com/users/octocat/repos")\n'),
+                              ("a.py", 'url = "gs://users/x.csv"\n'),
+                              ("a.py", 'url = "https://users/x"\n'),
+                              ("a.py", 'x = {"key:/users/me": 1}\n'),
                               ("a.R", 'read.csv(here::here("data", "x.csv"))\n'),
                               ("notes.md", 'cd "C:\\Users\\me\\proj"\n')):
             with self.subTest(name=name, content=content):
@@ -697,6 +773,22 @@ class StatusLine(_Tmp):
             with self.subTest(cwd=cwd):
                 out = self.run_sl({"model": {"display_name": "M"}, "workspace": {"current_dir": cwd}})
                 self.assertIn("plan:approved", out)
+
+
+class FindingIds(unittest.TestCase):
+    """The module docstring's promise: every class above names the finding it pins by
+    its id, which the issue and the other groups can search for, not by a gitignored
+    plan's item number. A hook's own kebab-case name does not count as one."""
+
+    def test_every_class_cites_a_finding_id(self):
+        fid = re.compile(r"\b[a-z0-9]+(?:-[a-z0-9]+){2,}\b")
+        hooks = {os.path.splitext(f)[0] for f in os.listdir(HOOKS)}
+        for name, cls in sorted(globals().items()):
+            if (isinstance(cls, type) and issubclass(cls, unittest.TestCase)
+                    and cls is not FindingIds and any(k.startswith("test_") for k in vars(cls))):
+                with self.subTest(cls=name):
+                    ids = [t for t in fid.findall(cls.__doc__ or "") if t not in hooks]
+                    self.assertTrue(ids, f"{name} cites no finding id")
 
 
 if __name__ == "__main__":
