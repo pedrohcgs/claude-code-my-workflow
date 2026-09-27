@@ -33,6 +33,16 @@ def _git(cwd, *args):
                    env=_clean(GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull))
 
 
+# The git reader check-repo-hygiene.py (tracked) and check-ledger-coverage.py
+# (tracked_files) had at 08a7641: text=True, so the locale's code page on Windows.
+PRE_FIX_READER = ('import subprocess\n'
+                  'ROOT = "."\n'
+                  'def tracked():\n'
+                  '    r = subprocess.run(["git", "-C", ROOT, "ls-files"], capture_output=True, text=True)\n'
+                  '    return [f for f in r.stdout.split("\\n") if f]\n'
+                  'tracked_files = tracked\n')
+
+
 class HarnessTest(unittest.TestCase):
     def test_loaded_module_sees_ntpath(self):
         with tempfile.TemporaryDirectory() as d:
@@ -61,16 +71,41 @@ class HostMechanisms(unittest.TestCase):
 
     @_winsim.needs_getencoding
     def test_a_patched_getencoding_decides_subprocess_text(self):
+        # Through _winsim.in_code_page, where the code-page cases patch it; this probe
+        # once forced PYTHONUTF8=0 while two of them patched in UTF-8 mode (#171 F3).
         # U+201D as UTF-8 ends in 0x9D, which cp1252 does not define.
-        code = ("import locale, subprocess, sys\n"
-                "locale.getencoding = lambda: 'cp1252'\n"
+        code = ("import subprocess, sys\n"
                 "subprocess.run([sys.executable, '-c', "
                 "'import sys; sys.stdout.buffer.write(bytes([0xe2, 0x80, 0x9d]))'],"
                 " capture_output=True, text=True)\n")
-        r = subprocess.run([sys.executable, "-c", code], capture_output=True,
-                           env=_clean(PYTHONUTF8="0"), timeout=60)
+        r = _winsim.in_code_page("cp1252", code, env=_clean(), timeout=60)
         self.assertNotEqual(r.returncode, 0, r.stderr)
         self.assertIn(b"UnicodeDecodeError", r.stderr)
+
+    @_winsim.needs_getencoding
+    def test_the_code_page_cases_bite_in_utf8_mode(self):
+        # #171 F3: in UTF-8 mode (PYTHONUTF8=1, -X utf8, Python 3.15's default) subprocess
+        # decodes as UTF-8 without asking locale.getencoding, and the two test_gitout
+        # cases that patched it in-process passed on the pre-fix gates. Here they run in
+        # UTF-8 mode against a stand-in that reads git's list as those gates did.
+        cases = ["test_gitout.HygieneLocaleDecode.test_tracked_names_survive_a_cp1252_locale",
+                 "test_gitout.LedgerGitOutput.test_a_non_ascii_hook_reads_as_tracked_under_cp1252"]
+        run = ("import sys, unittest\n"
+               "import test_gitout\n"
+               "test_gitout.HYGIENE = test_gitout.LEDGER = sys.argv.pop(1)\n"
+               "unittest.main(module=None, argv=['utf8'] + sys.argv[1:], verbosity=2)\n")
+        with tempfile.TemporaryDirectory() as d:
+            stub = os.path.join(d, "pre_fix_gate.py")
+            with open(stub, "w", encoding="utf-8") as f:
+                f.write(PRE_FIX_READER)
+            r = subprocess.run([sys.executable, "-X", "utf8", "-c", run, stub, *cases],
+                               cwd=SUITE, capture_output=True, env=_clean(), timeout=300)
+        out = r.stdout.decode("utf-8", "replace") + r.stderr.decode("utf-8", "replace")
+        for case in cases:
+            self.assertRegex(out, rf"(?m)^{case.rsplit('.', 1)[1]} \(.*\) \.\.\. (FAIL|ERROR)$", out)
+        # ...and for the reason each pins: Á (C3 81) has no cp1252 reading, ã comes back as Ã£.
+        self.assertIn("UnicodeDecodeError", out)
+        self.assertIn("lembrete_sessÃ£o.py", out)
 
     def test_the_suite_runs_where_os_symlink_is_refused(self):
         # #171 F4: Windows without Developer Mode refuses os.symlink (WinError 1314).

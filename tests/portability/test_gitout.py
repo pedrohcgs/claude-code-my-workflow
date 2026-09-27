@@ -15,6 +15,7 @@ is at git's default.
 import contextlib
 import importlib.util
 import io
+import json
 import os
 import pathlib
 import shutil
@@ -41,7 +42,8 @@ FAILING_R = 'a <- read.csv("/Users/x/a.csv")\nb <- read.csv("/Users/x/b.csv")\n'
 GOOD_R = "x <- 1\ny <- x + 1\n"
 
 # subprocess decodes text=True output through locale.getencoding() only from Python
-# 3.11; before that the function does not exist and there is nothing to patch. The
+# 3.11, and only in locale mode (tracked_in_code_page, below, holds its child there);
+# before 3.11 the function does not exist and there is nothing to patch. The
 # fix decodes git's bytes as UTF-8 itself on every version: CI (3.12) keeps the pin,
 # and macOS's /usr/bin/python3 (3.9) skips these cases instead of erroring the gate.
 # One definition for the suite: test_gates skips on the same probe.
@@ -117,6 +119,24 @@ def run_main(fn):
     return rc, out.getvalue()
 
 
+# A gate's git reader, called in a child where locale.getencoding() answers a Windows
+# code page. Not in this process: in UTF-8 mode (PYTHONUTF8=1, -X utf8, Python 3.15)
+# a patch here decides nothing, and these cases passed on the pre-fix gates (#171 F3).
+_READ_TRACKED = ("import importlib.util, json, sys\n"
+                 "gate, fn, root = sys.argv[1:4]\n"
+                 "spec = importlib.util.spec_from_file_location('gate', gate)\n"
+                 "m = importlib.util.module_from_spec(spec)\n"
+                 "spec.loader.exec_module(m)\n"
+                 "m.ROOT = root\n"
+                 "print(json.dumps(sorted(getattr(m, fn)())))\n")
+
+
+def tracked_in_code_page(case, gate, fn, repo, encoding):
+    r = _winsim.in_code_page(encoding, _READ_TRACKED, gate, fn, repo.dir, env=git_env())
+    case.assertEqual(r.returncode, 0, r.stderr.decode("utf-8", "replace"))
+    return json.loads(r.stdout)
+
+
 # ---- check-repo-hygiene.py --------------------------------------------------
 
 class HygieneGitOutput(unittest.TestCase):
@@ -169,12 +189,7 @@ class HygieneLocaleDecode(unittest.TestCase):
         name = "templates/Álgebra-notes.md"           # Á is C3 81; 0x81 is undefined in cp1252
         repo.write(name, "x\n")
         repo.add("templates")
-        m = load(HYGIENE)
-        m.ROOT = repo.dir
-        with mock.patch.dict(os.environ, git_env(), clear=True), \
-                mock.patch("locale.getencoding", return_value="cp1252"):
-            files = m.tracked()
-        self.assertEqual(files, [name])
+        self.assertEqual(tracked_in_code_page(self, HYGIENE, "tracked", repo, "cp1252"), [name])
 
 
 class HygieneWindowsSeparators(unittest.TestCase):
@@ -317,12 +332,11 @@ class LedgerGitOutput(unittest.TestCase):
         return repo
 
     def tracked(self, repo, encoding=None):
+        if encoding:
+            return tracked_in_code_page(self, LEDGER, "tracked_files", repo, encoding)
         m = load(LEDGER)
         m.ROOT = repo.dir
-        with contextlib.ExitStack() as st:
-            st.enter_context(mock.patch.dict(os.environ, git_env(), clear=True))
-            if encoding:
-                st.enter_context(mock.patch("locale.getencoding", return_value=encoding))
+        with mock.patch.dict(os.environ, git_env(), clear=True):
             return m.tracked_files()
 
     def test_a_non_ascii_hook_reads_as_tracked(self):

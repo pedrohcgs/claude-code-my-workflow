@@ -511,6 +511,21 @@ needs_getencoding = _unittest.skipUnless(
     "cannot be pointed at a Windows code page")
 
 
+def in_code_page(encoding, code, *argv, env=None, cwd=None, timeout=120):
+    """Run `code` (python -c, with `argv`) in a child whose locale.getencoding() answers
+    `encoding`, as Windows answers its ANSI code page; returns the CompletedProcess.
+
+    The child is held in LOCALE mode. #171 F3 fix-up: in UTF-8 mode (PYTHONUTF8=1,
+    -X utf8, and the default from Python 3.15, PEP 686) subprocess decodes text as
+    UTF-8 without asking locale.getencoding, so the two cases that patched it in the
+    test process passed on the pre-fix gates there. Those cases and the HostMechanisms
+    probe go through here; test_gates' file-issue case sets PYTHONUTF8=0 itself."""
+    env = dict(_os.environ if env is None else env, PYTHONUTF8="0")
+    prelude = f"import locale\nlocale.getencoding = lambda: {encoding!r}\n"
+    return _sp.run([sys.executable, "-c", prelude + code, *argv], capture_output=True,
+                   env=env, cwd=cwd, timeout=timeout)
+
+
 def _can_symlink():
     d = _tempfile.mkdtemp(prefix="winsim-symlink-")
     try:

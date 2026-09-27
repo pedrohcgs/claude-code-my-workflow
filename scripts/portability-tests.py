@@ -13,14 +13,14 @@ issue #171 or #151, or a regression a first-cut fix introduced) and passes after
 CONTROL is an ordinary command or clean input that passes before and after, so a fix
 that refuses everything cannot pass. A HARNESS check tests the suite itself: that the
 ntpath simulation is real, that each skip below guards a mechanism that bites where it
-runs, and that this runner counts honestly (test_harness.py). The qualification ledger
-gives the before/after counts.
+runs, and that this runner counts honestly (test_harness.py).
 
 A case whose mechanism this host lacks is SKIPPED with its reason, never passed: a pass
 there would pin nothing. The strict-encoding cases need Python 3.10 (EncodingWarning),
-the patched-locale cases 3.11 (locale.getencoding), the symlink cases a host that lets
-os.symlink run (Windows needs Developer Mode or elevation). The verdict line counts the
-skips and prints each reason, so a run that could not exercise a case says which.
+the patched-locale cases 3.11 (locale.getencoding, patched in a child held in locale
+mode, since UTF-8 mode never asks it), the symlink cases a host that lets os.symlink run
+(Windows needs Developer Mode or elevation). The verdict line counts the skips and
+prints each reason, so a run that could not exercise a case says which.
 
 Exit: 0 all pass (skips named), 1 a case failed, 2 the suite could not run.
 """
