@@ -36,8 +36,11 @@ cd "$REPO_ROOT" || exit 2
 # stashed (avoids slow stashes of large data dirs). A failed pop is loud +
 # recoverable, never silently swallowed.
 _STASHED=0
-_staged="$(git diff --cached --name-only 2>/dev/null | sort)"
-_unstaged="$(git diff --name-only 2>/dev/null | sort)"
+# -z: without it git C-quotes a non-ASCII, quote or backslash name
+# (".claude/hooks/verifica\303\247\303\243o.py"), and the battery trigger below never
+# matched a staged hook spelt that way.
+_staged="$(git diff --cached --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
+_unstaged="$(git diff --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
 _overlap="$(comm -12 <(printf '%s\n' "$_staged") <(printf '%s\n' "$_unstaged") | grep -c . || true)"
 if [ "${_overlap:-0}" -gt 0 ] 2>/dev/null; then
     echo "ℹ pre-commit: ${_overlap} file(s) have both staged and unstaged changes —" >&2
@@ -73,18 +76,30 @@ if [ "${SKIP_QUALITY_GATE:-0}" = "1" ]; then
     echo ""
     echo "── pre-commit: quality gate SKIPPED (SKIP_QUALITY_GATE=1) ──"
 else
-    # Staged, added-or-modified files that have quality rubrics.
-    STAGED="$(git diff --cached --name-only --diff-filter=ACM | grep -Ei '\.(qmd|tex|R)$' || true)"
-    if [ -n "$STAGED" ]; then
-        n="$(printf '%s\n' "$STAGED" | grep -c .)"
+    # Staged files that have quality rubrics: added, copied, modified, RENAMED or
+    # type-changed. `ACM` alone dropped a file renamed and edited in one commit (git
+    # reports it as R), so a syntax-broken script committed unscored. Read
+    # NUL-delimited: without -z git C-quotes a non-ASCII, quote or backslash name
+    # ("Slides/Aula_introdu\303\247\303\243o.tex"), the suffix match failed on the
+    # closing quote, and the file was never scored.
+    STAGED=()
+    while IFS= read -r -d '' f; do
+        case "$f" in *.[qQ][mM][dD]|*.[tT][eE][xX]|*.[rR]) STAGED+=("$f") ;; esac
+    done < <(git diff --cached --name-only -z --diff-filter=ACMRT)
+    if [ "${#STAGED[@]}" -gt 0 ]; then
         echo ""
-        echo "── pre-commit: quality score (>= 80) on ${n} staged file(s) ──"
+        echo "── pre-commit: quality score (>= 80) on ${#STAGED[@]} staged file(s) ──"
         # Score each file individually: portable (no mapfile/bash4), handles
-        # spaces in paths, and gives a per-file exit code we can classify.
-        while IFS= read -r f; do
-            [ -z "$f" ] && continue
-            [ -f "$f" ] || continue
-            python3 scripts/quality_score.py "$f"
+        # any byte in a path, and gives a per-file exit code we can classify.
+        for f in "${STAGED[@]}"; do
+            if [ ! -f "$f" ]; then
+                # Staged, then deleted from the working tree: the commit carries a
+                # file this gate cannot read. Skipping it here was a silent pass.
+                echo "✗ quality gate: '$f' is staged but missing from the working tree, so it cannot be scored — restore it or unstage it." >&2
+                FAIL=1
+                continue
+            fi
+            python3 scripts/quality_score.py -- "$f"
             rc=$?
             # quality_score.py: rc 2 = auto-fail (compile/syntax FAILURE), rc 1 =
             # score < 80 (or scorer error / file-not-found). BOTH must block — a
@@ -93,7 +108,7 @@ else
                 echo "✗ quality gate: '$f' failed (rc=$rc — 2=compile/syntax failure, 1=score<80 or scorer error)." >&2
                 FAIL=1
             fi
-        done <<< "$STAGED"
+        done
     else
         echo ""
         echo "── pre-commit: no staged .qmd/.tex/.R files to score ──"

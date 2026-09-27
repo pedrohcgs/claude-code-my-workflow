@@ -277,8 +277,13 @@ class IssueDetector:
         None (could-not-verify: timed out or Rscript missing — NOT a failure)."""
         limit = _timeout("QUALITY_RSCRIPT_TIMEOUT", 10)
         try:
+            # The path goes to R as an ARGUMENT, never pasted into R source: on Windows
+            # parse("scripts\R\01_load.R") is an invalid '\R' escape, so every valid
+            # script auto-failed; and a name like `y", text="1");#.R` parsed "1" instead
+            # of the file (a broken script scored 100) or ran code of its choosing.
             result = subprocess.run(
-                ['Rscript', '-e', f'parse("{filepath}")'],
+                ['Rscript', '-e', 'invisible(parse(file = commandArgs(trailingOnly = TRUE)[1]))',
+                 str(filepath)],
                 capture_output=True,
                 text=True,
                 timeout=limit
@@ -795,6 +800,15 @@ Exit Codes:
 
     args = parser.parse_args()
 
+    # Reports print em dashes ("could not run —" whenever Rscript is missing). A cp932
+    # or Latin-1 stdout cannot encode one, the crash exited 1, and the pre-commit read
+    # that as a failing score: print UTF-8, whatever the console.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding='utf-8', errors='backslashreplace')
+        except (AttributeError, ValueError):
+            pass
+
     if args.print_rubric:
         print(render_rubric(), end='')
         sys.exit(0)
@@ -813,14 +827,20 @@ Exit Codes:
         try:
             scorer = QualityScorer(filepath, verbose=args.verbose)
 
-            if filepath.suffix == '.qmd':
+            # Case-blind, like the pre-commit hook that selects the files: a staged
+            # `.r` or `.TEX` was announced as scored, reported "Unsupported", and
+            # passed with exit 0 — a syntax-broken script went through unscored.
+            suffix = filepath.suffix.lower()
+            if suffix == '.qmd':
                 report = scorer.score_quarto()
-            elif filepath.suffix == '.R':
+            elif suffix == '.r':
                 report = scorer.score_r_script()
-            elif filepath.suffix == '.tex':
+            elif suffix == '.tex':
                 report = scorer.score_beamer()
             else:
+                # A file this scorer was asked to score and could not is not a pass.
                 print(f"Error: Unsupported file type: {filepath.suffix}")
+                exit_code = max(exit_code, 1)
                 continue
 
             results.append(report)
