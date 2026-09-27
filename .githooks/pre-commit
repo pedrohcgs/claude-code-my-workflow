@@ -95,7 +95,13 @@ else
             if [ ! -f "$f" ]; then
                 # Staged, then deleted from the working tree: the commit carries a
                 # file this gate cannot read. Skipping it here was a silent pass.
-                echo "✗ quality gate: '$f' is staged but missing from the working tree, so it cannot be scored — restore it or unstage it." >&2
+                # A dangling symlink lands here too, and it IS in the working tree:
+                # name it as what it is, or the user goes looking for a deleted file.
+                if [ -L "$f" ]; then
+                    echo "✗ quality gate: '$f' is a symlink whose target is missing or not a file, so it cannot be scored — fix the link or unstage it." >&2
+                else
+                    echo "✗ quality gate: '$f' is staged but missing from the working tree, so it cannot be scored — restore it or unstage it." >&2
+                fi
                 FAIL=1
                 continue
             fi

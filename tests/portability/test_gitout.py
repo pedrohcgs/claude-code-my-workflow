@@ -14,6 +14,7 @@ is at git's default.
 import contextlib
 import importlib.util
 import io
+import locale
 import os
 import pathlib
 import shutil
@@ -38,6 +39,13 @@ BASH = shutil.which("bash")
 # from its static checks alone, so the cases below need no Rscript.
 FAILING_R = 'a <- read.csv("/Users/x/a.csv")\nb <- read.csv("/Users/x/b.csv")\n'
 GOOD_R = "x <- 1\ny <- x + 1\n"
+
+# subprocess decodes text=True output through locale.getencoding() only from Python
+# 3.11; before that the function does not exist and there is nothing to patch. The
+# fix decodes git's bytes as UTF-8 itself on every version: CI (3.12) keeps the pin,
+# and macOS's /usr/bin/python3 (3.9) skips these cases instead of erroring the gate.
+needs_getencoding = unittest.skipUnless(hasattr(locale, "getencoding"),
+                                        "locale.getencoding is new in Python 3.11")
 
 
 def git_env(**extra):
@@ -154,6 +162,7 @@ class HygieneGitOutput(unittest.TestCase):
 class HygieneLocaleDecode(unittest.TestCase):
     """ls-files-locale-decode: git's UTF-8 bytes decoded in the Windows code page."""
 
+    @needs_getencoding
     def test_tracked_names_survive_a_cp1252_locale(self):
         repo = Repo(self)
         repo.git("config", "core.quotepath", "off")
@@ -319,6 +328,7 @@ class LedgerGitOutput(unittest.TestCase):
     def test_a_non_ascii_hook_reads_as_tracked(self):
         self.assertIn(self.HOOK, self.tracked(self.fixture()))
 
+    @needs_getencoding
     def test_a_non_ascii_hook_reads_as_tracked_under_cp1252(self):
         self.assertIn(self.HOOK, self.tracked(self.fixture(quotepath="off"), encoding="cp1252"))
 
@@ -353,13 +363,16 @@ class GateStdoutCodePage(unittest.TestCase):
 class QualityScoreSuffix(unittest.TestCase):
     """quality-score-case-sensitive-suffix."""
 
-    def score(self, name, text):
+    def score(self, name, text, *more):
+        """Score one file, or several: each extra file is a (name, text) pair."""
         d = tempfile.mkdtemp(prefix="gitout-")
         self.addCleanup(shutil.rmtree, d, True)
-        p = os.path.join(d, name)
-        with open(p, "w", encoding="utf-8") as f:
-            f.write(text)
-        r = subprocess.run([sys.executable, QSCORE, "--summary", p], capture_output=True)
+        paths = []
+        for n, t in ((name, text),) + more:
+            paths.append(os.path.join(d, n))
+            with open(paths[-1], "w", encoding="utf-8") as f:
+                f.write(t)
+        r = subprocess.run([sys.executable, QSCORE, "--summary", *paths], capture_output=True)
         return r.returncode, r.stdout.decode("utf-8", "replace")
 
     def test_lowercase_r_is_scored_as_r(self):
@@ -371,9 +384,14 @@ class QualityScoreSuffix(unittest.TestCase):
         rc, out = self.score("t.R", FAILING_R)
         self.assertEqual(rc, 1, out)
 
-    def test_an_unsupported_file_is_not_a_pass(self):
-        rc, out = self.score("notes.py", "x = 1\n")
-        self.assertEqual(rc, 1, out)
+    def test_changed_files_without_a_rubric_are_skipped_not_failed(self):
+        # The PR checklist's `quality_score.py <changed-files>`: a passing script
+        # beside a .md and a .py exits 0, and the unscored types are still named.
+        # A regression pin, not an 08a7641 defect: 82a4590 exited 1 here.
+        rc, out = self.score("ok.R", GOOD_R, ("notes.md", "# n\n"), ("tool.py", "x = 1\n"))
+        self.assertEqual(rc, 0, out)
+        self.assertIn("Unsupported file type: .md", out)
+        self.assertIn("Unsupported file type: .py", out)
 
 
 class QualityScoreRscriptPath(unittest.TestCase):
@@ -480,6 +498,18 @@ class PreCommitQualityGate(unittest.TestCase):
         rc, out = self.hook(repo)
         self.assertEqual(rc, 1, out)
         self.assertIn("scripts/gone.R", out)
+
+    @unittest.skipIf(os.name == "nt", "a symlink needs privileges on Windows")
+    def test_dangling_symlink_is_named_as_a_symlink(self):
+        # The link IS in the working tree: "missing from the working tree" sent the
+        # user looking for a deleted file that was never deleted.
+        repo = self.fixture()
+        os.symlink("../../nowhere/x.R", repo.path("scripts/link.R"))
+        repo.add("scripts/link.R")
+        rc, out = self.hook(repo)
+        self.assertEqual(rc, 1, out)
+        self.assertIn("'scripts/link.R' is a symlink whose target is missing", out)
+        self.assertNotIn("missing from the working tree", out)
 
     def test_lowercase_r_is_scored(self):
         repo = self.fixture()

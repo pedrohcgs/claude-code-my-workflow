@@ -838,9 +838,10 @@ Exit Codes:
             elif suffix == '.tex':
                 report = scorer.score_beamer()
             else:
-                # A file this scorer was asked to score and could not is not a pass.
+                # No rubric for this type (.md, .py, ...): skipped, not failed, so the
+                # PR checklist's `quality_score.py <changed-files>` still exits 0 when
+                # every rubric file in the list passes.
                 print(f"Error: Unsupported file type: {filepath.suffix}")
-                exit_code = max(exit_code, 1)
                 continue
 
             results.append(report)
