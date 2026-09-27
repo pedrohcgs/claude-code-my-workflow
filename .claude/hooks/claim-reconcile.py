@@ -43,11 +43,24 @@ import re
 import sys
 import time
 import hashlib
+import unicodedata
 from pathlib import Path
 
-WATCH = re.compile(r"(^|/)scripts/.*\.(R|r|do|py|jl)$|(^|/)output/|(^|/)scripts/.*/_outputs/")
+# Matched against the path with `\` turned into `/` (see main): on Windows
+# Claude Code sends `C:\...\scripts\analysis.R`, which a `/`-only pattern never
+# matched, so every analysis-code and output/ edit was silent there.
+# Case-insensitive, because on macOS and Windows `Scripts/x.R` is `scripts/x.R`.
+WATCH = re.compile(r"(^|/)scripts/.*\.(R|do|py|jl)$|(^|/)output/|(^|/)scripts/.*/_outputs/",
+                   re.IGNORECASE)
 DISPLAY = re.compile(r"\.(tex|qmd|md|rmd|typ|ipynb)$", re.IGNORECASE)
 THROTTLE_S = 300
+
+
+def _fold(s: str) -> str:
+    """A path spelling as a case-insensitive disk compares it: NFC, case-folded.
+    macOS and Windows open `slides/Lecture1.tex` for `Slides/Lecture1.tex`, and
+    a passport written by hand may use either; exact comparison missed both."""
+    return unicodedata.normalize("NFC", s).casefold()
 
 
 def scan_passport(text: str, changed: str):
@@ -64,6 +77,7 @@ def scan_passport(text: str, changed: str):
     """
     blocks: list[dict] = []
     cur = None
+    changed_f = _fold(changed)
     for ln in text.splitlines():
         m = re.match(r"\s*-\s*id:\s*(\S+)", ln)
         if m:
@@ -73,7 +87,7 @@ def scan_passport(text: str, changed: str):
         if cur is None:
             continue
         if "source_file" in ln or "output_file" in ln:
-            if changed in ln:
+            if changed_f in _fold(ln):
                 cur["prov"] = True
             continue
         m = re.match(r"\s*-?\s*(?:path|location):\s*(.+)", ln)
@@ -87,10 +101,10 @@ def scan_passport(text: str, changed: str):
     prov = [b["id"] for b in blocks if b["prov"]]
     # Path-EQUALITY, not substring containment: "index.md" must not match a
     # declared display of "docs/index.md", or "report.md" match "final-report.md".
-    cn = os.path.normpath(changed)
+    cn = _fold(os.path.normpath(changed))
     disp = [b["id"] for b in blocks
             if len(b["displays"]) > 1
-            and any(os.path.normpath(d) == cn for d in b["displays"])]
+            and any(_fold(os.path.normpath(d)) == cn for d in b["displays"])]
     return prov, disp
 
 
@@ -103,14 +117,18 @@ def state_dir() -> Path:
 
 
 def main() -> int:
+    # Bytes, decoded as UTF-8 — what Claude Code writes. sys.stdin on Windows
+    # decodes a pipe with the ANSI code page, which turned an accented project
+    # path into one this hook could not relate to CLAUDE_PROJECT_DIR.
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
     except (json.JSONDecodeError, EOFError):
         return 0
 
     ti = data.get("tool_input", {}) or {}
     fp = ti.get("file_path", "") or ""
-    if not fp or not (WATCH.search(fp) or DISPLAY.search(fp)):
+    fp_n = fp.replace("\\", "/")            # the filters are written with `/`
+    if not fp or not (WATCH.search(fp_n) or DISPLAY.search(fp_n)):
         return 0
 
     project_dir = os.environ.get("CLAUDE_PROJECT_DIR", "") or data.get("cwd", "")
@@ -123,23 +141,39 @@ def main() -> int:
     # Match + throttle on the project-relative PATH, not the bare basename —
     # otherwise scripts/R/results.rds and scripts/stata/results.rds throttle
     # each other, and clean.R spuriously matches data_clean.R.
+    #
+    # as_posix() (from PR #152): passports declare "scripts/analysis.R", and
+    # str() of a Windows path is "scripts\analysis.R", so the `changed in ln`
+    # test never matched and every provenance claim went unflagged there.
+    # The prefix is stripped part by part under _fold rather than with
+    # relative_to, which is case-sensitive on POSIX: a file_path spelled
+    # .../crproj/slides/... for the project .../crproj/Slides/... is the same
+    # file on macOS and fell back to the bare basename. Parts are compared,
+    # not folded strings sliced, because casefold can change a length (ß → ss).
     try:
-        changed = str(Path(fp).resolve().relative_to(Path(project_dir).resolve()))
+        fparts = Path(fp).resolve().parts
+        pparts = Path(project_dir).resolve().parts
+        if len(fparts) <= len(pparts) or any(
+                _fold(a) != _fold(b) for a, b in zip(fparts, pparts)):
+            raise ValueError("outside the project")
+        changed = Path(*fparts[len(pparts):]).as_posix()
     except Exception:
         changed = Path(fp).name
 
-    # Throttle: one nudge per changed file per THROTTLE_S.
+    # Throttle: one nudge per changed file per THROTTLE_S — keyed on the folded
+    # spelling, so case variants of one file share one throttle.
+    key = _fold(changed)
     st_path = state_dir() / "claim-reconcile-state.json"
     try:
-        st = json.loads(st_path.read_text())
+        st = json.loads(st_path.read_text(encoding="utf-8"))
     except Exception:
         st = {}
     now = time.time()
-    if now - st.get(changed, 0) < THROTTLE_S:
+    if now - st.get(key, 0) < THROTTLE_S:
         return 0
-    st[changed] = now
+    st[key] = now
     try:
-        st_path.write_text(json.dumps(st))
+        st_path.write_text(json.dumps(st), encoding="utf-8")
     except Exception:
         pass
 

@@ -1,0 +1,13 @@
+# LF in every checkout, whatever core.autocrlf says (the Git for Windows installer
+# sets it to true). Under a non-MSYS bash (WSL, a container, macOS or Linux with
+# autocrlf on) a CRLF shell script dies: `set -o pipefail\r` is an invalid option,
+# `#!/usr/bin/env bash\r` is not found, so every commit is blocked. Not only the
+# shell scripts: check-staleness.py fingerprints source bytes, and a CRLF copy of
+# an unchanged source read as stale. The tree tracks no .bat/.cmd/.ps1; one that
+# is added needs its own `text eol=crlf` line here.
+* text=auto eol=lf
+# Raw inputs are kept byte-for-byte as deposited: a CRLF CSV or fixed-width file
+# under data/ must not be rewritten (its checksum and record lengths are evidence).
+data/** -text
+*.sh text eol=lf
+.githooks/* text eol=lf

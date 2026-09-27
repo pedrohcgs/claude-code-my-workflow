@@ -36,16 +36,67 @@ cd "$REPO_ROOT" || exit 2
 # stashed (avoids slow stashes of large data dirs). A failed pop is loud +
 # recoverable, never silently swallowed.
 _STASHED=0
-_staged="$(git diff --cached --name-only 2>/dev/null | sort)"
-_unstaged="$(git diff --name-only 2>/dev/null | sort)"
+# -z: without it git C-quotes a non-ASCII, quote or backslash name
+# (".claude/hooks/verifica\303\247\303\243o.py"), and the battery trigger below never
+# matched a staged hook spelt that way.
+_staged="$(git diff --cached --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
+_unstaged="$(git diff --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
 _overlap="$(comm -12 <(printf '%s\n' "$_staged") <(printf '%s\n' "$_unstaged") | grep -c . || true)"
+# Two tracked paths that differ only by case or Unicode form are one file on a macOS
+# or Windows disk: the tree is dirty for good, the pop below always failed, and every
+# commit left one more "pre-commit-gate" stash behind (#171). Same rule as
+# scripts/check-repo-hygiene.py (NFC + casefold, each path prefix), which names the
+# pair and fails the commit. NUL-delimited: without -z git C-quotes an accented name.
+_collide=""
+if [ -n "$_unstaged" ]; then
+    _collide="$(git ls-files -z 2>/dev/null | python3 -c '
+import sys, unicodedata
+seen = {}
+for f in sys.stdin.buffer.read().decode("utf-8", "surrogateescape").split("\0"):
+    parts = f.split("/") if f else []
+    for i in range(1, len(parts) + 1):
+        p = "/".join(parts[:i])
+        first = seen.setdefault(unicodedata.normalize("NFC", p).casefold(), p)
+        if first != p:
+            sys.stdout.buffer.write((first + " and " + p).encode("utf-8", "surrogateescape"))
+            sys.exit(0)
+' 2>/dev/null || true)"
+fi
 if [ "${_overlap:-0}" -gt 0 ] 2>/dev/null; then
     echo "ℹ pre-commit: ${_overlap} file(s) have both staged and unstaged changes —" >&2
     echo "  validating the WORKING TREE (not the pure staged index) to avoid a stash conflict." >&2
+elif [ -n "$_collide" ]; then
+    echo "ℹ pre-commit: tracked paths $_collide differ only by case or Unicode form, so the" >&2
+    echo "  working tree cannot be stashed clean — validating the WORKING TREE (not the pure staged index)." >&2
 elif [ -n "$_unstaged" ]; then
-    if git stash push --keep-index --quiet --message "pre-commit-gate" 2>/dev/null; then
+    # A stash is ours only if refs/stash moved. `stash push` exits 0 having made none
+    # when nothing is staged (`commit --amend`) and the only unstaged change is one it
+    # ignores (a submodule's own dirty content): the trap then popped the user's own
+    # newest stash into the tree (#171).
+    _before="$(git rev-parse -q --verify refs/stash 2>/dev/null || true)"
+    if git stash push --keep-index --quiet --message "pre-commit-gate" 2>/dev/null \
+            && [ "$(git rev-parse -q --verify refs/stash 2>/dev/null || true)" != "$_before" ]; then
         _STASHED=1
         trap 'if [ "$_STASHED" = "1" ]; then git stash pop --quiet 2>/dev/null || echo "⚠ pre-commit: could not auto-restore unstaged changes — recover with: git stash pop" >&2; fi' EXIT
+        # A path can stay modified with nothing left to stash: a CRLF blob under a later
+        # `eol=lf` rule, a clean filter that rewrites it. The pop then always failed, the
+        # commit went through, and each one moved the user's unstaged work into another
+        # "pre-commit-gate" stash (#171). Put the work back now and drop the stash:
+        # every path whose working copy differs from the stash's (a still-dirty path
+        # the user also edited included), --worktree only so nothing is staged.
+        _still=""
+        IFS= read -r -d '' _still < <(git diff --name-only -z --no-ext-diff --ignore-submodules 2>/dev/null) || true
+        if [ -n "$_still" ]; then
+            if git diff --quiet --no-ext-diff --ignore-submodules 'stash@{0}' 2>/dev/null \
+                    || git diff --name-only -z --no-ext-diff --ignore-submodules 'stash@{0}' 2>/dev/null \
+                        | git --literal-pathspecs restore --source='stash@{0}' --worktree \
+                              --pathspec-from-file=- --pathspec-file-nul 2>/dev/null; then
+                git stash drop --quiet 'stash@{0}' 2>/dev/null
+                _STASHED=0
+                echo "ℹ pre-commit: '$_still' stays modified after stashing (a line-ending or filter rule its" >&2
+                echo "  committed bytes predate?) — validating the WORKING TREE (not the pure staged index)." >&2
+            fi
+        fi
     fi
 fi
 
@@ -73,18 +124,36 @@ if [ "${SKIP_QUALITY_GATE:-0}" = "1" ]; then
     echo ""
     echo "── pre-commit: quality gate SKIPPED (SKIP_QUALITY_GATE=1) ──"
 else
-    # Staged, added-or-modified files that have quality rubrics.
-    STAGED="$(git diff --cached --name-only --diff-filter=ACM | grep -Ei '\.(qmd|tex|R)$' || true)"
-    if [ -n "$STAGED" ]; then
-        n="$(printf '%s\n' "$STAGED" | grep -c .)"
+    # Staged files that have quality rubrics: added, copied, modified, RENAMED or
+    # type-changed. `ACM` alone dropped a file renamed and edited in one commit (git
+    # reports it as R), so a syntax-broken script committed unscored. Read
+    # NUL-delimited: without -z git C-quotes a non-ASCII, quote or backslash name
+    # ("Slides/Aula_introdu\303\247\303\243o.tex"), the suffix match failed on the
+    # closing quote, and the file was never scored.
+    STAGED=()
+    while IFS= read -r -d '' f; do
+        case "$f" in *.[qQ][mM][dD]|*.[tT][eE][xX]|*.[rR]) STAGED+=("$f") ;; esac
+    done < <(git diff --cached --name-only -z --diff-filter=ACMRT)
+    if [ "${#STAGED[@]}" -gt 0 ]; then
         echo ""
-        echo "── pre-commit: quality score (>= 80) on ${n} staged file(s) ──"
+        echo "── pre-commit: quality score (>= 80) on ${#STAGED[@]} staged file(s) ──"
         # Score each file individually: portable (no mapfile/bash4), handles
-        # spaces in paths, and gives a per-file exit code we can classify.
-        while IFS= read -r f; do
-            [ -z "$f" ] && continue
-            [ -f "$f" ] || continue
-            python3 scripts/quality_score.py "$f"
+        # any byte in a path, and gives a per-file exit code we can classify.
+        for f in "${STAGED[@]}"; do
+            if [ ! -f "$f" ]; then
+                # Staged, then deleted from the working tree: the commit carries a
+                # file this gate cannot read. Skipping it here was a silent pass.
+                # A dangling symlink lands here too, and it IS in the working tree:
+                # name it as what it is, or the user goes looking for a deleted file.
+                if [ -L "$f" ]; then
+                    echo "✗ quality gate: '$f' is a symlink whose target is missing or not a file, so it cannot be scored — fix the link or unstage it." >&2
+                else
+                    echo "✗ quality gate: '$f' is staged but missing from the working tree, so it cannot be scored — restore it or unstage it." >&2
+                fi
+                FAIL=1
+                continue
+            fi
+            python3 scripts/quality_score.py -- "$f"
             rc=$?
             # quality_score.py: rc 2 = auto-fail (compile/syntax FAILURE), rc 1 =
             # score < 80 (or scorer error / file-not-found). BOTH must block — a
@@ -93,7 +162,7 @@ else
                 echo "✗ quality gate: '$f' failed (rc=$rc — 2=compile/syntax failure, 1=score<80 or scorer error)." >&2
                 FAIL=1
             fi
-        done <<< "$STAGED"
+        done
     else
         echo ""
         echo "── pre-commit: no staged .qmd/.tex/.R files to score ──"

@@ -53,6 +53,9 @@ tree says otherwise wins; this is the default.
 - **Accidental duplicates.** `notes 2.md` **when `notes.md` also exists** (the true copy
   signature — a bare `Lecture 2.tex` is an ordinary academic filename and is not flagged),
   and `data(1).csv`.
+- **Paths that differ only by case or Unicode form.** `Notes.md` beside `notes.md`, or an accented name stored
+  both composed and decomposed: two files in git, one on macOS and Windows, so a checkout there silently
+  loses one.
 - **Tracked build artifacts.** `.aux`, `.log`, `.synctex.gz`, `.pyc`. Regenerable output does
   not belong in version control.
 - **Edited append-only records.** A commit that edits or removes a committed line of

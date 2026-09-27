@@ -12,7 +12,7 @@ Render Quarto slides and sync all files to `docs/` for GitHub Pages deployment.
 ## Steps
 
 1. **Run the sync script:**
-   - If `$ARGUMENTS` is provided (e.g., "Lecture4"): `./scripts/sync_to_docs.sh $ARGUMENTS`
+   - If `$ARGUMENTS` is provided (e.g., "Lecture4"): `./scripts/sync_to_docs.sh "$ARGUMENTS"`
    - If no argument: `./scripts/sync_to_docs.sh` (syncs all lectures)
 
 2. **Verify deployment:**

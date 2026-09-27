@@ -448,6 +448,11 @@ def main() -> int:
                     help=f"pixels of overflow to ignore (default 1; minimum {MIN_TOLERANCE})")
     ap.add_argument("--no-screenshots", action="store_true", help="measure only")
     args = ap.parse_args()
+    # A deck or --out path outside the pipe's code page must not crash the summary.
+    try:
+        sys.stdout.reconfigure(errors="backslashreplace")
+    except (AttributeError, ValueError):
+        pass
     tol = args.tolerance
     if tol < MIN_TOLERANCE:
         print(f"slide-qa: tolerance raised to {MIN_TOLERANCE}px — below that, sub-pixel font metrics "
@@ -530,13 +535,18 @@ def main() -> int:
         md += [f"- **Missing:** `{rel(m)}`" for m in assets["missing"]]
         md += [f"- **Wrong letter case:** requested `{rel(c['requested'])}`, on disk `{rel(c['on_disk'])}` — "
                "loads on macOS and Windows, fails on Linux and GitHub Pages" for c in assets["wrong_case"]]
-    (out / "report.json").write_text(json.dumps(report, indent=2))
-    (out / "report.md").write_text("\n".join(md) + "\n")
+    # UTF-8, not the locale: on Windows report.md came out in cp1252, which every
+    # reader of it decodes as UTF-8, and a β in a slide title crashed the write and
+    # left the Overflow evidence empty (#171).
+    (out / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    (out / "report.md").write_text("\n".join(md) + "\n", encoding="utf-8")
 
+    # ASCII '->': the '→' this line ended with is in no Windows ANSI code page, so a
+    # CLEAN deck died here with exit 1 — which the contract reads as overflow.
     print(f"slide-qa: {len(slides)} slides, {report['summary']['overflow']} overflow, "
           f"{report['summary']['clipped']} clipped, {report['summary']['broken_asset']} with a broken asset; "
           f"{len(assets['missing'])} missing / {len(assets['wrong_case'])} wrong-case files "
-          f"→ {rel(str(out / 'report.md'))}")
+          f"-> {rel(str(out / 'report.md'))}")
     return 1 if (bad or asset_problems) else 0
 
 

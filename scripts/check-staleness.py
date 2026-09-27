@@ -15,8 +15,13 @@ SKIP = re.compile(r'(^|/)(CHANGELOG\.md|defect-library\.md|\.git/|node_modules/|
 def surfaces():
     out = []
     for pat in ["*.md", ".claude/**/*.md", "templates/**/*.md", "guide/*.qmd", "docs/*.html", ".github/**/*.md"]:
-        out += glob.glob(os.path.join(ROOT, pat), recursive=True)
-    return [p for p in sorted(set(out)) if not SKIP.search(os.path.relpath(p, ROOT))]
+        # glob.escape: a clone at "Paper [2026]" read its own path as a character
+        # class, matched nothing, and passed on 0 surfaces (#171).
+        out += glob.glob(os.path.join(glob.escape(ROOT), pat), recursive=True)
+    # SKIP is written with '/', so match it against a '/' path: on Windows relpath
+    # gives backslashes, the anchors never matched, and the anti-pattern catalogue
+    # was scanned and failed this gate on every clone (#171).
+    return [p for p in sorted(set(out)) if not SKIP.search(os.path.relpath(p, ROOT).replace(os.sep, "/"))]
 
 # (id, description, regex, allow-marker regex or None)
 CHECKS = [
@@ -32,9 +37,13 @@ CHECKS = [
 
 def main():
     files = surfaces()
+    if not files:
+        # Nothing scanned is a broken gate, not a clean tree.
+        print(f"check-staleness: no surfaces found under {ROOT} — nothing was checked", file=sys.stderr)
+        return 2
     hits = []
     for f in files:
-        rel = os.path.relpath(f, ROOT)
+        rel = os.path.relpath(f, ROOT).replace(os.sep, "/")
         try: text = open(f, encoding="utf-8", errors="ignore").read()
         except Exception: continue
         for cid, desc, pat, allow in CHECKS:
@@ -66,8 +75,13 @@ def main():
         s_path, o_path = os.path.join(ROOT, src), os.path.join(ROOT, out)
         if not (os.path.exists(s_path) and os.path.exists(o_path)):
             continue
-        src_hash = hashlib.sha256(open(s_path, "rb").read()).hexdigest()[:16]
-        out_hash = hashlib.sha256(open(o_path, "rb").read()).hexdigest()[:16]
+        # Line endings are not content. An autocrlf checkout (the Git for Windows
+        # default) holds CRLF where the stamp hashed LF, and read as a stale render
+        # on a pristine clone (#171). CRLF -> LF only, exactly as
+        # scripts/stamp-render.sh does: the two must agree byte for byte, or every
+        # stamp goes stale.
+        src_hash = hashlib.sha256(open(s_path, "rb").read().replace(b"\r\n", b"\n")).hexdigest()[:16]
+        out_hash = hashlib.sha256(open(o_path, "rb").read().replace(b"\r\n", b"\n")).hexdigest()[:16]
         rec = recorded.get(out)
         if rec is None:
             render.append(f"{out}: no render stamp — run scripts/stamp-render.sh after rendering")
@@ -120,7 +134,7 @@ def main():
             if os.path.exists(p): scan.append(p)
     inj_pat = re.compile(r"`![a-z][a-z0-9._-]*(?:\s+[^`\n]*)?`")
     for p in scan:
-        rel = os.path.relpath(p, ROOT)
+        rel = os.path.relpath(p, ROOT).replace(os.sep, "/")
         for i, line in enumerate(open(p, encoding='utf-8', errors='ignore'), 1):
             for m in inj_pat.finditer(line):
                 frag = m.group(0)
@@ -140,6 +154,12 @@ def main():
     return 1 if bad else 0
 
 if __name__ == "__main__":
+    # Every finding line carries an em dash, which a cp932/cp949 pipe (Japanese,
+    # Korean Windows) cannot encode: a real finding became "internal error" (#171).
+    try:
+        sys.stdout.reconfigure(errors="replace")
+    except (AttributeError, ValueError):
+        pass
     try:
         sys.exit(main())
     except Exception as e:                      # promised exit 2 now exists

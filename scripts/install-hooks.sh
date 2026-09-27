@@ -9,7 +9,9 @@
 #
 set -euo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel)"
+# From the script's own location, not the caller's cwd: run from another repo, the old
+# form installed the hooks into THAT repo (#171).
+REPO_ROOT="$(git -C "$(cd "$(dirname "$0")" && pwd)" rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
 if [ ! -d .githooks ]; then

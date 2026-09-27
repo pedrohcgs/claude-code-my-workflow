@@ -242,8 +242,9 @@ Two checks, by tool:
       keystroke", which understated it.
 
   Write/Edit/MultiEdit — warn on hardcoded machine paths in code:
-    - absolute home paths (/Users/<u>, /home/<u>, C:\\Users\\) written into
-      .R / .qmd / .do / .py files break replication packages. Warn by
+    - absolute home paths (/Users/<u>, /home/<u>, C:\\Users\\<u> with either
+      slash, single or doubled, any case) written into .R / .qmd / .do / .py /
+      .Rmd files (extension in any case) break replication packages. Warn by
       default; set CLAUDE_STRICT_PATHS=1 to hard-deny.
 
 LINE CONTINUATIONS ARE SPLICED (r12), for BOTH checks, before the command line
@@ -332,6 +333,11 @@ one the merge runs in) — a `cd` on a history op's command line now DENIES unde
 rule 0, as does every other multi-segment form. So does an unresolved `-C`, and
 so do the `--git-dir` / `--work-tree` / `GIT_DIR=` / `GIT_WORK_TREE=` selectors,
 which the pre-r13 text wrongly implied did not exist.
+  - an op inside a SUBSHELL or a SUBSTITUTION — `(git reset --hard)`,
+    `echo $(git merge main)`, the backtick spelling, the same inside double
+    quotes or an unquoted heredoc body. `(git` and `--hard)` are single words to
+    this tokenizer, so no `git` segment is identified. Open as #172; a flat-
+    separator fix was tried and backed out (see _SEG_TOKEN).
   - ANY SHELL FORM THAT PUTS THE OP SOMEWHERE THIS PARSER DOES NOT LOOK. The
     list above is the set known on 2026-08-23; it is a report of where the
     parser has been probed, not a proof of where it is complete. Round 9 found
@@ -553,6 +559,14 @@ GIT_HISTORY_OPS = {"merge", "rebase", "pull"}
 _ASSIGN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=")
 
 
+def _prog(word: str) -> str:
+    """The program a command word names, as Windows and a case-insensitive disk
+    run it: the basename on EITHER separator, lower-cased, a trailing `.exe`
+    dropped. `git.exe`, `GIT` and 'C:\\...\\cmd\\git.exe' are all `git` (r21)."""
+    b = re.split(r"[\\/]", word)[-1].lower()
+    return b[:-4] if b.endswith(".exe") else b
+
+
 def _op_is_exempt(words: list[str], start: int, tokens=GIT_OP_EXEMPT_TOKENS) -> bool:
     """True only when an ACTUAL argument token of this invocation IS one of
     `tokens`. `start` is the index of the subcommand. The token set is a
@@ -573,14 +587,35 @@ def _op_is_exempt(words: list[str], start: int, tokens=GIT_OP_EXEMPT_TOKENS) -> 
 
 # Tokenizer: split a Bash command into per-command segments on shell
 # separators, keeping quoted spans intact so a separator inside quotes does not
-# split a segment.
+# split a segment. Open (#172): `(`, `)` and backticks are NOT separators, so
+# `(git reset --hard)` reads as the words `(git` … `--hard)` and a subshell or a
+# substitution can carry an op past both checks. Making them flat separators was
+# tried and backed out (2026-09-27): it cut comments short (false denies on
+# `git pull  # (daily sync)`) and split a command's own arguments at a
+# substitution (a new miss). The fix needs substitutions parsed as nested commands.
 _SEG_TOKEN = re.compile(
     r"""(?P<sep>\|\||&&|;|&|\||\n)
       | (?P<word>(?:"[^"]*"|'[^']*'|\\.|[^\s"'|;&\n])+)""",
     re.VERBOSE,
 )
-HARDCODED_PATH = re.compile(r"(/Users/[^/\s'\")]+|/home/[^/\s'\")]+|[A-Za-z]:\\\\Users\\\\[^\\\s'\"]+)")
-CODE_EXT = {".R", ".r", ".qmd", ".do", ".py", ".Rmd"}
+# r21: the Windows branch used to need `C:\\Users\\` with DOUBLED backslashes —
+# the escaped spelling inside an R string — so Stata's native `cd "C:\Users\me"`,
+# a Python raw string `r"C:\Users\me\x.csv"` and lower-case `c:/users/me` were
+# never flagged; `C:/Users/me` was, but only by luck, through the `/Users/`
+# branch. Measured 2026-09-27 on ae72617 with CLAUDE_STRICT_PATHS=1: the first
+# three ALLOWED. One or more of either separator counts now, and `users` in any
+# case — a SCOPED `(?i:...)`, because a global `(?i)` also flags
+# `https://api.github.com/users/<name>` in ordinary .py code. The extension is
+# compared lower-cased for the same reason: `a.rmd` and `MASTER.DO` skipped the
+# check entirely while `a.Rmd` and `master.do` denied.
+# The drive letter must not follow a letter or digit. Without that the scheme's
+# last letter reads as a drive: `gs://users/data.csv`, `https://users/x` and
+# `{"key:/users/me": 1}` matched as `s:`, `s:` and `y:` (measured on 9d90fc3, a
+# deny under CLAUDE_STRICT_PATHS=1). A real drive follows a quote, a space, `(`,
+# `=`, `\\?\` or `file:///`, none of which the lookbehind refuses.
+HARDCODED_PATH = re.compile(r"(/Users/[^/\s'\")]+|/home/[^/\s'\")]+"
+                            r"|(?<![A-Za-z0-9])[A-Za-z]:[\\/]+(?i:users)[\\/]+[^\\/\s'\")]+)")
+CODE_EXT = {".r", ".qmd", ".do", ".py", ".rmd"}      # compared lower-cased
 
 
 # ANSI-C QUOTING (`$'…'`) AND LOCALE TRANSLATION (`$"…"`) — r19.
@@ -910,6 +945,21 @@ def _join_continuations(cmd: str) -> str:
     return _LINE_CONT.sub(r"\1", cmd)
 
 
+def _drop_cr(cmd: str) -> str:
+    """Remove every carriage return, as the MSYS bash of Git for Windows does
+    before it splits words (r21).
+
+    `_SEG_TOKEN` counts `\\r` as whitespace, so `git re<CR>set --hard` was
+    three words here and matched no rule, while Git Bash — the shell Claude
+    Code's Bash tool runs through on Windows — drops the CR and runs
+    `git reset --hard`. The same held for a CR inside the program word and
+    for a `\\<CR><LF>` continuation, which the continuation splice never saw.
+    Unconditional: POSIX bash keeps a CR as an ordinary WORD character, never
+    a separator, so dropping it can only join text the shell also treats as
+    one word — a false deny at worst, on a command git would reject anyway."""
+    return cmd.replace("\r", "")
+
+
 def _segments(cmd: str) -> list[list[str]]:
     """Per-command segments as lists of unquoted words.
 
@@ -1067,10 +1117,18 @@ def _git_segment(words: list[str]) -> tuple[str | None, list[str], int, list[str
     `git STATUS --porcelain` and `git Status --porcelain` both exit 128
     ("fatal: cannot handle STATUS as a builtin") while `git status` exits 0. A
     spelling git refuses to run cannot reach the tree, so folding it would buy
-    no coverage and would only add false denies."""
+    no coverage and would only add false denies.
+
+    r21 — `.exe` AND A BACKSLASH PATH NAME THE SAME PROGRAM. On Windows, Git
+    Bash starts `cmd\\git.exe` for `git.exe` exactly as for `git`, and a quoted
+    'C:\\Program Files\\Git\\cmd\\git.exe' is one word posixpath never splits.
+    Measured 2026-09-27 against ae72617: `git.exe reset --hard`, `GIT.EXE
+    clean -fdx` and that quoted path + `reset --hard` were ALLOWED (silent)
+    while `git reset --hard` DENIED. `_prog` reads the program either way, on
+    every OS, by the same ruling as the case fold above."""
     words, i = _strip_shell_head(words)
     while i < len(words):
-        if os.path.basename(words[i]).lower() == "git":
+        if _prog(words[i]) == "git":
             j, dash_c, selectors = _walk_git_globals(words, i + 1)
             if j < len(words):
                 return words[j], dash_c, j, words, selectors
@@ -1085,7 +1143,8 @@ def git_deny_reason(cmd: str) -> str | None:
     # Heredoc bodies are dropped FIRST (they are line-oriented: joining a body
     # line that ends in `\` could hide the terminator), then continuations are
     # spliced, so a multi-line command is tokenised as the one command bash runs.
-    for seg in _segments(_join_continuations(_strip_heredocs(cmd))):
+    # Carriage returns go before either, as Git Bash drops them (r21).
+    for seg in _segments(_join_continuations(_strip_heredocs(_drop_cr(cmd)))):
         sub, _dash_c, at, words, _sel = _git_segment(seg)
         if sub is None:
             continue
@@ -1296,9 +1355,13 @@ def read_status(cwd: str | None) -> "str | _NotARepo | None":
     question" the `-C` path was fixed for at r13 and this path was not. The two
     causes are now distinguished, and only the benign one allows."""
     try:
+        # UTF-8, not the locale: on Windows the default is the ANSI code page,
+        # which cannot decode every name git prints with core.quotePath=off,
+        # and a decode error here is an unanswered question — a false deny.
         r = subprocess.run(list(_GIT_STATUS_CMD), cwd=cwd or None,
                            env=_repo_neutral_env(),
                            capture_output=True, text=True,
+                           encoding="utf-8", errors="replace",
                            timeout=_status_timeout())
     except Exception:
         return None if _within_git_repo(cwd) else NOT_A_REPO
@@ -1442,6 +1505,9 @@ def _standalone_violation(spliced: str, n_segments: int,
     return None
 
 
+_MSYS_DRIVE = re.compile(r"^/([A-Za-z])(?=/|$)")
+
+
 def _resolve_dash_c(dash_c: list[str], default_cwd: str | None) -> str | None:
     """Fold EVERY `-C <path>` on the invocation, in order, the way git folds
     them — starting from the INVOCATION's directory.
@@ -1513,6 +1579,17 @@ def _resolve_dash_c(dash_c: list[str], default_cwd: str | None) -> str | None:
     not exist — there the resolved directory is not a repository, and the
     unresolvable-`-C` branch in `dirty_tree_reason` DENIES rather than allowing.
 
+    r21: A GIT BASH DRIVE PATH IS READ AS GIT.EXE RECEIVES IT. MSYS converts
+    `/c/Users/me/proj` to `C:/Users/me/proj` before it starts a native git.exe,
+    but Windows Python reads `/c/...` as a path on the CURRENT drive (or, on
+    3.13+, as relative to the event cwd) — `C:\\c\\Users\\...`, which does not
+    exist. Measured 2026-09-27 under the ntpath simulation: `git -C /c/<repo>
+    merge feature` on a CLEAN repo was DENIED as "names a repository this
+    guard cannot resolve" while `-C C:/<repo>` allowed. A false deny, not a
+    hole, but it refused ordinary Git Bash usage. Only on Windows: on POSIX
+    `/c/...` is a real path. Other MSYS roots (`/tmp`, `/usr`) still fail
+    closed; mapping those needs `cygpath`.
+
     Returns None when the fold cannot be anchored or cannot be computed; the
     caller must treat that as an unanswered question, never as the event cwd."""
     cur = default_cwd
@@ -1520,6 +1597,10 @@ def _resolve_dash_c(dash_c: list[str], default_cwd: str | None) -> str | None:
         if not raw:                          # `-C ""` — git leaves cwd alone
             continue
         p = os.path.expanduser(raw)
+        if os.name == "nt":
+            m = _MSYS_DRIVE.match(p)         # `/c/x` → `C:/x`, as MSYS hands it on
+            if m:
+                p = f"{m.group(1).upper()}:{p[m.end():] or '/'}"
         try:
             if os.path.isabs(p):
                 cur = os.path.realpath(p)    # absolute: replaces what came before
@@ -1552,7 +1633,8 @@ def dirty_tree_reason(cmd: str, event: dict) -> str | None:
     # Heredoc bodies are dropped FIRST (they are line-oriented: joining a body
     # line that ends in `\` could hide the terminator), then continuations are
     # spliced, so a multi-line command is tokenised as the one command bash runs.
-    spliced = _join_continuations(_strip_heredocs(cmd))
+    # Carriage returns go before either, as Git Bash drops them (r21).
+    spliced = _join_continuations(_strip_heredocs(_drop_cr(cmd)))
     segs = _segments(spliced)
     for seg in segs:
         sub, dash_c, at, words, selectors = _git_segment(seg)
@@ -1639,8 +1721,13 @@ def dirty_tree_reason(cmd: str, event: dict) -> str | None:
 
 
 def main() -> int:
+    # The event is read as BYTES and decoded as UTF-8, which is what Claude Code
+    # writes. `json.load(sys.stdin)` decoded it with the Windows ANSI code page:
+    # an accented project path came out as mojibake, the event cwd named a
+    # directory that does not exist, and a merge over a dirty tree read as
+    # "not a repository" and was allowed (r21).
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
     except (json.JSONDecodeError, EOFError):
         return 0
 
@@ -1660,7 +1747,7 @@ def main() -> int:
 
     if tool in ("Write", "Edit", "MultiEdit"):
         fp = ti.get("file_path", "") or ""
-        if Path(fp).suffix not in CODE_EXT:
+        if Path(fp).suffix.lower() not in CODE_EXT:
             return 0
         # Collect every string that becomes file content: Write.content,
         # Edit.new_string, and EACH MultiEdit edit's new_string (a list).

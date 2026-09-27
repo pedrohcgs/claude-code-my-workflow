@@ -23,7 +23,7 @@
     "id": {
       "type": "string",
       "pattern": "^[0-9a-f]{40}$",
-      "description": "sha1('file:line:locus') \u2014 deterministic and LENS-INDEPENDENT, so the same defect found by two different lenses, or rediscovered in a later round, gets the SAME id. Lens is metadata about who found it, not part of what it is."
+      "description": "sha1('file:line:locus'), with backslashes in file read as '/' so a Windows spelling gets the same id \u2014 deterministic and LENS-INDEPENDENT, so the same defect found by two different lenses, or rediscovered in a later round, gets the SAME id. Lens is metadata about who found it, not part of what it is."
     },
     "file": {
       "type": "string",

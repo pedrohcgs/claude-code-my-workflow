@@ -2,7 +2,7 @@
 # backtest.sh — prove the whole repo is internally consistent and currently true.
 #
 # Run this after ANY change. It is the difference between a maintained repo and
-# one that merely looks maintained. Ten gates:
+# one that merely looks maintained. Eleven gates:
 #
 #   1. surface-sync        counts + enumerative tables match what is on disk
 #   2. skill-integrity     frontmatter <-> body tool parity, anchors, flag parity
@@ -22,6 +22,9 @@
 #  10. hook-battery       the active guard hooks are driven with synthetic events
 #                         and must still go red on the failure each one targets —
 #                         gate 9 proves a hook is wired, this proves it still acts
+#  11. portability        path, encoding, line-ending and git-output cases that
+#                         differ on other machines — Windows simulated through
+#                         ntpath (tests/portability/), each pinning a real defect
 #   +  findings-validator  smoke test, so a review run cannot fail at the last step
 #
 # Every gate runs to completion even if an earlier one fails — you get the whole
@@ -58,6 +61,7 @@ run "repo-hygiene"       python3 "$DIR/check-repo-hygiene.py"
 run "derived-counts"     python3 "$DIR/check-derived-counts.py"
 run "ledger-coverage"    python3 "$DIR/check-ledger-coverage.py"
 run "hook-battery"       bash "$DIR/hook-battery.sh"
+run "portability"        python3 "$DIR/portability-tests.py"
 
 echo ""
 echo "── findings-validator smoke test ──"
