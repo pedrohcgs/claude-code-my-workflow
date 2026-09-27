@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Issue Guard Hook (PreToolUse, Bash, scoped with `"if": "Bash(gh *)"`)
+Issue Guard Hook (PreToolUse, Bash, scoped with `"if": "Bash(gh *)"` and, as a
+second registration, `"if": "Bash(gh.exe *)"`)
 
 Every new GitHub issue has to pass a duplicate check first. The check lives in
 scripts/file-issue.py, which searches open and closed issues several ways and
@@ -28,7 +29,10 @@ writes, which is the one that skips the check by accident.
 
 Cost: the `if` filter (Claude Code >= 2.1.85; compound commands >= 2.1.89)
 spawns this hook only for commands that run `gh`. On an older version the
-filter is ignored and the hook runs on every Bash call, still correctly.
+filter is ignored and the hook runs on every Bash call, still correctly. The
+filter is a prefix match, so `gh.exe` — which Git Bash on Windows runs as
+readily as `gh` — needs its own registration; .claude/settings.json carries
+both rather than dropping the filter and spawning this on every command.
 
 No network and no git: a guard that stalls or crashes fails OPEN, so it decides
 from the command text, plus — only for `gh api graphql` — the query file the
@@ -277,9 +281,17 @@ def gh_positionals(args: list[str]) -> list[str]:
     return out
 
 
+def prog(word: str) -> str:
+    """The program a command word names: the basename on either separator,
+    lower-cased, a trailing `.exe` dropped. On Windows `gh.exe issue create`
+    runs the same gh as `gh issue create`, and was allowed until this read it."""
+    b = re.split(r"[\\/]", word)[-1].lower()
+    return b[:-4] if b.endswith(".exe") else b
+
+
 def creates_issue(words: list[str], cwd: str) -> bool:
     words = strip_prefix(words)
-    if not words or os.path.basename(words[0]) != "gh":
+    if not words or prog(words[0]) != "gh":
         return False
     args = words[1:]
     pos = gh_positionals(args)
@@ -306,14 +318,18 @@ def creates_issue(words: list[str], cwd: str) -> bool:
 
 
 def main() -> int:
+    # Bytes, decoded as UTF-8 — what Claude Code writes. sys.stdin on Windows
+    # decodes a pipe with the ANSI code page instead.
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
     except (json.JSONDecodeError, EOFError, ValueError):
         return 0
     if not isinstance(data, dict) or data.get("tool_name") != "Bash":
         return 0
-    command = (data.get("tool_input") or {}).get("command") or ""
-    if "gh" not in command:
+    # Git Bash drops every carriage return before it splits words, so
+    # `gh issue cr<CR>eate` runs `gh issue create`; shlex would split it in two.
+    command = ((data.get("tool_input") or {}).get("command") or "").replace("\r", "")
+    if "gh" not in command.lower():         # `GH.exe` runs gh on Windows and macOS
         return 0
     try:
         text = strip_heredocs(command)

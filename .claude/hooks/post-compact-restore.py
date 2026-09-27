@@ -48,10 +48,10 @@ def read_pre_compact_state() -> dict | None:
         return None
 
     try:
-        state = json.loads(state_file.read_text())
+        state = json.loads(state_file.read_text(encoding="utf-8"))
         state_file.unlink()  # Clean up after restore
         return state
-    except (json.JSONDecodeError, IOError):
+    except (ValueError, OSError):
         return None
 
 
@@ -65,7 +65,9 @@ def find_active_plan(project_dir: str) -> dict | None:
 
     for plan_file in plan_files[:3]:  # Check last 3 plans
         try:
-            content = plan_file.read_text()
+            # UTF-8, explicitly: Windows' default code page raised on a plan
+            # holding a curly quote, which ended the hook with nothing restored.
+            content = plan_file.read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
 
@@ -163,10 +165,11 @@ def format_restoration_message(
 
 def main() -> int:
     """Main hook entry point."""
-    # Read hook input (not strictly needed but good practice)
+    # Read hook input — bytes, decoded as UTF-8, which is what Claude Code
+    # writes; sys.stdin on Windows decodes a pipe with the ANSI code page.
     try:
-        hook_input = json.load(sys.stdin)
-    except (json.JSONDecodeError, IOError):
+        hook_input = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
+    except (ValueError, OSError):
         hook_input = {}
 
     # Only run on compact/resume sessions
