@@ -73,8 +73,11 @@ echo ""
 
 echo -e "${BOLD}Git configuration:${RESET}"
 if command -v git >/dev/null 2>&1; then
-    git_name=$(git config user.name 2>/dev/null || true)
-    git_email=$(git config user.email 2>/dev/null || true)
+    # THIS script's repository, not the shell's: run from elsewhere, a repo-local
+    # identity read as "not set", or another repository's was reported as this one's
+    # (#171). Outside any repo, git -C still reads the global and system config.
+    git_name=$(git -C "$(dirname "$0")/.." config user.name 2>/dev/null || true)
+    git_email=$(git -C "$(dirname "$0")/.." config user.email 2>/dev/null || true)
     if [ -n "$git_name" ] && [ -n "$git_email" ]; then
         echo -e "  ${GREEN}✓${RESET} git user: $git_name <$git_email>"
         pass=$((pass + 1))

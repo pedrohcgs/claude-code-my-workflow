@@ -15,7 +15,9 @@ SKIP = re.compile(r'(^|/)(CHANGELOG\.md|defect-library\.md|\.git/|node_modules/|
 def surfaces():
     out = []
     for pat in ["*.md", ".claude/**/*.md", "templates/**/*.md", "guide/*.qmd", "docs/*.html", ".github/**/*.md"]:
-        out += glob.glob(os.path.join(ROOT, pat), recursive=True)
+        # glob.escape: a clone at "Paper [2026]" read its own path as a character
+        # class, matched nothing, and passed on 0 surfaces (#171).
+        out += glob.glob(os.path.join(glob.escape(ROOT), pat), recursive=True)
     # SKIP is written with '/', so match it against a '/' path: on Windows relpath
     # gives backslashes, the anchors never matched, and the anti-pattern catalogue
     # was scanned and failed this gate on every clone (#171).
@@ -35,6 +37,10 @@ CHECKS = [
 
 def main():
     files = surfaces()
+    if not files:
+        # Nothing scanned is a broken gate, not a clean tree.
+        print(f"check-staleness: no surfaces found under {ROOT} — nothing was checked", file=sys.stderr)
+        return 2
     hits = []
     for f in files:
         rel = os.path.relpath(f, ROOT).replace(os.sep, "/")
