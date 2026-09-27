@@ -91,18 +91,22 @@ fi
 echo ""
 
 echo -e "${BOLD}Claude Code hooks:${RESET}"
-# Executable bit only. Whether each hook registered in .claude/settings.json — and the
+# Executable bit only, and only where it matters. settings.json runs every .py hook
+# as `python3 <file>`, so their mode is irrelevant (six ship 100644); the .sh hook it
+# runs directly (notify.sh) needs +x. Checking the .py hooks warned on every fresh
+# clone, and the advised chmod then showed up as a mode change in git status.
+# Whether each hook registered in .claude/settings.json — and the
 # pre-commit entry point below — is wired to a file that exists, is invocable, and is
 # tracked by git is checked by scripts/check-ledger-coverage.py (a gate in backtest.sh).
 hook_dir="$(dirname "$0")/../.claude/hooks"
 if [ -d "$hook_dir" ]; then
-    non_exec=$(find "$hook_dir" -maxdepth 1 \( -name "*.py" -o -name "*.sh" \) ! -perm -u+x 2>/dev/null | wc -l | tr -d ' ')
+    non_exec=$(find "$hook_dir" -maxdepth 1 -name "*.sh" ! -perm -u+x 2>/dev/null | wc -l | tr -d ' ')
     if [ "$non_exec" -eq 0 ]; then
         echo -e "  ${GREEN}✓${RESET} All hook scripts are executable"
         pass=$((pass + 1))
     else
         echo -e "  ${YELLOW}⚠${RESET} $non_exec hook script(s) not executable"
-        echo -e "    Fix: chmod +x .claude/hooks/*.py .claude/hooks/*.sh"
+        echo -e "    Fix: chmod +x .claude/hooks/*.sh"
         warn=$((warn + 1))
     fi
 else
@@ -123,8 +127,21 @@ if [ -f "$pchook" ]; then
         warn=$((warn + 1))
     fi
     if command -v git >/dev/null 2>&1; then
-        if [ "$(git config core.hooksPath 2>/dev/null || true)" = ".githooks" ]; then
-            echo -e "  ${GREEN}✓${RESET} core.hooksPath → .githooks (gate active on every commit)"
+        # Ask THIS script's repository, not the one the shell is in, and compare the
+        # folder the setting names, not its text: './.githooks', '.githooks/' and an
+        # absolute path all activate the gate, and were reported as "not activated".
+        # A relative value is relative to the worktree top, as git reads it; --path
+        # expands a leading ~.
+        vs_top="$(git -C "$(dirname "$0")/.." rev-parse --show-toplevel 2>/dev/null || true)"
+        vs_hp="$(git -C "${vs_top:-.}" config --path --get core.hooksPath 2>/dev/null || true)"
+        case "$vs_hp" in
+            "")            vs_hp_abs="" ;;
+            /*|[A-Za-z]:*) vs_hp_abs="$(cd "$vs_hp" 2>/dev/null && pwd -P)" ;;
+            *)             vs_hp_abs="$(cd "$vs_top/$vs_hp" 2>/dev/null && pwd -P)" ;;
+        esac
+        vs_want="$(cd "$vs_top/.githooks" 2>/dev/null && pwd -P)"
+        if [ -n "$vs_top" ] && [ -n "$vs_hp_abs" ] && [ "$vs_hp_abs" = "$vs_want" ]; then
+            echo -e "  ${GREEN}✓${RESET} core.hooksPath → $vs_hp (gate active on every commit)"
         else
             echo -e "  ${YELLOW}⚠${RESET} pre-commit gate not activated — run ./scripts/install-hooks.sh"
             warn=$((warn + 1))

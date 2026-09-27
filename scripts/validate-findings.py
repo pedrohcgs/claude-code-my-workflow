@@ -30,7 +30,7 @@ the closest line of the file. Paths resolve against --root (default: the current
 
 Exit: 0 valid, 1 invalid, 2 internal error.
 """
-import json, sys, os, hashlib, re, subprocess, unicodedata, difflib
+import json, sys, os, hashlib, re, subprocess, unicodedata, difflib, posixpath
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA = os.path.join(ROOT, ".claude", "references", "finding-schema.json")
@@ -38,7 +38,29 @@ SCHEMA = os.path.join(ROOT, ".claude", "references", "finding-schema.json")
 def finding_id(file, line, locus, lens=None):
     # lens is deliberately NOT in the identity: the same defect found by two
     # lenses must dedup to one finding. (Codex review, PR #140.)
+    # Nor is the spelling of the path: a reviewer on Windows writes Slides\deck.tex,
+    # another ./Slides/deck.tex, and one defect got two ids and listed twice (#171).
+    # A canonical Slides/deck.tex keeps the id it always had.
+    file = str(file)
+    if file:
+        file = posixpath.normpath(file.replace("\\", "/"))
     return hashlib.sha1(f"{file}:{line}:{locus}".encode()).hexdigest()
+
+def _utf8_stdio():
+    # Windows hands a pipe the ANSI code page (cp1252, cp932). The filled report
+    # is read back as UTF-8, and a '¶' in a locus or a quoted '—' was written in
+    # the code page, mangled, or crashed the print (#171).
+    for s in (sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
+def _read_json_text(path):
+    # UTF-8 whatever the locale; -sig also takes a BOM, which json.loads rejects.
+    if path:
+        return open(path, encoding="utf-8-sig").read()
+    return sys.stdin.buffer.read().decode("utf-8-sig")
 
 def validate(data, schema):
     errs = []
@@ -162,7 +184,9 @@ def load_text(path):
     """(text, None), or (None, why) when the file cannot be read as text."""
     if path.lower().endswith(".pdf"):
         try:
-            r = subprocess.run(["pdftotext", "-q", path, "-"], capture_output=True, text=True, timeout=60)
+            # -enc: xpdf's pdftotext (common on Windows) writes Latin-1 by default.
+            r = subprocess.run(["pdftotext", "-q", "-enc", "UTF-8", path, "-"], capture_output=True,
+                               encoding="utf-8", errors="replace", timeout=60)
         except (OSError, subprocess.TimeoutExpired):
             return None, "a PDF, and pdftotext (poppler) is not available to read it"
         return (r.stdout, None) if r.returncode == 0 else (None, "a PDF that pdftotext could not read")
@@ -182,7 +206,7 @@ def check_quotes(args):
             print("usage: --check-quotes REPORT.json [--root DIR]", file=sys.stderr); return 2
         root = args[i + 1]; args = args[:i] + args[i + 2:]
     try:
-        data = json.loads(open(args[0]).read() if args else sys.stdin.read())
+        data = json.loads(_read_json_text(args[0] if args else None))
     except Exception as e:
         print(f"validate-findings: cannot read findings: {e}", file=sys.stderr); return 2
     if not isinstance(data, list):
@@ -236,6 +260,7 @@ def check_quotes(args):
     return 0
 
 def main():
+    _utf8_stdio()
     a = sys.argv[1:]
     if a and a[0] == "--check-quotes":
         return check_quotes(a[1:])
@@ -247,11 +272,11 @@ def main():
     if fill:
         a = a[1:]
     try:
-        schema = json.load(open(SCHEMA))
+        schema = json.load(open(SCHEMA, encoding="utf-8"))
     except Exception as e:
         print(f"validate-findings: cannot read schema: {e}", file=sys.stderr); return 2
     try:
-        raw = open(a[0]).read() if a else sys.stdin.read()
+        raw = _read_json_text(a[0] if a else None)
         data = json.loads(raw)
     except json.JSONDecodeError as e:
         print(f"validate-findings: invalid JSON: {e}", file=sys.stderr); return 1
