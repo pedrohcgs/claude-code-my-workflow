@@ -5,14 +5,16 @@ Two kinds of case:
 
   * NATIVE — the real hook run as a subprocess with a PreToolUse event on stdin
     and CLAUDE_PROJECT_DIR set, exactly as scripts/hook-battery.sh fires it. The
-    backslash fold, the CR strip, the `.exe`/case fold on program names, the
-    Unicode casefold, the stdin decoding and the scope half are all
-    unconditional, so they are pinned here on Linux and macOS alike.
+    CR strip, the `.exe`/case fold on program names, the Unicode casefold, the
+    stdin decoding and the scope half are all unconditional, so they are pinned
+    here on Linux and macOS alike — and so is the ABSENCE of the backslash
+    form, which here would misread an escaped `sed -i` script as a path.
   * WINDOWS — the real hook loaded through _winsim (os.path = ntpath) and its
     real main() driven with a Bash event. The project is a real fixture
     directory reached through its Windows spelling (C:\\...), so the scope half
-    resolves on disk. MSYS drive paths (`/c/...`) and the `-C` composition only
-    exist on Windows, so they are pinned here.
+    resolves on disk. A backslash as a separator, NTFS stream suffixes, MSYS
+    drive paths (`/c/...`) and the `-C` composition only exist on Windows, so
+    they are pinned here.
 
 HOOK_DIR (the same variable hook-battery.sh reads) points the suite at another
 copy of the hooks — that is how the pre-fix code is shown to fail these cases.
@@ -26,6 +28,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import types
 import unicodedata
 import unittest
 
@@ -115,16 +118,27 @@ def fire(command, cwd, project, env=None, event_extra=None):
 # (id, fixture, command, expect_deny, env) — command may hold {P} {T} for paths;
 # cwd and CLAUDE_PROJECT_DIR are the fixture.
 NATIVE = [
-    # -- backslash separators (rot-backslash-separators, rotg-backslash-token-bypass,
-    #    rot-windows-backslash-and-msys-paths, msys-path-spellings-bypass-root-of-trust)
-    ("bs_quoted_dir",       "proj", r"rm -rf '.claude\hooks'", True, None),
-    ("bs_quoted_redirect",  "proj", r"echo x > '.claude\settings.json'", True, None),
-    ("bs_mixed",            "proj", r"rm -rf '.claude/hooks\git-guardrails.py'", True, None),
-    ("bs_githooks",         "proj", r"mv '.githooks\pre-commit' /tmp/x", True, None),
-    ("bs_git_dash_c",       "proj", r"git -C '.claude\hooks' rm -f git-guardrails.py", True, None),
+    # -- a backslash is NOT a separator here (the Windows twins are win_bs_*).
+    #    The first #171 cut read it as one everywhere, which denied the ordinary
+    #    escaped `sed -i` / `perl -pi` script (rot-2 fix-up); on POSIX the `\`
+    #    is part of the name, so these name no protected file.
+    ("bs_posix_name_char",  "proj", r"rm -rf '.claude\hooks'", False, None),
+    ("bs_posix_redirect",   "proj", r"echo x > '.claude\settings.json'", False, None),
+    ("bs_sed_escaped_dot",  "proj", r"sed -i '' 's/\.githooks/githooks/' docs/x.md", False, None),
+    ("bs_sed_escaped_to",   "proj", r"sed -i '' 's/scripts\/hooks/.claude\/hooks/g' README.md",
+     False, None),
+    ("bs_sed_escaped_both", "proj",
+     r"sed -i 's/\.claude\/hooks\/old\.py/.claude\/hooks\/new.py/g' docs/guide.md", False, None),
+    ("bs_perl_escaped",     "proj", r"perl -pi -e 's/old\/dir/.claude\/settings.json/g' README.md",
+     False, None),
+    ("bs_sed_escaped_gnu",  "proj", r"sed -i 's/foo/.claude\/hooks/' notes.txt", False, None),
+    ("bs_ctrl_sed_hash",    "proj", r"sed -i '' 's#scripts/hooks#.claude/hooks#g' README.md",
+     False, None),
+    ("bs_ctrl_sed_print",   "proj", r"sed -n 's/x/.claude\/hooks/p' README.md", False, None),
     ("bs_ctrl_unquoted",    "proj", r"echo x > .claude\settings.json", False, None),
     ("bs_ctrl_read",        "proj", r"cat '.claude\hooks\git-guardrails.py'", False, None),
     ("bs_ctrl_rules",       "proj", r"rm -rf '.claude\rules'", False, None),
+    ("stream_ctrl_posix",   "proj", "echo x > '.claude/settings.json::$DATA'", False, None),
     # -- a CR inside a word (carriage-return-in-word-bypasses-guards)
     ("cr_rm",               "proj", "rm -rf .clau\rde/hooks", True, None),
     ("cr_redirect",         "proj", "echo CLOBBERED > .claude/settings.js\ron", True, None),
@@ -283,16 +297,32 @@ WINDOWS = [
     ("win_bs_abs",          r"rm -rf '{W}\.claude\hooks'", True),
     ("win_bs_redirect",     r"echo x > '.claude\settings.json'", True),
     ("win_bs_githooks",     r"rm -f '.githooks\pre-commit'", True),
+    ("win_bs_githooks_mv",  r"mv '.githooks\pre-commit' /tmp/x", True),
+    ("win_bs_mixed",        r"rm -rf '.claude/hooks\git-guardrails.py'", True),
+    ("win_bs_git_dash_c",   r"git -C '.claude\hooks' rm -f git-guardrails.py", True),
     ("win_bs_envvar",       r'rm -rf "$CLAUDE_PROJECT_DIR\.claude\hooks"', True),
+    # NTFS default streams: the file's contents, the directory itself (rot-2)
+    ("win_stream_data",     r"cp /dev/null '.claude\settings.json::$DATA'", True),
+    ("win_stream_redirect", r"echo x > '.claude\settings.json::$DATA'", True),
+    ("win_stream_abs",      r"echo x > '{W}\.claude\settings.json::$DATA'", True),
+    ("win_stream_drive_fwd", "echo x > 'C:{M}/.claude/settings.json::$data'", True),
+    ("win_stream_i30",      r"rm -rf '.claude\hooks:$I30:$INDEX_ALLOCATION'", True),
+    ("win_stream_index",    r"rm -rf '.githooks::$INDEX_ALLOCATION'", True),
     ("win_msys",            "rm -rf /c{M}/.claude/hooks", True),
     ("win_msys_redirect",   "echo x > /c{M}/.claude/settings.json", True),
     ("win_msys_upper",      "rm -rf /C{M}/.claude/hooks", True),
     ("win_cygdrive",        "rm -rf /cygdrive/c{M}/.claude/hooks", True),
+    ("win_proc_cygdrive",   "rm -rf /proc/cygdrive/c{M}/.claude/hooks", True),
+    ("win_proc_cygdrive_redirect", "echo x > /proc/cygdrive/c{M}/.claude/settings.json", True),
     ("win_msys_git_dash_c", "git -C /c{M}/.claude/hooks rm -f git-guardrails.py", True),
     ("win_dash_c_compose",  "git -C .claude -C hooks rm -f git-guardrails.py", True),
     ("win_dash_c_msys",     "git -C C:/x -C /c{M}/.claude rm -rf hooks", True),
     ("win_exe_full_path",   r"'C:\Program Files\Git\usr\bin\rm.exe' -rf .claude/hooks", True),
     ("win_ctrl_other_msys", "rm -rf /c{OM}/.claude/hooks", False),
+    ("win_ctrl_other_proc", "rm -rf /proc/cygdrive/c{OM}/.claude/hooks", False),
+    ("win_ctrl_stream_rules", r"echo x > '.claude\rules\x.md::$DATA'", False),
+    ("win_ctrl_stream_read", r"cat '.claude\settings.json::$DATA'", False),
+    ("win_ctrl_stream_docs", r"echo x > 'docs\notes.md::$DATA'", False),
     ("win_ctrl_other_bs",   r"rm -rf '{O}\.claude\hooks'", False),
     ("win_ctrl_read",       r"cat '.claude\hooks\git-guardrails.py'", False),
     ("win_ctrl_build",      r"rm -rf 'build\out'", False),
@@ -330,6 +360,20 @@ class WindowsTest(unittest.TestCase):
         m._PROJECT = m._CWD = "C:\\"
         self.assertTrue(m.in_project("C:/.claude/settings.json"))
         self.assertTrue(m.in_project(".claude\\hooks"))
+
+    def test_win_msys_python_reads_backslash(self):
+        # rot-2: the Cygwin/MSYS runtime's own Python has os.sep == "/", yet `\`
+        # is a separator to the shell it serves; this machine's Python (Linux,
+        # macOS) must not read it as one.
+        m = _load_native()
+        here = os.sep == "\\" or sys.platform in ("cygwin", "msys")
+        for platform, expect in (("msys", True), ("cygwin", True), (sys.platform, here)):
+            m.sys = types.SimpleNamespace(platform=platform)
+            self.assertEqual(m.matches_root_of_trust(".claude\\hooks"), expect, platform)
+            self.assertEqual(m.matches_root_of_trust(".claude\\settings.json::$DATA"),
+                             expect, platform)
+            self.assertEqual(m.matches_root_of_trust("s/\\.githooks/githooks/"),
+                             expect, platform)
 
 
 for _id, _cmd, _deny in WINDOWS:

@@ -229,9 +229,11 @@ continuation splice was corrected to DELETE the backslash-newline the way the
 shell does rather than substitute a space for it. The WINDOWS SPELLINGS joined
 the caught set at #171 (2026-09-27), measured under an ntpath simulation of
 this file because Git Bash is the Bash tool's shell there: a BACKSLASH as the
-separator (`'.claude\hooks'`, `C:\…\.claude\hooks`), a Git Bash DRIVE path
-(`/c/…`), two `-C` values composed with `\` (#151), a program named by its
-real file name (`rm.exe`, `GIT.EXE`), a CR inside a word (MSYS bash deletes
+separator (`'.claude\hooks'`, `C:\…\.claude\hooks` — read so only where it is
+one, not on macOS or Linux), an NTFS default-stream suffix
+(`settings.json::$DATA`), a Git Bash DRIVE path (`/c/…`, `/proc/cygdrive/c/…`),
+two `-C` values composed with `\` (#151), a program named by its real file
+name (`rm.exe`, `GIT.EXE`), a CR inside a word (MSYS bash deletes
 it), and an event decoded with the ANSI code page instead of UTF-8. So did two
 spellings that are not Windows-only: a name APFS folds and `lower()` does not
 (`hookſ`), and a project directory spelled in another case, another Unicode
@@ -323,19 +325,23 @@ BOUNDARY, not as a defect:
     table lookup now casefolds the name and drops `.exe`, see `_prog`.)
   - WINDOWS, beyond the spellings closed at #171, none of it measured on a real
     Windows machine (the #171 work used an ntpath simulation):
-      * the PowerShell tool. This hook is registered for `Bash` and returns at
-        once for any other tool, so on native Windows a PowerShell
-        `Remove-Item .claude\hooks -Recurse` is never seen here at all. What
-        covers that tool is the permission layer in `.claude/settings.json`,
-        not this file.
+      * the PowerShell tool, which NOTHING in this repository guards. This hook
+        is registered for `Bash` and returns at once for any other tool, so on
+        native Windows a PowerShell `Remove-Item .claude\hooks -Recurse` is
+        never seen here at all, and `.claude/settings.json` has no rule for
+        that tool (its `deny` list is empty). In default mode the only barrier
+        is the permission prompt; bypass and auto mode, the modes sessions here
+        often run in, do not show it.
       * a DRIVE-RELATIVE path (`C:.claude\hooks`): its first segment reads as
         `C:.claude`, which is not a protected name.
       * Win32 NAME ALIASING — an 8.3 short name (`CLAUDE~1`, `GITHOO~1`), a
         trailing dot or space that Win32 strips from a component — and NTFS's
         own upcase table, which is not Unicode casefold (the dotless `ı`
         uppercases to `I`, so `settıngs.json` may name `settings.json` there
-        while casefold leaves it alone). Each would be a name this lexical scan
-        does not recognise; none has been probed.
+        while casefold leaves it alone) — and a stream suffix on a directory in
+        the MIDDLE of a path (`.claude::$INDEX_ALLOCATION\hooks`; the suffix on
+        the LAST segment is read, see `matches_root_of_trust`). Each would be a
+        name this lexical scan does not recognise; none has been probed.
   - a GLOB whose expansion depends on a shell OPTION this scan does not model
     (r15, the residual left by the glob fix). A bare wildcard segment does not
     match a DOT-name because of an EXPLICIT rule in `_segment_matches` — a
@@ -633,6 +639,13 @@ def _matches_one(path: str) -> bool:
     return False
 
 
+# The unnamed stream of a file (`::$DATA`) or of a directory's index
+# (`::$INDEX_ALLOCATION`, `:$I30:$INDEX_ALLOCATION`) — the object itself. Read
+# only where `\` is a separator; see `matches_root_of_trust`.
+_NTFS_DEFAULT_STREAM = re.compile(
+    r"(?:::\$DATA|:(?:\$I30)?:\$INDEX_ALLOCATION)(?=/*$)", re.IGNORECASE)
+
+
 def matches_root_of_trust(token: str) -> bool:
     """PATTERN half: does this token spell a gate-defining path at all?
     Says nothing about WHICH tree it is in — see in_project().
@@ -648,12 +661,35 @@ def matches_root_of_trust(token: str) -> bool:
     spellings DENIED. The token is now ALSO tested with every `\\` read as `/`.
     That is a second FORM, not a rewrite of the first, so no deny that stands
     today can be lost (a rewrite in `normalize` would have dropped the glob
-    class in `".claude/hook[\\s]"`). It is unconditional, like the case fold:
-    on POSIX it costs a false DENY only for a QUOTED name that really contains
-    a backslash, which is the direction this guard errs in."""
+    class in `".claude/hook[\\s]"`).
+
+    ONLY WHERE A BACKSLASH IS A SEPARATOR — native Windows Python (`os.sep`) or
+    the Cygwin/MSYS runtime's own Python — NOT unconditionally like the case
+    fold. The first cut was unconditional, and its docstring said the POSIX
+    cost was a false DENY for a quoted name that really contains a backslash.
+    That was wrong: the in-place branch of `scan_segment` tests every operand
+    of `sed -i` / `perl -pi`, the SCRIPT included, and escaping a dot or a
+    slash there is the ordinary idiom. Measured 2026-09-27 on macOS:
+    `sed -i '' 's/\\.githooks/githooks/' docs/x.md` and
+    `perl -pi -e 's/old\\/dir/.claude\\/settings.json/g' README.md` ALLOWED at
+    08a7641 and DENIED under the unconditional form. On Windows the same
+    scripts still deny; that is the price of `\\` being a separator there, and
+    it is paid in this guard's direction.
+
+    NTFS DEFAULT STREAMS, on the same platforms. `settings.json::$DATA` is the
+    file's unnamed data stream — its contents — and `hooks::$INDEX_ALLOCATION`
+    (`hooks:$I30:$INDEX_ALLOCATION`) is the directory itself. Measured
+    2026-09-27 under the ntpath simulation: `echo x >
+    '.claude\\settings.json::$DATA'` and `rm -rf
+    '.claude\\hooks:$I30:$INDEX_ALLOCATION'` were ALLOWED (silent), their plain
+    twins DENIED. The Windows form drops that suffix from the last segment.
+    Whether Git Bash's runtime hands such a name to NTFS unchanged has not been
+    run on a real Windows machine; dropping it errs toward the deny."""
     forms = [token]
-    if "\\" in token:
-        forms.append(token.replace("\\", "/"))
+    if os.sep == "\\" or sys.platform in ("cygwin", "msys"):
+        win = _NTFS_DEFAULT_STREAM.sub("", token.replace("\\", "/"))
+        if win != token:
+            forms.append(win)
     return any(_matches_one(alt) for form in forms
                for alt in _brace_expand(normalize(form)))
 
@@ -707,11 +743,15 @@ def _git_root(start: str) -> str | None:
 # of the shipped guard: `rm -rf /c/<proj>/.claude/hooks` and
 # `echo x > /c/<proj>/.claude/settings.json` ALLOWED (silent) while the
 # `C:/<proj>/…` spelling DENIED. A no-op wherever `\` is not the separator.
-_MSYS_DRIVE = re.compile(r"^(?:/cygdrive)?/([A-Za-z])(?=/|$)")
+# `/proc/cygdrive` is the runtime's own link to the cygdrive prefix, present
+# whatever that prefix is (`/` in Git Bash, so `/proc/cygdrive/c/…` is `/c/…`);
+# it was ALLOWED (silent) under the same simulation after `/cygdrive/c/…` denied.
+_MSYS_DRIVE = re.compile(r"^(?:/proc/cygdrive|/cygdrive)?/([A-Za-z])(?=/|$)")
 
 
 def _native(p: str) -> str:
-    """`/c/x` (or `/cygdrive/c/x`) -> `C:/x` on Windows; unchanged elsewhere."""
+    """`/c/x` (or `/cygdrive/c/x`, `/proc/cygdrive/c/x`) -> `C:/x` on Windows;
+    unchanged elsewhere."""
     if os.sep != "\\":
         return p
     m = _MSYS_DRIVE.match(p)
@@ -1763,9 +1803,10 @@ def scan(raw: str, depth: int = 0) -> tuple[str, str] | None:
                     return hit
     for m in _REDIR.finditer(strip_quoted(cmd)):
         # #171: unquoted the way bash (and the tokenizer path) unquotes it. The
-        # backslash form in `matches_root_of_trust` would otherwise read the
-        # RAW `> .claude\settings.json` as the protected file, while bash
-        # strips that `\` and writes `.claudesettings.json`: a false deny.
+        # backslash form in `matches_root_of_trust` would otherwise read (on
+        # Windows) the RAW `> .claude\settings.json` as the protected file,
+        # while bash strips that `\` and writes `.claudesettings.json`: a false
+        # deny.
         target = unquote(m.group(1))
         if _is_fd_dup_target(target):
             continue                    # `>&2` / `2>&1` — a descriptor, not a path
