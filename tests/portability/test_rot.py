@@ -64,9 +64,14 @@ def setUpModule():
     FX["other"] = _mkproj(os.path.join(_T, "other"))
     FX["accent"] = _mkproj(os.path.join(_T, "proj-\u00e9"))   # NFC é
     FX["nfd"] = _mkproj(os.path.join(_T, unicodedata.normalize("NFD", "\u00e9t\u00e9")))
+    # the Windows-simulated project and a second tree beside it
+    FX["win"] = _mkproj(os.path.join(_T, "win", "proj"))
+    FX["winother"] = _mkproj(os.path.join(_T, "win", "other"))
     # a project whose `.claude` is a link to a shared config dir outside it
     shared = _mkproj(os.path.join(_T, "shared"))
     FX["shared"] = shared
+    if not _winsim.CAN_SYMLINK:
+        return       # #171 F4: the link fixtures' cases skip; the rest of the file runs
     FX["symproj"] = os.path.join(_T, "symproj")
     os.makedirs(FX["symproj"])
     os.symlink(os.path.join(shared, ".claude"), os.path.join(FX["symproj"], ".claude"))
@@ -82,9 +87,6 @@ def setUpModule():
     # an ALIAS spelling of the symlinked project (CLAUDE_PROJECT_DIR through a link)
     FX["alias"] = os.path.join(_T, "alias")
     os.symlink(FX["symproj"], FX["alias"])
-    # the Windows-simulated project and a second tree beside it
-    FX["win"] = _mkproj(os.path.join(_T, "win", "proj"))
-    FX["winother"] = _mkproj(os.path.join(_T, "win", "other"))
 
 
 def tearDownModule():
@@ -221,6 +223,7 @@ class NativeTest(unittest.TestCase):
                    {"transcript_path": "C:\\Users\\\u00c1lvaro\\.claude\\t.jsonl"})
         self.assertIn(DENY, out)
 
+    @_winsim.needs_symlink
     def test_scope_alias_project_dir(self):
         # rot-symlinked-claude-dir, the verifier's gap: CLAUDE_PROJECT_DIR spelled
         # through an alias AND `.claude` linked out of the tree.
@@ -255,8 +258,23 @@ class NativeTest(unittest.TestCase):
         self.assertIn(DENY, fire(f"rm -rf {fl}/.claude/hooks", FX["proj"], FX["proj"]))
 
 
+# #171 F4: where the guard reads `\` as a separator and drops an NTFS stream suffix (its
+# own test, root-of-trust-guard.py: os.sep, or a Cygwin/MSYS runtime) these POSIX
+# expectations do not hold; the win_bs_* / win_stream_* cases pin that host instead.
+BACKSLASH_SEPARATES = os.sep == "\\" or sys.platform in ("cygwin", "msys")
+POSIX_RULES = {"bs_posix_name_char", "bs_posix_redirect", "bs_sed_escaped_dot",
+               "bs_sed_escaped_to", "bs_sed_escaped_both", "bs_perl_escaped",
+               "bs_sed_escaped_gnu", "stream_ctrl_posix"}
+posix_rules = unittest.skipIf(BACKSLASH_SEPARATES, "a backslash is a separator on this host; "
+                                                   "the win_bs_* / win_stream_* cases pin it")
+
 for _id, _fx, _cmd, _deny, _env in NATIVE:
-    setattr(NativeTest, f"test_{_id}", _native_case(_fx, _cmd, _deny, _env))
+    _case = _native_case(_fx, _cmd, _deny, _env)
+    if _fx.startswith("sym"):                       # a fixture made of symlinks
+        _case = _winsim.needs_symlink(_case)
+    if _id in POSIX_RULES:
+        _case = posix_rules(_case)
+    setattr(NativeTest, f"test_{_id}", _case)
 
 
 # ---- Windows: the real main() under ntpath -----------------------------------

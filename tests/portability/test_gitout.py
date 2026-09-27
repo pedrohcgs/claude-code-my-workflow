@@ -4,7 +4,8 @@ The gates read git's file lists, and git hands back something other than the fil
 name more often than it looks: without -z it C-quotes every non-ASCII, quote or
 backslash name; with text=True Python decodes it in the Windows code page; relpath
 and os.path.join answer in backslashes on Windows; a rename is status R, not M.
-Each case below pins one of those: it fails on 08a7641 and passes after the fix.
+A case below either pins one of those (it fails on 08a7641, or on the first-cut fix
+it corrects, and passes after) or is a control that passes before and after.
 
 Fixture repositories are built in temp directories with git's own environment
 scrubbed (the suite also runs inside the pre-commit hook, where GIT_INDEX_FILE
@@ -14,7 +15,6 @@ is at git's default.
 import contextlib
 import importlib.util
 import io
-import locale
 import os
 import pathlib
 import shutil
@@ -44,8 +44,8 @@ GOOD_R = "x <- 1\ny <- x + 1\n"
 # 3.11; before that the function does not exist and there is nothing to patch. The
 # fix decodes git's bytes as UTF-8 itself on every version: CI (3.12) keeps the pin,
 # and macOS's /usr/bin/python3 (3.9) skips these cases instead of erroring the gate.
-needs_getencoding = unittest.skipUnless(hasattr(locale, "getencoding"),
-                                        "locale.getencoding is new in Python 3.11")
+# One definition for the suite: test_gates skips on the same probe.
+needs_getencoding = _winsim.needs_getencoding
 
 
 def git_env(**extra):
@@ -500,6 +500,7 @@ class PreCommitQualityGate(unittest.TestCase):
         self.assertIn("scripts/gone.R", out)
 
     @unittest.skipIf(os.name == "nt", "a symlink needs privileges on Windows")
+    @_winsim.needs_symlink
     def test_dangling_symlink_is_named_as_a_symlink(self):
         # The link IS in the working tree: "missing from the working tree" sent the
         # user looking for a deleted file that was never deleted.

@@ -9,6 +9,9 @@ Windows-shaped path back to the macOS filesystem:  C:\\a\\b  <->  /a/b.
 Drive C: is mapped to the POSIX root, so the real clone is reachable as
 C:\\private\\tmp\\...\\repo  and every os.walk / relpath / join produces the
 backslash-separated strings real Windows Python produces.
+
+It also holds the host-capability skips every test file shares (last section): a
+case whose mechanism this Python or this host lacks is skipped with its reason.
 """
 import builtins
 import importlib.util
@@ -484,3 +487,43 @@ def _sffl(name, location=None, *a, **k):
 
 
 _ilu.spec_from_file_location = _sffl
+
+
+# ---- what this host can do ---------------------------------------------------
+# A case that leans on a mechanism the host lacks does not fail there: it passes,
+# and pins nothing. So it SKIPS, and the gate's verdict line names the reason.
+import locale as _locale
+import shutil as _shutil
+import tempfile as _tempfile
+import unittest as _unittest
+
+# #171 F3: below 3.10, `-W error::EncodingWarning` is "Invalid -W option ignored" and
+# -X warn_default_encoding does nothing, so a locale-default read runs as before.
+needs_encoding_warning = _unittest.skipUnless(
+    hasattr(builtins, "EncodingWarning"),
+    "EncodingWarning and -X warn_default_encoding are new in Python 3.10; "
+    "below it the strict flags turn nothing into an error")
+# ...and below 3.11 subprocess decodes text output without asking locale.getencoding,
+# so patching it (the Windows ANSI code page) changes nothing.
+needs_getencoding = _unittest.skipUnless(
+    hasattr(_locale, "getencoding"),
+    "locale.getencoding is new in Python 3.11; below it subprocess text decoding "
+    "cannot be pointed at a Windows code page")
+
+
+def _can_symlink():
+    d = _tempfile.mkdtemp(prefix="winsim-symlink-")
+    try:
+        _os.symlink("target", _os.path.join(d, "link"))
+        return True
+    except (OSError, NotImplementedError, AttributeError):
+        return False
+    finally:
+        _shutil.rmtree(d, ignore_errors=True)
+
+
+# #171 F4: Windows refuses os.symlink without Developer Mode or elevation (WinError
+# 1314); one unguarded call in a setUpModule errored every case in its file.
+CAN_SYMLINK = _can_symlink()
+needs_symlink = _unittest.skipUnless(
+    CAN_SYMLINK, "os.symlink is refused on this host (Windows needs Developer Mode or elevation)")

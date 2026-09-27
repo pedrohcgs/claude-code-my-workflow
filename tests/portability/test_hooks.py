@@ -252,6 +252,7 @@ class GuardStdinCodePage(_Tmp):
         env = clean_env(self.home, PYTHONUTF8="0", PYTHONIOENCODING="cp1252:surrogateescape")
         self.assertEqual(decision(fire("git-guardrails.py", ev, env)[0]), "deny")
 
+    @_winsim.needs_encoding_warning
     def test_status_read_is_not_locale_decoded(self):
         """`git status` output decoded with the locale: on Windows with quotePath off,
         a name the code page cannot decode raised, and the guard read that as an
@@ -492,6 +493,7 @@ class CompactionUtf8(_Tmp):
     default-encoding I/O made an error, which trips on every such call on any OS."""
     STRICT = ("-X", "warn_default_encoding", "-W", "error::EncodingWarning")
 
+    @_winsim.needs_encoding_warning
     def test_state_survives_compaction(self):
         proj = self.path("proj")
         self.write("proj/quality_reports/plans/2026-09-27_x.md",
@@ -545,6 +547,7 @@ class ContextMonitorStdin(_Tmp):
             self.assertEqual(f.read(), "100")
         self.assertIn("Context ~100%", out)
 
+    @_winsim.needs_encoding_warning
     def test_cache_io_is_utf8(self):
         tr = self.write("t.jsonl", "x" * 1000)
         env = clean_env(self.home, CLAUDE_PROJECT_DIR=self.tmp, CLAUDE_CONTEXT_WINDOW_TOKENS="250")
@@ -566,6 +569,7 @@ class SessionHandoffStdin(_Tmp):
         os.utime(ck, (t, t))
         return proj
 
+    @_winsim.needs_encoding_warning
     def test_state_io_is_utf8(self):
         env = clean_env(self.home, CLAUDE_PROJECT_DIR=self.checkpoint())
         start = {"hook_event_name": "SessionStart", "source": "startup", "session_id": "s1"}
@@ -599,6 +603,7 @@ class OpenIssuesGhOutput(_Tmp):
         os.chmod(gh, os.stat(gh).st_mode | stat.S_IXUSR)
         return fake
 
+    @_winsim.needs_encoding_warning
     def test_curly_quote_title_is_listed(self):
         fake = self.fake_gh("Table 3 “SEs” disagree")
         env = clean_env(self.home, CLAUDE_ISSUES_AT_START="1",
@@ -656,6 +661,7 @@ class LogReminderNames(_Tmp):
         self.assertNotIn("\\303", log)
         self.assertNotIn("- `README.md`", log)
 
+    @_winsim.needs_encoding_warning
     def test_git_output_is_not_decoded_with_the_locale(self):
         log = self.run_hook(("-X", "warn_default_encoding", "-W", "error::EncodingWarning"))
         self.assertIsNotNone(log, "no session log written")
@@ -678,14 +684,15 @@ class NotifyWithoutJqAndOnWindows(_Tmp):
     def tools(self, uname, with_jq=False):
         d = self.path("tools-" + uname.split("_")[0])
         os.makedirs(d, exist_ok=True)
-        for t in ("cat", "tr"):
-            os.symlink(shutil.which(t), os.path.join(d, t))
-        if with_jq:
-            os.symlink(shutil.which("jq"), os.path.join(d, "jq"))
         self.log = self.path("notifier.log")
-        for name, body in (("uname", f"echo {uname}"),
-                           ("notify-send", f'printf "%s|" "$@" >> "{self.log}"'),
-                           ("osascript", f'printf "%s|" "$@" >> "{self.log}"')):
+        # The real tools go in as shims, not symlinks: Windows refuses os.symlink without
+        # Developer Mode (#171 F4), and a copied MSYS cat.exe will not start without its
+        # msys-2.0.dll beside it.
+        real = [(t, f"exec {shlex.quote(shutil.which(t))} \"$@\"")
+                for t in ("cat", "tr") + (("jq",) if with_jq else ())]
+        for name, body in real + [("uname", f"echo {uname}"),
+                                  ("notify-send", f'printf "%s|" "$@" >> "{self.log}"'),
+                                  ("osascript", f'printf "%s|" "$@" >> "{self.log}"')]:
             p = os.path.join(d, name)
             with open(p, "w", encoding="utf-8") as f:
                 f.write("#!/bin/sh\n" + body + "\n")
