@@ -298,33 +298,6 @@ fsub.check_call = _check_call
 fsub.Popen = _Popen
 
 
-def load(path, name=None, argv=None, as_main=False):
-    """Import the real module at `path` with os -> fake (ntpath)."""
-    path = _os.path.abspath(path)
-    name = name or ("__main__" if as_main else "mod_" + _os.path.basename(path).replace("-", "_").replace(".", "_"))
-    spec = importlib.util.spec_from_file_location(name, path)
-    mod = importlib.util.module_from_spec(spec)
-    mod.__file__ = to_win(path)
-    mod.open = fake_open
-    saved = {k: sys.modules.get(k) for k in ("os", "os.path", "subprocess")}
-    sys.modules["os"] = fake
-    sys.modules["os.path"] = nt
-    sys.modules["subprocess"] = fsub
-    old_argv = sys.argv
-    if argv is not None:
-        sys.argv = argv
-    try:
-        spec.loader.exec_module(mod)
-    finally:
-        for k, v in saved.items():
-            if v is None:
-                sys.modules.pop(k, None)
-            else:
-                sys.modules[k] = v
-        sys.argv = old_argv
-    return mod
-
-
 def run_main(path, argv=None, stdin=None, cwd=None):
     """Run a script as __main__ under simulation; returns (exit, stdout, stderr)."""
     out, err = io.StringIO(), io.StringIO()

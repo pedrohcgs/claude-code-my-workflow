@@ -29,7 +29,7 @@ except (AttributeError, ValueError):
     pass
 
 def tracked(*opts):
-    """Every path in git's index, '/'-separated and NFC; None when git cannot say.
+    """Every path in git's index, '/'-separated in exact index bytes; None when git cannot say.
     -z, because without it git quotes a non-ASCII name ("an\\303\\241lise.md")."""
     try:
         r = subprocess.run(["git", "-C", ROOT, "ls-files", "-z", *opts], capture_output=True, timeout=60)
@@ -37,14 +37,16 @@ def tracked(*opts):
         return None
     if r.returncode != 0:
         return None
-    return {NFC(f) for f in r.stdout.decode("utf-8", "surrogateescape").split("\0") if f} or None
+    return {f for f in r.stdout.decode("utf-8", "surrogateescape").split("\0") if f} or None
 
 TRACKED = tracked()
+TRACKED_NFC = {NFC(f) for f in TRACKED or ()}
 TRACKED_DIRS = {"."}
 for t in TRACKED or ():
     parts = t.split("/")
     TRACKED_DIRS.update("/".join(parts[:i]) for i in range(1, len(parts)))
 FOLDED = {p.lower(): p for p in (TRACKED or set()) | TRACKED_DIRS}
+FOLDED_NFC = {NFC(p).lower(): p for p in (TRACKED or set()) | TRACKED_DIRS}
 
 def relp(p):
     return os.path.relpath(p, ROOT).replace(os.sep, "/")
@@ -53,7 +55,7 @@ def resolves(full):
     if TRACKED is None:
         return os.path.exists(full)
     try:
-        r = NFC(relp(full))
+        r = relp(full)
     except ValueError:              # Windows: another drive, so never in the repository
         return False
     return r in TRACKED or r in TRACKED_DIRS
@@ -63,13 +65,15 @@ def unresolved(full):
     Windows the disk also has README.MD when README.md is tracked."""
     if TRACKED is not None:
         try:
-            r = NFC(relp(full))
+            r = relp(full)
         except ValueError:
             return "missing file"
         if r == ".." or r.startswith("../"):
             return "outside the repository"
         if r.lower() in FOLDED:
             return f"letter case differs from the tracked {FOLDED[r.lower()]}"
+        if NFC(r).lower() in FOLDED_NFC:
+            return f"Unicode form or letter case differs from the tracked {FOLDED_NFC[NFC(r).lower()]}"
         if os.path.exists(full):
             return "not tracked by git (git add it; a clone and GitHub do not have it)"
     return "missing file"
@@ -87,9 +91,9 @@ if not SCAN:
 # --others --exclude-standard names untracked, unignored files, and a nested
 # checkout (a worktree under .claude/) only as its directory, so its copies of
 # these docs are not counted as the repository's.
-UNTRACKED = (tracked("--others", "--exclude-standard") or set()) if TRACKED is not None else set()
-UNSCANNED = sorted(NFC(relp(f)) for f in set(SCAN) if NFC(relp(f)) in UNTRACKED)
-SCAN = sorted(f for f in set(SCAN) if TRACKED is None or NFC(relp(f)) in TRACKED)
+UNTRACKED_NFC = {NFC(f) for f in (tracked("--others", "--exclude-standard") or set())} if TRACKED is not None else set()
+UNSCANNED = sorted(NFC(relp(f)) for f in set(SCAN) if NFC(relp(f)) in UNTRACKED_NFC)
+SCAN = sorted(f for f in set(SCAN) if TRACKED is None or NFC(relp(f)) in TRACKED_NFC)
 
 def strip_code(t):
     t = re.sub(r'```.*?```', lambda m: "\n"*m.group(0).count("\n"), t, flags=re.S)

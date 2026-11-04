@@ -38,17 +38,38 @@ cd "$REPO_ROOT" || exit 2
 _STASHED=0
 # -z: without it git C-quotes a non-ASCII, quote or backslash name
 # (".claude/hooks/verifica\303\247\303\243o.py"), and the battery trigger below never
-# matched a staged hook spelt that way.
-_staged="$(git diff --cached --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
-_unstaged="$(git diff --name-only -z 2>/dev/null | tr '\0' '\n' | sort)"
-_overlap="$(comm -12 <(printf '%s\n' "$_staged") <(printf '%s\n' "$_unstaged") | grep -c . || true)"
+# matched a staged hook spelt that way. Read NUL-delimited directly (not via
+# `tr '\0' '\n'`) so paths containing embedded newlines stay intact.
+_STAGED_ALL=()
+_HOOK_STAGED=0
+while IFS= read -r -d '' _f; do
+    _STAGED_ALL+=("$_f")
+    case "$_f" in
+        .claude/hooks/*|.githooks/*|scripts/hook-battery.sh)
+            _HOOK_STAGED=1 ;;
+        .claude/settings*.json)
+            case "${_f#.claude/}" in */*) ;; *) _HOOK_STAGED=1 ;; esac ;;
+    esac
+done < <(git diff --cached --name-only -z 2>/dev/null)
+
+_UNSTAGED_ALL=()
+_overlap=0
+while IFS= read -r -d '' _u; do
+    _UNSTAGED_ALL+=("$_u")
+    for _s in ${_STAGED_ALL[@]+"${_STAGED_ALL[@]}"}; do
+        if [ "$_u" = "$_s" ]; then
+            _overlap=$((_overlap + 1))
+            break
+        fi
+    done
+done < <(git diff --name-only -z 2>/dev/null)
 # Two tracked paths that differ only by case or Unicode form are one file on a macOS
 # or Windows disk: the tree is dirty for good, the pop below always failed, and every
 # commit left one more "pre-commit-gate" stash behind (#171). Same rule as
 # scripts/check-repo-hygiene.py (NFC + casefold, each path prefix), which names the
 # pair and fails the commit. NUL-delimited: without -z git C-quotes an accented name.
 _collide=""
-if [ -n "$_unstaged" ]; then
+if [ "${#_UNSTAGED_ALL[@]}" -gt 0 ]; then
     _collide="$(git ls-files -z 2>/dev/null | python3 -c '
 import sys, unicodedata
 seen = {}
@@ -68,7 +89,7 @@ if [ "${_overlap:-0}" -gt 0 ] 2>/dev/null; then
 elif [ -n "$_collide" ]; then
     echo "ℹ pre-commit: tracked paths $_collide differ only by case or Unicode form, so the" >&2
     echo "  working tree cannot be stashed clean — validating the WORKING TREE (not the pure staged index)." >&2
-elif [ -n "$_unstaged" ]; then
+elif [ "${#_UNSTAGED_ALL[@]}" -gt 0 ]; then
     # A stash is ours only if refs/stash moved. `stash push` exits 0 having made none
     # when nothing is staged (`commit --amend`) and the only unstaged change is one it
     # ignores (a submodule's own dirty content): the trap then popped the user's own
@@ -106,10 +127,7 @@ FAIL=0
 # Its result can only change when a hook, the settings that wire them, this git
 # hook or the battery itself changes — so skip it here when none of those is
 # staged. CI runs the full suite on every push; nothing merges unbatteried.
-# (A here-string, not `printf | grep -q`: under pipefail, grep -q exiting early
-# makes printf die of SIGPIPE on a long staged list, and the test would misfire.)
-if grep -E '^(\.claude/hooks/|\.claude/settings[^/]*\.json$|\.githooks/|scripts/hook-battery\.sh$)' \
-        >/dev/null <<< "$_staged"; then
+if [ "$_HOOK_STAGED" = "1" ]; then
     unset BACKTEST_SKIP_HOOK_BATTERY      # a hook is staged: run it, whatever the shell inherited
 else
     export BACKTEST_SKIP_HOOK_BATTERY=1
