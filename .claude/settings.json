@@ -42,6 +42,12 @@
             "if": "Bash(gh *)",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/issue-guard.py",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(gh.exe *)",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/issue-guard.py",
+            "timeout": 10
           }
         ]
       }

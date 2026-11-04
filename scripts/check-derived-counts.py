@@ -44,7 +44,9 @@ def n_gates():
 # two gates can never disagree about what a "skill" or a "hook" is. If you change
 # a definition there, change it here in the same commit.
 def _glob_count(pat):
-    return len(glob.glob(os.path.join(ROOT, pat)))
+    # glob.escape: a clone at "Paper [2026]" read its own path as a character class,
+    # counted 0 of everything, and failed on four true claims (#171).
+    return len(glob.glob(os.path.join(glob.escape(ROOT), pat)))
 
 def n_skills(): return _glob_count(".claude/skills/*/SKILL.md")
 def n_agents(): return _glob_count(".claude/agents/*.md")
@@ -78,8 +80,8 @@ def changelog_current_release():
     return m.group(1) if m else ""
 
 def n_hook_battery_cases():
-    # The battery prints "ALL PASS (N cases)" where N = TOTAL = PASS + FAIL —
-    # the `TOTAL=$((PASS + FAIL))` roll-up in the final summary block of
+    # The battery prints "ALL PASS (N cases)" where N = TOTAL = PASS + FAIL + UNREACH —
+    # the `TOTAL=$((PASS + FAIL + UNREACH))` roll-up in the final summary block of
     # scripts/hook-battery.sh (find it with `grep -n 'ALL PASS'`; it is cited
     # by name, not by line number, because line numbers rot as the battery
     # grows — this comment previously said "line ~276", which by round 7

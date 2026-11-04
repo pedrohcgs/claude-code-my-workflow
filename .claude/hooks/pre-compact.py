@@ -61,7 +61,10 @@ def find_active_plan(project_dir: str) -> dict | None:
     plan_files = sorted(plans_dir.glob("*.md"), key=lambda f: f.stat().st_mtime, reverse=True)
 
     for plan_file in plan_files[:3]:  # Check last 3 plans
-        content = plan_file.read_text()
+        # UTF-8, explicitly: with no encoding Windows reads the ANSI code page,
+        # a plan holding a curly quote raised before anything was saved, and a
+        # decodable one saved "stage 2 â†’ 3" and lost every "→" decision.
+        content = plan_file.read_text(encoding="utf-8", errors="replace")
 
         # Parse the plan's Status FIELD (e.g. "**Status:** DRAFT"), not a
         # whole-file substring — a DRAFT plan whose body merely mentions
@@ -103,7 +106,7 @@ def extract_recent_decisions(project_dir: str, limit: int = 3) -> list[str]:
     if not log_files:
         return []
 
-    content = log_files[0].read_text()
+    content = log_files[0].read_text(encoding="utf-8", errors="replace")
     decisions = []
 
     # Look for decision markers
@@ -132,7 +135,7 @@ def save_state(state: dict) -> None:
     state["timestamp"] = datetime.now().isoformat()
 
     try:
-        state_file.write_text(json.dumps(state, indent=2))
+        state_file.write_text(json.dumps(state, indent=2), encoding="utf-8")
     except IOError as e:
         print(f"Warning: Could not save pre-compact state: {e}", file=sys.stderr)
 
@@ -171,7 +174,7 @@ def should_block_draft(plan_info: dict | None) -> tuple[bool, str]:
     # once, not to guarantee blocking under adverse conditions.
     try:
         if sentinel_file.exists():
-            existing = json.loads(sentinel_file.read_text())
+            existing = json.loads(sentinel_file.read_text(encoding="utf-8"))
             if existing.get("last_blocked_plan") == plan_path:
                 return False, ""
     except (OSError, json.JSONDecodeError):
@@ -182,7 +185,8 @@ def should_block_draft(plan_info: dict | None) -> tuple[bool, str]:
     # cause repeat blocks on every subsequent compaction.
     try:
         sentinel_file.write_text(
-            json.dumps({"last_blocked_plan": plan_path, "when": datetime.now().isoformat()})
+            json.dumps({"last_blocked_plan": plan_path, "when": datetime.now().isoformat()}),
+            encoding="utf-8",
         )
     except OSError as e:
         print(f"Warning: could not persist block sentinel; not blocking: {e}",
@@ -212,7 +216,7 @@ def append_to_session_log(project_dir: str, trigger: str) -> None:
         return
 
     try:
-        with open(log_files[0], "a") as f:
+        with open(log_files[0], "a", encoding="utf-8") as f:
             f.write(f"\n\n---\n")
             f.write(f"**Context compaction ({trigger}) at {datetime.now().strftime('%H:%M')}**\n")
             f.write(f"Check git log and quality_reports/plans/ for current state.\n")
@@ -247,10 +251,11 @@ def format_compaction_message(plan_info: dict | None, decisions: list[str]) -> s
 
 def main() -> int:
     """Main hook entry point."""
-    # Read hook input
+    # Read hook input — bytes, decoded as UTF-8, which is what Claude Code
+    # writes; sys.stdin on Windows decodes a pipe with the ANSI code page.
     try:
-        hook_input = json.load(sys.stdin)
-    except (json.JSONDecodeError, IOError):
+        hook_input = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
+    except (ValueError, OSError):
         hook_input = {}
 
     trigger = hook_input.get("trigger", "auto")

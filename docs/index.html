@@ -284,7 +284,7 @@ is almost always speaking about the first and being heard about the last.</p>
 
 <h2>What you get</h2>
 
-<p><strong>18 agents, 61 skills, 37 rules, 11 hooks</strong> — and ten gates, run before every commit once the pre-commit hook is installed, and in full in CI.</p>
+<p><strong>18 agents, 61 skills, 37 rules, 11 hooks</strong> — and eleven gates, run before every commit once the pre-commit hook is installed, and in full in CI.</p>
 
 <ul>
 <li><strong>61 skills</strong> covering the full research lifecycle — papers, analysis,
@@ -294,9 +294,10 @@ is almost always speaking about the first and being heard about the last.</p>
 <li><strong>37 rules</strong> — most path-scoped so they load only when relevant, a few
     always-on — plus 11 hooks that act rather than nag, including one that refuses to let a shell
     command quietly rewrite the settings and hook files the gates are defined in.</li>
-<li><strong>Ten gates in one command.</strong> Surface consistency, skill integrity, model
+<li><strong>Eleven gates in one command.</strong> Surface consistency, skill integrity, model
     currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage,
-    and a seeded hook battery that re-fires every guard hook against the failure it targets — run
+    a seeded hook battery that re-fires every guard hook against the failure it targets, and a
+    portability suite for Windows paths, encodings and non-ASCII file names — run
     before every commit once <code>./scripts/install-hooks.sh</code> has been run (the hook battery
     only when a hook, its settings or the battery itself is staged), and all of them in CI.</li>
 <li><strong>An audit trail by default</strong> — issues as defect memory, progress reports as

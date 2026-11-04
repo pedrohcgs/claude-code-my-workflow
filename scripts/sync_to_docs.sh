@@ -22,7 +22,13 @@ cd "$QUARTO_DIR"
 if [ -n "$1" ]; then
     # Render specific lecture
     echo "Rendering $1..."
-    matched_qmd=$(ls ${1}_*.qmd ${1}.qmd 2>/dev/null | head -1)
+    # Quoted: an unquoted ${1} split 'Aula 1' into two words, so the lookup found
+    # nothing — or, with a stray 1.qmd present, rendered THAT deck. The exact name
+    # still wins over a suffixed one, as the sorted ls did.
+    matched_qmd=""
+    for c in "$1".qmd "$1"_*.qmd; do
+        if [ -f "$c" ]; then matched_qmd=$c; break; fi
+    done
     if [ -n "$matched_qmd" ]; then
         quarto render "$matched_qmd"
     else

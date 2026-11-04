@@ -104,9 +104,19 @@ Good — the pre-check caught a P3 (bare `scale=`) or P4 (missing directional ke
 
 ## Git / hooks / CI
 
+### On Windows, the guards do not see PowerShell commands
+
+Claude Code on Windows can run shell commands through two tools, Bash (Git Bash) and PowerShell. The template's guard hooks — `git-guardrails`, `root-of-trust-guard`, `issue-guard` — are wired to the **Bash** tool only, so a command Claude runs through PowerShell passes none of them.
+
+- **Install [Git for Windows](https://git-scm.com/downloads/win).** Without Git Bash, Claude Code uses PowerShell for every shell command, and none of the guards run at all.
+- **With Git Bash installed, the PowerShell tool is still on by default** for claude.ai and Console accounts. To keep every shell command on the guarded route, turn it off for your machine with `"env": { "CLAUDE_CODE_USE_POWERSHELL_TOOL": "0" }` in `.claude/settings.local.json`, or add `"PowerShell"` to your `permissions.deny`.
+- Widening the guards' matchers to `Bash|PowerShell` would not be enough: they read bash syntax, and PowerShell spells the same operations differently (`Remove-Item -Recurse`, not `rm -rf`).
+
+(Claude Code tools reference, "PowerShell tool", read 2026-09-27.)
+
 ### Hook script permission denied
 
-`chmod +x .claude/hooks/*.py .claude/hooks/*.sh`. `./scripts/validate-setup.sh` also reports non-executable hooks.
+`chmod +x .claude/hooks/*.sh`. The Python hooks are run as `python3 <file>`, so they need no executable bit; `./scripts/validate-setup.sh` reports only the shell hooks that lack it.
 
 ### Pre-compact hook didn't save the plan
 
@@ -316,6 +326,16 @@ For **short-delay polling within an active session** (e.g. "check the build ever
 ### PreCompact keeps blocking even after I approved the plan
 
 You probably have `CLAUDE_PRECOMPACT_BLOCK_ON_DRAFT=1` set in your environment. The hook blocks compaction at most **once** per DRAFT plan — subsequent compactions of the same plan proceed normally. If it's blocking repeatedly, either the plan's status line hasn't been updated from DRAFT to APPROVED/IN_PROGRESS (check the plan file header), or you've got a different DRAFT plan every time (the hook tracks by plan path). Unset the env var to disable the guard entirely: `unset CLAUDE_PRECOMPACT_BLOCK_ON_DRAFT`.
+
+### Windows / WSL: `env: bash\r: No such file or directory` after updating
+
+An existing clone that was checked out with `core.autocrlf=true` (the Git for Windows default) keeps its CRLF shell scripts after you pull v2.6: `.gitattributes` now asks for LF, but git rewrites only the files an update touches, and `git status` stays clean. Under WSL, a container or any non-MSYS bash, the unchanged `.sh` files then fail. Renormalise once, from a clean tree, in your own terminal:
+
+```bash
+git rm --cached -r -q . && git reset --hard
+```
+
+That re-checks-out every file under the current `.gitattributes` rules (LF for text, `data/` untouched). Commit or stash your work first — `reset --hard` discards uncommitted changes.
 
 ## Still stuck?
 

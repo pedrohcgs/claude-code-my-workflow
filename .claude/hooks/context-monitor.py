@@ -74,8 +74,8 @@ def read_cache() -> dict:
     if not cache_file.exists():
         return {}
     try:
-        return json.loads(cache_file.read_text())
-    except (json.JSONDecodeError, IOError):
+        return json.loads(cache_file.read_text(encoding="utf-8"))
+    except (ValueError, OSError):
         return {}
 
 
@@ -83,7 +83,7 @@ def save_cache(data: dict) -> None:
     """Save the context monitor cache."""
     cache_file = get_session_dir() / "context-monitor-cache.json"
     try:
-        cache_file.write_text(json.dumps(data, indent=2))
+        cache_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
     except IOError:
         pass
 
@@ -168,10 +168,14 @@ def emit(system_message: str, claude_context: str) -> None:
 
 def run_context_monitor() -> int:
     """Main monitoring logic."""
-    # Read hook input
+    # Read hook input — bytes, decoded as UTF-8, which is what Claude Code
+    # writes. sys.stdin on Windows decodes a pipe with the ANSI code page: a
+    # transcript under C:\Users\José\ came out as mojibake, getsize() failed,
+    # and the estimate fell back to the tool-call counter (a full transcript
+    # read as 0%).
     try:
-        hook_input = json.load(sys.stdin)
-    except (json.JSONDecodeError, IOError):
+        hook_input = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
+    except (ValueError, OSError):
         hook_input = {}
 
     # Estimate current context usage (coarse proxy)
@@ -179,7 +183,7 @@ def run_context_monitor() -> int:
 
     # Persist the latest estimate so the status line can surface it (best-effort).
     try:
-        (get_session_dir() / "context-pct.txt").write_text(f"{percentage:.0f}")
+        (get_session_dir() / "context-pct.txt").write_text(f"{percentage:.0f}", encoding="utf-8")
     except Exception:
         pass
 

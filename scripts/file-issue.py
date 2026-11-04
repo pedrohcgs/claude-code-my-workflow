@@ -81,11 +81,16 @@ def search(query: str, repo: str | None) -> list[dict]:
            "--json", "number,title,state,url"]
     if repo:
         cmd += ["--repo", repo]
-    r = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+    # Bytes, decoded here. gh writes UTF-8; text=True decoded it with the Windows
+    # code page, and on Windows that decode runs in subprocess's reader thread,
+    # where a title holding ” or ρ killed the thread and left stdout None — read
+    # as "no candidates", so the check passed and the issue was filed (#171). A
+    # bad decode now raises here, and main() fails closed.
+    r = subprocess.run(cmd, capture_output=True, timeout=60)
     if r.returncode != 0:
         raise RuntimeError(f"`{' '.join(cmd[:4])} ... {query!r}` failed: "
-                           f"{(r.stderr or r.stdout).strip()[:300]}")
-    return json.loads(r.stdout or "[]")
+                           f"{(r.stderr or r.stdout).decode('utf-8', 'replace').strip()[:300]}")
+    return json.loads(r.stdout.decode("utf-8") or "[]")
 
 
 def parse_checked(values: list[str]) -> set[int]:
@@ -106,6 +111,14 @@ def main() -> int:
     ap.add_argument("--repo", help="owner/name (default: the repository gh infers)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
+    # A title the pipe's code page cannot show (ρ or → on cp1252; the em dash below
+    # on cp932 or cp949) crashed the duplicate listing. UTF-8 is what Claude Code
+    # and mintty read.
+    for s in (sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
 
     if not shutil.which("gh"):
         print("file-issue: CANNOT RUN — the GitHub CLI (gh) is not on PATH. Install it "
@@ -134,7 +147,8 @@ def main() -> int:
             for it in search(q, a.repo):
                 row = found.setdefault(it["number"], {**it, "hits": 0})
                 row["hits"] += 1
-    except (RuntimeError, subprocess.TimeoutExpired, json.JSONDecodeError, KeyError) as e:
+    except (RuntimeError, subprocess.TimeoutExpired, ValueError, KeyError) as e:
+        # ValueError covers a JSONDecodeError and a UnicodeDecodeError alike.
         print(f"file-issue: CANNOT RUN — the duplicate search did not complete ({e}). "
               "Nothing was created: an unchecked issue is what this script exists to prevent.",
               file=sys.stderr)
@@ -194,7 +208,10 @@ def main() -> int:
         path = f.name
     keep = False
     try:
-        r = subprocess.run(cmd + ["--body-file", path], capture_output=True, text=True)
+        # Decoded explicitly: a failed locale decode here left stdout None, and the
+        # write below raised AFTER the issue had been created.
+        r = subprocess.run(cmd + ["--body-file", path], capture_output=True,
+                           encoding="utf-8", errors="replace")
         sys.stdout.write(r.stdout)
         if r.returncode != 0:
             keep = True

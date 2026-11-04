@@ -177,6 +177,42 @@ absent; the debt was drift between files.
   entries against today's battery, so adding a case demanded an edit to released history; it now
   reads only the current release, like the inventory rows.
 
+### Fixed — portability: paths, encodings, line endings and git output (#171, #151, #172)
+
+A stress test of every gate, hook and script found 78 defects in 17 root causes, each reproduced
+by a separate verifier. The 74 fixed here are each pinned by a case that fails on the old code (see
+the qualification ledger). Four are not closed by this change: three need a launcher that finds
+Python on Windows (a separate change), and the PowerShell tool, which the guards cannot read, is
+documented rather than blocked (owner decision).
+PR #152 (JonOM123) had fixed two of #151's three claims; its sound parts are taken here, credited
+as co-author.
+
+- **The root-of-trust guard could be bypassed on every platform.** Its scope check compared raw
+  strings, so the project path spelled in another case (reproduced on macOS), an NFC/NFD spelling,
+  a symlinked `.claude`, a Unicode long s (`ſ`) or a project at `/` put a write into the hooks
+  "outside the project". It now compares case-folded, normalised paths, by file identity, named or
+  resolved.
+- **On Windows the guards could be bypassed or fail open:** stdin decoded with the ANSI code page,
+  backslash and `/c/` drive spellings, `-C .claude -C hooks` (#151), `git.exe` / `rm.exe` /
+  `gh.exe`, and a CR inside a word. All hooks now read stdin as UTF-8 bytes; `issue-guard` is also
+  registered for `gh.exe`.
+- **Accented file names confused the gates:** `git ls-files` / `diff` are read with `-z` and UTF-8,
+  so quoted names no longer create phantom folders, hide draft names, or mark tracked hooks
+  untracked (#151). Tracked paths that differ only by case or Unicode form are flagged.
+- **The quality gate skipped files silently:** renamed files, staged files it cannot find, and
+  `.r` files now count; the R file path is passed as an argument, not pasted into R source.
+- **Links were judged against the disk, not the index:** an untracked or wrong-case target no
+  longer passes; `%20` and `<a b.md>` links resolve; a BOM no longer hides frontmatter or a heading.
+- **Line endings and encodings:** `* text=auto eol=lf`, with `data/` exempt so raw inputs keep their
+  bytes (an existing clone checked out with `core.autocrlf=true` needs a one-time renormalise — see
+  TROUBLESHOOTING); the staleness gate and the render stamp
+  hash LF-normalised text; gates and scripts read and write UTF-8 and no longer crash on a cp932
+  console; `validate-setup` and `install-hooks` act on their own repository, not the caller's
+  folder; the hook battery no longer depends on the folder it is run from.
+- **Windows and PowerShell:** the guards are wired to the Bash tool, and on Windows the PowerShell
+  tool is on by default — TROUBLESHOOTING says how to keep shell work on the guarded route (owner:
+  document, do not deny).
+
 ### Added
 
 - **Slide QA in a real browser** (`scripts/slide-qa.py`). It loads a rendered Quarto deck in
@@ -259,6 +295,12 @@ absent; the debt was drift between files.
 - README and guide: the mid-2026 Claude Code features worth knowing; TROUBLESHOOTING:
   deadline-safe updates and the headless credit pool.
 
+- **Portability suite, the eleventh backtest gate** (`scripts/portability-tests.py`,
+  `tests/portability/`). Windows behaviour is simulated by loading the real modules with `ntpath`
+  swapped in, so a Windows defect fails on Linux CI. It adds about 20 s to a pre-commit backtest
+  when no hook, hook setting or battery file is staged (its two full re-runs of the hook battery are
+  skipped there, under the battery's own rule); a direct `./scripts/backtest.sh`, a commit that
+  stages a hook, and CI run them, adding about a minute.
 - **Small edits borrowed from claudeblattman** (after reading it for ideas; it also turned up the
   defects above, #165–#169; each was filed as an issue before it was fixed):
   - **A missing lens is not a dry round** in the review loop (`orchestrator-protocol.md`).
@@ -291,7 +333,7 @@ absent; the debt was drift between files.
 - **awesome-ai-agents** — no scholarly tools; its restricted-data concern is adopted above,
   browser-measured slide QA is adopted (see Added), and gate mutation testing goes to the backlog.
 
-**Inventory at release: 61 skills, 18 agents, 37 rules, 11 hooks, 10 gates**
+**Inventory at release: 61 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
 (v2.5.1: 60 skills, 8 hooks; the rest unchanged).
 
 ### Verification of this release
@@ -307,8 +349,8 @@ absent; the debt was drift between files.
   one trying to refute it: round 1 confirmed 56 of 61, round 2 confirmed 31 of 39 (many duplicates
   across lenses); all confirmed findings are fixed. **The loop was stopped after round 2 by
   owner decision, so convergence (two consecutive rounds with nothing new) is not claimed.**
-- **Gates:** `./scripts/backtest.sh` passes all 10 gates, including the hook battery
-  (312 cases, seconds to run; the new case fails against the hook's old watch pattern).
+- **Gates:** `./scripts/backtest.sh` passes all 11 gates, including the hook battery
+  (312 cases, seconds to run) and the portability suite; each fix was shown to fail on the old code.
   Every checker this release changed was re-qualified on seeded defects with clean controls
   (ledger rows): `check-model-versions.sh` 5/5 recall, 0/4 false positives;
   `validate-findings.py --fill-ids` 4/4; `check-derived-counts.py` seven-pass pattern 1/1,

@@ -24,7 +24,16 @@ if ! cmp -s "$G" "$D"; then
     echo "  sync first:  cp guide/workflow-guide.html docs/workflow-guide.html" >&2
     exit 1
 fi
-fp() { local h; h="$(shasum -a 256 "$1" 2>/dev/null | cut -c1-16)"; 
+# Line endings are not content: hash with CRLF -> LF, so an autocrlf checkout
+# (the Git for Windows default) stamps what an LF clone stamps, and a stamp made
+# on Windows does not turn CI red (#171). This must stay byte for byte what
+# scripts/check-staleness.py hashes: CRLF pairs only, never a lone CR (`tr -d
+# '\r'` would drop those too, and the two would disagree). binmode keeps a native
+# Windows perl from translating line endings itself; perl is present wherever
+# shasum is, because shasum is a perl script.
+fp() { local h; h="$(perl -pe 'BEGIN { binmode STDIN; binmode STDOUT } s/\r\n\z/\n/' < "$1" \
+                     | shasum -a 256 2>/dev/null | cut -c1-16)" \
+           || { echo "stamp-render: fingerprint failed for $1 (perl or shasum missing?)" >&2; exit 2; };
        [ -n "$h" ] || { echo "stamp-render: fingerprint failed for $1 (shasum missing?)" >&2; exit 2; };
        printf '%s' "$h"; }
 SH="$(fp "$SRC")" || exit 2
