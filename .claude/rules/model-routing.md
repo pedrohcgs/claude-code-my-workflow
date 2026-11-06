@@ -29,16 +29,16 @@ Set per-skill via the same field in `SKILL.md` frontmatter. Inheritance is fine 
 
 ## The effort axis (the first cost lever)
 
-Model tier is the second cost lever; **effort is the first.** Every model that supports effort runs at a level (`low / medium / high / xhigh / max`) — the current Haiku takes no effort setting — and lowering effort is cheaper than dropping a tier: reach for it first.
+Model tier is the second cost lever; **effort is the first.** Every current model tier supports effort (`low / medium / high`, plus `xhigh / max` on Opus and Fable) — and lowering effort is cheaper than dropping a tier: reach for it first.
 
-Default effort differs by tier — the current defaults live in [`model-versions.md`](../references/model-versions.md) (at its 2026-09-26 verification: Opus tier **`medium`**, Sonnet and Fable tiers `high`). Two facts about the current Opus shape every pin, and both belong to that verification — re-read them when the SSoT changes:
+Default effort differs by tier — the current defaults live in [`model-versions.md`](../references/model-versions.md) (at its 2026-11-04 verification: Opus and Haiku tiers **`medium`**, Sonnet and Fable tiers `high`). Two facts about the current Opus shape every pin, and both belong to that verification — re-read them when the SSoT changes:
 
 - **Its `medium` matches or beats the prior Opus generation at `high`** on coding and knowledge work (Anthropic's own evaluations), and **at a given level it thinks more per turn** than that generation did. So pin above the default only where the extra thinking is the point.
 - **Thinking is always on**; effort is the only depth control. To get less thinking, lower effort — do not add "think less" prose. To get more, raise effort — do not add "think harder" prose.
 
 How the template pins effort:
 
-- **Mechanical work** → the Haiku tier (no effort setting on the current Haiku), or `low` / `medium` on a tier that takes one.
+- **Mechanical work** → the Haiku tier at `low` effort (`promote-memory-council` pins `effort: low`, one notch below the Haiku default of `medium`).
 - **Review and judgment on the Sonnet tier** → `high` (its default).
 - **Opus-tier gates where a false PASS is expensive** — `editor`, `domain-referee`, `methods-referee`, `claim-verifier` → `high`, deliberately one level above the default. These are the do-not-demote agents below; the extra thinking is what you are paying for.
 - **Other Opus-tier agents** (`verifier`, `quarto-critic`, `tikz-reviewer`, `sim-reviewer`, `domain-reviewer`) → `medium`. Raise one only after `medium` measurably missed issues on your material.

@@ -48,6 +48,26 @@ makes new now problem problems still wrong
 WORD = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.\-/]*[A-Za-z0-9_]|[A-Za-z0-9_]")
 PATH = re.compile(r"(?<![\w/.-])(?:[\w.-]+/)*[\w.-]+\.(?:R|r|py|sh|tex|qmd|md|Rmd|do|ado|ipynb|"
                   r"json|ya?ml|csv|bib|html|js|css|scss|toml|txt)\b")
+UPSTREAM_TEMPLATE = "pedrohcgs/claude-code-my-workflow"
+_GH_URL = re.compile(r"github\.com[:/]([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+?)(?:\.git)?/?$")
+
+
+def origin_repo() -> str | None:
+    """Return owner/name from `git remote get-url origin` when it is a fork (not the
+    upstream template), so gh does not silently fall back to the public parent repo
+    when Issues are disabled on a fork (#174)."""
+    try:
+        r = subprocess.run(["git", "remote", "get-url", "origin"],
+                           capture_output=True, timeout=5)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if r.returncode != 0:
+        return None
+    m = _GH_URL.search(r.stdout.decode("utf-8", "replace").strip())
+    if not m:
+        return None
+    slug = m.group(1)
+    return slug if slug.lower() != UPSTREAM_TEMPLATE else None
 
 
 def keywords(title: str) -> list[str]:
@@ -108,9 +128,11 @@ def main() -> int:
                     help="extra search terms (a section name, a function, a table label)")
     ap.add_argument("--checked", action="append", default=[],
                     help="issue numbers you reviewed and judged distinct, e.g. 12,15")
-    ap.add_argument("--repo", help="owner/name (default: the repository gh infers)")
+    ap.add_argument("--repo", help="owner/name (default: origin remote on forks, or the repository gh infers)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
+    if not a.repo:
+        a.repo = origin_repo()
     # A title the pipe's code page cannot show (ρ or → on cp1252; the em dash below
     # on cp932 or cp949) crashed the duplicate listing. UTF-8 is what Claude Code
     # and mintty read.
@@ -149,8 +171,11 @@ def main() -> int:
                 row["hits"] += 1
     except (RuntimeError, subprocess.TimeoutExpired, ValueError, KeyError) as e:
         # ValueError covers a JSONDecodeError and a UnicodeDecodeError alike.
+        hint = (" If this is a fork, enable Issues under GitHub → Settings → General → "
+                "Features → Issues so issues stay in your repository rather than the public template."
+                if "disabled" in str(e).lower() else "")
         print(f"file-issue: CANNOT RUN — the duplicate search did not complete ({e}). "
-              "Nothing was created: an unchecked issue is what this script exists to prevent.",
+              f"Nothing was created: an unchecked issue is what this script exists to prevent.{hint}",
               file=sys.stderr)
         return 2
 

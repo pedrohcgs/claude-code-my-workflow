@@ -1,32 +1,32 @@
-<!-- CURRENT: Fable 5.1 | Opus 5.5 | Sonnet 5 | Haiku 4.5 -->
+<!-- CURRENT: Fable 5.1 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 -->
 
 # Current Model Versions (single source of truth)
 
-**Last verified against Anthropic docs:** 2026-09-26  
-**Expires:** 2026-11-25 (60 days) — after this date the currency gate fails until re-verified.
+**Last verified against Anthropic docs:** 2026-11-06  
+**Expires:** 2027-01-05 (60 days) — after this date the currency gate fails until re-verified.
 
 This file is the **one place** that names current Claude model point versions. Everything else in the template should either refer to tiers abstractly ("newest Opus", "the Haiku tier") or point here. `scripts/check-model-versions.sh` flags any **superseded** version that is presented as **current** in the template's user-facing surfaces.
 
 The machine-readable `<!-- CURRENT: ... -->` marker at the top is parsed by the checker — keep it in sync with the table.
 
-Sources (all read 2026-09-26): platform.claude.com `about-claude/models/overview` and `about-claude/pricing`; code.claude.com `model-config`; platform.claude.com `build-with-claude/prompt-engineering/prompting-claude-opus-5-5`.
+Sources (all read 2026-11-04): platform.claude.com `about-claude/models/overview`, `about-claude/pricing`, and `about-claude/models/whats-new-claude-5-5`; code.claude.com `model-config` and `changelog`; platform.claude.com `build-with-claude/prompt-engineering/prompting-claude-opus-5-5`.
 
 | Tier | Current version | Model ID | Notes |
 |------|-----------------|----------|-------|
 | Fable (Mythos-class; hardest, long-horizon) | **Fable 5.1** | `claude-fable-5-1` (alias `fable`; also what `best` selects where Fable is available) | most capable model in Claude Code; **opt-in** (`/model fable`) — NOT the default on any plan or provider; GA 2026-09-01; $10/$50 per MTok (cache reads $0.25); 1M context, 128K max output; adaptive thinking always on; defaults to `high` effort; requires Claude Code ≥ 2.1.257 |
 | Opus (high-judgment) | **Opus 5.5** | `claude-opus-5-5` (alias `opus`) | **the Claude Code default** on Pro / Max / Team / Enterprise / Anthropic API (and on Claude Platform on AWS, Bedrock, Google Cloud's Agent Platform); GA 2026-09-22; $4/$20 per MTok (cache reads $0.20); 1M context, 128K max output; adaptive thinking **always on** (cannot be disabled — effort is the only depth control); **defaults to `medium` effort**; requires Claude Code ≥ 2.1.280 |
-| Sonnet (workhorse) | **Sonnet 5** | `claude-sonnet-5` (alias `sonnet`) | $2/$10 per MTok (the launch price is now the standard price); native 1M context, 128K max output; adaptive thinking; defaults to `high` effort; requires Claude Code ≥ 2.1.197 |
-| Haiku (fast / mechanical) | **Haiku 4.5** | `claude-haiku-4-5-20251001` (alias `haiku`) | $1/$5 per MTok; 200K context, 64K max output; no effort parameter; **retirement not sooner than 2026-10-15** — watch for a successor and re-pin the Haiku-tier agent when it ships |
+| Sonnet (workhorse) | **Sonnet 5.5** | `claude-sonnet-5-5` (alias `sonnet`) | GA 2026-09-28; $2/$10 per MTok (cache reads dropped 50% to $0.10/MTok); native 1M context, 128K max output; adaptive thinking; defaults to `high` effort on the API |
+| Haiku (fast / mechanical) | **Haiku 5.5** | `claude-haiku-5-5` (alias `haiku`) | GA 2026-10-07 (replaces Haiku 4.5); tiered pricing: $0.10/$0.50 per MTok up to 100K tokens ($0.50/$2.50 over 100K; cache reads $0.01/$0.05); native 1M context (up from 200K), 128K max output (up from 64K); adaptive thinking; **supports configurable `effort` (`low` / `medium` / `high`, defaults to `medium`)** |
 
-**Effort defaults differ by tier — set `effort` explicitly rather than assuming one.** Opus 5.5 defaults to `medium`; Fable 5.1 and Sonnet 5 default to `high`. Anthropic's Opus 5.5 guidance: its `medium` matches or exceeds the prior Opus generation at `high` on coding and knowledge-work evaluations, and at a given level it thinks *more* per turn — so lower effort before adding "think less" prose, and reserve `xhigh`/`max` for measured gains. Routing consequences live in [`model-routing.md`](../rules/model-routing.md).
+**Effort defaults differ by tier — set `effort` explicitly rather than assuming one.** Opus 5.5 and Haiku 5.5 default to `medium`; Fable 5.1 and Sonnet 5.5 default to `high` on the API. Anthropic's Opus 5.5 guidance: its `medium` matches or exceeds the prior Opus generation at `high` on coding and knowledge-work evaluations, and at a given level it thinks *more* per turn — so lower effort before adding "think less" prose, and reserve `xhigh`/`max` for measured gains. Routing consequences live in [`model-routing.md`](../rules/model-routing.md).
 
-**Alias resolution is provider-dependent** (verified 2026-09-26): on the Anthropic API `opus`→Opus 5.5 and `sonnet`→Sonnet 5; on Claude Platform on AWS `opus`→Opus 5.5 and `sonnet`→Sonnet 4.6; on Amazon Bedrock and Google Cloud's Agent Platform `opus`→Opus 5.5 and `sonnet`→Sonnet 4.5; on Microsoft Foundry `opus`→Opus 4.6 and `sonnet`→Sonnet 4.5. `fable` resolves to Fable 5.1 except in Claude apps gateway sessions (Fable 5 there). Pin with a full model name or `ANTHROPIC_DEFAULT_OPUS_MODEL` / `ANTHROPIC_DEFAULT_SONNET_MODEL` / `ANTHROPIC_DEFAULT_FABLE_MODEL` where an alias resolves older; `CLAUDE_CODE_SUBAGENT_MODEL` sets the default for subagents that carry no `model:`.
+**Alias resolution is provider-dependent** (verified 2026-11-04): on the Anthropic API `opus`→Opus 5.5, `sonnet`→Sonnet 5.5, and `haiku`→Haiku 5.5; third-party providers (Claude Platform on AWS, Amazon Bedrock, Google Cloud's Agent Platform, Microsoft Foundry) roll aliases forward on their own schedules and may still resolve `sonnet`, `haiku`, or `opus` to prior generations. `fable` resolves to Fable 5.1 except in Claude apps gateway sessions (Fable 5 there). Pin with a full model name or `ANTHROPIC_DEFAULT_OPUS_MODEL` / `ANTHROPIC_DEFAULT_SONNET_MODEL` / `ANTHROPIC_DEFAULT_HAIKU_MODEL` / `ANTHROPIC_DEFAULT_FABLE_MODEL` where an alias resolves older; `CLAUDE_CODE_SUBAGENT_MODEL` sets the default model and `CLAUDE_CODE_SUBAGENT_EFFORT` sets the default effort for subagents.
 
-**Fast mode** (research preview, Claude API only): Opus 5.5 is $8/$40 per MTok. *(Prior generation, historical: Opus 5 and Opus 4.8 fast mode were $10/$50.)*
+**Fast mode** (research preview, Claude API only): Opus 5.5 is $8/$40 per MTok. *(Prior generation, historical: Opus 5 fast mode was $10/$50; Opus 4.8 fast mode was deprecated 2026-10-30 ahead of removal on 2026-11-30.)*
 
-**Fable vs Opus, in Anthropic's words** (models overview, 2026-09-26): "start with Claude Opus 5.5 for most workloads. Use Claude Fable 5.1 for demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5.5 at higher effort still fall short." Fable 5.1 is 2.5× the Opus 5.5 per-token price.
+**Fable vs Opus, in Anthropic's words** (models overview, 2026-11-04): "start with Claude Opus 5.5 for most workloads. Use Claude Fable 5.1 for demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5.5 at higher effort still fall short." Fable 5.1 is 2.5× the Opus 5.5 per-token price.
 
-**Forced tool choice is gone on both top tiers.** Fable 5.1 and Opus 5.5 reject `tool_choice` `any`/`tool` at the API; harnesses steer with `auto` + `strict` tool schemas or structured outputs. The launch-week "28/28 structured-output failures" observation that once kept Fable off the reviewer fleet was about a forced-tool protocol that no longer exists on either tier — the routing rule now rests on cost and Anthropic's own guidance alone.
+**Forced tool choice is gone on the 5.5 and Fable tiers.** Fable 5.1, Opus 5.5, Sonnet 5.5, and Haiku 5.5 reject `tool_choice` `any`/`tool` at the API; harnesses steer with `auto` + `strict` tool schemas or structured outputs. The launch-week "28/28 structured-output failures" observation that once kept Fable off the reviewer fleet was about a forced-tool protocol that no longer exists on these tiers — the routing rule now rests on cost and Anthropic's own guidance alone.
 
 **The advisor tool is the native form of "strongest model adjudicates"** (verified 2026-08-21; experimental, Anthropic API only): set `advisorModel` or `/advisor`, and the main model consults a stronger advisor at hard decisions. An Opus 4.7-or-later main accepts a Fable advisor. This is worth evaluating against the current per-agent model pinning.
 
@@ -37,7 +37,8 @@ It is fine to mention older versions in **historical** contexts (CHANGELOG entri
 - **Fable 5** (`claude-fable-5`) — prior Fable generation; still served (and what `fable` resolves to in Claude apps gateway sessions).
 - **Opus 5** (`claude-opus-5`) — prior Opus generation (the Claude Code default from Week 30 until Opus 5.5, v2.1.280); defaulted to `high` effort.
 - **Opus 4.8**, **Opus 4.7**, **Opus 4.6** — prior Opus generations.
-- **Sonnet 4.6**, **Sonnet 4.5** — prior Sonnet generations; still what `sonnet` resolves to on some third-party providers (see alias resolution above).
+- **Sonnet 5** (`claude-sonnet-5`), **Sonnet 4.6**, **Sonnet 4.5** — prior Sonnet generations; may still be what `sonnet` resolves to on some third-party providers (see alias resolution above).
+- **Haiku 4.5** (`claude-haiku-4-5-20251001`) — prior Haiku generation (passed its 2026-10-15 retirement floor and succeeded by Haiku 5.5 on 2026-10-07; had 200K context and no effort parameter).
 
 The checker allows a line to mention an older version when it carries a marker such as `prior generation`, `retire`, `migrat`, `deprecat`, `or later`, `historical`, an `X.Y's` comparison, or an inline `<!-- model-allow -->` comment.
 

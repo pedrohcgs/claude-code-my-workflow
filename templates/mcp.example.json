@@ -1,0 +1,17 @@
+{
+  "_comment": "Copy needed entries to .mcp.json (project-shared) or add via `claude mcp add --scope user`. Never enable external MCP servers on restricted-data repositories without checking your DUA.",
+  "mcpServers": {
+    "stata-mcp": {
+      "command": "uvx",
+      "args": ["stata-mcp"]
+    },
+    "r-mcptools": {
+      "command": "Rscript",
+      "args": ["-e", "mcptools::mcp_server()"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}

@@ -88,9 +88,15 @@ EOF
 Without `--pr`, and without the user asking for a pull request, skip this step: the commit stays
 local and the report says so.
 
+**Fork safety check (#175/#176):** Before running `gh pr create`, check `git remote get-url origin`.
+If `origin` is a fork (not `pedrohcgs/claude-code-my-workflow`), pass `--repo <origin_owner>/<origin_repo>`
+explicitly to `gh pr create` unless the user explicitly asked to open a pull request upstream
+against `pedrohcgs/claude-code-my-workflow` — otherwise `gh pr create` defaults to the upstream
+template repository and publishes the user's paper/coursework PR publicly there.
+
 ```bash
 git push -u origin <branch-name>
-gh pr create --title "<short title>" --body "$(cat <<'EOF'
+gh pr create --repo <origin_owner>/<origin_repo> --title "<short title>" --body "$(cat <<'EOF'
 ## Summary
 <1-3 bullet points>
 

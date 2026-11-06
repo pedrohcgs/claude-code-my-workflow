@@ -6,6 +6,35 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
+## v2.6.1 — 2026-11-06
+
+A **model-currency, fork-safety, ecosystem, and pedagogical tightening release.** Anthropic completed the Claude 5.5 lineup right after v2.6.0 shipped (**Claude Sonnet 5.5** on 2026-09-28 and **Claude Haiku 5.5** on 2026-10-07, replacing Haiku 4.5 past its 2026-10-15 retirement floor) and added harness-level fail-closed hook handlers (`"onFailure": "block"`) and workspace write guards in Claude Code v2.1.295+. This release updates the model SSoT and routing docs, closes a live fork footgun where `scripts/file-issue.py` and `/commit --pr` fell back to the public parent repository when Issues were disabled on a fork (#174, #175, #176), refreshes the economics ecosystem and MCP coverage, and tightens beginner onboarding in `README.md` and Chapter 4 of the guide.
+
+### Changed — model & platform refresh (Oct–Nov 2026)
+
+- **Model SSoT** (`.claude/references/model-versions.md`) now reads `Fable 5.1 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5`, verified 2026-11-04 and expiring 2027-01-03:
+  - **Sonnet 5.5** (`claude-sonnet-5-5`, GA 2026-09-28): $2/$10 per MTok, prompt cache reads reduced 50% to $0.10/MTok, 1M context, 128K max output, defaults to `high` effort on the API.
+  - **Haiku 5.5** (`claude-haiku-5-5`, GA 2026-10-07): replaces Haiku 4.5 (now in the prior-generations section after passing its 2026-10-15 retirement floor); tiered pricing ($0.10/$0.50 per MTok up to 100K tokens; $0.50/$2.50 over 100K; cache reads $0.01/$0.05), native 1M context (up from 200K), 128K max output (up from 64K), and **supports configurable `effort` (`low` / `medium` / `high`, default `medium`)** — activating `promote-memory-council`'s `effort: low` pin.
+- **Fail-closed `PreToolUse` guards + workspace write boundary** (`.claude/settings.json`): `git-guardrails.py`, `root-of-trust-guard.py`, and `issue-guard.py` now set `"onFailure": "block"` (Claude Code v2.1.295+) so a crashed or timed-out guard fails closed at the harness level; `permissions.blockWritesOutsideWorkingDirectories: true` blocks `Edit`/`Write`/`NotebookEdit` outside the workspace across all permission modes.
+- **Headless credential expiry check** (`.claude/references/scheduled-routines.md`): documents `loginExpiresAt` (`claude auth status`) and `credential_expires_at` (`claude -p --output-format json`) for overnight scheduled runs, plus `CLAUDE_CODE_SUBAGENT_EFFORT`.
+
+### Fixed — fork safety & portability reviews (#173, #174, #175, #176)
+
+- **`scripts/file-issue.py`, `/issues`, and `/commit --pr` no longer leak fork issues/PRs to the upstream template (#174, #175, #176).** GitHub disables Issues on forks by default, causing bare `gh` commands in a fork to resolve against `pedrohcgs/claude-code-my-workflow`. `scripts/file-issue.py` now inspects `git remote get-url origin`, pins `--repo` to the fork's `origin` when it differs from the upstream template, and prints instructions to enable Issues on the fork if GitHub refuses the query. `/issues` and `/commit` enforce the same `origin` check in pre-flight.
+- **Portability review follow-ups (#173):** `scripts/check-links.py` preserves exact index byte spellings for link resolution while keeping NFC folding for diagnostics; `.githooks/pre-commit` reads `git diff -z` into NUL-safe bash arrays without `tr '\0' '\n'`; `tests/portability/_winsim.py` removes the duplicate `load()` definition.
+
+### Added & refreshed — economics ecosystem & pedagogical tightening
+
+- **`/coauthor-brief --quiz` (Seminar Defense Check):** optional 3–5 question comprehension check on recent sample filters, merge keys, and specification changes (inspired by `clo-author` v26.09's `/explain` gate and `MixtapeTools`'s `Fletcher` audit).
+- **Starter MCP configuration (`templates/mcp.example.json`) and expanded guide MCP callout:** documents `SepineTam/mcp-for-stata` (`v1.25.2`), Posit's `mcptools` for live R sessions in RStudio/Positron, official/community FRED, World Bank Data360, and U.S. Census Bureau MCPs, and Context7.
+- **Ecosystem section (`#sec-ecosystem` & `README.md`):** updated `clo-author` to v26.09 (25 agents, 18 skills, `/coherence`, `/explain`, `/deepread`, `/paper-format`), `SepineTam/mcp-for-stata`, `aspi6246/Claude-Code-Presentation`, and community adoption counts (3,145+ forks, 1,680+ stars as of 2026-11-04); added Paul Goldsmith-Pinkham's tools (`claude-container`, `exhibit-review`, `margin`, DuckDB + Parquet pattern), Anton Korinek's *AI Agents for Economic Research*, and Lulong Han's `awesome-ai-for-economists`.
+- **Pedagogical tightening:** removed dead workspace bypass keys from `.vscode/settings.json`, trimmed the permission and hook-parser disclaimers in `README.md` and Chapter 4 of `guide/workflow-guide.qmd` into collapsible deep-dive blocks, added a *"Start here on Day 1 — the 6 commands that cover 80% of daily research work"* box above the 61-skill reference table, and pruned shipped history from `.claude/references/v2.0-backlog.md`.
+
+**Inventory at release: 61 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
+(standing hook battery: 312 cases, seconds to run; portability suite: 233 cases).
+
+---
+
 ## v2.6.0 — 2026-09-26
 
 A **currency and consistency release.** Claude Opus 5.5 and Fable 5.1 shipped after v2.5.1: the

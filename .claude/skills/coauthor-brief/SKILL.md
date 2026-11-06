@@ -1,7 +1,7 @@
 ---
 name: coauthor-brief
 description: Generate a co-author / collaborator handoff brief for a multi-author, multi-machine project — summarizing what changed since the last brief (git delta), the current state of each artifact (manuscript, analysis, slides), open questions, how to reproduce locally, and any restricted-data access steps. Use when user says "coauthor brief", "handoff brief", "bring my coauthor up to speed", "what changed since last week", "onboard a collaborator", "write a handoff for [name]", or before sending a co-author the repo. NOT a commit or a checkpoint — it is the cross-machine, cross-person summary `meta-governance.md` only partially covers.
-argument-hint: "[--since <tag|date|Ndays>] [--for <collaborator-name>] [--no-data-section]"
+argument-hint: "[--since <tag|date|Ndays>] [--for <collaborator-name>] [--no-data-section] [--quiz]"
 disable-model-invocation: true
 allowed-tools: ["Read", "Write", "Glob", "Grep", "Bash"]
 effort: medium
@@ -92,6 +92,9 @@ branch: [current branch]
 ## Open questions / decisions needed
 [Things the co-author should weigh in on. Mark Q1, Q2…; flag which block progress.]
 
+## Seminar Defense Check (when `--quiz` is passed)
+[3–5 pointed questions about the pipeline's sample drops, merge keys, variable construction, or specification choices changed in this window — each with the `file:line` where the answer lives, so every author or student can explain and defend AI-written code in a seminar or referee report.]
+
 ## Reproduce locally
 1. Clone + branch: `git checkout <branch>`
 2. Restore environment: `Rscript -e 'renv::restore()'` (or `pip install -r requirements.txt` / Stata `do scripts/stata/00_install.do`).
@@ -127,6 +130,8 @@ A single Markdown handoff doc at `quality_reports/handoffs/YYYY-MM-DD_coauthor-b
 
 - `--since` `<tag|date|Ndays>` — Baseline to diff against — a git tag, an ISO date, or `Ndays` (e.g. `14days`). Default: the previous brief in `quality_reports/handoffs/`, else 14 days (Phase 0).
 - `--for` `<name>` — Tailor the brief to a specific collaborator (e.g. surface the restricted-data access steps they still need).
+- `--no-data-section` — Omit the restricted-data access section.
+- `--quiz` — Include a 3–5 question **Seminar Defense Check** (inspired by `clo-author`'s understanding gate and `MixtapeTools`'s `Fletcher` audit) testing whether the human author can explain the pipeline's sample filters, merge keys, and specification mechanics before a talk or submission.
 
 ## Cross-references
 
