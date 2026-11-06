@@ -64,7 +64,10 @@ never leaves the machine.
 [`.agents/skills/`](.agents/skills/) holds generated wrappers for the skills in
 `.claude/skills/` that one agent can run end to end. Each wrapper points to the real
 instructions. In Codex, mention one with `$name` or list them with `/skills`; in Antigravity,
-type `/name`. Skills built on several independent reviewers (such as `/review-paper --peer`),
+type `/name`. Where a skill hands a step to a Claude Code agent, do the step where it appears
+and let it gate what follows. Where that step needs a context that has not seen your work (a
+claim verifier that must not see the draft), use a separate session that has not seen it. If you
+cannot, mark its results *not independently verified* and say so. Skills built on several independent reviewers (such as `/review-paper --peer`),
 and skills that manage Claude Code itself, are not bridged. The list and the reason for each
 are in [`scripts/sync-agent-skills.py`](scripts/sync-agent-skills.py). To change a skill, edit
 `.claude/skills/<name>/SKILL.md` and run `python3 scripts/sync-agent-skills.py`. The backtest

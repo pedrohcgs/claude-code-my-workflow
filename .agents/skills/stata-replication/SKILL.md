@@ -14,8 +14,15 @@ It was written for Claude Code. Running it from Codex, Antigravity or another ag
 
 - **Arguments.** Where it says `$ARGUMENTS`, use what the user asked for.
 - **Claude Code agents.** Where a step hands work to an agent in `.claude/agents/` (through the
-  `Agent` or `Task` tool), read that agent's file and do the step yourself after the main work.
-  Tell the user the step was not an independent review: the same agent did both.
+  `Agent` or `Task` tool), do that step where it appears in the procedure: never later, and never
+  skip it. A step that gates what follows still gates it (`/commit` runs its verifier before it
+  commits). Read the agent's file for what the step checks.
+- **Fresh context.** If the step needs a context that has not seen your work, for example a claim
+  verifier that must never see the draft, run it in a separate session or worker that has not
+  seen the draft, if your tool can start one, and give it only what the step says to pass. If it
+  cannot, do the step yourself, mark every result it produced *not independently verified*, and
+  tell the user to repeat that check in Claude Code (`/verify-claims` for citations) before
+  relying on it.
 - **Claude Code settings.** `allowed-tools`, `model`, `effort`, `argument-hint` and
   `disable-model-invocation` in the source's frontmatter configure Claude Code. Ignore them.
 - **Guards.** Claude Code's guard hooks do not run for you. Follow the rules in `AGENTS.md`
