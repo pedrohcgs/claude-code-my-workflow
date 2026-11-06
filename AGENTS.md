@@ -3,7 +3,8 @@
 This repository was built for Claude Code. [`CLAUDE.md`](CLAUDE.md) and
 [`.claude/rules/`](.claude/rules/) hold its instructions, and they apply to you as well. Read
 `CLAUDE.md` before your first change. This file adds what Claude Code would otherwise enforce
-for you. It is written for Codex, Google Antigravity, and any other agent that reads
+for you. It is written for Codex (the Codex tab of the ChatGPT desktop app, the Codex CLI, or an
+IDE extension), Google Antigravity, and any other agent that reads
 `AGENTS.md` or the skills in `.agents/skills/`.
 
 ## What Claude Code enforces that you must do by hand
@@ -63,8 +64,8 @@ never leaves the machine.
 
 [`.agents/skills/`](.agents/skills/) holds generated wrappers for the skills in
 `.claude/skills/` that one agent can run end to end. Each wrapper points to the real
-instructions. In Codex, mention one with `$name` or list them with `/skills`; in Antigravity,
-type `/name`. Where a skill hands a step to a Claude Code agent, do the step where it appears
+instructions. In the ChatGPT app, type `@` to pick one; in the Codex CLI or IDE extension, mention
+one with `$name` or list them with `/skills`; in Antigravity, type `/name`. Where a skill hands a step to a Claude Code agent, do the step where it appears
 and let it gate what follows. Where that step needs a context that has not seen your work (a
 claim verifier that must not see the draft), use a separate session that has not seen it. If you
 cannot, mark its results *not independently verified* and say so. Skills built on several independent reviewers (such as `/review-paper --peer`),

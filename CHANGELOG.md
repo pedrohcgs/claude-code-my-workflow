@@ -8,7 +8,7 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ## v2.8.0 — 2026-11-06
 
-A **second-agent release.** The template can now be worked on from Codex and Google Antigravity as well as Claude Code. Both read skills in the open Agent Skills format from `.agents/skills/`, and Codex reads `AGENTS.md`; this release gives them both, without a second copy of any skill to keep in sync.
+A **second-agent release.** The template can now be worked on from Codex (the Codex CLI, its IDE extensions, or the Codex tab of the ChatGPT desktop app, which absorbed the Codex app) and Google Antigravity as well as Claude Code. Both read skills in the open Agent Skills format from `.agents/skills/`, and Codex reads `AGENTS.md`; this release gives them both, without a second copy of any skill to keep in sync.
 
 ### Added
 

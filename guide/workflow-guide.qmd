@@ -285,7 +285,7 @@ The guide shows terminal commands because they are the most universal way to exp
 ::: {.callout-note collapse="true"}
 ## Using Codex or Antigravity instead of Claude Code?
 
-The template is built for Claude Code, but two other agents can use much of it. Codex reads [`AGENTS.md`](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/AGENTS.md) at the repository root, and both Codex and Google Antigravity read skills in the open Agent Skills format from `.agents/skills/`. That folder holds generated wrappers, one per skill that a single agent can run end to end: each has the same name and description as its Claude Code skill and sends the agent to the real instructions in `.claude/skills/`. In Codex, mention a skill with `$name` or list them with `/skills`; in Antigravity, type `/name`.
+The template is built for Claude Code, but two other agents can use much of it. Codex — the Codex CLI, its IDE extensions, and the Codex tab of the ChatGPT desktop app — reads [`AGENTS.md`](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/AGENTS.md) at the repository root, and both Codex and Google Antigravity read skills in the open Agent Skills format from `.agents/skills/`. That folder holds generated wrappers, one per skill that a single agent can run end to end: each has the same name and description as its Claude Code skill and sends the agent to the real instructions in `.claude/skills/`. In the ChatGPT app, type `@` to pick a skill; in the Codex CLI or an IDE extension, mention one with `$name` or list them with `/skills`; in Antigravity, type `/name`.
 
 Three things do not carry over, and `AGENTS.md` says what to do instead:
 
