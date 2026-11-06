@@ -32,15 +32,18 @@ getting a yes.
 The input is a findings JSON from the review runtime, a review report, or problems described in
 the conversation.
 
-1. **Pre-flight.** `gh auth status` must succeed. Then `gh repo view --json visibility,nameWithOwner`
-   and `git remote get-url origin`:
-   - **Fork safety check (#174):** GitHub disables Issues on forks by default, causing bare `gh`
-     commands to fall back to the parent template repository (`pedrohcgs/claude-code-my-workflow`).
-     If `origin` is a fork (not `pedrohcgs/claude-code-my-workflow`) and `gh repo view` resolves to
-     `pedrohcgs/claude-code-my-workflow`, **stop immediately** — tell the user to enable Issues on
-     their fork (*Settings → General → Features → Issues*) and run `gh repo set-default` to their
-     own `origin` remote before filing anything. (`scripts/file-issue.py` also pins `--repo` to a
-     non-template `origin` automatically.)
+1. **Pre-flight.** `gh auth status` must succeed. Then `git remote get-url origin`, and
+   `gh repo view <HOST>/<OWNER>/<NAME> --json visibility,nameWithOwner` for **that** repository —
+   the one `scripts/file-issue.py` will file into (it prints it) — not whatever bare `gh` infers:
+   - **Fork safety check (#174):** in a fork, a bare `gh` can resolve to the parent template
+     repository (`pedrohcgs/claude-code-my-workflow`), and GitHub disables Issues on forks by default.
+     If `origin` is a fork (not `github.com/pedrohcgs/claude-code-my-workflow`) and
+     `gh repo view <HOST>/<OWNER>/<NAME> --json hasIssuesEnabled` says `false`, **stop
+     immediately** — tell the user to enable Issues on their fork (*Settings → General → Features →
+     Issues*) and run `gh repo set-default` to their own `origin` remote before filing anything.
+     (`scripts/file-issue.py` pins `--repo` to a non-template `origin` automatically, and its
+     printed follow-ups — `gh issue view/comment/reopen` — carry the same `--repo`; keep it on
+     any you run.)
    - On a **PUBLIC** repository, say plainly that every issue will be public — unpublished results,
      referee-sensitive weaknesses and co-authors' drafts would be visible to anyone — suggest a
      private repository for paper work, and create nothing without an explicit yes to that.

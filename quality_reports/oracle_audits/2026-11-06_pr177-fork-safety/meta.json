@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-06",
+  "topic": "PR #177 stress test: fork-safety repair of scripts/file-issue.py, its battery cases, and the onFailure / blockWritesOutsideWorkingDirectories / model-fact documentation",
+  "oracle": {
+    "model": "GPT-6 (ChatGPT picker target 'GPT-6')",
+    "effort": "Pro",
+    "transport": "browser (ChatGPT Pro)",
+    "cli": "oracle 0.22.2 (npx); 0.21.3 failed to find the model picker and sent nothing"
+  },
+  "repository_state": {
+    "branch": "feat/v2.7-currency-ecosystem-and-tightening",
+    "commit": "0bd456d plus uncommitted working-tree changes (the first repair)",
+    "note": "the files sent are hashed below; the repair that followed this consult is in the same release"
+  },
+  "conversation_url": "https://chatgpt.com/c/6aee5603-e200-83ea-9a41-732e299536ef",
+  "elapsed": "15m13s",
+  "tokens": {
+    "in": 76350,
+    "out": 7080
+  },
+  "prompt_file": "prompt.md",
+  "transcript_file": "transcript.md",
+  "files_sent": [
+    {
+      "name": "a-change.diff",
+      "bytes": 236743,
+      "sha256": "907d620e18b56b11",
+      "contents": "git diff of the PR against its merge base (7586127), working tree, rendered HTML excluded"
+    },
+    {
+      "name": "b-file-issue.py",
+      "bytes": 14377,
+      "sha256": "efb4f67043a8c27c",
+      "contents": "scripts/file-issue.py as it stood after the first repair"
+    },
+    {
+      "name": "c-battery-excerpt.sh",
+      "bytes": 8206,
+      "sha256": "1bde72130c90b47e",
+      "contents": "scripts/hook-battery.sh: the fake gh, section (i) up to i15, and the GIT_* strip list"
+    },
+    {
+      "name": "d-settings.json",
+      "bytes": 3852,
+      "sha256": "a1adefdebb5378be",
+      "contents": ".claude/settings.json"
+    },
+    {
+      "name": "e-hook-entrypoints.txt",
+      "bytes": 600,
+      "sha256": "b804d01ac22a5472",
+      "contents": "the last 8 lines (entrypoint) of each PreToolUse guard hook"
+    },
+    {
+      "name": "f-reference-excerpts.md",
+      "bytes": 5758,
+      "sha256": "797f12abe3892e94",
+      "contents": "verbatim primary-source excerpts: Claude Code 2.1.318 settings schema, changelog entries, Anthropic platform docs, GitHub API and third-party repo facts"
+    }
+  ],
+  "files_deliberately_not_sent": [
+    "the earlier in-session review's findings (fenced: the referee saw the change, not the verdicts)",
+    "the hook implementations beyond their entrypoints",
+    "the battery prologue"
+  ],
+  "coverage_bound": "The referee executed the supplied Python with mocked subprocesses, traced the regexes by hand, and read the supplied excerpts; it did not run the battery, did not run on Windows, and could not verify claims whose sources were not attached (it lists them).",
+  "verdict": "Fork-safety fix incomplete: 6 major, 8 minor findings",
+  "adjudication": "meta.md"
+}

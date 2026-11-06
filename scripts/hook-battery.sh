@@ -2841,6 +2841,7 @@ cat > "$FGH/gh" <<'FAKEGH'
 #!/usr/bin/env bash
 # Stand-in for the GitHub CLI: logs its arguments, answers from files.
 echo "ARGS $*" >> "${FAKE_GH_LOG:-/dev/null}"
+{ printf 'ARGV'; printf ' <%s>' "$@"; printf '\n'; } >> "${FAKE_GH_LOG:-/dev/null}"
 case "$1 ${2:-}" in
   "api "*)
     [ -n "${FAKE_GH_SLEEP:-}" ] && sleep "$FAKE_GH_SLEEP"
@@ -2860,7 +2861,19 @@ case "$1 ${2:-}" in
 esac
 exit 1
 FAKEGH
-chmod +x "$FGH/gh"
+cat > "$FGH/ssh" <<'FAKESSH'
+#!/usr/bin/env bash
+# Stand-in for `ssh -G [--] HOST`: what ~/.ssh/config would resolve, as real ssh prints it.
+[ "$1" = "-G" ] || exit 255
+shift; [ "${1:-}" = "--" ] && shift
+case "$1" in
+  github-work) echo "hostname github.com" ;;
+  ghe-work)    echo "hostname ghe.example.com" ;;
+  *)           echo "hostname $1" ;;
+esac
+echo "port 22"
+FAKESSH
+chmod +x "$FGH/gh" "$FGH/ssh"
 NOGH="$TMP/nogh"; mkdir -p "$NOGH"; ln -s "$(command -v python3)" "$NOGH/python3"
 
 python3 - "$TMP" <<'MKISSUES'
@@ -2948,7 +2961,11 @@ fi_run() {  # fi_run <log> [VAR=VAL ...] -- <args...>   -> sets OUT (stdout+stde
     local log="$1"; shift; local envs=()
     while [ "$1" != "--" ]; do envs+=("$1"); shift; done; shift
     : > "$log"
-    OUT="$(env "${UNSET_GIT_ENV[@]}" PATH="$FGH:$PATH" FAKE_GH_LOG="$log" ${envs[@]+"${envs[@]}"} \
+    # GH_TOKEN: if a REAL gh is ever reached instead of the stand-in (native Windows Python
+    # resolves `gh` through PATHEXT and skips an extensionless file), it cannot authenticate,
+    # so no case can create a real issue (PR #177 review).
+    OUT="$(env "${UNSET_GIT_ENV[@]}" -u GH_REPO -u GH_HOST PATH="$FGH:$PATH" FAKE_GH_LOG="$log" \
+           GH_TOKEN=battery-not-a-token GH_ENTERPRISE_TOKEN=battery-not-a-token ${envs[@]+"${envs[@]}"} \
            python3 "$FI" "$@" 2>&1)"
     RC=$?
 }
@@ -2991,6 +3008,58 @@ verdict "exit=$RC leaked=$(sed -n '/^BODY-START/,$p' "$TMP/i9.log" | grep -c 'un
 expect_contains "i9 a --search term is searched but never written into the public issue body" "exit=0 leaked=0 kinds=1"
 verdict "left-behind=$(find "$ITMP" -type f | wc -l | tr -d ' ')"
 expect_contains "i10 the temp file holding the body is removed after the create" "left-behind=0"
+# #174: in a fork, bare gh can resolve to the parent (or to a remote named `upstream`),
+# so a forker's paper issue was filed on the public template. The script pins --repo to
+# origin as HOST/OWNER/NAME; these run it from a clone whose origin is set, in each
+# spelling the first version of the fix (0bd456d) or its first repair got wrong (PR #177
+# review). The fake gh logs each argument as <word>, so a pin must be exactly
+# `<--repo> <HOST/OWNER/NAME>`: a fused "--repo X" argument, or a near-miss host, fails.
+IFX="$TMP/i-fork"; mkdir -p "$IFX"; git -C "$IFX" init -q >/dev/null 2>&1
+fi_origin() {  # fi_origin <origin-url> <log> -- <args...>   -> OUT, RC; run from a clone with that origin
+    git -C "$IFX" remote remove origin >/dev/null 2>&1
+    git -C "$IFX" remote add origin "$1" >/dev/null 2>&1; shift
+    pushd "$IFX" >/dev/null; fi_run "$@"; popd >/dev/null
+}
+fi_pin() {  # fi_pin <log> <HOST/OWNER/NAME>: every gh issue call must carry exactly that pin
+    echo "exit=$RC created=$(grep -c '^ARGV <issue> <create>' "$1") pinned=$(grep '^ARGV <issue>' "$1" | grep -F -c -- "<--repo> <$2>") of=$(grep -c '^ARGV <issue>' "$1")"
+}
+fi_bare() { echo "exit=$RC created=$(grep -c '^ARGV <issue> <create>' "$1") pinned=$(grep -F -c -- '<--repo>' "$1")"; }
+fi_case() {  # fi_case <n> <origin-url> -> runs the standard create from a clone with that origin
+    fi_origin "$2" "$TMP/i$1.log" -- --title "$TITLE" --body-file "$TMP/i-body.md"
+}
+fi_case 11 "https://GitHub.com/alice/fork.git"
+verdict "$(fi_pin "$TMP/i11.log" github.com/alice/fork)"
+expect_contains "i11 a fork origin spelt GitHub.com pins github.com/alice/fork on every search and the create" "exit=0 created=1 pinned=5 of=5"
+fi_case 12 "git@github-work:alice/fork.git"
+verdict "$(fi_pin "$TMP/i12.log" github.com/alice/fork)"
+expect_contains "i12 an ssh-config alias (git@github-work:) is resolved with ssh -G to github.com" "exit=0 created=1 pinned=5 of=5"
+fi_case 13 "https://ghe.example.com/alice/fork.git"
+verdict "$(fi_pin "$TMP/i13.log" ghe.example.com/alice/fork)"
+expect_contains "i13 a GitHub Enterprise origin pins HOST/OWNER/NAME" "exit=0 created=1 pinned=5 of=5"
+fi_case 14 "https://x-access-token:s3cr3t-T0KEN@github.com/alice?access_token=s3cr3t-T0KEN"
+verdict "exit=$RC gh-calls=$(grep -c '^ARGV' "$TMP/i14.log") token-shown=$(printf '%s' "$OUT" | grep -c 's3cr3t-T0KEN')"
+expect_contains "i14 an origin URL whose owner/name cannot be read fails CLOSED (exit 2, gh never called, no token printed)" "exit=2 gh-calls=0 token-shown=0"
+fi_case 15 "https://github.com/pedrohcgs/claude-code-my-workflow.git"
+verdict "$(fi_bare "$TMP/i15.log")"
+expect_contains "i15 CONTROL: in a clone of the template on github.com, nothing is pinned and gh decides" "exit=0 created=1 pinned=0"
+fi_case 16 "git@ghe-work:alice/paper.git"
+verdict "$(fi_pin "$TMP/i16.log" ghe.example.com/alice/paper)"
+expect_contains "i16 an ssh alias that points at an Enterprise host pins that host, not github.com" "exit=0 created=1 pinned=5 of=5"
+fi_case 17 "https://ghe.example.com/pedrohcgs/claude-code-my-workflow.git"
+verdict "$(fi_pin "$TMP/i17.log" ghe.example.com/pedrohcgs/claude-code-my-workflow)"
+expect_contains "i17 the template's owner/name on another host is NOT the template: it is pinned" "exit=0 created=1 pinned=5 of=5"
+fi_case 18 "git@github.com:/alice/fork.git"
+verdict "$(fi_pin "$TMP/i18.log" github.com/alice/fork)"
+expect_contains "i18 the scp form with an absolute path (host:/owner/name) is a remote and is pinned" "exit=0 created=1 pinned=5 of=5"
+fi_case 19 "file://localhost/tmp/paper.git"
+verdict "$(fi_bare "$TMP/i19.log")"
+expect_contains "i19 CONTROL: a file:// origin is a local path, left to gh" "exit=0 created=1 pinned=0"
+pushd "$IFX" >/dev/null
+git -C "$IFX" remote set-url origin "https://github.com/alice/fork.git" >/dev/null 2>&1
+fi_run "$TMP/i20.log" FAKE_GH_MATCH=standard FAKE_GH_HITS="$TMP/i-one.json" -- --title "$TITLE" --body-file "$TMP/i-body.md"
+popd >/dev/null
+verdict "exit=$RC follow-ups-pinned=$(printf '%s\n' "$OUT" | grep -E -c 'gh issue (view|comment|reopen) N --repo github\.com/alice/fork')"
+expect_contains "i20 the duplicate follow-up commands it prints name the same repository as its searches" "exit=3 follow-ups-pinned=2"
 
 # ── (e) the battery's own isolation from git's hook environment ────────────
 # This battery runs INSIDE .githooks/pre-commit. Everything above is worthless

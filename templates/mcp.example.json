@@ -1,9 +1,9 @@
 {
-  "_comment": "Copy needed entries to .mcp.json (project-shared) or add via `claude mcp add --scope user`. Never enable external MCP servers on restricted-data repositories without checking your DUA.",
+  "_comment": "Copy needed entries to .mcp.json (project-shared) or add via `claude mcp add --scope user`. Never enable external MCP servers on restricted-data repositories without checking your DUA. stata-mcp and context7 are pinned (checked 2026-11-06); bump them deliberately. r-mcptools runs whatever mcptools version your R library holds; pin it there (e.g. renv).",
   "mcpServers": {
     "stata-mcp": {
       "command": "uvx",
-      "args": ["stata-mcp"]
+      "args": ["stata-mcp@1.25.2"]
     },
     "r-mcptools": {
       "command": "Rscript",
@@ -11,7 +11,7 @@
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": ["-y", "@upstash/context7-mcp@4.4.4"]
     }
   }
 }

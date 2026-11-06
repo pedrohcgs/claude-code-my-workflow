@@ -48,26 +48,84 @@ makes new now problem problems still wrong
 WORD = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.\-/]*[A-Za-z0-9_]|[A-Za-z0-9_]")
 PATH = re.compile(r"(?<![\w/.-])(?:[\w.-]+/)*[\w.-]+\.(?:R|r|py|sh|tex|qmd|md|Rmd|do|ado|ipynb|"
                   r"json|ya?ml|csv|bib|html|js|css|scss|toml|txt)\b")
-UPSTREAM_TEMPLATE = "pedrohcgs/claude-code-my-workflow"
-_GH_URL = re.compile(r"github\.com[:/]([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+?)(?:\.git)?/?$")
+UPSTREAM_TEMPLATE = "github.com/pedrohcgs/claude-code-my-workflow"
+# Git's two remote spellings: `scheme://[userinfo@]host[:port]/path` and scp-like
+# `[user@]host:path`, whose path may itself start with `/`. The host's spelling is not
+# trusted: a literal-`github.com` match missed `GitHub.com`, ssh-config aliases and GitHub
+# Enterprise, and each fell back to the template (PR #177 review).
+_URL_FORM = re.compile(r"^(?P<scheme>[A-Za-z][A-Za-z0-9+.-]*)://(?:[^@/]*@)?"
+                       r"(?P<host>\[[^\]/]+\]|[^/:\[\]]+)(?::\d*)?/(?P<path>.+)$")
+_SCP_FORM = re.compile(r"^(?:[^@/:]+@)?(?P<host>\[[^\]/]+\]|[^/:\[\]@]+):(?P<path>.+)$")
+_SLUG = re.compile(r"^/?(?P<owner>[A-Za-z0-9_.-]+)/(?P<name>[A-Za-z0-9_.-]+?)(?:\.git)?/?$")
+_SSH_SCHEMES = {"ssh", "git+ssh", "ssh+git"}
 
 
-def origin_repo() -> str | None:
-    """Return owner/name from `git remote get-url origin` when it is a fork (not the
-    upstream template), so gh does not silently fall back to the public parent repo
-    when Issues are disabled on a fork (#174)."""
+def _is_local(url: str) -> bool:
+    """A path git reads from disk rather than a server: a file:// URL, a Windows drive, or
+    anything with a slash before its first colon, or no colon at all — git's own rule for
+    telling a path from scp-like `host:path`. Only these are left to gh."""
+    if url.lower().startswith("file:") or re.match(r"^[A-Za-z]:([\\/]|$)", url):
+        return True
+    colon = url.find(":")
+    return colon == -1 or "/" in url[:colon] or "\\" in url[:colon]
+
+
+def _ssh_hostname(alias: str) -> str | None:
+    """The server ssh really connects to for `alias`: `ssh -G` applies ~/.ssh/config, so
+    `github-work` can turn out to be github.com or an Enterprise host."""
     try:
-        r = subprocess.run(["git", "remote", "get-url", "origin"],
-                           capture_output=True, timeout=5)
+        r = subprocess.run(["ssh", "-G", "--", alias], capture_output=True, timeout=5)
     except (OSError, subprocess.TimeoutExpired):
         return None
     if r.returncode != 0:
         return None
-    m = _GH_URL.search(r.stdout.decode("utf-8", "replace").strip())
-    if not m:
+    for line in r.stdout.decode("utf-8", "replace").splitlines():
+        key, _, value = line.strip().partition(" ")
+        if key.lower() == "hostname" and value.strip():
+            return value.strip().lower()
+    return None
+
+
+def origin_repo() -> str | None:
+    """The --repo to pin, as HOST/OWNER/NAME, read from `git remote get-url origin`.
+
+    Left to gh (None) only when there is no origin, when origin is a local path, or when it
+    is the template on github.com. Otherwise the origin, host included — an OWNER/NAME pin
+    still lets GH_HOST choose the server — so gh cannot pick a different repository (a remote
+    named `upstream`, or a fork's parent), which is how a forker's paper issue was filed
+    publicly on the template (#174). Raises ValueError for any other origin it cannot
+    identify: falling back to gh's choice there is the leak this exists to stop.
+    """
+    try:
+        r = subprocess.run(["git", "remote", "get-url", "origin"],
+                           capture_output=True, timeout=5)
+    except OSError:
+        return None                                  # no git: gh cannot read remotes either
+    except subprocess.TimeoutExpired:
+        raise ValueError("`git remote get-url origin` timed out") from None
+    if r.returncode != 0:
+        return None                                  # no origin remote
+    url = r.stdout.decode("utf-8", "replace").strip()
+    if not url or _is_local(url):
         return None
-    slug = m.group(1)
-    return slug if slug.lower() != UPSTREAM_TEMPLATE else None
+    m = _URL_FORM.match(url) or _SCP_FORM.match(url)
+    s = _SLUG.match(m.group("path")) if m and "\n" not in url else None
+    host = m.group("host").lower() if m else ""
+    if not s or host.startswith("-") or "\ufffd" in host:
+        # The URL is not repeated here: it can carry a token, in its userinfo or its query.
+        raise ValueError("the origin remote's URL (`git remote get-url origin`) does not name "
+                         "a HOST/OWNER/NAME repository this script can identify")
+    if m.re is _SCP_FORM or m.group("scheme").lower() in _SSH_SCHEMES:
+        if host != "github.com":
+            real = _ssh_hostname(host)
+            if not real:
+                raise ValueError(f"cannot tell which server the ssh host {host!r} in origin "
+                                 "points to (`ssh -G` gave no hostname)")
+            host = real
+    if host.endswith(".github.com"):
+        host = "github.com"                          # ssh.github.com (port 443) is github.com
+    repo = f"{host}/{s.group('owner')}/{s.group('name')}"
+    return None if repo.lower() == UPSTREAM_TEMPLATE else repo
 
 
 def keywords(title: str) -> list[str]:
@@ -128,11 +186,20 @@ def main() -> int:
                     help="extra search terms (a section name, a function, a table label)")
     ap.add_argument("--checked", action="append", default=[],
                     help="issue numbers you reviewed and judged distinct, e.g. 12,15")
-    ap.add_argument("--repo", help="owner/name (default: origin remote on forks, or the repository gh infers)")
+    ap.add_argument("--repo", help="[HOST/]OWNER/NAME (default: the origin remote as HOST/OWNER/NAME, "
+                                   "unless origin is the template on github.com or a local path)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     if not a.repo:
-        a.repo = origin_repo()
+        try:
+            a.repo = origin_repo()
+        except ValueError as e:
+            print(f"file-issue: CANNOT RUN — {e}. Pass --repo OWNER/NAME, so the issue cannot "
+                  "land in a repository you did not mean (#174). Nothing was created.",
+                  file=sys.stderr)
+            return 2
+        if a.repo:
+            print(f"file-issue: filing in {a.repo} (the origin remote)")
     # A title the pipe's code page cannot show (ρ or → on cp1252; the em dash below
     # on cp932 or cp949) crashed the duplicate listing. UTF-8 is what Claude Code
     # and mintty read.
@@ -191,8 +258,10 @@ def main() -> int:
                   f"(matched {r['hits']} of {len(queries)} searches)")
         if len(pending) > SHOW:
             print(f"  ... and {len(pending) - SHOW} more with fewer matches")
-        print("\nRead each one (gh issue view N). If one is the same problem, add to it instead:")
-        print("  gh issue comment N --body-file <file>    (and gh issue reopen N if it is back)")
+        # The same repository as the searches, or N names an issue somewhere else.
+        rp = f" --repo {a.repo}" if a.repo else ""
+        print(f"\nRead each one (gh issue view N{rp}). If one is the same problem, add to it instead:")
+        print(f"  gh issue comment N{rp} --body-file <file>    (and gh issue reopen N{rp} if it is back)")
         shown = ",".join(str(r["number"]) for r in pending[:SHOW])
         print(f"If the new issue is distinct from all of them, re-run with --checked {shown}")
         print("Nothing was created.")

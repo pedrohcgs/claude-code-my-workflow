@@ -29,7 +29,7 @@ Set per-skill via the same field in `SKILL.md` frontmatter. Inheritance is fine 
 
 ## The effort axis (the first cost lever)
 
-Model tier is the second cost lever; **effort is the first.** Every current model tier supports effort (`low / medium / high`, plus `xhigh / max` on Opus and Fable) — and lowering effort is cheaper than dropping a tier: reach for it first.
+Model tier is the second cost lever; **effort is the first.** Every current model tier supports effort (`low / medium / high / xhigh / max` on all four) — and lowering effort is cheaper than dropping a tier: reach for it first.
 
 Default effort differs by tier — the current defaults live in [`model-versions.md`](../references/model-versions.md) (at its 2026-11-04 verification: Opus and Haiku tiers **`medium`**, Sonnet and Fable tiers `high`). Two facts about the current Opus shape every pin, and both belong to that verification — re-read them when the SSoT changes:
 

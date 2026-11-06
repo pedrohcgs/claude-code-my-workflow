@@ -131,7 +131,7 @@ A single Markdown handoff doc at `quality_reports/handoffs/YYYY-MM-DD_coauthor-b
 - `--since` `<tag|date|Ndays>` — Baseline to diff against — a git tag, an ISO date, or `Ndays` (e.g. `14days`). Default: the previous brief in `quality_reports/handoffs/`, else 14 days (Phase 0).
 - `--for` `<name>` — Tailor the brief to a specific collaborator (e.g. surface the restricted-data access steps they still need).
 - `--no-data-section` — Omit the restricted-data access section.
-- `--quiz` — Include a 3–5 question **Seminar Defense Check** (inspired by `clo-author`'s understanding gate and `MixtapeTools`'s `Fletcher` audit) testing whether the human author can explain the pipeline's sample filters, merge keys, and specification mechanics before a talk or submission.
+- `--quiz` — Include a 3–5 question **Seminar Defense Check** (inspired by `clo-author`'s `/explain` understanding gate) testing whether the human author can explain the pipeline's sample filters, merge keys, and specification mechanics before a talk or submission.
 
 ## Cross-references
 
