@@ -10,7 +10,8 @@
       "WebSearch",
       "Read(**)"
     ],
-    "deny": []
+    "deny": [],
+    "blockWritesOutsideWorkingDirectories": true
   },
   "hooks": {
     "PreToolUse": [
@@ -20,7 +21,8 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/git-guardrails.py",
-            "timeout": 20
+            "timeout": 20,
+            "onFailure": "block"
           }
         ]
       },
@@ -30,7 +32,8 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/root-of-trust-guard.py",
-            "timeout": 20
+            "timeout": 20,
+            "onFailure": "block"
           }
         ]
       },
@@ -41,13 +44,15 @@
             "type": "command",
             "if": "Bash(gh *)",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/issue-guard.py",
-            "timeout": 10
+            "timeout": 10,
+            "onFailure": "block"
           },
           {
             "type": "command",
             "if": "Bash(gh.exe *)",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/issue-guard.py",
-            "timeout": 10
+            "timeout": 10,
+            "onFailure": "block"
           }
         ]
       }

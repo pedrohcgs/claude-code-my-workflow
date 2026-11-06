@@ -2,6 +2,8 @@
 
 This repository is a **template** designed for academic researchers to fork and customize. Contributions back to the template should help **all** users, not just one fork.
 
+**Pull requests are open to collaborators only** (since 2026-11-06). Forks kept opening their own coursework and papers here, often without meaning to. To propose a change to the template, open an issue; if it is taken up, a maintainer makes the change or invites you as a collaborator. The steps below apply to collaborators.
+
 ## What we welcome
 
 - **Bug fixes** in shared infrastructure (skills, agents, rules, hooks, scripts).

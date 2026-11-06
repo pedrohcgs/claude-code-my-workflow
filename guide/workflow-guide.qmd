@@ -2,8 +2,8 @@
 title: "My Claude Code Setup"
 subtitle: "A Comprehensive Guide to AI-Assisted Academic Workflows: Slides, Papers, Analysis, and Beyond"
 author: "Pedro H. C. Sant'Anna"
-date: "2026-09-27"
-version: "2.6.0"
+date: "2026-11-06"
+version: "2.7.0"
 date-modified: last-modified
 format:
   html:
@@ -1019,13 +1019,13 @@ Claude Code also offers experimental **Agent Teams** --- multiple independent se
 ### Multi-Model Strategy: Cost vs. Quality {#multi-model-strategy-cost-vs-quality}
 
 ::: {.callout-note}
-## Current Anthropic lineup (re-verified 2026-09-26; expiry-gated via the model SSoT)
+## Current Anthropic lineup (re-verified 2026-11-04; expiry-gated via the model SSoT)
 
-The **Fable tier** (alias `fable`) is the top Claude Code tier — opt-in via `/model fable` or the `best` alias, built for tasks larger than a single sitting; it investigates before acting and verifies its own work more often than smaller models. It is **not** the default on any account type and costs a multiple of the Opus price. The **Opus tier** is the Claude Code default and what this template routes referees, editors, and verifiers to; its adaptive thinking is always on and it defaults to `medium` effort. **Sonnet** is the workhorse mid-tier; **Haiku** is the fast/mechanical tier. Anthropic's own routing advice: start with the current Opus, and move to Fable when evals at a higher Opus effort still fall short.
+The **Fable tier** (alias `fable`) is the top Claude Code tier — opt-in via `/model fable` or the `best` alias, built for tasks larger than a single sitting; it investigates before acting and verifies its own work more often than smaller models. It is **not** the default on any account type and costs a multiple of the Opus price. The **Opus tier** is the Claude Code default and what this template routes referees, editors, and verifiers to; its adaptive thinking is always on and it defaults to `medium` effort. **Sonnet** is the workhorse mid-tier (cache reads dropped 50% to `\$0.10/MTok` on the 5.5 generation); **Haiku** is the fast/mechanical tier (now with a `1M` context window and configurable `effort`). Anthropic's own routing advice: start with the current Opus, and move to Fable when evals at a higher Opus effort still fall short.
 
 Alias resolution is **provider-dependent**, and point versions move faster than any guide can. The single source of truth is [`model-versions.md`](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/.claude/references/model-versions.md), which carries the current versions, the per-provider alias table, and a `verified_on` date with an expiry — `scripts/check-staleness.py` fails the build when that expiry passes, and `scripts/check-model-versions.sh` catches any superseded version presented as current. **Do not hard-code a point version here.**
 
-**Retirement watch:** Sonnet 4 and the original Opus 4 retired on 2026-06-15; the current Haiku model's retirement floor is 2026-10-15 (see the SSoT). If your environment pins a model string (`ANTHROPIC_MODEL`, `ANTHROPIC_DEFAULT_*_MODEL`, hard-coded IDs in CI), re-check it against the SSoT. The current Opus needs Claude Code ≥ 2.1.280 — run `claude update` (or `claude --version`) if `/model` does not offer it.
+**Retirement watch:** Sonnet 4 and the original Opus 4 retired on 2026-06-15, the current Haiku tier shipped on 2026-10-07, and prior-generation Haiku 4.5 is still served but past its retirement floor (not sooner than 2026-10-15), so a retirement can now be announced at 60 days' notice (see the SSoT). If your environment pins a model string (`ANTHROPIC_MODEL`, `ANTHROPIC_DEFAULT_*_MODEL`, hard-coded IDs in CI), re-check it against the SSoT. The current Opus needs Claude Code ≥ 2.1.280 — run `claude update` (or `claude --version`) if `/model` does not offer it.
 :::
 
 ::: {.callout-tip}
@@ -1108,7 +1108,7 @@ The Apr 2026 [TTL change cost analysis](https://dev.to/whoffagents/claude-prompt
 
 | Model | Share of subagent calls | Use for |
 |---|---|---|
-| **Haiku 4.5** | ~70% | Mechanical work: TikZ extraction, citation reformatting, bib validation, proofread fixes, simple file lookups |
+| **Haiku tier** | ~70% | Mechanical work: TikZ extraction, citation reformatting, bib validation, proofread fixes, simple file lookups |
 | **Sonnet tier** | ~20% | Review and critique: r-reviewer, slide-auditor, proofreader, quarto-fixer |
 | **Opus tier** | ~10% | High-judgment work: editor, domain-referee, methods-referee, claim-verifier, manuscript review |
 
@@ -1214,7 +1214,7 @@ Plan mode and a low-prompt execution mode — **auto mode**, or bypass if you ru
 
 Approving a plan via `ExitPlanMode` hands the session to the mode set at the approval prompt — current Claude Code versions present explicit choices there (approve into auto mode, approve with manual edit review, keep planning); on a bypass setup the approved plan proceeds without per-tool prompts. Once there, any subsequent tool call (Edit, Write, Bash) executes under the full allowlist in your `settings.json`, not a scope derived from the plan. A mistaken implementation can still edit unrelated files or run destructive shell commands with no second checkpoint.
 
-Treat this flow as a convenience pattern, not a security control. If you need a hard enforcement boundary, set `permissions.defaultMode: "default"` (Manual — the template's `.claude/settings.json` sets no default mode, so on Claude Code ≥ 2.1.283 sessions start in auto) and remove the template's wildcard `Bash(*)`, `Edit(**)` and `Write(**)` allows, or add `ask`/`deny` rules for high-risk tools, so each one prompts individually. In VS Code, also delete the two bypass keys from `.vscode/settings.json`. Alternatively, run the whole session in `plan` mode and copy actions out manually.
+Treat this flow as a convenience pattern, not a security control. If you need a hard enforcement boundary, set `permissions.defaultMode: "default"` (Manual — the template's `.claude/settings.json` sets no default mode, so on Claude Code ≥ 2.1.283 sessions start in auto) and remove the template's wildcard `Bash(*)`, `Edit(**)` and `Write(**)` allows, or add `ask`/`deny` rules for high-risk tools, so each one prompts individually. Alternatively, run the whole session in `plan` mode and copy actions out manually.
 :::
 
 The flow:
@@ -1311,13 +1311,13 @@ Claude Code lets you control how deeply it reasons about each task. Higher effor
 - **Per-skill:** Add `effort: high` to skill frontmatter (see [Skill Frontmatter Reference](#skill-frontmatter))
 - **Keyboard toggle:** `Option+T` (Mac) / `Alt+T` (Windows/Linux) toggles thinking on models where it can be switched off; on the current Opus and Fable tiers thinking is always on, so `/effort` is the control
 - **In prompts:** on always-thinking tiers, raise `/effort` for a hard turn rather than relying on a keyword such as `ultrathink`; phrases like "think hard" are treated as regular instructions and do *not* allocate extra thinking
-- **Environment variable:** `CLAUDE_CODE_EFFORT_LEVEL=high` for all sessions
+- **Environment variable:** `CLAUDE_CODE_EFFORT_LEVEL=high` for all sessions, and `CLAUDE_CODE_SUBAGENT_EFFORT=medium` (Claude Code ≥ 2.1.316) to set the default effort for subagents
 - **Hooks can read it:** As of Apr 2026 Week 19, hook input includes `effort.level` and `$CLAUDE_EFFORT` is set in Bash subprocess env --- useful for skipping expensive verification on low-effort runs
 
 ::: {.callout-tip}
 ## Composing Effort with Model Choice
 
-Effort levels compose with model selection for fine-grained cost control. For example, `Sonnet + high effort` costs less than `Opus + high effort` and may produce comparable results for bounded tasks like formatting, and the Haiku tier (which takes no effort setting) is cheaper still. Use `Opus + max` only for tasks that genuinely require deep multi-step reasoning --- complex proofs, intricate data pipeline debugging, or comprehensive paper critique.
+Effort levels compose with model selection for fine-grained cost control. For example, `Sonnet + high effort` costs less than `Opus + high effort` and may produce comparable results for bounded tasks like formatting, while `Haiku + low effort` (configurable on the current Haiku tier, where `promote-memory-council` pins `effort: low`) is cheaper still. Use `Opus + max` only for tasks that genuinely require deep multi-step reasoning --- complex proofs, intricate data pipeline debugging, or comprehensive paper critique.
 :::
 
 ## Memory --- Cross-Session Persistence {#memory---cross-session-persistence}
@@ -1441,7 +1441,10 @@ The template includes 11 hooks for logging, notifications, context survival, git
 | Open issues (opt-in) | `SessionStart[startup]` | With `CLAUDE_ISSUES_AT_START=1`, lists the open issues' numbers and titles — by the owner and collaborators only — so a session starts knowing the to-do list; off by default |
 | Root-of-trust guard | `PreToolUse[Bash]` | A tripwire, not a lock: denies *silent shell* writes into `.claude/settings*.json`, `.claude/hooks/`, and `.githooks/` — the files that define every other gate — and applies the destructive-git deny list to `bash -c` / `env -S` payloads. `Edit`/`Write`, a branch switch, or a bug in the hook can still replace them |
 
-Two of these deserve a note, because both encode a lesson rather than a preference. **Git guardrails** refuses a merge, rebase, or pull while the working tree is dirty: the operation either aborts mid-way or quietly folds uncommitted work into the result, and neither outcome announces itself. Stash with a label first, or set `ALLOW_DIRTY_MERGE=1` if you mean it. `--abort` and `--continue` are exempt outright — they are how you get *out* of a dirty in-progress operation. `--autostash` is not: it is allowed only when `git status --porcelain` reports no untracked entry, because `git stash` does not stash untracked files, so an autostash over a `??` line leaves that line exactly where it was.
+Two of these deserve a note, because both encode a lesson rather than a preference. **Git guardrails** refuses a merge, rebase, or pull while the working tree is dirty: the operation either aborts mid-way or quietly folds uncommitted work into the result, and neither outcome announces itself. Stash with a label first, or set `ALLOW_DIRTY_MERGE=1` if you mean it. `--abort` and `--continue` are exempt outright — they are how you get *out* of a dirty in-progress operation. `--autostash` is not: it is allowed only when `git status --porcelain` reports no untracked entry, because `git stash` does not stash untracked files, so an autostash over a `??` line leaves that line exactly where it was. All three `PreToolUse` guards (`git-guardrails.py`, `root-of-trust-guard.py`, and `issue-guard.py`) are registered in `.claude/settings.json` with `"onFailure": "block"` (Claude Code ≥ 2.1.295): a guard that cannot start (`python3` missing, a moved script), times out, exits with an unexpected code or prints invalid output now blocks the call instead of letting it through. An exception *inside* a guard still fails open: each guard catches its own errors and exits 0, so that a guard bug cannot block unrelated work.
+
+::: {.callout-note collapse="true"}
+## Deep Dive: Why Shell-Command Guards Are Tripwires, Not Locks (Rule 0 & Parser Boundaries)
 
 It refuses **even when the same command line would have cleaned the tree first** — `git stash push -m wip && git merge` is denied, and you run the two steps separately instead. That looks pedantic until you see what the alternative cost. The check originally tried to *predict*, from the text of a chained command, whether the tree would still be dirty by the time the merge ran. Round after round of adversarial review found one more thing the prediction got wrong — stash flags, then stash subcommands, then intervening segments, then output redirection, then command substitution, and finally the plain fact that `git stash` does not stash untracked files at all, so even a correctly-parsed "this cleans the tree" was sometimes false. The rule now reads the tree as it *actually is* and refuses.
 
@@ -1453,13 +1456,14 @@ What it still cannot see is written down rather than implied away. Its docstring
 
 Because that hook already unwraps `bash -c` and `env -S` payloads to find writes hidden inside them, it now hands the unwrapped payload to git-guardrails' *own* destructive-git deny list as well — imported, not copied, so the two hooks cannot drift apart on what counts as destructive. That closes a gap the two of them had left open between each other: `bash -c 'git reset --hard'` and `bash -c 'git clean -fdx'` named no protected path for the first hook to test and looked like one opaque word to the second, so neither denied them, while the unwrapped spellings had been denied all along. The clean-tree check is *not* shared, so `bash -c 'git merge main'` on a dirty tree is still seen by neither.
 
-Now the part the name gets wrong. A repo-local, mutable, fail-open textual scan is not a root of trust, and the file name is a filename rather than a claim. The scan reads the command line as text, so it catches the direct forms — redirects, `tee`, `cp`/`mv`/`rm`, in-place edits — and the payload carriers it knows about, including behind common wrappers. It cannot see inside an interpreter it does not read (`python3 -c`, `perl -e`), a path piped into a deleter, or an execution form nobody has enumerated yet. More to the point, the files it watches stay replaceable through four channels the template deliberately allows, none of which trips it: an `Edit` / `Write` / `MultiEdit` on those same files — including one that deletes the hook's own registration from `.claude/settings.json`; an ordinary `git switch` onto a branch whose tree carries different hooks; a clean merge or pull that imports the same change; and a bug in the hook itself, which fails open and becomes a no-op.
+Now the part the name gets wrong. `"onFailure": "block"` closes the cases where the hook cannot start, times out, or exits or answers abnormally — not an error the hook catches itself; a repo-local, mutable, fail-open textual scan is still not a root of trust, and the file name is a filename rather than a claim. The scan reads the command line as text, so it catches the direct forms — redirects, `tee`, `cp`/`mv`/`rm`, in-place edits — and the payload carriers it knows about, including behind common wrappers. It cannot see inside an interpreter it does not read (`python3 -c`, `perl -e`), a path piped into a deleter, or an execution form nobody has enumerated yet. More to the point, the files it watches stay replaceable through channels the template deliberately allows, none of which trips it: an `Edit` / `Write` / `MultiEdit` on `.claude/hooks/` or `.githooks/` (on Claude Code ≥ 2.1.314 the template's `blockWritesOutsideWorkingDirectories` refuses file-tool writes to the settings files themselves, so the hook's registration can no longer be deleted that way); an ordinary `git switch` onto a branch whose tree carries different hooks; a clean merge or pull that imports the same change; and a bug in the hook itself, which fails open and becomes a no-op.
 
 So state its value exactly: **it changes the channel a modification arrives through — a reviewable diff instead of an invisible overwrite — and nothing more.** It is not a lock, and in a fresh fork there may be no other control behind it: a visible diff is retrospective visibility rather than authorisation, choosing `bypassPermissions` is a posture rather than a control, and a machine-wide hook in `~/.claude/hooks/` is optional and lives outside the repository. If you want a real one, it has to sit outside the worktree — a non-empty `deny` list in the permission system, or a machine-level hook — and it has to cover `Edit`/`Write` and branch transitions too. Note also what the audit trail is not: the transcript records that a loss happened, and `git reflog` / `ORIG_HEAD` recover a moved commit pointer, but neither holds the bytes of an uncommitted edit, an untracked file, or an ignored one — which is exactly what `reset --hard` and `clean -fdx` destroy. A guard whose advertised coverage exceeds its actual coverage is worse than none, because you stop looking.
 
 There is a further lesson here, and it is the one most likely to transfer to whatever you are guarding. A path can be written many ways that all reach the same file — a glob, a different case on a case-insensitive filesystem, a quote or a backslash sitting inside the name, a variable, a command substitution. Successive review rounds each turned up another one. That is simply what a text scan over shell syntax is: useful for the direct forms, and not a closed set. So the practical advice is not to give up on the guard — it still costs an accident a denial — but to be honest in the docstring about which forms it has actually been tested against, and to say that there are others. If you need a guarantee rather than a speed bump, the mechanism has to stop being a text scan: a real `deny` rule in the permission system, or a wrapper the operation cannot go around.
 
 One distinction inside that is worth keeping, because it changes what a fix can even do. Most of those forms are just **text** — the information is in the command line, so a scanner can be taught to read it, and another round of parsing is a reasonable answer. A symbolic link is not: it is a fact about the filesystem, and reading the command line cannot recover it. A link named anything at all, pointing at the directory you protect, is invisible to a text scan while the shell writes straight through it. That one is written down as out of reach rather than chased — and when you build your own guard, the same question tells you which gaps are worth more parsing and which mean the mechanism is the wrong shape for the guarantee you wanted.
+:::
 
 Verification and Beamer-Quarto sync are enforced via auto-loaded rules, which are the right tool for nuanced judgment. Hooks are reserved for enforcement that *must* survive context compression.
 
@@ -1497,7 +1501,7 @@ But a wired hook is not yet a working hook. A guard can keep its path, keep firi
 denying — an over-broad exception, a regex loosened during a debugging session, an early
 `return allow` left in. Gate 10, the hook battery, drives each active guard with synthetic events
 and requires it to still go red on the failure it was written for, and to stay green on the clean
-controls. 312 cases, and it finishes in seconds.
+controls. 322 cases, and it finishes in seconds.
 :::
 
 **Hook handler types.** The examples above use `command` hooks (shell scripts), but Claude Code supports five handler types:
@@ -2857,7 +2861,7 @@ clo-author reorients the entire workflow from slides to **research papers**. The
 
 **What it adds:**
 
-- **17 specialized agents** organized as 6 worker-critic pairs (Librarian, Explorer, Strategist, Coder, Writer, Storyteller --- each with a dedicated critic) plus standalone agents (data-engineer, domain-referee, methods-referee, orchestrator, verifier)
+- **25 specialized agents and 18 skills** organized around adversarial worker-critic pairs (Librarian, Explorer, Strategist, Coder, Writer, Storyteller --- each with a dedicated critic) plus standalone referees, data-engineer, orchestrator, and verifier
 - **Phase-based severity gradient** --- critics are encouraging during Discovery, constructive during Strategy, strict during Execution, and adversarial during Peer Review
 - **Weighted aggregate scoring** with component minimums: Literature 10%, Data 10%, Identification 25%, Code 15%, Paper 25%, Polish 10%, Replication 5%. Submission gate (≥ 95) requires every component independently ≥ 80
 - **Simulated blind peer review** --- two independent Referee agents plus an Editor making an editorial decision (Accept / Minor / Major / Reject)
@@ -2868,15 +2872,16 @@ clo-author reorients the entire workflow from slides to **research papers**. The
 **When to use it:** Your primary output is research papers and you want production-grade infrastructure for the full lifecycle --- from literature review through journal submission and revise-and-resubmit.
 
 ::: {.callout-note}
-## clo-author v26.05 (May 2026)
+## clo-author 26.09 (October 2026 — "Rebuilt for Opus 5.5: scripts enforce the gates")
 
-clo-author has shipped substantial post-v4 architecture. The current release (v26.05, 2026-05-10) adds:
+clo-author's current release (26.09, 2026-10-15; building on the v26.05 MAS v2 / skill-centric restructure and self-contained HTML dashboard) expands to **25 agents and 18 skills** and adds:
 
-- **MAS v2** --- second-generation multi-agent system with clearer worker/critic boundaries and phase-aware severity gradients
-- **Skill-Centric Restructure** --- repository reorganised around 13 skills + 18 agents (up from 17 in the v4.x line)
-- **HTML Dashboard** --- self-contained visual interface for tracking pipeline state across phases (no server required)
+- **Script-enforced gates + `"onFailure": "block"`** --- deterministic scripts and fail-closed `PreToolUse` hook handlers enforce submission invariants rather than relying on prompt reminders
+- **`/coherence`** --- combined deterministic + reasoning audit checking internal consistency across manuscript sections, tables, and appendix claims
+- **`/explain` (Understanding Gate `INV-26`)** --- 5-question author comprehension check so researchers can explain and defend every AI-written pipeline step in a seminar or referee report (adapted here as [`/coauthor-brief --quiz`](#sec-appendix))
+- **`/deepread` and `/paper-format`** --- deep technical paper reading and journal-format verification (`INV-23/24/25`)
 
-Patterns like `/checkpoint` (originally adapted with permission from clo-author v4.2.0) trace to the earlier line; if you're forking clo-author directly today, you get the MAS v2 / skill-centric layout.
+Patterns like `/checkpoint` (originally adapted with permission from clo-author v4.2.0) and `/review-paper --peer` trace to this collaboration; if you're forking clo-author directly today, you get the 26.09 layout.
 :::
 
 ## claudeblattman: Workflows for Non-Technical Academics
@@ -2921,14 +2926,15 @@ This paper formalizes many principles that this workflow uses intuitively. It de
 **Repository:** [scunning1975/MixtapeTools](https://github.com/scunning1975/MixtapeTools)
 **Author:** Scott Cunningham (Baylor University), author of *Causal Inference: The Mixtape*
 
-MixtapeTools provides the philosophical and practical framework for academic presentation design (see Pattern 14). Beyond the Rhetoric of Decks, it includes:
+MixtapeTools provides the philosophical and practical framework for academic presentation design (see Pattern 14) and empirical replication auditing. Beyond the Rhetoric of Decks, it includes:
 
-- **Referee 2** --- a systematic 5-audit adversarial protocol for reviewing and replicating empirical work
+- **Referee 2** --- a systematic 5-audit adversarial protocol for reviewing and replicating empirical work; one of its audits is an R ↔ Stata ↔ Python cross-language replication
+- **Blindspot** --- a "peripheral vision" audit of empirical output
 - **Deck generation prompt** --- a tested, customizable multi-agent prompt for creating Beamer decks (builder → rhetoric reviewer → graphics specialist)
 - **Example decks** with professional color palettes, custom ggplot2 themes (`theme_rhetoric()`), and complete Beamer templates
 - **Zero-warning compilation standard** --- even 0.5pt overfull hbox must be fixed
 
-**When to use it:** You want to make your presentations genuinely beautiful and rhetorically effective, or you want a tested deck generation workflow for Claude Code.
+**When to use it:** You want to make your presentations genuinely beautiful and rhetorically effective, or you want a tested deck generation and cross-language replication audit workflow for Claude Code.
 
 ## AEA Data Editor Template
 
@@ -2972,28 +2978,40 @@ An autonomous research agent that runs continuous experiments --- modifying code
 RMSE of ATT estimate. Lower is better. Report coverage rate alongside.
 ```
 
-## stata-mcp: MCP server for Stata execution
+## mcp-for-stata (formerly `stata-mcp`): MCP server for Stata execution
 
-**Repository:** [SepineTam/stata-mcp](https://github.com/SepineTam/stata-mcp)
-**Author:** SepineTam (171+ stars, 91 releases, v1.17.3 as of May 2026)
+**Repository:** [SepineTam/mcp-for-stata](https://github.com/SepineTam/mcp-for-stata)
+**Author:** Song Tan (`SepineTam`; 274+ stars, v1.25.2 as of Oct 2026)
 
-A mature MCP server that lets Claude Code execute Stata `.do` files via a command-guarded interface — refuses destructive shell ops (`!/shell/erase` etc.), monitors RAM, and pairs with the Stata Language Server. **Install once per user:** `claude mcp add stata-mcp --scope user -- uvx stata-mcp` (requires `uv` and a local Stata install).
+A mature MCP server that lets Claude Code execute Stata `.do` files via a command-guarded interface — refuses destructive shell ops (`!/shell/erase` etc.), monitors RAM, and pairs with the Stata Language Server. *(Note: Lu Han (Bank of Canada) maintains a separate VS Code/MCP extension at [`hanlulong/stata-mcp`](https://github.com/hanlulong/stata-mcp); either can drive Stata `.do` pipelines, and `templates/mcp.example.json` shows the `uvx` wiring.)* **Install once per user:** `claude mcp add stata-mcp --scope user -- uvx stata-mcp` (requires `uv` and a local Stata install).
 
 **Why it matters for this template:** v1.9.0 added [`/stata-replication`](#sec-appendix) for Stata-first projects, which depends on this MCP server. R-first projects (the original template focus) continue to use [`/data-analysis`](#sec-appendix); the two skills are parallel — same pipeline shape, different source language. AEA submissions where the original replication package is in Stata are the canonical use case.
 
 For end-to-end Stata workflows, see [`.claude/rules/stata-code-conventions.md`](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/.claude/rules/stata-code-conventions.md) (header scaffold, numbered pipeline, esttab tables, clustering discipline, AEA Data Editor compliance).
 
-## ClaudeCodeTools: The Editor Persona
+## Claude-Code-Presentation (formerly `ClaudeCodeTools`): The Editor Persona
 
-**Repository:** [aspi6246/ClaudeCodeTools](https://github.com/aspi6246/ClaudeCodeTools)
+**Repository:** [aspi6246/Claude-Code-Presentation](https://github.com/aspi6246/Claude-Code-Presentation)
+**Author:** Alessandro Spina (University of Technology Sydney)
 
-A collection of Claude Code personas, including "The Editor" --- a deeply structured academic paper reviewer that runs seven sequential audit passes (see [Pattern 15](#pattern-15-sequential-audits)). Notable features:
+A collection of Claude Code personas and academic presentation materials, including "The Editor" --- a deeply structured academic paper reviewer that runs seven sequential audit passes (see [Pattern 15](#pattern-15-sequential-audits)). Notable features:
 
 - **R&R mode** --- tracks referee reports and cross-references each concern against revisions
 - **Blunt, specific feedback** --- "This paragraph is incoherent" not "might benefit from clarity"
 - **"So What" litmus test** --- five questions every paper must answer clearly
 
 **When to use it:** You want a structured pre-submission paper review, or you're responding to referee reports and need systematic tracking of which concerns have been addressed.
+
+## Paul Goldsmith-Pinkham (`paulgp`), Anton Korinek, and Economics Tooling
+
+Several economists have published open-source building blocks and methodological guides that complement this repository:
+
+- **Paul Goldsmith-Pinkham (Yale University, [*A Causal Affair*](https://paulgp.substack.com)):**
+  - **[`paulgp/claude-container`](https://github.com/paulgp/claude-container)** --- Dockerized container environment for running Claude Code in `bypassPermissions` mode safely isolated from your host filesystem (the container pattern Anthropic recommends when you want zero permission prompts without host exposure).
+  - **[`paulgp/exhibit-review`](https://github.com/paulgp/exhibit-review) and [`paulgp/margin`](https://github.com/paulgp/margin)** --- lightweight tools for spatial review of paper tables/figures and source-first manuscript annotation.
+  - **DuckDB + Parquet for large administrative panels** --- converting multi-gigabyte CSV/DTA extracts to partitioned Parquet and querying out-of-core via `duckdb` in R (`duckplyr`/`arrow`) or Python (`duckdb`/`polars`) before passing summary objects to estimation scripts, keeping raw microdata out of memory and out of LLM context.
+- **Anton Korinek (University of Virginia & NBER):** *"Generative AI for Economic Research"* (*Journal of Economic Literature*) and *"AI Agents for Economic Research"* (NBER Working Paper series) --- the canonical disciplinary references tracing the progression from single-turn chatbots (System 1) to reasoning models (System 2) to multi-agent verification workflows.
+- **[`hanlulong/awesome-ai-for-economists`](https://github.com/hanlulong/awesome-ai-for-economists)** (Lu Han, Bank of Canada; 700+ stars) --- curated directory of AI workflows, MCP servers, literature tools, and replication utilities across economics (where this repository is also indexed).
 
 ## Anthropic-Shipped Apr 2026 Utilities
 
@@ -3012,7 +3030,7 @@ These are external to this template --- invoke directly, no installation needed.
 
 ## Community Adoption {#sec-community}
 
-Research groups across multiple disciplines have forked and adapted this workflow for their own projects — **15+ research groups at the March 2026 survey**; the repository has since passed **2,900 forks** and 1,500 stars (GitHub, 2026-08-24). A fork is not a research group — the survey figure and the fork count measure different things, and only the first was checked by hand:
+Research groups across multiple disciplines have forked and adapted this workflow for their own projects — **15+ research groups at the March 2026 survey**; the repository has since passed **3,145 forks** and 1,680 stars (GitHub, 2026-11-04). A fork is not a research group — the survey figure and the fork count measure different things, and only the first was checked by hand:
 
 - **Economics** --- China innovation policy, mental health and layoffs, AIGC and stock prices, capital/labor shares in healthcare
 - **Energy** --- Nepal and global energy economics, PV module reliability
@@ -3328,7 +3346,13 @@ This is the `/learn` lifecycle in action: discover a repeating workflow → extr
 ::: {.callout-note collapse="true"}
 ## Extending with MCP Servers
 
-For capabilities beyond file editing and shell commands --- web search during literature review, database queries for replication, or reference manager integration (Zotero, Mendeley) --- Claude Code supports [MCP servers](https://modelcontextprotocol.io). Add them with `claude mcp add` (use `--scope project` to write a shared `.mcp.json` at the repo root, or `--scope user` to make a server available in all your projects; the default `local` scope keeps it private to you in this project). Start with skills and agents first; add MCP when you need external integrations.
+For capabilities beyond file editing and shell commands --- live statistical sessions, economic data retrieval, package documentation lookup, or reference manager integration (Zotero) --- Claude Code supports [MCP servers](https://modelcontextprotocol.io). Add them with `claude mcp add` (use `--scope project` to write a shared `.mcp.json` at the repo root, or `--scope user` to make a server available across all your projects; the default `local` scope keeps it private to you in this project). A ready-to-copy starter config is in [`templates/mcp.example.json`](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/templates/mcp.example.json):
+
+- **Statistical sessions:** [`SepineTam/mcp-for-stata`](https://github.com/SepineTam/mcp-for-stata) (`uvx stata-mcp`) for command-guarded Stata execution; Posit's **[`mcptools`](https://posit-dev.github.io/mcptools/)** (`Rscript -e "mcptools::mcp_server()"`) to connect Claude Code directly to a live R session in RStudio or Positron.
+- **Economic & public data APIs:** Official/community MCP servers for **FRED** (Federal Reserve Economic Data), **World Bank Data360**, and the **U.S. Census Bureau Data API** let `/data-analysis` pull series metadata and public extracts reproducibly (always save the raw pull via an R/Python/Stata script rather than pasting MCP output straight into a table).
+- **Documentation & literature:** **[Context7](https://github.com/upstash/context7)** (see `templates/mcp.example.json`) for version-accurate R/Python package docs (`fixest`, `did`, `ggplot2`, `polars`, `pyfixest`).
+
+Start with skills and agents first; add MCP servers when you need external integrations, and never attach write-enabled third-party MCP servers to a restricted-data project.
 
 ## Extending with Plugins
 

@@ -38,7 +38,7 @@ A wrong "looks fine" from one of these is expensive (a desk-reject, a hallucinat
 | `quarto-fixer` | Applies `quarto-critic`'s diffs, re-renders, verifies | **writes** | `/qa-quarto` |
 | `beamer-translator` | Beamer→Quarto slide-by-slide translation | **writes** | `/translate-to-quarto` |
 
-## Mechanical / voting tier — Haiku tier (the current Haiku takes no effort setting; the `effort: low` pin applies to a successor that does)
+## Mechanical / voting tier — Haiku tier, effort: low
 
 | Agent | Role | Read/Write | Dispatched by |
 |---|---|---|---|

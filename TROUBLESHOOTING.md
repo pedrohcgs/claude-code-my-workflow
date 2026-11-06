@@ -22,7 +22,7 @@ Required by `/extract-tikz`. `brew install pdf2svg` (macOS) / `apt install pdf2s
 
 ### `/stata-replication` halts at "stata-mcp not registered"
 
-The Stata pipeline skill needs the [`stata-mcp`](https://github.com/SepineTam/stata-mcp) MCP server. Install once per user:
+The Stata pipeline skill needs the [`mcp-for-stata`](https://github.com/SepineTam/mcp-for-stata) (formerly `stata-mcp`) MCP server. Install once per user:
 
 ```bash
 claude mcp add stata-mcp --scope user -- uvx stata-mcp
@@ -38,9 +38,9 @@ In Manual mode Claude asks before most edits and shell commands the allow list d
 
 - **Auto mode** — the built-in starting mode on Claude Code ≥ 2.1.283 (and on Pro/Max/Team since 2026-08-14 on earlier versions): a classifier approves routine actions and blocks or asks about risky ones.
 - **Accept edits** — `Shift+Tab`, or `claude --permission-mode acceptEdits`: auto-approves file edits and common filesystem commands in the working directory.
-- **Bypass** — `claude --permission-mode bypassPermissions` skips permission prompts and safety checks (deny rules still apply). Anthropic scopes it to isolated containers and VMs, and it takes effect from the CLI flag, `--settings`, or user/managed settings — a `bypassPermissions` in a project's `.claude/settings.json` is not honoured and the session starts in Manual mode. (In VS Code, bypass is a user-settings choice: set `claudeCode.initialPermissionMode` to `bypassPermissions` and turn on `claudeCode.allowDangerouslySkipPermissions` in your VS Code *user* settings. Both are machine-scoped, so the extension ignores workspace values and the template's `.vscode/settings.json` does not change the starting mode.)
+- **Bypass** — `claude --permission-mode bypassPermissions` skips permission prompts and safety checks (deny rules still apply). Anthropic scopes it to isolated containers and VMs, and it takes effect from the CLI flag, `--settings`, or user/managed settings — a `bypassPermissions` in a project's `.claude/settings.json` is not honoured and the session starts in Manual mode. (In VS Code, bypass is a user-settings choice: set `claudeCode.initialPermissionMode` to `bypassPermissions` and turn on `claudeCode.allowDangerouslySkipPermissions` in your VS Code *user* settings — both are machine-scoped, so the extension ignores workspace values in `.vscode/settings.json`.)
 
-The template's `.claude/settings.json` ships broad allow rules (`Edit(**)`, `Write(**)`, `Bash(*)`, …) and no default mode, so in Manual mode most routine work runs unprompted. Auto mode drops the blanket `Bash(*)` rule and sends shell commands through its classifier instead. To keep restricted data off the model in every mode, add deny rules — see ["Keep restricted data off the model"](#keep-restricted-data-off-the-model) below.
+The template's `.claude/settings.json` ships broad allow rules (`Edit(**)`, `Write(**)`, `Bash(*)`, …) and no default mode, so in Manual mode most routine work runs unprompted. Auto mode drops the blanket `Bash(*)` rule and sends shell commands through its classifier instead. To keep restricted data off the model in every mode, add deny rules — see ["Keep restricted data off the model"](#keep-restricted-data-off-the-model) below. The same settings file sets `"blockWritesOutsideWorkingDirectories": true` (Claude Code ≥ 2.1.314): Claude's file tools then refuse writes outside the working directories (Claude Code's own session files excepted) and every write to a Claude Code settings file, even inside the repository, and the `root-of-trust-guard` hook refuses the common shell writes there — so add those deny rules (or any allow rule, including the ones `/fewer-permission-prompts` proposes) by editing the settings file yourself.
 
 ## Models and API
 
@@ -49,7 +49,7 @@ The template's `.claude/settings.json` ships broad allow rules (`Edit(**)`, `Wri
 The current lineup, minimum Claude Code versions, and retirement floors live in [`model-versions.md`](.claude/references/model-versions.md). Two failure shapes are common after a model launch:
 
 - **The new model is missing from `/model`.** Each model needs a minimum Claude Code version (the current Opus needs ≥ 2.1.280). Run `claude --version`; update with `claude update` or your installer (`npm install -g @anthropic-ai/claude-code@latest` for an npm install). The VS Code extension bundles its own CLI, so the terminal `claude` on your `PATH` can lag behind it.
-- **A pinned model ID fails.** Sonnet 4 and the original Opus 4 retired on 2026-06-15, and the current Haiku model's retirement floor is 2026-10-15. Find pins before they break:
+- **A pinned model ID fails.** Sonnet 4 and the original Opus 4 retired on 2026-06-15, and prior-generation Haiku 4.5 — succeeded by the current Haiku tier on 2026-10-07 — is still served but past its retirement floor (not sooner than 2026-10-15), so its retirement can now be announced at 60 days' notice. Find pins before they break:
   - **Environment:** `echo $ANTHROPIC_MODEL $ANTHROPIC_DEFAULT_FABLE_MODEL $ANTHROPIC_DEFAULT_OPUS_MODEL $ANTHROPIC_DEFAULT_SONNET_MODEL $ANTHROPIC_DEFAULT_HAIKU_MODEL $CLAUDE_CODE_SUBAGENT_MODEL`.
   - **Settings:** a `model` key in `.claude/settings.json`, `.claude/settings.local.json`, or `~/.claude/settings.json`.
   - **Agents and skills:** `grep -rn "^model:" .claude/agents/ .claude/skills/` — the template pins tier aliases (`opus` / `sonnet` / `haiku`), which follow the current model automatically; a full model ID does not.
