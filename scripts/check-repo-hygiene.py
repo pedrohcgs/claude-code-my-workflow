@@ -28,6 +28,9 @@ ROOT_ALLOW = {
     # work with at the root (DESCRIPTION, renv.lock, requirements.txt, a Dockerfile, ...).
     "DESCRIPTION", "NAMESPACE", ".Rbuildignore", "renv.lock", ".Rprofile",
     "requirements.txt", "environment.yml", "uv.lock", "pyproject.toml", "Dockerfile",
+    # Instructions for agents other than Claude Code (Codex, Antigravity, ...), which
+    # look for this file at the root; CLAUDE.md is Claude Code's equivalent.
+    "AGENTS.md",
 }
 ROOT_ALLOW_DIRS = {
     ".claude", ".git", ".github", ".githooks", ".vscode", "Figures", "Preambles",
@@ -41,6 +44,9 @@ ROOT_ALLOW_DIRS = {
     "man", "vignettes", "inst", "renv",
     # The deposit /replication-package assembles for a journal's data editor.
     "replication_package",
+    # Skills for Codex and Antigravity, which read .agents/skills/ at the root;
+    # generated from .claude/skills/ by scripts/sync-agent-skills.py.
+    ".agents",
 }
 
 # Names that mean "I was experimenting". These must not live in tracked source.

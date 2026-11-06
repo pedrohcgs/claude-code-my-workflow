@@ -3,7 +3,7 @@ title: "My Claude Code Setup"
 subtitle: "A Comprehensive Guide to AI-Assisted Academic Workflows: Slides, Papers, Analysis, and Beyond"
 author: "Pedro H. C. Sant'Anna"
 date: "2026-11-06"
-version: "2.7.0"
+version: "2.8.0"
 date-modified: last-modified
 format:
   html:
@@ -280,6 +280,22 @@ Open your terminal in the project directory, run `claude`, and paste the followi
 Everything in this guide works the same in any Claude Code interface. In **VS Code**, open the Claude Code panel (click the Claude icon in the sidebar or press Cmd+Shift+P → "Claude Code: Open"). In **Claude Desktop**, open your project folder and start a local session. Then paste the starter prompt below.
 
 The guide shows terminal commands because they are the most universal way to explain things, but every skill, agent, hook, and rule works identically regardless of which interface you use.
+:::
+
+::: {.callout-note collapse="true"}
+## Using Codex or Antigravity instead of Claude Code?
+
+The template is built for Claude Code, but two other agents can use much of it. Codex reads [`AGENTS.md`](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/AGENTS.md) at the repository root, and both Codex and Google Antigravity read skills in the open Agent Skills format from `.agents/skills/`. That folder holds generated wrappers, one per skill that a single agent can run end to end: each has the same name and description as its Claude Code skill and sends the agent to the real instructions in `.claude/skills/`. In Codex, mention a skill with `$name` or list them with `/skills`; in Antigravity, type `/name`.
+
+Three things do not carry over, and `AGENTS.md` says what to do instead:
+
+- **The guard hooks.** `git-guardrails`, `root-of-trust-guard` and `issue-guard` are Claude Code hooks, so another agent is not stopped from running `git reset --hard` or a raw `gh issue create`. `AGENTS.md` turns each hook into a rule the agent follows by hand. The git pre-commit gate (`./scripts/install-hooks.sh`) and CI apply to every agent's commits.
+- **Independent reviewers.** Skills whose value is several reviewers who do not see each other's work — `/review-paper --peer`, `/seven-pass-review`, `/verify-claims` — are not bridged: one agent playing every referee is not the same check. Where a bridged skill hands one step to a Claude Code agent, the other agent does that step itself and says it was not independent.
+- **Claude Code's own machinery.** Skills that manage Claude Code sessions, memory or permissions are not bridged.
+
+`scripts/sync-agent-skills.py` lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.
+
+**Keep reviewing agent-written changes.** A pull request written with another agent once passed every backtest gate with three wrong names of real people, a cited source that did not exist, and guessed version numbers. The gates check that the repository agrees with itself, not that it is true; `AGENTS.md` asks agents to source every fact, and a second model's review before merge is what caught the rest.
 :::
 
 ::: {.callout-tip appearance="simple"}

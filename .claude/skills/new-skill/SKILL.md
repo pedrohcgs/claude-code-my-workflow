@@ -73,7 +73,8 @@ REMIND the user to:
 2. Add a row to the guide's `## All Skills` appendix table in `guide/workflow-guide.qmd`. That table has no surface-sync marker, so no gate catches a missing row.
 3. Bump every skill count. Run `python3 scripts/check-surface-sync.py`: each `asserts N skills (actual: M)` line names a file:line to update. For the guide, edit `guide/workflow-guide.qmd`, then `quarto render guide/workflow-guide.qmd`, `cp guide/workflow-guide.html docs/workflow-guide.html` and `./scripts/stamp-render.sh`, so both HTML copies carry the new count and the staleness gate stays green.
 4. Optionally add the skill to CLAUDE.md's "Skills Quick Reference" bullet list — only if it belongs among the most-used skills; no gate checks that list.
-5. Run `./scripts/check-surface-sync.sh` and `python3 scripts/check-skill-integrity.py` — both must exit 0.
+5. Decide whether Codex and Antigravity should get it. If one agent can run it end to end (no fan-out to independent reviewers, nothing specific to Claude Code's own sessions), add its name to `INCLUDE` in `scripts/sync-agent-skills.py` and run `python3 scripts/sync-agent-skills.py`; otherwise add it to `EXCLUDE` with the reason. Left in neither list, it stays Claude-only and `check-skill-integrity.py` prints a P2 reminder.
+6. Run `./scripts/check-surface-sync.sh` and `python3 scripts/check-skill-integrity.py` — both must exit 0.
 6. Check what the skill costs and whether it fires: `/skill-doctor` shows its context cost and usage; `./scripts/run-skill-eval.sh` runs its eval cases once they exist.
 
 Print the ready-to-paste README row so the user can drop it in.
