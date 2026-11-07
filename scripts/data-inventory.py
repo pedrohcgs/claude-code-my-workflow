@@ -10,19 +10,22 @@ data cannot. The idea follows the World Bank's reproducibility skill
 independent implementation).
 
 Who runs it: on restricted data, the author, on the machine the data-use agreement allows.
-The output still contains column names, and some agreements treat those as confidential:
-check yours before you share it (.claude/rules/confidential-data.md).
+Everything it prints is derived from the data: file names, sizes, hashes, row counts, column
+names. On restricted data, clear the WHOLE output under your agreement before it leaves the
+machine or reaches a model (/disclosure-check; .claude/rules/confidential-data.md).
+--no-counts drops the row counts, which are often the most disclosive field.
 
 Readers:
-  CSV / TSV   standard library. The header row gives the names; if the first row looks like
-              data (a cell that parses as a number), the names are withheld, because that
-              row would be a record.
+  CSV / TSV   standard library. The first row is listed as column names only with --header,
+              your confirmation that it is a header: a headerless file's first row is a
+              record, and no rule can tell `Alice,London` from a header. Even with --header,
+              a first row with a numeric cell is withheld.
   .dta .sav .sas7bdat .xpt   pyreadstat, metadata only, if installed.
   .parquet    pyarrow, schema and row count from the footer, if installed.
   anything else   size and hash only.
 
 Usage:
-  python3 scripts/data-inventory.py [PATH ...] [--format csv|md] [--out FILE]
+  python3 scripts/data-inventory.py [PATH ...] [--header] [--no-counts] [--format csv|md] [--out FILE]
 
 Exit: 0 listed; 2 a path does not exist, or --out cannot be written.
 """
@@ -81,13 +84,16 @@ def looks_like_data(cells: list[str]) -> bool:
     return False
 
 
-def read_text_table(path: str, delim: str) -> dict:
+def read_text_table(path: str, delim: str, header_ok: bool) -> dict:
     with open(path, encoding="utf-8-sig", errors="replace", newline="") as f:
         reader = csv.reader(f, delimiter=delim)
         header = next(reader, None)
         rows = sum(1 for _ in reader)
     if header is None:
         return {"rows": 0, "n_columns": 0, "columns": [], "note": "empty file"}
+    if not header_ok:
+        return {"rows": f"{rows} or {rows + 1}", "n_columns": len(header), "columns": [],
+                "note": "column names withheld: pass --header once you have checked the first row is a header"}
     if looks_like_data(header):
         return {"rows": rows + 1, "n_columns": len(header), "columns": [],
                 "note": "first row looks like data, not a header: column names withheld"}
@@ -114,14 +120,14 @@ def read_parquet(path: str) -> dict:
     return {"rows": pf.metadata.num_rows, "n_columns": len(names), "columns": names, "note": ""}
 
 
-def describe(path: str, base: str) -> dict:
+def describe(path: str, base: str, header_ok: bool = False, counts: bool = True) -> dict:
     ext = os.path.splitext(path)[1].lower()
     row = {"path": os.path.relpath(path, base).replace(os.sep, "/"), "bytes": os.path.getsize(path),
            "sha256": sha256(path), "format": ext.lstrip(".") or "(none)",
            "rows": "", "n_columns": "", "columns": [], "note": ""}
     try:
         if ext in TABULAR_TEXT:
-            row.update(read_text_table(path, TABULAR_TEXT[ext]))
+            row.update(read_text_table(path, TABULAR_TEXT[ext], header_ok))
         elif ext in READSTAT:
             row.update(read_readstat(path, READSTAT[ext]))
         elif ext == ".parquet":
@@ -129,6 +135,8 @@ def describe(path: str, base: str) -> dict:
     except Exception as e:  # a reader failure is reported, never a crash and never a value
         row["note"] = f"columns not read: {type(e).__name__}"
     row["name_flags"] = name_flags(row["columns"])
+    if not counts:
+        row["rows"] = ""
     return row
 
 
@@ -169,6 +177,9 @@ def render(rows: list[dict], fmt: str) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     ap.add_argument("paths", nargs="*", default=["data/raw"])
+    ap.add_argument("--header", action="store_true",
+                    help="list each CSV/TSV first row as column names: you have checked that EVERY CSV/TSV given has a header row (otherwise run it per file)")
+    ap.add_argument("--no-counts", action="store_true", help="omit row counts")
     ap.add_argument("--format", choices=["csv", "md"], default="csv")
     ap.add_argument("--out", help="write here instead of stdout")
     a = ap.parse_args()
@@ -177,7 +188,7 @@ def main() -> int:
     if missing:
         print(f"data-inventory: no such path: {', '.join(missing)}", file=sys.stderr)
         return 2
-    text = render([describe(f, b) for f, b in walk(paths)], a.format)
+    text = render([describe(f, b, a.header, not a.no_counts) for f, b in walk(paths)], a.format)
     if a.out:
         try:
             with open(a.out, "w", encoding="utf-8", newline="") as f:

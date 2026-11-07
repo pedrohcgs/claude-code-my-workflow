@@ -16,13 +16,20 @@ An **adoption release** carrying what the 2026-11-06 audit found worth building 
 - **`/verify`** (62nd skill). Since 2.1.286, Claude Code tells Claude to run a project skill named `verify` right before committing; docs-only and tests-only commits are exempt. This one runs the backtest, and the quality score on staged `.qmd`/`.tex`/`.R` files, and stops the commit on a failure. It skips itself when the git pre-commit hook will run the same gates. It is a reminder, not enforcement: the hook and `/commit` remain the gates. It is bridged for Codex and Antigravity.
 - **`templates/triangulation-ledger.md`.** For each robustness check, write down and commit what result would support the claim, weaken it or leave it undecided, before the check runs; the result is filled in afterwards in a new commit. It is method-neutral and joins `spec-ledger.md` on date and `Script:line`.
 - **Template, not fork, for unpublished work** (README and guide, step 1, placed before the clone commands). The repository is now a GitHub template repository, so a copy can be made private; a fork of a public repository cannot.
-- **`scripts/data-inventory.py`: a dataset manifest that never carries a value.** For each file it lists the path, size and SHA-256 and, for tables, the row count, the column names, and the columns whose *names* suggest personal data (name, email, address, birth date, ...). CSV and TSV use the standard library; if a first row looks like data, the names are withheld. `.dta`, `.sav` and `.sas7bdat` use pyreadstat's metadata-only read, and Parquet uses its footer, when those packages are installed. The author can run it on restricted data and share only the output. `/replication-package` starts its dataset manifest from it. Four portability cases pin it, under cp1252 and with non-ASCII file names; a mutant that leaks a value and one that keeps a data row as names each fail their case. The idea follows the World Bank's reproducibility skill; the code is our own.
+- **`scripts/data-inventory.py`: a dataset manifest that never carries a value.** For each file it lists the path, size and SHA-256 and, for tables, the row count, the column names, and the columns whose *names* suggest personal data (name, email, address, birth date, ...).
+  - **CSV and TSV** use the standard library. A first row is listed as column names only with `--header`, your check that every file given has a header, because no rule can tell `Alice,London` from a header. Even with `--header`, a numeric first row is withheld.
+  - **`.dta`, `.sav` and `.sas7bdat`** use pyreadstat's metadata-only read, and **Parquet** uses its footer, when those packages are installed.
+  - **`--no-counts`** drops the row counts.
+  - **On restricted data**, the author runs it, and the whole manifest goes through the agreement's disclosure review before it leaves the machine or reaches a model.
+  - `/replication-package` starts its dataset manifest from it.
+  - Six portability cases pin it, under cp1252 and with non-ASCII file names. Three mutants each fail their own case: one leaks a value, one drops the numeric-row check, and one lists names without `--header`. Codex's review on PR #184 found the all-text-first-row leak and the clearance gap.
+  - The idea follows the World Bank's reproducibility skill; the code is our own.
 - **`/replication-package`: AI-generated analytical outputs.** When a model produced data, the README records the model ID and date, the prompts, the parameters, the raw outputs, the post-processing and who checked them. AI coding help stays a disclosure matter. The idea follows the World Bank's reproducibility guidance; the wording is our own.
 - **Links:** Brodeur et al. 2026 (*PNAS*: AI-assisted teams reproduce about as often as human-only teams but catch fewer major coding errors; AI-led teams reproduce far less) in `verification-ladder.md`; `paulgp/econ-ai-detector` in `writing-with-ai.md` and the ecosystem section; `posit-dev/skills` in README and the guide.
 - **TROUBLESHOOTING: "Every Bash, Edit and Write is refused, with a hook error"**, covering a missing hook script (recovery from a terminal) and a missing `python3` on Windows.
 
 **Inventory at release: 62 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
-(standing hook battery: 322 cases, seconds to run; portability suite: 237 cases).
+(standing hook battery: 322 cases, seconds to run; portability suite: 239 cases).
 
 ---
 

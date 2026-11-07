@@ -369,7 +369,7 @@ class DataInventory(unittest.TestCase):
     """The inventory is what may leave a restricted machine, so its one promise is
     that no data value appears in it, under any encoding or file name."""
     SCRIPT = os.path.join(ROOT, "scripts", "data-inventory.py")
-    SECRETS = ("s3cr3t-VALUE", "ana@x.org", "Fulton", "17,3.5")
+    SECRETS = ("s3cr3t-VALUE", "ana@x.org", "Fulton", "17,3.5", "Alice", "London")
 
     def setUp(self):
         self.tmp = tempfile.mkdtemp()
@@ -379,20 +379,37 @@ class DataInventory(unittest.TestCase):
                           "person_id,firstName,email,income,County\n1,Ana,ana@x.org,s3cr3t-VALUE,Fulton\n")
         _write(self.raw, "sub/noheader.csv", "17,3.5,88\n18,4.1,90\n")
         _write(self.raw, "sub/café.tsv", "a\tb\nx\ty\n")
+        _write(self.raw, "sub/textrow.csv", "Alice,London\nBob,Leeds\n")
 
     def inventory(self, *args, **env):
         return _run([sys.executable, self.SCRIPT, self.raw, *args], cwd=self.tmp, **env)
 
     def test_no_value_reaches_the_output_in_either_format(self):
+        # --header vouches for every CSV/TSV it is given, so it is given only files that have one
+        with_header = [self.csv, os.path.join(self.raw, "sub", "noheader.csv"), os.path.join(self.raw, "sub", "café.tsv")]
         for fmt in ("csv", "md"):
-            rc, out = self.inventory("--format", fmt)
+            rc, out = _run([sys.executable, self.SCRIPT, *with_header, "--format", fmt, "--header"], cwd=self.tmp)
             self.assertEqual(rc, 0, out)
             for s in self.SECRETS:
                 self.assertNotIn(s, out, f"{fmt}: a data value leaked: {s}")
             self.assertIn("firstName; email", out)      # names are listed, and flagged
 
-    def test_a_first_row_that_looks_like_data_withholds_the_names(self):
+    def test_without_header_no_first_row_is_listed_even_an_all_text_one(self):
+        """A headerless file whose first record is all text (`Alice,London`) cannot be told
+        from a header, so names are listed only on --header (PR #184 review)."""
         rc, out = self.inventory()
+        self.assertEqual(rc, 0, out)
+        for s in self.SECRETS + ("firstName",):
+            self.assertNotIn(s, out)
+        self.assertIn("pass --header", out)
+
+    def test_no_counts_drops_the_row_counts(self):
+        rc, out = self.inventory("--header", "--no-counts")
+        line = next(l for l in out.splitlines() if l.startswith("raw/survey.csv"))
+        self.assertEqual(line.split(",")[4], "", line)
+
+    def test_a_first_row_that_looks_like_data_withholds_the_names(self):
+        rc, out = self.inventory("--header")
         line = next(l for l in out.splitlines() if l.startswith("raw/sub/noheader.csv"))
         self.assertIn("column names withheld", line)
         self.assertNotIn("17", line.split(",", 4)[4])    # nothing after the hash repeats the row
