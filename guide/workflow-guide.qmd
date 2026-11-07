@@ -200,6 +200,7 @@ You need four things: install Claude Code, fork the repo, run `./scripts/install
 | [Quarto](https://quarto.org) | Web slides | [quarto.org/docs/get-started](https://quarto.org/docs/get-started/) |
 | R | Figures & data analysis | [r-project.org](https://www.r-project.org/) |
 | [gh CLI](https://cli.github.com/) | PR workflow | `brew install gh` (macOS) |
+| poppler | Beamer page screenshots and log digest (`scripts/beamer-qa.py`) | `brew install poppler` (macOS), `apt install poppler-utils` (Debian) |
 | Playwright for Python | Slide overflow measured in a real browser (`scripts/slide-qa.py`) | `python3 -m venv ~/.venvs/slide-qa && ~/.venvs/slide-qa/bin/pip install playwright`, then `export SLIDE_QA_PYTHON=~/.venvs/slide-qa/bin/python` (uses your installed Chrome) |
 
 ::: {.callout-note}

@@ -427,5 +427,133 @@ class DataInventory(unittest.TestCase):
         self.assertEqual(rc, 2, out)
 
 
+# ── beamer-qa: page map, log digest, footline band ────────────────────────────
+
+def _pdf(path, rects, size=(362.83, 272.13)):
+    """A one-page PDF (128 x 96 mm, Beamer's 4:3) with filled black rectangles (x, y, w, h in pt
+    from the bottom-left), byte offsets computed, so poppler reads it without repairing it."""
+    body = "".join(f"0 0 0 rg {x} {y} {w} {h} re f\n" for x, y, w, h in rects).encode()
+    objs = [b"<< /Type /Catalog /Pages 2 0 R >>",
+            b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+            f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {size[0]} {size[1]}] /Contents 4 0 R >>".encode(),
+            b"<< /Length %d >>\nstream\n" % len(body) + body + b"endstream"]
+    out, offsets = bytearray(b"%PDF-1.4\n"), []
+    for i, o in enumerate(objs, 1):
+        offsets.append(len(out))
+        out += b"%d 0 obj\n" % i + o + b"\nendobj\n"
+    xref = len(out)
+    out += b"xref\n0 %d\n0000000000 65535 f \n" % (len(objs) + 1)
+    out += b"".join(b"%010d 00000 n \n" % o for o in offsets)
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (len(objs) + 1, xref)
+    with open(path, "wb") as f:
+        f.write(bytes(out))
+    return path
+
+
+class BeamerQa(unittest.TestCase):
+    """scripts/beamer-qa.py reads three things a Beamer build leaves behind. A wrong frame map
+    sends the reader to the wrong slide, a log digest that drops a message hides it, and a
+    band measured from the wrong edge flags every page or none."""
+    SCRIPT = os.path.join(ROOT, "scripts", "beamer-qa.py")
+    MM = 72 / 25.4
+
+    @classmethod
+    def setUpClass(cls):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("beamer_qa", cls.SCRIPT)
+        cls.m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.m)
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+
+    def test_overlay_steps_and_the_appendix_get_their_own_labels(self):
+        nav = _write(self.tmp, "d.nav", "\\headcommand {\\beamer@framepages {1}{1}}\n"
+                     "\\headcommand {\\beamer@framepages {2}{4}}\n"
+                     "\\headcommand {\\beamer@appendixpages {5}}\n"
+                     "\\headcommand {\\beamer@framepages {5}{6}}\n")
+        fm = self.m.frame_map(nav)
+        self.assertEqual(fm[1], ("frame 1", 1, 1))
+        self.assertEqual(fm[3], ("frame 2", 2, 3))
+        self.assertEqual(fm[6], ("A1", 2, 2))
+        self.assertEqual(self.m.frame_map(os.path.join(self.tmp, "none.nav")), {})
+
+    def test_the_log_digest_keeps_errors_and_wrapped_warnings_and_drops_reruns(self):
+        log = _write(self.tmp, "d.log", "\n".join([
+            "! Undefined control sequence.", "l.12 \\foo",
+            "Package hyperref Warning: Token not allowed in a PDF string (Unicode):",
+            "(hyperref)                removing `\\\\' on input line 7.",
+            "LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.",
+            "Package rerunfilecheck Warning: File `d.out' has changed.",
+            "(rerunfilecheck)                Rerun to get outlines right",
+            "Overfull \\hbox (12.0pt too wide) in paragraph at lines 20--21",
+            "Overfull \\hbox (12.0pt too wide) in paragraph at lines 20--21",
+            "Missing character: There is no ß in font cmr10!"]))
+        found = self.m.log_problems(log)
+        self.assertEqual(len(found), 4, found)
+        self.assertIn("l.12", found[0])
+        self.assertIn("removing", found[1])
+        self.assertFalse(any("Rerun" in f for f in found))
+
+    def test_file_line_errors_count_without_the_word_error(self):
+        """PR #185 review: under -file-line-error an error reads `./deck.tex:42: Undefined
+        control sequence.`, with no "!" and no "Error", and was dropped."""
+        log = _write(self.tmp, "fle.log", "\n".join([
+            "This is XeTeX, Version 3.141592653 (preloaded format=xelatex)  6 NOV 2026 21:45",
+            "./deck.tex:42: Undefined control sequence.", "l.42 \\foo",
+            "C:/talks/deck.tex:7: Missing $ inserted.",
+            "Document Class: beamer 2024/01/06 v3.71 A class for typesetting presentations"]))
+        found = self.m.log_problems(log)
+        self.assertEqual(len(found), 2, found)
+        self.assertIn("l.42", found[0])
+        self.assertTrue(found[1].startswith("C:/talks/deck.tex:7:"))
+
+    def run_qa(self, pdf, *args, **env):
+        return _run([sys.executable, self.SCRIPT, pdf, "--out", os.path.join(self.tmp, "shots"), *args],
+                    cwd=self.tmp, **env)
+
+    def test_no_pdf_or_no_poppler_cannot_run(self):
+        rc, out = self.run_qa(os.path.join(self.tmp, "missing.pdf"))
+        self.assertEqual(rc, 2, out)
+        pdf = _write(self.tmp, "deck.pdf", b"%PDF-1.4\n")
+        rc, out = self.run_qa(pdf, PATH=os.path.join(self.tmp, "empty-bin"))
+        self.assertEqual(rc, 2, out)
+        self.assertIn("poppler", out)
+
+    @unittest.skipUnless(shutil.which("pdftoppm") and shutil.which("pdfinfo") and shutil.which("pdftotext"),
+                         "poppler not installed")
+    def test_the_band_is_measured_from_the_bottom_edge_and_x_max_skips_the_right(self):
+        mm = self.MM
+        low = _pdf(os.path.join(self.tmp, "low.pdf"), [(20, 6 * mm, 200, 1.5 * mm)])   # ink 6-7.5 mm up
+        right = _pdf(os.path.join(self.tmp, "right.pdf"), [(340, 6 * mm, 15, 1.5 * mm)])  # same, far right
+        rc, out = self.run_qa(low, "--band-mm", "9", "5")
+        self.assertEqual(rc, 1, out)
+        self.assertIn("pages with ink in the footline band: 01", out)
+        rc, out = self.run_qa(low, "--band-mm", "14", "10")                  # higher band: clean
+        self.assertEqual(rc, 0, out)
+        rc, out = self.run_qa(right, "--band-mm", "9", "5", "--band-x-max", "80")
+        self.assertEqual(rc, 0, out)
+        rc, out = self.run_qa(right, "--band-mm", "9", "5")
+        self.assertEqual(rc, 1, out)
+        self.assertTrue(os.path.exists(os.path.join(self.tmp, "shots", "01.png")))
+
+    @unittest.skipUnless(shutil.which("pdftoppm") and shutil.which("pdfinfo") and shutil.which("pdftotext"),
+                         "poppler not installed")
+    def test_a_full_run_drops_pages_an_earlier_longer_build_left_and_nothing_else(self):
+        """PR #185 review: a deck that lost pages kept its old screenshots beside the new ones,
+        where /visual-audit reads them as current."""
+        pdf = _pdf(os.path.join(self.tmp, "one.pdf"), [])
+        shots = os.path.join(self.tmp, "shots")
+        for name in ("02.png", "17.png", "notes.txt", "cover.png"):
+            _write(shots, name, b"old")
+        rc, out = self.run_qa(pdf, "--pages", "1")              # a partial run keeps the others
+        self.assertEqual(rc, 0, out)
+        self.assertTrue(os.path.exists(os.path.join(shots, "02.png")))
+        rc, out = self.run_qa(pdf)                              # a full run does not
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(sorted(os.listdir(shots)), ["01.png", "cover.png", "notes.txt"])
+
+
 if __name__ == "__main__":
     unittest.main()
