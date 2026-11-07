@@ -101,24 +101,11 @@ if [ -n "$latest_plan" ]; then
     esac
 fi
 
-# Context % — prefer the native field Claude Code passes on stdin; fall back to
-# the estimate context-monitor.py persists under the session dir keyed by
-# md5(project_dir)[:8] (older Claude Code versions, or null early in a session).
+# Context % — the native field Claude Code passes on stdin. It can be null early
+# in a session; then nothing is shown. (Until v2.9.1 this fell back to an
+# estimate context-monitor.py wrote; that hook was removed.)
 ctx=""
 [ -n "$native_pct" ] && ctx="ctx ${native_pct}%"
-# Mirror context-monitor.py's get_session_dir() EXACTLY: CLAUDE_PROJECT_DIR set →
-# hash it; unset/empty → the writer falls back to sessions/default/, so do the same
-# (hashing the git toplevel here would point at the wrong folder on that path).
-# Read from the ENVIRONMENT, as the writer reads it: piped through stdin, Windows
-# Python decoded the path with the ANSI code page, so a non-ASCII project path
-# hashed to a different folder (or to "" on a byte cp1252 leaves undefined).
-if [ -n "${CLAUDE_PROJECT_DIR:-}" ]; then
-    hash="$(python3 -c 'import os,sys,hashlib; sys.stdout.write(hashlib.md5(os.environ.get("CLAUDE_PROJECT_DIR","").encode()).hexdigest()[:8])' 2>/dev/null)"
-else
-    hash="default"
-fi
-pct_file="$HOME/.claude/sessions/${hash}/context-pct.txt"
-[ -z "$ctx" ] && [ -f "$pct_file" ] && ctx="ctx ~$(cat "$pct_file" 2>/dev/null)%"
 set -e
 
 line="$model"

@@ -284,7 +284,7 @@ is almost always speaking about the first and being heard about the last.</p>
 
 <h2>What you get</h2>
 
-<p><strong>18 agents, 62 skills, 37 rules, 11 hooks</strong> — and eleven gates, run before every commit once the pre-commit hook is installed, and in full in CI.</p>
+<p><strong>18 agents, 62 skills, 37 rules, 9 hooks</strong> — and eleven gates, run before every commit once the pre-commit hook is installed, and in full in CI.</p>
 
 <ul>
 <li><strong>62 skills</strong> covering the full research lifecycle — papers, analysis,
@@ -292,8 +292,8 @@ is almost always speaking about the first and being heard about the last.</p>
 <li><strong>18 specialized agents</strong> — referees, proofreaders, layout auditors, code
     reviewers, a fresh-context claim verifier — each pinned to a model and effort tier.</li>
 <li><strong>37 rules</strong> — most path-scoped so they load only when relevant, a few
-    always-on — plus 11 hooks that act rather than nag, including one that refuses to let a shell
-    command quietly rewrite the settings and hook files the gates are defined in.</li>
+    always-on — plus 9 hooks that act rather than nag, and permission deny rules that refuse
+    destructive git commands and reads of secret files.</li>
 <li><strong>Eleven gates in one command.</strong> Surface consistency, skill integrity, model
     currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage,
     a seeded hook battery that re-fires every guard hook against the failure it targets, and a
@@ -301,7 +301,7 @@ is almost always speaking about the first and being heard about the last.</p>
     before every commit once <code>./scripts/install-hooks.sh</code> has been run (the hook battery
     only when a hook, its settings or the battery itself is staged), and all of them in CI.</li>
 <li><strong>Codex (ChatGPT) and Antigravity too.</strong> <a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/AGENTS.md"><code>AGENTS.md</code></a> tells
-    other agents what Claude Code's hooks would have enforced, and <code>.agents/skills/</code> bridges
+    other agents what Claude Code's deny rules and hooks would have enforced, and <code>.agents/skills/</code> bridges
     every skill one agent can run end to end. The hooks do not run for them; the pre-commit gate and
     CI still do.</li>
 <li><strong>An audit trail by default</strong> — issues as defect memory, progress reports as

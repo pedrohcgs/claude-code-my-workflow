@@ -58,7 +58,7 @@ Hook-specific checks (Stop/PreToolUse/SessionStart protocols, `CLAUDE_PROJECT_DI
 - JSON input/output correctness (stdin for input, stdout/stderr for output) [hooks only]
 - Exit code correctness. Blocking protocols differ by hook event:
   - **Stop:** (a) **exit 2 + reason on stderr** — legacy, still supported; (b) **exit 0 + JSON `{"decision": "block", "reason": "..."}` on stdout** — modern; this is what `log-reminder.py` uses and it works correctly
-  - **PreToolUse:** (a) **exit 2 + reason on stderr** — legacy, still supported; (b) **exit 0 + JSON `{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": "..."}}` on stdout** — modern; this is what `git-guardrails.py` and `root-of-trust-guard.py` use. A top-level `{"decision": "block"}` on a PreToolUse hook is the deprecated form, not the modern one
+  - **PreToolUse:** (a) **exit 2 + reason on stderr** — legacy, still supported; (b) **exit 0 + JSON `{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": "..."}}` on stdout** — modern; this is what `dirty-tree-guard.py` and `issue-guard.py` use. A top-level `{"decision": "block"}` on a PreToolUse hook is the deprecated form, not the modern one
   - Non-blocking hooks always exit 0. On PreCompact, exit 2 **blocks compaction** — use it only when blocking is the point; plain stdout goes to the debug log, so a user-visible note goes out as a JSON `systemMessage` and diagnostics go to stderr
 - `from __future__ import annotations` for Python 3.8+ compatibility
 - Correct field names from hook input schema (`source` not `type` for SessionStart)

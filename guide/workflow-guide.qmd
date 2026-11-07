@@ -3,7 +3,7 @@ title: "My Claude Code Setup"
 subtitle: "A Comprehensive Guide to AI-Assisted Academic Workflows: Slides, Papers, Analysis, and Beyond"
 author: "Pedro H. C. Sant'Anna"
 date: "2026-11-06"
-version: "2.9.0"
+version: "2.9.1"
 date-modified: last-modified
 format:
   html:
@@ -292,11 +292,11 @@ The template is built for Claude Code, but two other agents can use much of it. 
 
 Three things do not carry over, and `AGENTS.md` says what to do instead:
 
-- **The guard hooks.** `git-guardrails`, `root-of-trust-guard` and `issue-guard` are Claude Code hooks, so another agent is not stopped from running `git reset --hard` or a raw `gh issue create`. `AGENTS.md` turns each hook into a rule the agent follows by hand. The git pre-commit gate (`./scripts/install-hooks.sh`) and CI apply to every agent's commits.
+- **The guards.** The deny rules in `.claude/settings.json` and the `dirty-tree-guard` and `issue-guard` hooks belong to Claude Code, so another agent is not stopped from running `git reset --hard` or a raw `gh issue create`. `AGENTS.md` turns each one into a rule the agent follows by hand. The git pre-commit gate (`./scripts/install-hooks.sh`) and CI apply to every agent's commits.
 - **Independent reviewers.** Skills whose value is several reviewers who do not see each other's work — `/review-paper --peer`, `/seven-pass-review`, `/verify-claims` — are not bridged: one agent playing every referee is not the same check. Where a bridged skill hands one step to a Claude Code agent, the other agent does that step where it appears, so a gate still gates. A step that needs a context that has not seen the work, such as `/lit-review`'s claim verifier, runs in a separate session. If the agent cannot start one, it marks those results *not independently verified* and tells you to repeat the check in Claude Code.
 - **Claude Code's own machinery.** Skills that manage Claude Code sessions, memory or permissions are not bridged.
 
-Claude Code itself reads `CLAUDE.md`, not `AGENTS.md`, unless a repository has no `CLAUDE.md` or its **Project instructions** setting is `claude-md-and-agents-md`; leave that setting at its default here, because `AGENTS.md` tells other agents to do by hand what Claude Code's hooks already do. `scripts/sync-agent-skills.py` lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.
+Claude Code itself reads `CLAUDE.md`, not `AGENTS.md`, unless a repository has no `CLAUDE.md` or its **Project instructions** setting is `claude-md-and-agents-md`; leave that setting at its default here, because `AGENTS.md` tells other agents to do by hand what Claude Code's deny rules and hooks already do. `scripts/sync-agent-skills.py` lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.
 
 **Keep reviewing agent-written changes.** A pull request written with another agent once passed every backtest gate with three wrong names of real people, a cited source that did not exist, and guessed version numbers. The gates check that the repository agrees with itself, not that it is true; `AGENTS.md` asks agents to source every fact, and a second model's review before merge is what caught the rest.
 :::
@@ -360,7 +360,7 @@ You don't have to start from a fork. To bring the workflow into a repository you
 2. **Rewrite `CLAUDE.md` for your project** — name, folder tree, current state. It is the first file Claude reads. Its link to the template README's skills table (`README.md#skills-claudeskills`) will not resolve in your repo; point it at your own index or drop it.
 3. **Tell the hygiene gate about your folders and root files.** Add each top-level folder of yours (`paper/`, `code/`, …) to `ROOT_ALLOW_DIRS` in `scripts/check-repo-hygiene.py`, and each file at the root that is not already allowed (a `Makefile`, an `.Rproj`, …) to `ROOT_ALLOW`, each with a one-line reason. The layout folders (`output/`, `data/`, `R/`, `tests/`) and the common R and Python environment files (`DESCRIPTION`, `renv.lock`, `requirements.txt`, …) are allowed already.
 4. **Remove the two checks that read the template's own documentation.** Delete the `run "surface-sync"` and `run "derived-counts"` lines from `scripts/backtest.sh`: they count skills, gates and battery cases in the template's README, guide and changelog, which your project does not have. Every other check applies to your work as-is.
-5. **Stage the copied files by name** — `git add .claude .githooks scripts templates Preambles CLAUDE.md MEMORY.md TROUBLESHOOTING.md CHANGELOG.md quality_reports .gitignore`. The ledger check needs the hook files tracked, and the template's own guard refuses a blanket `git add -A`.
+5. **Stage the copied files by name** — `git add .claude .githooks scripts templates Preambles CLAUDE.md MEMORY.md TROUBLESHOOTING.md CHANGELOG.md quality_reports .gitignore`. The ledger check needs the hook files tracked, and the template's deny rules refuse a blanket `git add -A`.
 6. **Run** `./scripts/validate-setup.sh`, then `./scripts/install-hooks.sh`, then `./scripts/backtest.sh`.
 
 We tested these steps on a project with its own README, `paper/` and `code/` folders and a root `Makefile`. As copied, five of the suite's checks failed. After steps 1–5, the full suite passed, the hook battery included.
@@ -555,15 +555,15 @@ A skeptical reader should distinguish "Claude was told to check" from "a determi
 |---|---|---|---|---|---|
 | Backtest (11 gates) | scripts, pre-commit + CI | repo-wide consistency/currency, **plus the gate layer itself** — ledger coverage and hook wiring (gate 9), the guard hooks re-fired against their target failures (gate 10) | **closed** — commit blocked | `--no-verify` | gate output, CI log |
 | Quality score ≥ 80 | script, pre-commit | staged `.tex`/`.qmd`/`.R` | **closed**; render checks best-effort → `UNVERIFIED` noted, not failed | `SKIP_QUALITY_GATE=1` | score report |
-| Destructive-git guard | PreToolUse hook | `git` commands in-session | **closed** — call blocked | run it yourself in a terminal | hook message |
-| Root-of-trust guard | PreToolUse hook (`Bash`) | *silent shell* writes into `.claude/settings*.json`, `.claude/hooks/`, `.githooks/` in-session (a best-effort tripwire; `Edit`/`Write` still pass) | **closed** — call blocked | `ALLOW_ROOT_OF_TRUST_WRITE=1` | hook message |
+| Destructive-git deny rules | permission `deny` rules in `.claude/settings.json`, checked by Claude Code | `git reset --hard`, `git clean`, `git push --force`/`-f`, `git add -A`/`--all`/`.`, `git checkout .`, `git restore .` in-session, as Claude usually spells them (a guard, not a security boundary: `git -C . …` and `bash -c '…'` are not matched) | **closed** — call refused | run it yourself in a terminal | the refusal in the transcript |
+| Dirty-tree guard | PreToolUse hook (`Bash`, started only for `git merge`, `pull`, `rebase`) | a history operation while tracked files have uncommitted changes, in the session's directory | **closed** — call blocked; the hook itself fails open | `ALLOW_DIRTY_MERGE=1` | hook message |
 | Issue guard | PreToolUse hook (`Bash`, spawned only for `gh` commands) | `gh issue create`, or a REST/GraphQL issue create, in-session (a best-effort tripwire, not a security boundary) | **closed** — call blocked, pointed to `scripts/file-issue.py` | run `gh` yourself in a terminal | hook message; the duplicate check recorded in the issue body |
 | Numeric-claim passport | script + skill | claims declared per paper | FAIL/STALE = must-fix at `/commit` | named override, recorded | `passport.yaml` rows |
 | `/verify-claims` | fresh-context verifier agent | citations, numbers in a draft | HIGH-WARN fails the report closed (never reported as verified); **not** a commit gate — the author decides | explicit `--no-fail-closed` | verification report |
 | Review agents / referees | model reviewers | manuscripts, slides, code | **advisory** — reports, never auto-gates | n/a | report files |
 | `/humanize`, proofread | model auditors | prose | **advisory**, detect-only | n/a | report files |
 
-Two design rules behind this table: everything **closed** is deterministic (scripts, not model judgment), and model judgment is never a gate — it produces reports a human adjudicates. And deliberately, this template does **not** pile on session-time enforcement hooks beyond its three `PreToolUse` guards — the destructive-git guard, the root-of-trust tripwire, and the issue guard. A guard that runs on every call slows every single interaction, and the cost lands on you every minute you work; that is why the issue guard is spawned only for `gh` commands.
+Two design rules behind this table: everything **closed** is deterministic (scripts, not model judgment), and model judgment is never a gate — it produces reports a human adjudicates. And deliberately, this template keeps session-time enforcement small: native deny rules, which start no process, and two `PreToolUse` hooks that Claude Code starts only for the commands they check, the dirty-tree guard for `git merge`, `pull` and `rebase` and the issue guard for `gh`. A hook that runs on every call slows every interaction, and the cost lands on you every minute you work; v2.9.1 removed the three that did.
 
 ## Don't Skip Verification
 
@@ -1152,7 +1152,7 @@ Since 2026-06-15, `claude -p` headless subprocess calls (used by `scripts/run-sk
 
 ## Settings --- Permissions and Hooks {#settings---permissions-and-hooks}
 
-`.claude/settings.json` controls what Claude is allowed to do. The template ships a catch-all allow list rather than a curated one: seven wildcard rules, with no deny rules and no default mode. Here is the permissions block plus one of its hooks:
+`.claude/settings.json` controls what Claude is allowed to do. The template ships a catch-all allow list rather than a curated one: seven wildcard allow rules, a deny list for destructive git commands and secret files, and no default mode. Here is the permissions block plus one of its hooks:
 
 ```json
 {
@@ -1166,7 +1166,36 @@ Since 2026-06-15, `claude -p` headless subprocess calls (used by `scripts/run-sk
       "WebSearch",
       "Read(**)"
     ],
-    "deny": []
+    "deny": [
+      "Bash(git reset *--hard*)",
+      "Bash(git clean *)",
+      "Bash(git push *--force)",
+      "Bash(git push *--force *)",
+      "Bash(git push -f*)",
+      "Bash(git push * -f*)",
+      "Bash(git add -A*)",
+      "Bash(git add --all*)",
+      "Bash(git add . *)",
+      "Bash(git checkout -- . *)",
+      "Bash(git checkout . *)",
+      "Bash(git restore . *)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/credentials*)",
+      "Edit(.env)",
+      "Edit(.env.*)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(**/.env)",
+      "Write(**/.env.*)"
+    ],
+    "blockWritesOutsideWorkingDirectories": true
   },
   "hooks": {
     "Stop": [
@@ -1182,7 +1211,7 @@ Since 2026-06-15, `claude -p` headless subprocess calls (used by `scripts/run-sk
 }
 ```
 
-In Manual mode almost nothing prompts. Auto mode drops the blanket `Bash(*)` and routes shell commands through its classifier. To tighten this, for example to keep restricted data off the model, add `deny` rules: see "Keep restricted data off the model" in [TROUBLESHOOTING.md](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/TROUBLESHOOTING.md#keep-restricted-data-off-the-model).
+In Manual mode almost nothing prompts. Auto mode drops the blanket `Bash(*)` and routes shell commands through its classifier. The deny rules hold in every mode; the push rules leave `--force-with-lease` allowed, and what the git rules do not catch is in [Hooks](#hooks---automated-enforcement). To tighten this further, for example to keep restricted data off the model, add more `deny` rules: see "Keep restricted data off the model" in [TROUBLESHOOTING.md](https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/TROUBLESHOOTING.md#keep-restricted-data-off-the-model).
 
 **Permission modes.** Claude Code has six permission modes that control how much autonomy Claude gets:
 
@@ -1193,7 +1222,7 @@ In Manual mode almost nothing prompts. Auto mode drops the blanket `Bash(*)` and
 | **Don't ask** | `dontAsk` | Auto-denies tools unless pre-approved in allowlist | Restricted environments where only allowlisted tools run |
 | **Plan** | `plan` | Read-only --- edits blocked until you approve the plan (except in interactive terminal sessions where bypass is available: there the block is not enforced) | Exploring code, reviewing before acting |
 | **Auto** | `auto` | Classifier-gated; everything runs unless flagged risky. **The built-in starting mode on Claude Code ≥ 2.1.283** for interactive terminal and VS Code sessions (on earlier versions, Pro/Max/Team since 2026-08-14), and it needs no opt-in flag on Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry | Long autonomous tasks with safety net --- the recommended mode for trusted repos when bypass is too permissive |
-| **Bypass** | `bypassPermissions` | Skips **all** permission prompts and safety checks (deny rules still apply) — including writes to protected paths (`.git`, `.vscode`, `.idea`, `.husky`, `.claude`). Anthropic's docs advise reserving it for isolated environments | CI/CD, headless scripts, and — eyes open — trusted-repo daily driving: nothing prompts, so pair it with plan-first and the shipped `git-guardrails` hook — which narrows the common accidents rather than replacing the prompt you turned off |
+| **Bypass** | `bypassPermissions` | Skips **all** permission prompts and safety checks (deny rules still apply) — including writes to protected paths (`.git`, `.vscode`, `.idea`, `.husky`, `.claude`). Anthropic's docs advise reserving it for isolated environments | CI/CD, headless scripts, and — eyes open — trusted-repo daily driving: nothing prompts, so pair it with plan-first and the shipped deny rules, which still apply in bypass and narrow the common accidents rather than replacing the prompt you turned off |
 
 Set via CLI flag (`claude --permission-mode plan`), the `/config` command, or `permissions.defaultMode` in `settings.json`.
 
@@ -1444,7 +1473,7 @@ The first five layers are your safety net. Anything written to disk survives ind
 
 The session log reminder above is one example of a broader pattern: using **hooks** to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in `.claude/settings.json` and fire every time, regardless of context state.
 
-The template includes 11 hooks for logging, notifications, context survival, git safety, issue tracking, and protection of the configuration that defines the gates (plus a real git pre-commit hook, `.githooks/pre-commit`, installed via `./scripts/install-hooks.sh`):
+The template includes 9 hooks for logging, notifications, context survival, git safety, and issue tracking (plus a real git pre-commit hook, `.githooks/pre-commit`, installed via `./scripts/install-hooks.sh`). Destructive git commands are refused by permission deny rules rather than by a hook:
 
 | Hook | Event | What It Does |
 |------|-------|-------------|
@@ -1453,35 +1482,23 @@ The template includes 11 hooks for logging, notifications, context survival, git
 | Context state capture | `PreCompact` | Saves plan state before auto-compaction |
 | Context restoration | `SessionStart[compact|resume]` | Restores context after compaction or resume |
 | Session handoff | `SessionStart[startup]` + `UserPromptSubmit` | Hands a fresh session the newest checkpoint written in the last 7 days; used up only once you type a prompt (`CLAUDE_HANDOFF=off` to skip) |
-| Context monitor | `PostToolUse[Bash|Agent|Task]` | Progressive warnings at 40%/55%/65%/80%/90% context |
-| Git guardrails | `PreToolUse[Bash|Write|Edit|MultiEdit]` | Blocks destructive git (`reset --hard`, `clean -f`, `push --force`, `add -A`), and refuses a merge, rebase, or pull while the tree is dirty — including chains that would clean it first; on `Write`/`Edit`/`MultiEdit` of code files (`.R`, `.Rmd`, `.qmd`, `.do`, `.py`) it warns on hardcoded machine paths (`/Users/…`, `/home/…`), and denies them when `CLAUDE_STRICT_PATHS=1` |
+| Dirty-tree guard | `PreToolUse[Bash]`, started only for `git merge`, `git pull` and `git rebase` (`"if": "Bash(git merge *)"` and the like) | Refuses the operation while tracked files have uncommitted changes; untracked files do not count, `--abort`/`--continue`/`--skip`/`--quit`/`--edit-todo` pass, and `ALLOW_DIRTY_MERGE=1` overrides |
 | Claim reconcile | `PostToolUse[Write|Edit|MultiEdit]` | Flags stale numeric claims when analysis scripts change |
 | Issue guard | `PreToolUse[Bash]`, spawned only for `gh` commands (`"if": "Bash(gh *)"`, and `Bash(gh.exe *)` for Windows) | Denies a new GitHub issue created without the duplicate check (`gh issue create`/`new`, or a REST or GraphQL create) and points to `scripts/file-issue.py`, which searches open and closed issues first |
 | Open issues (opt-in) | `SessionStart[startup]` | With `CLAUDE_ISSUES_AT_START=1`, lists the open issues' numbers and titles — by the owner and collaborators only — so a session starts knowing the to-do list; off by default |
-| Root-of-trust guard | `PreToolUse[Bash]` | A tripwire, not a lock: denies *silent shell* writes into `.claude/settings*.json`, `.claude/hooks/`, and `.githooks/` — the files that define every other gate — and applies the destructive-git deny list to `bash -c` / `env -S` payloads. `Edit`/`Write`, a branch switch, or a bug in the hook can still replace them |
 
-Two of these deserve a note, because both encode a lesson rather than a preference. **Git guardrails** refuses a merge, rebase, or pull while the working tree is dirty: the operation either aborts mid-way or quietly folds uncommitted work into the result, and neither outcome announces itself. Stash with a label first, or set `ALLOW_DIRTY_MERGE=1` if you mean it. `--abort` and `--continue` are exempt outright — they are how you get *out* of a dirty in-progress operation. `--autostash` is not: it is allowed only when `git status --porcelain` reports no untracked entry, because `git stash` does not stash untracked files, so an autostash over a `??` line leaves that line exactly where it was. All three `PreToolUse` guards (`git-guardrails.py`, `root-of-trust-guard.py`, and `issue-guard.py`) are registered in `.claude/settings.json` with `"onFailure": "block"` (Claude Code ≥ 2.1.295): a guard that cannot start (`python3` missing, a moved script), times out, exits with an unexpected code or prints invalid output now blocks the call instead of letting it through. An exception *inside* a guard still fails open: each guard catches its own errors and exits 0, so that a guard bug cannot block unrelated work.
+One of these deserves a note, because it encodes a lesson rather than a preference. The **dirty-tree guard** refuses a merge, rebase, or pull while tracked files have uncommitted changes: the operation either aborts mid-way or quietly folds uncommitted work into the result, and neither outcome announces itself. Commit, or stash with a label, then run the operation as its own command; set `ALLOW_DIRTY_MERGE=1` if you mean it. `--abort` and `--continue` pass, because they are how you get *out* of a dirty in-progress operation. Only the issue guard is registered with `"onFailure": "block"` (Claude Code ≥ 2.1.295), so a missing `python3` refuses `gh` commands and no longer blocks Bash, Edit and Write. The dirty-tree guard has no such setting and fails open.
 
 ::: {.callout-note collapse="true"}
-## Deep Dive: Why Shell-Command Guards Are Tripwires, Not Locks (Rule 0 & Parser Boundaries)
+## What the deny rules and the dirty-tree guard catch, and what they miss
 
-It refuses **even when the same command line would have cleaned the tree first** — `git stash push -m wip && git merge` is denied, and you run the two steps separately instead. That looks pedantic until you see what the alternative cost. The check originally tried to *predict*, from the text of a chained command, whether the tree would still be dirty by the time the merge ran. Round after round of adversarial review found one more thing the prediction got wrong — stash flags, then stash subcommands, then intervening segments, then output redirection, then command substitution, and finally the plain fact that `git stash` does not stash untracked files at all, so even a correctly-parsed "this cleans the tree" was sometimes false. The rule now reads the tree as it *actually is* and refuses.
+**Denied natively.** The `deny` list in `.claude/settings.json` (shown in [Settings](#settings---permissions-and-hooks)) is checked by Claude Code itself, so it starts no process and adds no delay. It refuses `git reset --hard`, every `git clean` (dry runs included), `git push --force` and `-f` (`--force-with-lease` still runs), `git add -A`, `--all` and `.`, and `git checkout .`, `git checkout -- .` and `git restore .`. It also refuses reads and edits of `.env` files, including a Bash command that reads or writes a `.env` path, and reads of `*.pem`, `*.key` and `credentials*` files. Per the Claude Code permissions docs (read 2026-11-06), a deny rule applies to every subcommand of a compound command, including one inside a subshell, a command substitution or a control-flow body; it strips wrappers such as `timeout`, `nice`, `nohup` and leading `VAR=` assignments; and it holds in every permission mode. Each rule was checked live on 2026-11-06 in a scratch repository, including `(git reset --hard)` and `echo "$(git reset --hard)"`, the forms issue #172 recorded the old hook missing. `git reset --soft`, `git add <named files>`, `git restore --staged <file>` and `git checkout -- <file>` still run.
 
-The reading has to be earned, though, and that is **rule 0: standalone or nothing.** A `PreToolUse` hook decides before bash runs the line, so a reading taken now says nothing about the tree the op will actually start from — `printf '\n# note\n' >> analysis.R && git merge main` reads clean at hook time and executes dirty. So an identified merge, rebase, or pull reaches the tree reading only as a *standalone simple command*. A second shell segment, a pipeline, a redirection, a command or process substitution in its arguments, a grouping, a `cd`, or a variable assignment on the same line is denied outright, without the tree being read at all. That closes every write-then-op ordering by construction instead of by enumeration, and it also denies ordinary trailing conveniences — `git pull | tail -5`, `git pull > log 2>&1`, `git merge x && npm install`. **Deleting the prediction took the whole class of defect with it** — at the cost of one extra tool call, with its own hook cycle and agent round trip.
+**The dirty-tree check.** Claude Code starts `dirty-tree-guard.py` only for a command that contains `git merge`, `git pull` or `git rebase`. The hook runs `git status --porcelain --untracked-files=no` in the session's directory and refuses if a tracked file has uncommitted changes. Untracked files do not count, because git itself refuses a merge that would overwrite one. The hook reads the tree before the command line runs, so `git stash && git merge` on a dirty tree is refused too: run the two as separate commands.
 
-The hook did not end up smaller, and the reason is the useful part of the lesson. What replaced the prediction was *parsing* — working out which part of a command line is a git invocation, and whether a flag is really a flag or just a word inside a message. That is a harder-looking job that is nonetheless **finite and checkable**: shell grammar can be read correctly, and when the reading is wrong a test says so. Predicting what a command will *do* to the working tree has no such floor. Trading an unbounded problem for a bounded one is worth paying code for; the mistake was ever being on the unbounded side.
+**What neither catches.** A deny rule does not match a rewritten spelling: `git -C . push --force`, `git -c x=y push`, `git 'push'`, `/usr/bin/git`, or a command inside `bash -c '…'`. The docs call Bash deny rules a guard on the invocation Claude usually produces, not a security boundary. The dirty-tree guard reads the session's directory, so it misses a repository reached by `cd elsewhere &&` or `git -C`, and it does not look inside `bash -c`, an alias, a script or a Makefile. It fails open: if git cannot answer or the hook has a bug, the command runs. No hook refuses a shell write into `.claude/settings*.json`, `.claude/hooks/` or `.githooks/`; `blockWritesOutsideWorkingDirectories` still refuses file-tool writes to the settings files. And none of this recovers anything: `git reflog` restores a moved commit pointer, but not an uncommitted edit or an untracked file, which is what `reset --hard` and `clean` destroy.
 
-What it still cannot see is written down rather than implied away. Its docstring enumerates the forms it has been probed against — a `git merge` carried inside `bash -c`, an interpreter, an alias, a script, or a Makefile; and a write by **another process** in the milliseconds between the reading and git starting — and then says plainly that the list reports where the parser *has been probed*, not where it is complete. One form sits under that catch-all rather than on the list, and is worth naming because it is easy to assume covered: an op hidden *inside* a command substitution or a subshell — `echo $(git merge main)`, `(git reset --hard)`, the backtick spelling — never reaches the parser as a segment at all, so the hook is **silent** on it where the bare spelling denies (measured on a dirty fixture, 2026-08-23; open as #172). Making `(`, `)` and backticks plain separators was tried and backed out: it cut comments short and split a command's own arguments. The fix needs substitutions parsed as nested commands. A `cd` into a different repository was on the docstring's list until rule 0 arrived and denied it, along with every other multi-segment form — which is also what closes the case of the same command line doing the dirtying. The second hook — the file is `root-of-trust-guard.py`, and the honest description is a **silent-shell-write tripwire** — exists because the settings file and the hook directory decide whether any other gate runs at all: a shell one-liner can disable every gate in the repo in a single redirect, and nothing in the transcript looks unusual afterwards. Reads pass, and `Edit` / `Write` stay allowed so a change to a gate arrives as a reviewable diff rather than an invisible overwrite; the hatch is `ALLOW_ROOT_OF_TRUST_WRITE=1`.
-
-Because that hook already unwraps `bash -c` and `env -S` payloads to find writes hidden inside them, it now hands the unwrapped payload to git-guardrails' *own* destructive-git deny list as well — imported, not copied, so the two hooks cannot drift apart on what counts as destructive. That closes a gap the two of them had left open between each other: `bash -c 'git reset --hard'` and `bash -c 'git clean -fdx'` named no protected path for the first hook to test and looked like one opaque word to the second, so neither denied them, while the unwrapped spellings had been denied all along. The clean-tree check is *not* shared, so `bash -c 'git merge main'` on a dirty tree is still seen by neither.
-
-Now the part the name gets wrong. `"onFailure": "block"` closes the cases where the hook cannot start, times out, or exits or answers abnormally — not an error the hook catches itself; a repo-local, mutable, fail-open textual scan is still not a root of trust, and the file name is a filename rather than a claim. The scan reads the command line as text, so it catches the direct forms — redirects, `tee`, `cp`/`mv`/`rm`, in-place edits — and the payload carriers it knows about, including behind common wrappers. It cannot see inside an interpreter it does not read (`python3 -c`, `perl -e`), a path piped into a deleter, or an execution form nobody has enumerated yet. More to the point, the files it watches stay replaceable through channels the template deliberately allows, none of which trips it: an `Edit` / `Write` / `MultiEdit` on `.claude/hooks/` or `.githooks/` (on Claude Code ≥ 2.1.314 the template's `blockWritesOutsideWorkingDirectories` refuses file-tool writes to the settings files themselves, so the hook's registration can no longer be deleted that way); an ordinary `git switch` onto a branch whose tree carries different hooks; a clean merge or pull that imports the same change; and a bug in the hook itself, which fails open and becomes a no-op.
-
-So state its value exactly: **it changes the channel a modification arrives through — a reviewable diff instead of an invisible overwrite — and nothing more.** It is not a lock, and in a fresh fork there may be no other control behind it: a visible diff is retrospective visibility rather than authorisation, choosing `bypassPermissions` is a posture rather than a control, and a machine-wide hook in `~/.claude/hooks/` is optional and lives outside the repository. If you want a real one, it has to sit outside the worktree — a non-empty `deny` list in the permission system, or a machine-level hook — and it has to cover `Edit`/`Write` and branch transitions too. Note also what the audit trail is not: the transcript records that a loss happened, and `git reflog` / `ORIG_HEAD` recover a moved commit pointer, but neither holds the bytes of an uncommitted edit, an untracked file, or an ignored one — which is exactly what `reset --hard` and `clean -fdx` destroy. A guard whose advertised coverage exceeds its actual coverage is worse than none, because you stop looking.
-
-There is a further lesson here, and it is the one most likely to transfer to whatever you are guarding. A path can be written many ways that all reach the same file — a glob, a different case on a case-insensitive filesystem, a quote or a backslash sitting inside the name, a variable, a command substitution. Successive review rounds each turned up another one. That is simply what a text scan over shell syntax is: useful for the direct forms, and not a closed set. So the practical advice is not to give up on the guard — it still costs an accident a denial — but to be honest in the docstring about which forms it has actually been tested against, and to say that there are others. If you need a guarantee rather than a speed bump, the mechanism has to stop being a text scan: a real `deny` rule in the permission system, or a wrapper the operation cannot go around.
-
-One distinction inside that is worth keeping, because it changes what a fix can even do. Most of those forms are just **text** — the information is in the command line, so a scanner can be taught to read it, and another round of parsing is a reasonable answer. A symbolic link is not: it is a fact about the filesystem, and reading the command line cannot recover it. A link named anything at all, pointing at the directory you protect, is invisible to a text scan while the shell writes straight through it. That one is written down as out of reach rather than chased — and when you build your own guard, the same question tells you which gaps are worth more parsing and which mean the mechanism is the wrong shape for the guarantee you wanted.
+**Restoring a removed hook.** v2.9.1 removed `git-guardrails.py`, `root-of-trust-guard.py` and `context-monitor.py`. They ran on every Bash call, and together they slowed work and refused too often. To bring one back, copy it from the `v2.9.0` tag (`git show v2.9.0:.claude/hooks/git-guardrails.py > .claude/hooks/git-guardrails.py`) and register it again in `.claude/settings.json` the way it was at that tag (`git show v2.9.0:.claude/settings.json`).
 :::
 
 Verification and Beamer-Quarto sync are enforced via auto-loaded rules, which are the right tool for nuanced judgment. Hooks are reserved for enforcement that *must* survive context compression.
@@ -1520,7 +1537,7 @@ But a wired hook is not yet a working hook. A guard can keep its path, keep firi
 denying — an over-broad exception, a regex loosened during a debugging session, an early
 `return allow` left in. Gate 10, the hook battery, drives each active guard with synthetic events
 and requires it to still go red on the failure it was written for, and to stay green on the clean
-controls. 322 cases, and it finishes in seconds.
+controls. 110 cases, and it finishes in seconds.
 :::
 
 **Hook handler types.** The examples above use `command` hooks (shell scripts), but Claude Code supports five handler types:
@@ -1579,17 +1596,9 @@ Session running → context fills up → PreCompact fires
 
 #### Context Monitoring
 
-The `context-monitor.py` hook tracks approximate context usage and provides progressive warnings:
+Claude Code reports context use itself. The status line shows `ctx NN%` from Claude Code's own `context_window.used_percentage`, and shows nothing while that field is empty early in a session. The built-in `/context` command shows the exact breakdown, and `/context-status` adds the active plan, the newest session log and whether the compaction hooks are configured.
 
-| Threshold | Message | Purpose |
-|-----------|---------|---------|
-| 40%, 55%, 65% | Suggest `/learn` | Capture non-obvious discoveries before compaction |
-| 80% | Info message | Auto-compact approaching, no rush |
-| 90% | Caution | Complete current task with full quality |
-
-Use `/context-status` to check current session health at any time.
-
-Note: the monitor estimates context from transcript size (falling back to a tool-call count), so warnings may appear earlier or later than actual compaction; the status line prefers Claude Code's own `context_window.used_percentage` where available.
+Until v2.9.1 a `context-monitor.py` hook estimated the percentage after every Bash call and printed nudges at set thresholds. It was removed with the other per-command hooks.
 
 #### Recovery After Compaction
 
@@ -2002,7 +2011,7 @@ Phase 4: QUALITY GATE
 
 #### When to Use /learn
 
-The context monitor suggests `/learn` at 40%, 55%, and 65% context usage. Consider extracting a skill when you encounter:
+Run `/learn` before compaction, while the discovery is still in context; the status line's `ctx` reading tells you how close that is. Consider extracting a skill when you encounter:
 
 | Trigger | Example |
 |---------|---------|
@@ -2330,7 +2339,7 @@ Strong statisticians hit these six walls more than any others; each has a one-li
 3. **"What is staged?"** — `git status`; only the green (staged) files enter the next commit.
 4. **"Why did `git checkout main` fail?"** — a branch can be checked out in only ONE worktree at a time; `cd` back to the primary worktree instead.
 5. **"Why does `git branch -d` refuse after my squash merge?"** — a squash merge copies the changes but not the ancestry, so git can't see the branch as merged; use `-D` once the squash commit is in.
-6. **"How do I undo without `reset --hard`?"** — `git checkout -- <file>` for one file, `git stash` to shelve everything; the template's git guard blocks the destructive forms for exactly this reason.
+6. **"How do I undo without `reset --hard`?"** — `git checkout -- <file>` for one file, `git stash` to shelve everything; the template's deny rules block the destructive forms for exactly this reason.
 :::
 
 Git worktrees create a **separate working directory** linked to the same repository. Each directory has its own branch but shares commit history. Subagents can use worktrees via the `isolation: worktree` field (see [Advanced Agent Configuration](#sec-agent-config)).
@@ -2355,8 +2364,8 @@ your-project/                     ← main branch (stays clean)
 ```
 1. CREATE WORKTREE
    echo ".worktrees/" >> .git/info/exclude   # once per clone, BEFORE the first worktree:
-                                             # otherwise porcelain always shows `?? .worktrees/`,
-                                             # no stash clears it, and every merge below is denied
+                                             # otherwise the primary's status always
+                                             # shows `?? .worktrees/`
    git worktree add .worktrees/lecture-06-quarto -b quarto/lecture-06
    cd .worktrees/lecture-06-quarto
          ↓
@@ -2370,9 +2379,9 @@ your-project/                     ← main branch (stays clean)
 4. SYNC TO MAIN (when ready)
    cd ../..                # back to the primary worktree (main is checked out THERE;
                            # `git checkout main` inside the secondary worktree fails)
-   git status --porcelain  # git-guardrails denies a merge into a dirty tree, and
-                           # "kept working on main" is the whole point of a worktree,
-                           # so expect this NOT to be empty — clear it first
+   git status --porcelain  # dirty-tree-guard refuses a merge while tracked files have
+                           # uncommitted changes, and "kept working on main" is the
+                           # whole point of a worktree, so expect this NOT to be empty
    git stash push -u -m "pre-merge: in-flight edits"   # skip if porcelain was empty
    git merge --squash quarto/lecture-06
    git commit -m "feat: add Lecture 6 Quarto version"
@@ -2404,43 +2413,27 @@ git branch -D [branch-name]   # -D needed after --squash (no merge ancestry)
 
 # Squash-merge into main
 cd [primary-worktree]         # main lives in the primary worktree
-git status --porcelain        # empty, or the merge is denied — clear it first (below)
+git status --porcelain        # a tracked change here means the merge is refused — clear it first (below)
 git merge --squash [branch-name]
 git commit -m "feat: description of changes"
 
-# ...if the primary worktree is dirty, either stash around the merge:
+# ...if the primary worktree is dirty, stash around the merge, one command at a time:
 git stash push -u -m "pre-merge: in-flight edits"   # -u, or untracked files stay behind
 git merge --squash [branch-name]
 git commit -m "feat: description of changes"
 git stash pop
-
-# ...or, ONLY if porcelain shows no `??` lines, let git stash the tracked changes:
-git status --porcelain        # no `??` entries, or --autostash is denied too
-git merge --squash --autostash [branch-name]
-git commit -m "feat: description of changes"
 ```
 
 **The primary worktree is normally dirty when you reach the sync step, and that is the pattern
 working, not failing.** You used a worktree so you could keep editing on `main` while the other
-branch ran; those edits are still sitting there. The `git-guardrails` hook denies `git merge` on a
-non-empty `git status --porcelain`, so the merge is refused exactly when the pattern did its job.
-Clear the tree first — stash with a label, merge, pop. That sequence clears in-flight edits
-whether they are tracked or untracked, which is why it is the recipe above rather than the
-fallback. It cannot clear the worktree directory itself: a worktree nested at `.worktrees/` shows
-in the primary's porcelain as `?? .worktrees/`, `git stash push -u` skips it (*"Ignoring path
-.worktrees/lecture-06-quarto/"*), and the merge is then denied — which is why step 1 excludes
-`.worktrees/` before it creates the worktree. `--autostash` is the shorter
-route on a tree whose dirt is *only tracked*: the hook reads porcelain and allows it when there is
-no `??` entry, and denies it when there is, because `git stash` does not stash untracked files —
-so an autostash over a `??` line would start the merge on the same dirty tree the check exists to
-refuse. Two consequences follow. When porcelain is free of `??` lines, `--autostash` is allowed
-and the merge result comes back *staged* while your restored in-flight edits are *unstaged*, so
-the plain `git commit` above records the merge and leaves your work alone. When porcelain shows
-any `??` line — the ordinary case for a worktree you have been editing in — use the explicit `-u`
-stash; git's own behaviour agrees, since a branch that adds a file at a path you are holding
-untracked aborts with *"untracked working tree files would be overwritten"* after the autostash
-has already been taken. Both forms have to be **standalone** commands either way: chaining the
-stash and the merge onto one line is denied under rule 0, whichever route you pick.
+branch ran; those edits are still sitting there. The `dirty-tree-guard` hook refuses `git merge`
+while tracked files have uncommitted changes, so the merge is refused exactly when the pattern did
+its job. Clear the tree first: stash with a label, merge, pop. Untracked files do not trigger the
+refusal, but `-u` stashes them as well, so a branch that adds a file at a path you hold untracked
+does not stop the merge with git's *"untracked working tree files would be overwritten"*. Run the
+stash and the merge as separate commands. The hook reads the tree before the command line runs, so
+`git stash push -u … && git merge …` is still refused while tracked files are dirty, and so is
+`git merge --autostash`.
 
 ::: {.callout-note}
 ## `worktree.baseRef` (Apr 2026 Week 19)
@@ -3535,12 +3528,10 @@ Claude Code supports **plugins** --- bundled collections of skills, agents, hook
 | Context state capture | PreCompact (command) | `.claude/hooks/pre-compact.py` — saves plan/task/decisions; the DRAFT-block is opt-in (`CLAUDE_PRECOMPACT_BLOCK_ON_DRAFT=1`) |
 | Context restoration | SessionStart[compact\|resume] (command) | `.claude/hooks/post-compact-restore.py` |
 | Session handoff | SessionStart[startup] + UserPromptSubmit (command) | `.claude/hooks/session-handoff.py` — hands a fresh session the newest `/checkpoint` or `/compress-session` file written in the last 7 days; it counts as delivered at the session's first prompt, never in headless runs; `CLAUDE_HANDOFF=off` opts out |
-| Context monitor | PostToolUse[Bash\|Agent\|Task] (command) | `.claude/hooks/context-monitor.py` |
-| Git guardrails | PreToolUse (command) | `.claude/hooks/git-guardrails.py` — blocks `reset --hard` / `clean -f` / `push --force` / `add -A`; refuses merge / rebase / pull on a dirty tree, including chains that would clean it first (`ALLOW_DIRTY_MERGE=1`) |
+| Dirty-tree guard | PreToolUse[Bash], only for `git merge` / `pull` / `rebase` (`if: Bash(git merge *)` and the like) (command) | `.claude/hooks/dirty-tree-guard.py` — refuses the operation while tracked files have uncommitted changes; untracked files do not count; fails open (`ALLOW_DIRTY_MERGE=1`) |
 | Claim reconcile | PostToolUse (command) | `.claude/hooks/claim-reconcile.py` — flags stale numeric claims when scripts change, including edits to a declared `appears_in` display |
 | Issue guard | PreToolUse[Bash], only for `gh` commands (`if: Bash(gh *)` and `Bash(gh.exe *)`) (command) | `.claude/hooks/issue-guard.py` — denies a raw `gh issue create`/`new`, or a REST/GraphQL issue create, and points to `scripts/file-issue.py`, which checks for duplicates first |
 | Open issues (opt-in) | SessionStart[startup] (command) | `.claude/hooks/open-issues.py` — with `CLAUDE_ISSUES_AT_START=1`, lists open issues' numbers and titles (owner and collaborators only) at startup; off by default |
-| Root-of-trust guard | PreToolUse (command) | `.claude/hooks/root-of-trust-guard.py` — best-effort tripwire against *silent* shell writes to `.claude/settings*.json`, `.claude/hooks/`, `.githooks/`, plus the destructive-git deny list applied to `bash -c` / `env -S` payloads; reads and `Edit`/`Write` still pass, so it changes the channel rather than locking the files (`ALLOW_ROOT_OF_TRUST_WRITE=1`) |
 
 **Additional hook events** available in Claude Code (not used in this template but available for custom hooks):
 
@@ -3579,7 +3570,7 @@ Claude Code supports **plugins** --- bundled collections of skills, agents, hook
 
 ### Hooks Not Firing
 
-**Symptom:** No context warnings, no auto-written session log, no git guardrails firing.
+**Symptom:** No notifications, no auto-written session log, no dirty-tree or issue guard firing.
 
 **Fix:**
 1. Check hooks are configured: `cat .claude/settings.json | grep hooks`

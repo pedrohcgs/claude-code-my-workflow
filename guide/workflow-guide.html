@@ -3015,11 +3015,11 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 <p>The template is built for Claude Code, but two other agents can use much of it. Codex — the Codex CLI, its IDE extensions, and the Codex tab of the ChatGPT desktop app — reads <a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/AGENTS.md"><code>AGENTS.md</code></a> at the repository root, and both Codex and Google Antigravity read skills in the open Agent Skills format from <code>.agents/skills/</code>. That folder holds generated wrappers, one per skill that a single agent can run end to end: each has the same name and description as its Claude Code skill and sends the agent to the real instructions in <code>.claude/skills/</code>. In the ChatGPT app, type <code>@</code> to pick a skill; in the Codex CLI or an IDE extension, mention one with <code>$name</code> or list them with <code>/skills</code>; in Antigravity, type <code>/name</code>.</p>
 <p>Three things do not carry over, and <code>AGENTS.md</code> says what to do instead:</p>
 <ul>
-<li><strong>The guard hooks.</strong> <code>git-guardrails</code>, <code>root-of-trust-guard</code> and <code>issue-guard</code> are Claude Code hooks, so another agent is not stopped from running <code>git reset --hard</code> or a raw <code>gh issue create</code>. <code>AGENTS.md</code> turns each hook into a rule the agent follows by hand. The git pre-commit gate (<code>./scripts/install-hooks.sh</code>) and CI apply to every agent’s commits.</li>
+<li><strong>The guards.</strong> The deny rules in <code>.claude/settings.json</code> and the <code>dirty-tree-guard</code> and <code>issue-guard</code> hooks belong to Claude Code, so another agent is not stopped from running <code>git reset --hard</code> or a raw <code>gh issue create</code>. <code>AGENTS.md</code> turns each one into a rule the agent follows by hand. The git pre-commit gate (<code>./scripts/install-hooks.sh</code>) and CI apply to every agent’s commits.</li>
 <li><strong>Independent reviewers.</strong> Skills whose value is several reviewers who do not see each other’s work — <code>/review-paper --peer</code>, <code>/seven-pass-review</code>, <code>/verify-claims</code> — are not bridged: one agent playing every referee is not the same check. Where a bridged skill hands one step to a Claude Code agent, the other agent does that step where it appears, so a gate still gates. A step that needs a context that has not seen the work, such as <code>/lit-review</code>’s claim verifier, runs in a separate session. If the agent cannot start one, it marks those results <em>not independently verified</em> and tells you to repeat the check in Claude Code.</li>
 <li><strong>Claude Code’s own machinery.</strong> Skills that manage Claude Code sessions, memory or permissions are not bridged.</li>
 </ul>
-<p>Claude Code itself reads <code>CLAUDE.md</code>, not <code>AGENTS.md</code>, unless a repository has no <code>CLAUDE.md</code> or its <strong>Project instructions</strong> setting is <code>claude-md-and-agents-md</code>; leave that setting at its default here, because <code>AGENTS.md</code> tells other agents to do by hand what Claude Code’s hooks already do. <code>scripts/sync-agent-skills.py</code> lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.</p>
+<p>Claude Code itself reads <code>CLAUDE.md</code>, not <code>AGENTS.md</code>, unless a repository has no <code>CLAUDE.md</code> or its <strong>Project instructions</strong> setting is <code>claude-md-and-agents-md</code>; leave that setting at its default here, because <code>AGENTS.md</code> tells other agents to do by hand what Claude Code’s deny rules and hooks already do. <code>scripts/sync-agent-skills.py</code> lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.</p>
 <p><strong>Keep reviewing agent-written changes.</strong> A pull request written with another agent once passed every backtest gate with three wrong names of real people, a cited source that did not exist, and guessed version numbers. The gates check that the repository agrees with itself, not that it is true; <code>AGENTS.md</code> asks agents to source every fact, and a second model’s review before merge is what caught the rest.</p>
 </div>
 </div>
@@ -3091,7 +3091,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 <li><strong>Rewrite <code>CLAUDE.md</code> for your project</strong> — name, folder tree, current state. It is the first file Claude reads. Its link to the template README’s skills table (<code>README.md#skills-claudeskills</code>) will not resolve in your repo; point it at your own index or drop it.</li>
 <li><strong>Tell the hygiene gate about your folders and root files.</strong> Add each top-level folder of yours (<code>paper/</code>, <code>code/</code>, …) to <code>ROOT_ALLOW_DIRS</code> in <code>scripts/check-repo-hygiene.py</code>, and each file at the root that is not already allowed (a <code>Makefile</code>, an <code>.Rproj</code>, …) to <code>ROOT_ALLOW</code>, each with a one-line reason. The layout folders (<code>output/</code>, <code>data/</code>, <code>R/</code>, <code>tests/</code>) and the common R and Python environment files (<code>DESCRIPTION</code>, <code>renv.lock</code>, <code>requirements.txt</code>, …) are allowed already.</li>
 <li><strong>Remove the two checks that read the template’s own documentation.</strong> Delete the <code>run &quot;surface-sync&quot;</code> and <code>run &quot;derived-counts&quot;</code> lines from <code>scripts/backtest.sh</code>: they count skills, gates and battery cases in the template’s README, guide and changelog, which your project does not have. Every other check applies to your work as-is.</li>
-<li><strong>Stage the copied files by name</strong> — <code>git add .claude .githooks scripts templates Preambles CLAUDE.md MEMORY.md TROUBLESHOOTING.md CHANGELOG.md quality_reports .gitignore</code>. The ledger check needs the hook files tracked, and the template’s own guard refuses a blanket <code>git add -A</code>.</li>
+<li><strong>Stage the copied files by name</strong> — <code>git add .claude .githooks scripts templates Preambles CLAUDE.md MEMORY.md TROUBLESHOOTING.md CHANGELOG.md quality_reports .gitignore</code>. The ledger check needs the hook files tracked, and the template’s deny rules refuse a blanket <code>git add -A</code>.</li>
 <li><strong>Run</strong> <code>./scripts/validate-setup.sh</code>, then <code>./scripts/install-hooks.sh</code>, then <code>./scripts/backtest.sh</code>.</li>
 </ol>
 <p>We tested these steps on a project with its own README, <code>paper/</code> and <code>code/</code> folders and a root <code>Makefile</code>. As copied, five of the suite’s checks failed. After steps 1–5, the full suite passed, the hook battery included.</p>
@@ -3460,19 +3460,19 @@ APPROVED   NEEDS WORK
 <td>score report</td>
 </tr>
 <tr class="odd">
-<td>Destructive-git guard</td>
-<td>PreToolUse hook</td>
-<td><code>git</code> commands in-session</td>
-<td><strong>closed</strong> — call blocked</td>
+<td>Destructive-git deny rules</td>
+<td>permission <code>deny</code> rules in <code>.claude/settings.json</code>, checked by Claude Code</td>
+<td><code>git reset --hard</code>, <code>git clean</code>, <code>git push --force</code>/<code>-f</code>, <code>git add -A</code>/<code>--all</code>/<code>.</code>, <code>git checkout .</code>, <code>git restore .</code> in-session, as Claude usually spells them (a guard, not a security boundary: <code>git -C . …</code> and <code>bash -c &#39;…&#39;</code> are not matched)</td>
+<td><strong>closed</strong> — call refused</td>
 <td>run it yourself in a terminal</td>
-<td>hook message</td>
+<td>the refusal in the transcript</td>
 </tr>
 <tr class="even">
-<td>Root-of-trust guard</td>
-<td>PreToolUse hook (<code>Bash</code>)</td>
-<td><em>silent shell</em> writes into <code>.claude/settings*.json</code>, <code>.claude/hooks/</code>, <code>.githooks/</code> in-session (a best-effort tripwire; <code>Edit</code>/<code>Write</code> still pass)</td>
-<td><strong>closed</strong> — call blocked</td>
-<td><code>ALLOW_ROOT_OF_TRUST_WRITE=1</code></td>
+<td>Dirty-tree guard</td>
+<td>PreToolUse hook (<code>Bash</code>, started only for <code>git merge</code>, <code>pull</code>, <code>rebase</code>)</td>
+<td>a history operation while tracked files have uncommitted changes, in the session’s directory</td>
+<td><strong>closed</strong> — call blocked; the hook itself fails open</td>
+<td><code>ALLOW_DIRTY_MERGE=1</code></td>
 <td>hook message</td>
 </tr>
 <tr class="odd">
@@ -3517,7 +3517,7 @@ APPROVED   NEEDS WORK
 </tr>
 </tbody>
 </table>
-<p>Two design rules behind this table: everything <strong>closed</strong> is deterministic (scripts, not model judgment), and model judgment is never a gate — it produces reports a human adjudicates. And deliberately, this template does <strong>not</strong> pile on session-time enforcement hooks beyond its three <code>PreToolUse</code> guards — the destructive-git guard, the root-of-trust tripwire, and the issue guard. A guard that runs on every call slows every single interaction, and the cost lands on you every minute you work; that is why the issue guard is spawned only for <code>gh</code> commands.</p>
+<p>Two design rules behind this table: everything <strong>closed</strong> is deterministic (scripts, not model judgment), and model judgment is never a gate — it produces reports a human adjudicates. And deliberately, this template keeps session-time enforcement small: native deny rules, which start no process, and two <code>PreToolUse</code> hooks that Claude Code starts only for the commands they check, the dirty-tree guard for <code>git merge</code>, <code>pull</code> and <code>rebase</code> and the issue guard for <code>gh</code>. A hook that runs on every call slows every interaction, and the cost lands on you every minute you work; v2.9.1 removed the three that did.</p>
 <section id="dont-skip-verification" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="dont-skip-verification"><span class="header-section-number">3.5</span> Don’t Skip Verification</h2>
 <p>In Econ 730, verification caught unverified TikZ diagrams that would have deployed with overlapping labels, broken SVGs in Quarto slides that wouldn’t display, and R scripts with missing intercept terms that produced silently wrong estimates.</p>
@@ -4316,7 +4316,7 @@ APPROVED   NEEDS WORK
 </section>
 <section id="settings---permissions-and-hooks" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="settings---permissions-and-hooks"><span class="header-section-number">4.6</span> Settings — Permissions and Hooks</h2>
-<p><code>.claude/settings.json</code> controls what Claude is allowed to do. The template ships a catch-all allow list rather than a curated one: seven wildcard rules, with no deny rules and no default mode. Here is the permissions block plus one of its hooks:</p>
+<p><code>.claude/settings.json</code> controls what Claude is allowed to do. The template ships a catch-all allow list rather than a curated one: seven wildcard allow rules, a deny list for destructive git commands and secret files, and no default mode. Here is the permissions block plus one of its hooks:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;permissions&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;allow&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
@@ -4328,21 +4328,50 @@ APPROVED   NEEDS WORK
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;WebSearch&quot;</span><span class="ot">,</span></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(**)&quot;</span></span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;deny&quot;</span><span class="fu">:</span> <span class="ot">[]</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR</span><span class="ch">\&quot;</span><span class="st">/.claude/hooks/log-reminder.py&quot;</span><span class="fu">,</span></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>In Manual mode almost nothing prompts. Auto mode drops the blanket <code>Bash(*)</code> and routes shell commands through its classifier. To tighten this, for example to keep restricted data off the model, add <code>deny</code> rules: see “Keep restricted data off the model” in <a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/TROUBLESHOOTING.md#keep-restricted-data-off-the-model">TROUBLESHOOTING.md</a>.</p>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;deny&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git reset *--hard*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git clean *)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git push *--force)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git push *--force *)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git push -f*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git push * -f*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git add -A*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git add --all*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git add . *)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git checkout -- . *)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git checkout . *)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Bash(git restore . *)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(.env)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(.env.*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(**/.env)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(**/.env.*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(**/*.pem)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(**/*.key)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Read(**/credentials*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Edit(.env)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Edit(.env.*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Edit(**/.env)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Edit(**/.env.*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Write(.env)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Write(.env.*)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Write(**/.env)&quot;</span><span class="ot">,</span></span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;Write(**/.env.*)&quot;</span></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;blockWritesOutsideWorkingDirectories&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Stop&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;hooks&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span></span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;command&quot;</span><span class="fu">,</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;command&quot;</span><span class="fu">:</span> <span class="st">&quot;python3 </span><span class="ch">\&quot;</span><span class="st">$CLAUDE_PROJECT_DIR</span><span class="ch">\&quot;</span><span class="st">/.claude/hooks/log-reminder.py&quot;</span><span class="fu">,</span></span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>          <span class="dt">&quot;timeout&quot;</span><span class="fu">:</span> <span class="dv">10</span></span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In Manual mode almost nothing prompts. Auto mode drops the blanket <code>Bash(*)</code> and routes shell commands through its classifier. The deny rules hold in every mode; the push rules leave <code>--force-with-lease</code> allowed, and what the git rules do not catch is in <a href="#hooks---automated-enforcement">Hooks</a>. To tighten this further, for example to keep restricted data off the model, add more <code>deny</code> rules: see “Keep restricted data off the model” in <a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/TROUBLESHOOTING.md#keep-restricted-data-off-the-model">TROUBLESHOOTING.md</a>.</p>
 <p><strong>Permission modes.</strong> Claude Code has six permission modes that control how much autonomy Claude gets:</p>
 <table class="caption-top table">
 <colgroup>
@@ -4394,7 +4423,7 @@ APPROVED   NEEDS WORK
 <td><strong>Bypass</strong></td>
 <td><code>bypassPermissions</code></td>
 <td>Skips <strong>all</strong> permission prompts and safety checks (deny rules still apply) — including writes to protected paths (<code>.git</code>, <code>.vscode</code>, <code>.idea</code>, <code>.husky</code>, <code>.claude</code>). Anthropic’s docs advise reserving it for isolated environments</td>
-<td>CI/CD, headless scripts, and — eyes open — trusted-repo daily driving: nothing prompts, so pair it with plan-first and the shipped <code>git-guardrails</code> hook — which narrows the common accidents rather than replacing the prompt you turned off</td>
+<td>CI/CD, headless scripts, and — eyes open — trusted-repo daily driving: nothing prompts, so pair it with plan-first and the shipped deny rules, which still apply in bypass and narrow the common accidents rather than replacing the prompt you turned off</td>
 </tr>
 </tbody>
 </table>
@@ -4821,7 +4850,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 <section id="hooks---automated-enforcement" class="level3" data-number="4.8.5">
 <h3 data-number="4.8.5" class="anchored" data-anchor-id="hooks---automated-enforcement"><span class="header-section-number">4.8.5</span> Hooks — Automated Enforcement</h3>
 <p>The session log reminder above is one example of a broader pattern: using <strong>hooks</strong> to enforce rules that Claude might otherwise forget during long sessions. Rules live in context and can be compressed away. Hooks live in <code>.claude/settings.json</code> and fire every time, regardless of context state.</p>
-<p>The template includes 11 hooks for logging, notifications, context survival, git safety, issue tracking, and protection of the configuration that defines the gates (plus a real git pre-commit hook, <code>.githooks/pre-commit</code>, installed via <code>./scripts/install-hooks.sh</code>):</p>
+<p>The template includes 9 hooks for logging, notifications, context survival, git safety, and issue tracking (plus a real git pre-commit hook, <code>.githooks/pre-commit</code>, installed via <code>./scripts/install-hooks.sh</code>). Destructive git commands are refused by permission deny rules rather than by a hook:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 23%">
@@ -4862,59 +4891,44 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 <td>Hands a fresh session the newest checkpoint written in the last 7 days; used up only once you type a prompt (<code>CLAUDE_HANDOFF=off</code> to skip)</td>
 </tr>
 <tr class="even">
-<td>Context monitor</td>
-<td><code>PostToolUse[Bash|Agent|Task]</code></td>
-<td>Progressive warnings at 40%/55%/65%/80%/90% context</td>
+<td>Dirty-tree guard</td>
+<td><code>PreToolUse[Bash]</code>, started only for <code>git merge</code>, <code>git pull</code> and <code>git rebase</code> (<code>&quot;if&quot;: &quot;Bash(git merge *)&quot;</code> and the like)</td>
+<td>Refuses the operation while tracked files have uncommitted changes; untracked files do not count, <code>--abort</code>/<code>--continue</code>/<code>--skip</code>/<code>--quit</code>/<code>--edit-todo</code> pass, and <code>ALLOW_DIRTY_MERGE=1</code> overrides</td>
 </tr>
 <tr class="odd">
-<td>Git guardrails</td>
-<td><code>PreToolUse[Bash|Write|Edit|MultiEdit]</code></td>
-<td>Blocks destructive git (<code>reset --hard</code>, <code>clean -f</code>, <code>push --force</code>, <code>add -A</code>), and refuses a merge, rebase, or pull while the tree is dirty — including chains that would clean it first; on <code>Write</code>/<code>Edit</code>/<code>MultiEdit</code> of code files (<code>.R</code>, <code>.Rmd</code>, <code>.qmd</code>, <code>.do</code>, <code>.py</code>) it warns on hardcoded machine paths (<code>/Users/…</code>, <code>/home/…</code>), and denies them when <code>CLAUDE_STRICT_PATHS=1</code></td>
-</tr>
-<tr class="even">
 <td>Claim reconcile</td>
 <td><code>PostToolUse[Write|Edit|MultiEdit]</code></td>
 <td>Flags stale numeric claims when analysis scripts change</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Issue guard</td>
 <td><code>PreToolUse[Bash]</code>, spawned only for <code>gh</code> commands (<code>&quot;if&quot;: &quot;Bash(gh *)&quot;</code>, and <code>Bash(gh.exe *)</code> for Windows)</td>
 <td>Denies a new GitHub issue created without the duplicate check (<code>gh issue create</code>/<code>new</code>, or a REST or GraphQL create) and points to <code>scripts/file-issue.py</code>, which searches open and closed issues first</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Open issues (opt-in)</td>
 <td><code>SessionStart[startup]</code></td>
 <td>With <code>CLAUDE_ISSUES_AT_START=1</code>, lists the open issues’ numbers and titles — by the owner and collaborators only — so a session starts knowing the to-do list; off by default</td>
 </tr>
-<tr class="odd">
-<td>Root-of-trust guard</td>
-<td><code>PreToolUse[Bash]</code></td>
-<td>A tripwire, not a lock: denies <em>silent shell</em> writes into <code>.claude/settings*.json</code>, <code>.claude/hooks/</code>, and <code>.githooks/</code> — the files that define every other gate — and applies the destructive-git deny list to <code>bash -c</code> / <code>env -S</code> payloads. <code>Edit</code>/<code>Write</code>, a branch switch, or a bug in the hook can still replace them</td>
-</tr>
 </tbody>
 </table>
-<p>Two of these deserve a note, because both encode a lesson rather than a preference. <strong>Git guardrails</strong> refuses a merge, rebase, or pull while the working tree is dirty: the operation either aborts mid-way or quietly folds uncommitted work into the result, and neither outcome announces itself. Stash with a label first, or set <code>ALLOW_DIRTY_MERGE=1</code> if you mean it. <code>--abort</code> and <code>--continue</code> are exempt outright — they are how you get <em>out</em> of a dirty in-progress operation. <code>--autostash</code> is not: it is allowed only when <code>git status --porcelain</code> reports no untracked entry, because <code>git stash</code> does not stash untracked files, so an autostash over a <code>??</code> line leaves that line exactly where it was. All three <code>PreToolUse</code> guards (<code>git-guardrails.py</code>, <code>root-of-trust-guard.py</code>, and <code>issue-guard.py</code>) are registered in <code>.claude/settings.json</code> with <code>&quot;onFailure&quot;: &quot;block&quot;</code> (Claude Code ≥ 2.1.295): a guard that cannot start (<code>python3</code> missing, a moved script), times out, exits with an unexpected code or prints invalid output now blocks the call instead of letting it through. An exception <em>inside</em> a guard still fails open: each guard catches its own errors and exits 0, so that a guard bug cannot block unrelated work.</p>
+<p>One of these deserves a note, because it encodes a lesson rather than a preference. The <strong>dirty-tree guard</strong> refuses a merge, rebase, or pull while tracked files have uncommitted changes: the operation either aborts mid-way or quietly folds uncommitted work into the result, and neither outcome announces itself. Commit, or stash with a label, then run the operation as its own command; set <code>ALLOW_DIRTY_MERGE=1</code> if you mean it. <code>--abort</code> and <code>--continue</code> pass, because they are how you get <em>out</em> of a dirty in-progress operation. Only the issue guard is registered with <code>&quot;onFailure&quot;: &quot;block&quot;</code> (Claude Code ≥ 2.1.295), so a missing <code>python3</code> refuses <code>gh</code> commands and no longer blocks Bash, Edit and Write. The dirty-tree guard has no such setting and fails open.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Deep Dive: Why Shell-Command Guards Are Tripwires, Not Locks (Rule 0 &amp; Parser Boundaries)
+<span class="screen-reader-only">Note</span>What the deny rules and the dirty-tree guard catch, and what they miss
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-31" class="callout-31-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>It refuses <strong>even when the same command line would have cleaned the tree first</strong> — <code>git stash push -m wip &amp;&amp; git merge</code> is denied, and you run the two steps separately instead. That looks pedantic until you see what the alternative cost. The check originally tried to <em>predict</em>, from the text of a chained command, whether the tree would still be dirty by the time the merge ran. Round after round of adversarial review found one more thing the prediction got wrong — stash flags, then stash subcommands, then intervening segments, then output redirection, then command substitution, and finally the plain fact that <code>git stash</code> does not stash untracked files at all, so even a correctly-parsed “this cleans the tree” was sometimes false. The rule now reads the tree as it <em>actually is</em> and refuses.</p>
-<p>The reading has to be earned, though, and that is <strong>rule 0: standalone or nothing.</strong> A <code>PreToolUse</code> hook decides before bash runs the line, so a reading taken now says nothing about the tree the op will actually start from — <code>printf &#39;\n# note\n&#39; &gt;&gt; analysis.R &amp;&amp; git merge main</code> reads clean at hook time and executes dirty. So an identified merge, rebase, or pull reaches the tree reading only as a <em>standalone simple command</em>. A second shell segment, a pipeline, a redirection, a command or process substitution in its arguments, a grouping, a <code>cd</code>, or a variable assignment on the same line is denied outright, without the tree being read at all. That closes every write-then-op ordering by construction instead of by enumeration, and it also denies ordinary trailing conveniences — <code>git pull | tail -5</code>, <code>git pull &gt; log 2&gt;&amp;1</code>, <code>git merge x &amp;&amp; npm install</code>. <strong>Deleting the prediction took the whole class of defect with it</strong> — at the cost of one extra tool call, with its own hook cycle and agent round trip.</p>
-<p>The hook did not end up smaller, and the reason is the useful part of the lesson. What replaced the prediction was <em>parsing</em> — working out which part of a command line is a git invocation, and whether a flag is really a flag or just a word inside a message. That is a harder-looking job that is nonetheless <strong>finite and checkable</strong>: shell grammar can be read correctly, and when the reading is wrong a test says so. Predicting what a command will <em>do</em> to the working tree has no such floor. Trading an unbounded problem for a bounded one is worth paying code for; the mistake was ever being on the unbounded side.</p>
-<p>What it still cannot see is written down rather than implied away. Its docstring enumerates the forms it has been probed against — a <code>git merge</code> carried inside <code>bash -c</code>, an interpreter, an alias, a script, or a Makefile; and a write by <strong>another process</strong> in the milliseconds between the reading and git starting — and then says plainly that the list reports where the parser <em>has been probed</em>, not where it is complete. One form sits under that catch-all rather than on the list, and is worth naming because it is easy to assume covered: an op hidden <em>inside</em> a command substitution or a subshell — <code>echo $(git merge main)</code>, <code>(git reset --hard)</code>, the backtick spelling — never reaches the parser as a segment at all, so the hook is <strong>silent</strong> on it where the bare spelling denies (measured on a dirty fixture, 2026-08-23; open as #172). Making <code>(</code>, <code>)</code> and backticks plain separators was tried and backed out: it cut comments short and split a command’s own arguments. The fix needs substitutions parsed as nested commands. A <code>cd</code> into a different repository was on the docstring’s list until rule 0 arrived and denied it, along with every other multi-segment form — which is also what closes the case of the same command line doing the dirtying. The second hook — the file is <code>root-of-trust-guard.py</code>, and the honest description is a <strong>silent-shell-write tripwire</strong> — exists because the settings file and the hook directory decide whether any other gate runs at all: a shell one-liner can disable every gate in the repo in a single redirect, and nothing in the transcript looks unusual afterwards. Reads pass, and <code>Edit</code> / <code>Write</code> stay allowed so a change to a gate arrives as a reviewable diff rather than an invisible overwrite; the hatch is <code>ALLOW_ROOT_OF_TRUST_WRITE=1</code>.</p>
-<p>Because that hook already unwraps <code>bash -c</code> and <code>env -S</code> payloads to find writes hidden inside them, it now hands the unwrapped payload to git-guardrails’ <em>own</em> destructive-git deny list as well — imported, not copied, so the two hooks cannot drift apart on what counts as destructive. That closes a gap the two of them had left open between each other: <code>bash -c &#39;git reset --hard&#39;</code> and <code>bash -c &#39;git clean -fdx&#39;</code> named no protected path for the first hook to test and looked like one opaque word to the second, so neither denied them, while the unwrapped spellings had been denied all along. The clean-tree check is <em>not</em> shared, so <code>bash -c &#39;git merge main&#39;</code> on a dirty tree is still seen by neither.</p>
-<p>Now the part the name gets wrong. <code>&quot;onFailure&quot;: &quot;block&quot;</code> closes the cases where the hook cannot start, times out, or exits or answers abnormally — not an error the hook catches itself; a repo-local, mutable, fail-open textual scan is still not a root of trust, and the file name is a filename rather than a claim. The scan reads the command line as text, so it catches the direct forms — redirects, <code>tee</code>, <code>cp</code>/<code>mv</code>/<code>rm</code>, in-place edits — and the payload carriers it knows about, including behind common wrappers. It cannot see inside an interpreter it does not read (<code>python3 -c</code>, <code>perl -e</code>), a path piped into a deleter, or an execution form nobody has enumerated yet. More to the point, the files it watches stay replaceable through channels the template deliberately allows, none of which trips it: an <code>Edit</code> / <code>Write</code> / <code>MultiEdit</code> on <code>.claude/hooks/</code> or <code>.githooks/</code> (on Claude Code ≥ 2.1.314 the template’s <code>blockWritesOutsideWorkingDirectories</code> refuses file-tool writes to the settings files themselves, so the hook’s registration can no longer be deleted that way); an ordinary <code>git switch</code> onto a branch whose tree carries different hooks; a clean merge or pull that imports the same change; and a bug in the hook itself, which fails open and becomes a no-op.</p>
-<p>So state its value exactly: <strong>it changes the channel a modification arrives through — a reviewable diff instead of an invisible overwrite — and nothing more.</strong> It is not a lock, and in a fresh fork there may be no other control behind it: a visible diff is retrospective visibility rather than authorisation, choosing <code>bypassPermissions</code> is a posture rather than a control, and a machine-wide hook in <code>~/.claude/hooks/</code> is optional and lives outside the repository. If you want a real one, it has to sit outside the worktree — a non-empty <code>deny</code> list in the permission system, or a machine-level hook — and it has to cover <code>Edit</code>/<code>Write</code> and branch transitions too. Note also what the audit trail is not: the transcript records that a loss happened, and <code>git reflog</code> / <code>ORIG_HEAD</code> recover a moved commit pointer, but neither holds the bytes of an uncommitted edit, an untracked file, or an ignored one — which is exactly what <code>reset --hard</code> and <code>clean -fdx</code> destroy. A guard whose advertised coverage exceeds its actual coverage is worse than none, because you stop looking.</p>
-<p>There is a further lesson here, and it is the one most likely to transfer to whatever you are guarding. A path can be written many ways that all reach the same file — a glob, a different case on a case-insensitive filesystem, a quote or a backslash sitting inside the name, a variable, a command substitution. Successive review rounds each turned up another one. That is simply what a text scan over shell syntax is: useful for the direct forms, and not a closed set. So the practical advice is not to give up on the guard — it still costs an accident a denial — but to be honest in the docstring about which forms it has actually been tested against, and to say that there are others. If you need a guarantee rather than a speed bump, the mechanism has to stop being a text scan: a real <code>deny</code> rule in the permission system, or a wrapper the operation cannot go around.</p>
-<p>One distinction inside that is worth keeping, because it changes what a fix can even do. Most of those forms are just <strong>text</strong> — the information is in the command line, so a scanner can be taught to read it, and another round of parsing is a reasonable answer. A symbolic link is not: it is a fact about the filesystem, and reading the command line cannot recover it. A link named anything at all, pointing at the directory you protect, is invisible to a text scan while the shell writes straight through it. That one is written down as out of reach rather than chased — and when you build your own guard, the same question tells you which gaps are worth more parsing and which mean the mechanism is the wrong shape for the guarantee you wanted.</p>
+<p><strong>Denied natively.</strong> The <code>deny</code> list in <code>.claude/settings.json</code> (shown in <a href="#settings---permissions-and-hooks">Settings</a>) is checked by Claude Code itself, so it starts no process and adds no delay. It refuses <code>git reset --hard</code>, every <code>git clean</code> (dry runs included), <code>git push --force</code> and <code>-f</code> (<code>--force-with-lease</code> still runs), <code>git add -A</code>, <code>--all</code> and <code>.</code>, and <code>git checkout .</code>, <code>git checkout -- .</code> and <code>git restore .</code>. It also refuses reads and edits of <code>.env</code> files, including a Bash command that reads or writes a <code>.env</code> path, and reads of <code>*.pem</code>, <code>*.key</code> and <code>credentials*</code> files. Per the Claude Code permissions docs (read 2026-11-06), a deny rule applies to every subcommand of a compound command, including one inside a subshell, a command substitution or a control-flow body; it strips wrappers such as <code>timeout</code>, <code>nice</code>, <code>nohup</code> and leading <code>VAR=</code> assignments; and it holds in every permission mode. Each rule was checked live on 2026-11-06 in a scratch repository, including <code>(git reset --hard)</code> and <code>echo &quot;$(git reset --hard)&quot;</code>, the forms issue #172 recorded the old hook missing. <code>git reset --soft</code>, <code>git add &lt;named files&gt;</code>, <code>git restore --staged &lt;file&gt;</code> and <code>git checkout -- &lt;file&gt;</code> still run.</p>
+<p><strong>The dirty-tree check.</strong> Claude Code starts <code>dirty-tree-guard.py</code> only for a command that contains <code>git merge</code>, <code>git pull</code> or <code>git rebase</code>. The hook runs <code>git status --porcelain --untracked-files=no</code> in the session’s directory and refuses if a tracked file has uncommitted changes. Untracked files do not count, because git itself refuses a merge that would overwrite one. The hook reads the tree before the command line runs, so <code>git stash &amp;&amp; git merge</code> on a dirty tree is refused too: run the two as separate commands.</p>
+<p><strong>What neither catches.</strong> A deny rule does not match a rewritten spelling: <code>git -C . push --force</code>, <code>git -c x=y push</code>, <code>git &#39;push&#39;</code>, <code>/usr/bin/git</code>, or a command inside <code>bash -c &#39;…&#39;</code>. The docs call Bash deny rules a guard on the invocation Claude usually produces, not a security boundary. The dirty-tree guard reads the session’s directory, so it misses a repository reached by <code>cd elsewhere &amp;&amp;</code> or <code>git -C</code>, and it does not look inside <code>bash -c</code>, an alias, a script or a Makefile. It fails open: if git cannot answer or the hook has a bug, the command runs. No hook refuses a shell write into <code>.claude/settings*.json</code>, <code>.claude/hooks/</code> or <code>.githooks/</code>; <code>blockWritesOutsideWorkingDirectories</code> still refuses file-tool writes to the settings files. And none of this recovers anything: <code>git reflog</code> restores a moved commit pointer, but not an uncommitted edit or an untracked file, which is what <code>reset --hard</code> and <code>clean</code> destroy.</p>
+<p><strong>Restoring a removed hook.</strong> v2.9.1 removed <code>git-guardrails.py</code>, <code>root-of-trust-guard.py</code> and <code>context-monitor.py</code>. They ran on every Bash call, and together they slowed work and refused too often. To bring one back, copy it from the <code>v2.9.0</code> tag (<code>git show v2.9.0:.claude/hooks/git-guardrails.py &gt; .claude/hooks/git-guardrails.py</code>) and register it again in <code>.claude/settings.json</code> the way it was at that tag (<code>git show v2.9.0:.claude/settings.json</code>).</p>
 </div>
 </div>
 </div>
@@ -4935,7 +4949,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 <p>Picture a lab’s shared template that registers a guard hook to refuse writes to its instrument-calibration files. Someone reorganises the hooks directory and updates <code>settings.json</code> to match, but types <code>.claude/hooks/calibration_guard.py</code> where the file on disk is <code>calibration-guard.py</code>.</p>
 <p>What is lost is the <em>guarding</em>, and the symptom that replaces it is never legible as <em>a hook is misconfigured</em>. Which symptom you get depends on how the hook was registered, and both are bad in their own way. This template registers all but one of its hooks as <code>python3 &lt;path&gt;</code>; a path Python cannot open exits <strong>2</strong>, and exit 2 from a <code>PreToolUse</code> hook means BLOCK (the handler table below states that contract). So a typo on one of the guards would deny <em>every</em> matching call, and the reason handed back is an interpreter error about a missing file — the loudest possible failure, and still not one a reader parses as a settings typo. Registered as a bare path instead, the missing file exits 127 (126 if it exists but is not executable): a non-blocking error that scrolls past while the session continues, tools are allowed, and the only thing that changed is the one thing nobody was watching. That is the lab’s case. The guard is in the settings file, in the README, and in the onboarding doc. It is not in the process. Weeks later a calibration file is overwritten by an agent that the hook had been written to stop.</p>
 <p>Gate 9, ledger coverage, is the check that would have caught it: it opens every hook registered in <code>.claude/settings.json</code> and requires the file to exist, be invocable, and be tracked in git. Nothing else in the repo reads the settings file against the disk, so <strong>a hook can be wired to nothing while every gate in the suite stays green</strong> — the failure has no detector of its own. That is what Gate 9 is worth: a mistyped path fails the build the moment it is committed, instead of waiting for the day the guard was supposed to fire.</p>
-<p>But a wired hook is not yet a working hook. A guard can keep its path, keep firing, and stop denying — an over-broad exception, a regex loosened during a debugging session, an early <code>return allow</code> left in. Gate 10, the hook battery, drives each active guard with synthetic events and requires it to still go red on the failure it was written for, and to stay green on the clean controls. 322 cases, and it finishes in seconds.</p>
+<p>But a wired hook is not yet a working hook. A guard can keep its path, keep firing, and stop denying — an over-broad exception, a regex loosened during a debugging session, an early <code>return allow</code> left in. Gate 10, the hook battery, drives each active guard with synthetic events and requires it to still go red on the failure it was written for, and to stay green on the clean controls. 110 cases, and it finishes in seconds.</p>
 </div>
 </div>
 </div>
@@ -5060,40 +5074,8 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </section>
 <section id="context-monitoring" class="level4" data-number="4.8.6.3">
 <h4 data-number="4.8.6.3" class="anchored" data-anchor-id="context-monitoring"><span class="header-section-number">4.8.6.3</span> Context Monitoring</h4>
-<p>The <code>context-monitor.py</code> hook tracks approximate context usage and provides progressive warnings:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 37%">
-<col style="width: 31%">
-<col style="width: 31%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Threshold</th>
-<th>Message</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>40%, 55%, 65%</td>
-<td>Suggest <code>/learn</code></td>
-<td>Capture non-obvious discoveries before compaction</td>
-</tr>
-<tr class="even">
-<td>80%</td>
-<td>Info message</td>
-<td>Auto-compact approaching, no rush</td>
-</tr>
-<tr class="odd">
-<td>90%</td>
-<td>Caution</td>
-<td>Complete current task with full quality</td>
-</tr>
-</tbody>
-</table>
-<p>Use <code>/context-status</code> to check current session health at any time.</p>
-<p>Note: the monitor estimates context from transcript size (falling back to a tool-call count), so warnings may appear earlier or later than actual compaction; the status line prefers Claude Code’s own <code>context_window.used_percentage</code> where available.</p>
+<p>Claude Code reports context use itself. The status line shows <code>ctx NN%</code> from Claude Code’s own <code>context_window.used_percentage</code>, and shows nothing while that field is empty early in a session. The built-in <code>/context</code> command shows the exact breakdown, and <code>/context-status</code> adds the active plan, the newest session log and whether the compaction hooks are configured.</p>
+<p>Until v2.9.1 a <code>context-monitor.py</code> hook estimated the percentage after every Bash call and printed nudges at set thresholds. It was removed with the other per-command hooks.</p>
 </section>
 <section id="recovery-after-compaction" class="level4" data-number="4.8.6.4">
 <h4 data-number="4.8.6.4" class="anchored" data-anchor-id="recovery-after-compaction"><span class="header-section-number">4.8.6.4</span> Recovery After Compaction</h4>
@@ -5596,7 +5578,7 @@ Phase 4: QUALITY GATE
   • General enough to be reusable?</code></pre>
 <section id="when-to-use-learn" class="level4" data-number="5.7.2.1">
 <h4 data-number="5.7.2.1" class="anchored" data-anchor-id="when-to-use-learn"><span class="header-section-number">5.7.2.1</span> When to Use /learn</h4>
-<p>The context monitor suggests <code>/learn</code> at 40%, 55%, and 65% context usage. Consider extracting a skill when you encounter:</p>
+<p>Run <code>/learn</code> before compaction, while the discovery is still in context; the status line’s <code>ctx</code> reading tells you how close that is. Consider extracting a skill when you encounter:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -6091,7 +6073,7 @@ Decision point (1-2 hours):
 <li><strong>“What is staged?”</strong> — <code>git status</code>; only the green (staged) files enter the next commit.</li>
 <li><strong>“Why did <code>git checkout main</code> fail?”</strong> — a branch can be checked out in only ONE worktree at a time; <code>cd</code> back to the primary worktree instead.</li>
 <li><strong>“Why does <code>git branch -d</code> refuse after my squash merge?”</strong> — a squash merge copies the changes but not the ancestry, so git can’t see the branch as merged; use <code>-D</code> once the squash commit is in.</li>
-<li><strong>“How do I undo without <code>reset --hard</code>?”</strong> — <code>git checkout -- &lt;file&gt;</code> for one file, <code>git stash</code> to shelve everything; the template’s git guard blocks the destructive forms for exactly this reason.</li>
+<li><strong>“How do I undo without <code>reset --hard</code>?”</strong> — <code>git checkout -- &lt;file&gt;</code> for one file, <code>git stash</code> to shelve everything; the template’s deny rules block the destructive forms for exactly this reason.</li>
 </ol>
 </div>
 </div>
@@ -6140,8 +6122,8 @@ Decision point (1-2 hours):
 <h4 data-number="5.9.4.2" class="anchored" data-anchor-id="the-workflow"><span class="header-section-number">5.9.4.2</span> The Workflow</h4>
 <pre><code>1. CREATE WORKTREE
    echo &quot;.worktrees/&quot; &gt;&gt; .git/info/exclude   # once per clone, BEFORE the first worktree:
-                                             # otherwise porcelain always shows `?? .worktrees/`,
-                                             # no stash clears it, and every merge below is denied
+                                             # otherwise the primary&#39;s status always
+                                             # shows `?? .worktrees/`
    git worktree add .worktrees/lecture-06-quarto -b quarto/lecture-06
    cd .worktrees/lecture-06-quarto
          ↓
@@ -6155,9 +6137,9 @@ Decision point (1-2 hours):
 4. SYNC TO MAIN (when ready)
    cd ../..                # back to the primary worktree (main is checked out THERE;
                            # `git checkout main` inside the secondary worktree fails)
-   git status --porcelain  # git-guardrails denies a merge into a dirty tree, and
-                           # &quot;kept working on main&quot; is the whole point of a worktree,
-                           # so expect this NOT to be empty — clear it first
+   git status --porcelain  # dirty-tree-guard refuses a merge while tracked files have
+                           # uncommitted changes, and &quot;kept working on main&quot; is the
+                           # whole point of a worktree, so expect this NOT to be empty
    git stash push -u -m &quot;pre-merge: in-flight edits&quot;   # skip if porcelain was empty
    git merge --squash quarto/lecture-06
    git commit -m &quot;feat: add Lecture 6 Quarto version&quot;
@@ -6187,21 +6169,16 @@ Decision point (1-2 hours):
 <span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Squash-merge into main</span></span>
 <span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="pp">[</span><span class="ss">primary</span><span class="pp">-</span><span class="ss">worktree</span><span class="pp">]</span>         <span class="co"># main lives in the primary worktree</span></span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--porcelain</span>        <span class="co"># empty, or the merge is denied — clear it first (below)</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--porcelain</span>        <span class="co"># a tracked change here means the merge is refused — clear it first (below)</span></span>
 <span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge <span class="at">--squash</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
 <span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;feat: description of changes&quot;</span></span>
 <span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ...if the primary worktree is dirty, either stash around the merge:</span></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ...if the primary worktree is dirty, stash around the merge, one command at a time:</span></span>
 <span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> stash push <span class="at">-u</span> <span class="at">-m</span> <span class="st">&quot;pre-merge: in-flight edits&quot;</span>   <span class="co"># -u, or untracked files stay behind</span></span>
 <span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge <span class="at">--squash</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
 <span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;feat: description of changes&quot;</span></span>
-<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> stash pop</span>
-<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a><span class="co"># ...or, ONLY if porcelain shows no `??` lines, let git stash the tracked changes:</span></span>
-<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status <span class="at">--porcelain</span>        <span class="co"># no `??` entries, or --autostash is denied too</span></span>
-<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge <span class="at">--squash</span> <span class="at">--autostash</span> <span class="pp">[</span><span class="ss">branch</span><span class="pp">-</span><span class="ss">name</span><span class="pp">]</span></span>
-<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;feat: description of changes&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>The primary worktree is normally dirty when you reach the sync step, and that is the pattern working, not failing.</strong> You used a worktree so you could keep editing on <code>main</code> while the other branch ran; those edits are still sitting there. The <code>git-guardrails</code> hook denies <code>git merge</code> on a non-empty <code>git status --porcelain</code>, so the merge is refused exactly when the pattern did its job. Clear the tree first — stash with a label, merge, pop. That sequence clears in-flight edits whether they are tracked or untracked, which is why it is the recipe above rather than the fallback. It cannot clear the worktree directory itself: a worktree nested at <code>.worktrees/</code> shows in the primary’s porcelain as <code>?? .worktrees/</code>, <code>git stash push -u</code> skips it (<em>“Ignoring path .worktrees/lecture-06-quarto/”</em>), and the merge is then denied — which is why step 1 excludes <code>.worktrees/</code> before it creates the worktree. <code>--autostash</code> is the shorter route on a tree whose dirt is <em>only tracked</em>: the hook reads porcelain and allows it when there is no <code>??</code> entry, and denies it when there is, because <code>git stash</code> does not stash untracked files — so an autostash over a <code>??</code> line would start the merge on the same dirty tree the check exists to refuse. Two consequences follow. When porcelain is free of <code>??</code> lines, <code>--autostash</code> is allowed and the merge result comes back <em>staged</em> while your restored in-flight edits are <em>unstaged</em>, so the plain <code>git commit</code> above records the merge and leaves your work alone. When porcelain shows any <code>??</code> line — the ordinary case for a worktree you have been editing in — use the explicit <code>-u</code> stash; git’s own behaviour agrees, since a branch that adds a file at a path you are holding untracked aborts with <em>“untracked working tree files would be overwritten”</em> after the autostash has already been taken. Both forms have to be <strong>standalone</strong> commands either way: chaining the stash and the merge onto one line is denied under rule 0, whichever route you pick.</p>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> stash pop</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>The primary worktree is normally dirty when you reach the sync step, and that is the pattern working, not failing.</strong> You used a worktree so you could keep editing on <code>main</code> while the other branch ran; those edits are still sitting there. The <code>dirty-tree-guard</code> hook refuses <code>git merge</code> while tracked files have uncommitted changes, so the merge is refused exactly when the pattern did its job. Clear the tree first: stash with a label, merge, pop. Untracked files do not trigger the refusal, but <code>-u</code> stashes them as well, so a branch that adds a file at a path you hold untracked does not stop the merge with git’s <em>“untracked working tree files would be overwritten”</em>. Run the stash and the merge as separate commands. The hook reads the tree before the command line runs, so <code>git stash push -u … &amp;&amp; git merge …</code> is still refused while tracked files are dirty, and so is <code>git merge --autostash</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -8153,34 +8130,24 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 <td><code>.claude/hooks/session-handoff.py</code> — hands a fresh session the newest <code>/checkpoint</code> or <code>/compress-session</code> file written in the last 7 days; it counts as delivered at the session’s first prompt, never in headless runs; <code>CLAUDE_HANDOFF=off</code> opts out</td>
 </tr>
 <tr class="even">
-<td>Context monitor</td>
-<td>PostToolUse[Bash|Agent|Task] (command)</td>
-<td><code>.claude/hooks/context-monitor.py</code></td>
+<td>Dirty-tree guard</td>
+<td>PreToolUse[Bash], only for <code>git merge</code> / <code>pull</code> / <code>rebase</code> (<code>if: Bash(git merge *)</code> and the like) (command)</td>
+<td><code>.claude/hooks/dirty-tree-guard.py</code> — refuses the operation while tracked files have uncommitted changes; untracked files do not count; fails open (<code>ALLOW_DIRTY_MERGE=1</code>)</td>
 </tr>
 <tr class="odd">
-<td>Git guardrails</td>
-<td>PreToolUse (command)</td>
-<td><code>.claude/hooks/git-guardrails.py</code> — blocks <code>reset --hard</code> / <code>clean -f</code> / <code>push --force</code> / <code>add -A</code>; refuses merge / rebase / pull on a dirty tree, including chains that would clean it first (<code>ALLOW_DIRTY_MERGE=1</code>)</td>
-</tr>
-<tr class="even">
 <td>Claim reconcile</td>
 <td>PostToolUse (command)</td>
 <td><code>.claude/hooks/claim-reconcile.py</code> — flags stale numeric claims when scripts change, including edits to a declared <code>appears_in</code> display</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Issue guard</td>
 <td>PreToolUse[Bash], only for <code>gh</code> commands (<code>if: Bash(gh *)</code> and <code>Bash(gh.exe *)</code>) (command)</td>
 <td><code>.claude/hooks/issue-guard.py</code> — denies a raw <code>gh issue create</code>/<code>new</code>, or a REST/GraphQL issue create, and points to <code>scripts/file-issue.py</code>, which checks for duplicates first</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Open issues (opt-in)</td>
 <td>SessionStart[startup] (command)</td>
 <td><code>.claude/hooks/open-issues.py</code> — with <code>CLAUDE_ISSUES_AT_START=1</code>, lists open issues’ numbers and titles (owner and collaborators only) at startup; off by default</td>
-</tr>
-<tr class="odd">
-<td>Root-of-trust guard</td>
-<td>PreToolUse (command)</td>
-<td><code>.claude/hooks/root-of-trust-guard.py</code> — best-effort tripwire against <em>silent</em> shell writes to <code>.claude/settings*.json</code>, <code>.claude/hooks/</code>, <code>.githooks/</code>, plus the destructive-git deny list applied to <code>bash -c</code> / <code>env -S</code> payloads; reads and <code>Edit</code>/<code>Write</code> still pass, so it changes the channel rather than locking the files (<code>ALLOW_ROOT_OF_TRUST_WRITE=1</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -8266,7 +8233,7 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 </section>
 <section id="hooks-not-firing" class="level3" data-number="8.5.3">
 <h3 data-number="8.5.3" class="anchored" data-anchor-id="hooks-not-firing"><span class="header-section-number">8.5.3</span> Hooks Not Firing</h3>
-<p><strong>Symptom:</strong> No context warnings, no auto-written session log, no git guardrails firing.</p>
+<p><strong>Symptom:</strong> No notifications, no auto-written session log, no dirty-tree or issue guard firing.</p>
 <p><strong>Fix:</strong> 1. Check hooks are configured: <code>cat .claude/settings.json | grep hooks</code> 2. Ensure Python 3 is available: <code>which python3</code> 3. Check hook file permissions: <code>ls -la .claude/hooks/</code></p>
 </section>
 <section id="claude-ignores-rules" class="level3" data-number="8.5.4">

@@ -123,29 +123,15 @@ class _Tmp(unittest.TestCase):
         return p
 
 
-# ── git-guardrails / issue-guard: the program word ─────────────────────────
+# ── issue-guard: the program word ───────────────────────────────────────────
 class ExeProgramNames(_Tmp):
-    """guards-miss-dot-exe-program-names: `git.exe`, a quoted `C:\\...\\git.exe` and
-    `gh.exe` run the same programs in Git Bash, and passed both guards."""
-
-    def gg(self, command):
-        ev = {"tool_name": "Bash", "tool_input": {"command": command}, "cwd": self.tmp}
-        return decision(fire("git-guardrails.py", ev, clean_env(self.home))[0])
+    """guards-miss-dot-exe-program-names (the issue-guard half; git-guardrails, which
+    had the other half, was removed in v2.9.1): `gh.exe` and a quoted
+    `C:\\...\\gh.exe` run gh in Git Bash, and passed the guard."""
 
     def ig(self, command):
         ev = {"tool_name": "Bash", "tool_input": {"command": command}, "cwd": self.tmp}
         return decision(fire("issue-guard.py", ev, clean_env(self.home))[0])
-
-    def test_git_exe_spellings_are_denied(self):
-        for cmd in ("git.exe reset --hard",
-                    "GIT.EXE push --force origin main",
-                    "'C:\\Program Files\\Git\\cmd\\git.exe' clean -fdx",
-                    '"/c/Program Files/Git/cmd/git.exe" reset --hard'):
-            with self.subTest(cmd=cmd):
-                self.assertEqual(self.gg(cmd), "deny")
-
-    def test_git_exe_harmless_command_is_silent(self):
-        self.assertEqual(self.gg("git.exe status"), "silent")
 
     # Piped straight to the hook, so these check its reading of the program word.
     # As deployed only `gh.exe` gets that far: the `if` filters never spawn the hook
@@ -211,168 +197,72 @@ class ExeProgramNames(_Tmp):
 
 
 class CarriageReturnInsideWords(_Tmp):
-    """carriage-return-in-word-bypasses-guards (the git-guardrails and issue-guard
-    halves; root-of-trust-guard's is the rot group's): Git Bash drops every CR before
-    it splits words, so `git re<CR>set --hard` runs `git reset --hard`; the guards
-    read two words."""
-
-    def test_git_guardrails_joins_the_word(self):
-        for cmd in ("git re\rset --hard", "gi\rt clean -fdx", "git reset \\\r\n--hard"):
-            with self.subTest(cmd=repr(cmd)):
-                ev = {"tool_name": "Bash", "tool_input": {"command": cmd}, "cwd": self.tmp}
-                self.assertEqual(decision(fire("git-guardrails.py", ev, clean_env(self.home))[0]),
-                                 "deny")
+    """carriage-return-in-word-bypasses-guards (the issue-guard half; the
+    git-guardrails and root-of-trust-guard halves went with those hooks in v2.9.1):
+    Git Bash drops every CR before it splits words, so `gh issue cr<CR>eate` runs
+    `gh issue create`; the guard read two words."""
 
     def test_issue_guard_joins_the_word(self):
         ev = {"tool_name": "Bash", "tool_input": {"command": "gh issue cr\reate -t x -b y"}}
         self.assertEqual(decision(fire("issue-guard.py", ev, clean_env(self.home))[0]), "deny")
 
-    def test_crlf_line_ending_still_separates_commands(self):
-        ev = {"tool_name": "Bash", "tool_input": {"command": "git status\r\ngit log -1\r\n"},
-              "cwd": self.tmp}
-        self.assertEqual(decision(fire("git-guardrails.py", ev, clean_env(self.home))[0]),
-                         "silent")
-
 
 # ── the event itself: stdin decoded with the Windows code page ─────────────
 class GuardStdinCodePage(_Tmp):
     """guard-stdin-codepage-fail-open, guard-stdin-mojibake-scope-bypass and
-    hook-stdin-ansi-codepage-fail-open (the git-guardrails and issue-guard halves;
-    root-of-trust-guard's are the rot group's): the event was decoded with the ANSI
-    code page. Western: an accented path became mojibake. CJK: a multibyte character
-    swallowed the backslash of `\\"` and the JSON did not parse, so the guard exited
-    silent."""
+    hook-stdin-ansi-codepage-fail-open, carried from git-guardrails (removed in
+    v2.9.1) to dirty-tree-guard, which reads the same two things: the event was
+    decoded with the ANSI code page, so an accented path became mojibake (Western)
+    or a multibyte character swallowed the backslash of `\\"` and the JSON did not
+    parse (CJK), and the guard exited silent; and `git status` output decoded with
+    the locale made a dirty tree read as unanswered."""
 
-    def test_accented_dirty_repo_merge_is_denied_on_cp1252(self):
-        repo = self.path("Pé proj")
+    def tracked_repo(self, name, fname="t.txt"):
+        repo = self.path(name)
         os.makedirs(repo)
         git(repo, "init", "-q")
-        self.write("Pé proj/untracked.txt", "x\n")
+        git(repo, "config", "core.quotePath", "off")
+        self.write(f"{name}/{fname}", "a\n")
+        git(repo, "add", fname)
+        git(repo, "commit", "-qm", "c")
+        self.write(f"{name}/{fname}", "b\n")
+        return repo
+
+    def test_accented_dirty_repo_merge_is_denied_on_cp1252(self):
+        repo = self.tracked_repo("Pé proj")
         ev = {"tool_name": "Bash", "tool_input": {"command": "git merge feature"}, "cwd": repo}
         env = clean_env(self.home, PYTHONUTF8="0", PYTHONIOENCODING="cp1252:surrogateescape")
-        self.assertEqual(decision(fire("git-guardrails.py", ev, env)[0]), "deny")
+        self.assertEqual(decision(fire("dirty-tree-guard.py", ev, env)[0]), "deny")
 
     @_winsim.needs_encoding_warning
     def test_status_read_is_not_locale_decoded(self):
-        """`git status` output decoded with the locale: on Windows with quotePath off,
-        a name the code page cannot decode raised, and the guard read that as an
-        unanswered question. A clean tree prints nothing, so it was never refused;
-        the reachable effects are a dirty tree denied for the wrong reason and a
-        `--autostash` merge over tracked-only dirt denied although it is allowed
-        (test_autostash_over_tracked_dirt_is_allowed reproduces that one). Here
-        default-encoding decoding is made an error, which trips the call itself
+        """Default-encoding decoding is made an error, which trips the call itself
         whatever git prints, on any OS."""
         repo = self.path("clean")
         os.makedirs(repo)
         git(repo, "init", "-q")
         ev = {"tool_name": "Bash", "tool_input": {"command": "git merge feature"}, "cwd": repo}
-        out = fire("git-guardrails.py", ev, clean_env(self.home),
+        out = fire("dirty-tree-guard.py", ev, clean_env(self.home),
                    ("-X", "warn_default_encoding", "-W", "error::EncodingWarning"))[0]
         self.assertEqual(decision(out), "silent", out)
 
-    def test_autostash_over_tracked_dirt_is_allowed(self):
+    def test_a_name_the_locale_cannot_decode_still_reads_dirty(self):
         """The Windows effect itself, with an ASCII locale standing in for a code page
         that cannot decode the name: quotePath off, only a tracked `Á.txt` modified.
-        Rule 2b allows `--autostash` here; the undecodable status denied it."""
-        repo = self.path("tracked")
-        os.makedirs(repo)
-        git(repo, "init", "-q")
-        git(repo, "config", "core.quotePath", "off")
-        self.write("tracked/Á.txt", "a\n")
-        git(repo, "add", "-A")
-        git(repo, "commit", "-qm", "c")
-        self.write("tracked/Á.txt", "b\n")
+        Decoded with the locale, the status raised and read as unanswered."""
+        repo = self.tracked_repo("tracked", "Á.txt")
         env = clean_env(self.home, LC_ALL="C", PYTHONUTF8="0")
-        ev = {"tool_name": "Bash", "tool_input": {"command": "git merge --autostash feature"},
-              "cwd": repo}
-        out = fire("git-guardrails.py", ev, env)[0]
-        self.assertEqual(decision(out), "silent", out)
-        ev["tool_input"]["command"] = "git merge feature"
-        self.assertIn("must start from a clean tree", fire("git-guardrails.py", ev, env)[0])
+        ev = {"tool_name": "Bash", "tool_input": {"command": "git merge feature"}, "cwd": repo}
+        self.assertEqual(decision(fire("dirty-tree-guard.py", ev, env)[0]), "deny")
 
     def test_cjk_command_still_parses_for_both_guards(self):
+        repo = self.tracked_repo("cjk")
         env = clean_env(self.home, PYTHONUTF8="0", PYTHONIOENCODING="cp936:surrogateescape")
-        ev = {"tool_name": "Bash", "tool_input": {"command": 'echo "王" && git reset --hard'},
-              "cwd": self.tmp}
-        self.assertEqual(decision(fire("git-guardrails.py", ev, env)[0]), "deny")
+        ev = {"tool_name": "Bash", "tool_input": {"command": 'echo "王" && git merge main'},
+              "cwd": repo}
+        self.assertEqual(decision(fire("dirty-tree-guard.py", ev, env)[0]), "deny")
         ev = {"tool_name": "Bash", "tool_input": {"command": 'gh issue create -t "王" -b x'}}
         self.assertEqual(decision(fire("issue-guard.py", ev, env)[0]), "deny")
-
-
-# ── git-guardrails: -C in Git Bash spelling ─────────────────────────────────
-class MsysDashC(_Tmp):
-    """git-guardrails-msys-dash-c-false-deny: `-C /c/Users/me/proj` is what Git Bash
-    turns into `C:/Users/me/proj` for git.exe; Windows Python read it as C:\\c\\..."""
-
-    def test_resolve_maps_the_drive(self):
-        m = _winsim.load(os.path.join(HOOKS, "git-guardrails.py"))
-        self.assertEqual(m._resolve_dash_c(["/c/work/repo"], "C:\\proj").lower(), "c:\\work\\repo")
-
-    def test_posix_keeps_c_as_a_directory(self):
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("gg_posix",
-                                                      os.path.join(HOOKS, "git-guardrails.py"))
-        m = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(m)
-        self.assertEqual(m._resolve_dash_c(["/c/work/repo"], "/proj"),
-                         os.path.realpath("/c/work/repo"))
-
-    def test_clean_repo_merge_via_msys_path_is_allowed(self):
-        repo = self.path("clean")
-        os.makedirs(repo)
-        git(repo, "init", "-q")
-        ev = {"tool_name": "Bash", "tool_input": {"command": f"git -C /c{repo} merge feature"},
-              "cwd": _winsim.to_win(self.tmp)}
-        out = sim_fire("git-guardrails.py", ev, {"HOME": self.home})
-        self.assertEqual(decision(out), "silent", out)
-        self.write("clean/dirt.txt", "x\n")
-        out = sim_fire("git-guardrails.py", ev, {"HOME": self.home})
-        self.assertIn("must start from a clean tree", out)
-
-
-# ── git-guardrails: hardcoded machine paths ─────────────────────────────────
-class HardcodedPaths(_Tmp):
-    """hardcoded-path-misses-single-backslash, hardcoded-path-check-misses-windows-and-case:
-    Stata's `cd "C:\\Users\\me"`, a raw string, `c:/users/`, and `.rmd` / `MASTER.DO`
-    passed CLAUDE_STRICT_PATHS=1; a global (?i) would falsely flag a GitHub API URL."""
-
-    def strict(self, name, content):
-        ev = {"tool_name": "Write",
-              "tool_input": {"file_path": self.path("scripts", name), "content": content}}
-        return decision(fire("git-guardrails.py", ev,
-                             clean_env(self.home, CLAUDE_STRICT_PATHS="1"))[0])
-
-    def test_windows_user_paths_are_denied(self):
-        for name, content in (("master.do", 'cd "C:\\Users\\me\\proj"\n'),
-                              ("a.do", 'use "C:\\Users\\pedro\\Dropbox\\data.dta", clear\n'),
-                              ("a.py", 'pd.read_csv(r"C:\\Users\\pedro\\proj\\data.csv")\n'),
-                              ("a.R", 'read.csv("c:/users/pedro/x.csv")\n'),
-                              ("a.R", 'read.csv("C:\\\\Users\\\\pedro\\\\x.csv")\n'),
-                              ("a.py", 'open(r"\\\\?\\C:\\Users\\pedro\\x.csv")\n')):
-            with self.subTest(name=name, content=content):
-                self.assertEqual(self.strict(name, content), "deny")
-
-    def test_extension_case_does_not_skip_the_check(self):
-        for name in ("a.rmd", "MASTER.DO", "a.PY", "a.QMD"):
-            with self.subTest(name=name):
-                self.assertEqual(self.strict(name, 'x <- "/Users/me/x"\n'), "deny")
-
-    def test_controls_stay_allowed(self):
-        for name, content in (("a.py", 'requests.get("https://api.github.com/users/octocat/repos")\n'),
-                              ("a.py", 'url = "gs://users/x.csv"\n'),
-                              ("a.py", 'url = "https://users/x"\n'),
-                              ("a.py", 'x = {"key:/users/me": 1}\n'),
-                              ("a.R", 'read.csv(here::here("data", "x.csv"))\n'),
-                              ("notes.md", 'cd "C:\\Users\\me\\proj"\n')):
-            with self.subTest(name=name, content=content):
-                self.assertEqual(self.strict(name, content), "silent")
-
-    def test_default_mode_warns(self):
-        ev = {"tool_name": "Write", "tool_input": {"file_path": self.path("scripts", "master.do"),
-                                                   "content": 'cd "C:\\Users\\me\\proj"\n'}}
-        out, err = fire("git-guardrails.py", ev, clean_env(self.home))
-        self.assertEqual(out.strip(), "")
-        self.assertIn("Hardcoded machine path", err)
 
 
 # ── claim-reconcile ────────────────────────────────────────────────────────
@@ -535,32 +425,6 @@ class CompactionUtf8(_Tmp):
 
 
 # ── other session hooks ─────────────────────────────────────────────────────
-class ContextMonitorStdin(_Tmp):
-    """nonguard-hooks-stdin-silent (context-monitor): a transcript under an accented
-    directory came through a cp1252 stdin as mojibake, getsize failed, and the
-    estimate fell back to the tool-call counter. Its cache was also written in the
-    locale encoding."""
-
-    def test_accented_transcript_is_measured(self):
-        tr = self.write("José/t.jsonl", "x" * 1000)
-        env = clean_env(self.home, CLAUDE_PROJECT_DIR=self.tmp, CLAUDE_CONTEXT_WINDOW_TOKENS="250",
-                        PYTHONUTF8="0", PYTHONIOENCODING="cp1252:surrogateescape")
-        out = fire("context-monitor.py", {"transcript_path": tr}, env)[0]
-        h = hashlib.md5(self.tmp.encode()).hexdigest()[:8]
-        with open(os.path.join(self.home, ".claude", "sessions", h, "context-pct.txt"),
-                  encoding="utf-8") as f:
-            self.assertEqual(f.read(), "100")
-        self.assertIn("Context ~100%", out)
-
-    @_winsim.needs_encoding_warning
-    def test_cache_io_is_utf8(self):
-        tr = self.write("t.jsonl", "x" * 1000)
-        env = clean_env(self.home, CLAUDE_PROJECT_DIR=self.tmp, CLAUDE_CONTEXT_WINDOW_TOKENS="250")
-        out = fire("context-monitor.py", {"transcript_path": tr}, env,
-                   ("-X", "warn_default_encoding", "-W", "error::EncodingWarning"))[0]
-        self.assertIn("Context ~100%", out)
-
-
 class SessionHandoffStdin(_Tmp):
     """nonguard-hooks-stdin-silent (session-handoff): on a CJK code page the prompt did
     not parse, the handoff was never marked delivered, and the next startup got it again.
@@ -742,8 +606,9 @@ class NotifyWithoutJqAndOnWindows(_Tmp):
 
 # ── statusline.sh ───────────────────────────────────────────────────────────
 class StatusLine(_Tmp):
-    """statusline-stdin-locale, statusline-ctx-hash-mismatch-cp1252,
-    statusline-plan-badge-from-subdir."""
+    """statusline-stdin-locale, statusline-plan-badge-from-subdir. (The ctx fallback
+    to context-monitor's estimate, and statusline-ctx-hash-mismatch-cp1252 with it,
+    went with that hook in v2.9.1; the native context_window field remains.)"""
 
     def repo(self, name):
         r = self.path(name)
@@ -765,17 +630,6 @@ class StatusLine(_Tmp):
                           PYTHONUTF8="0", PYTHONIOENCODING="cp936:surrogateescape")
         for part in ("[BYPASS]", "Opus", "@ main", "ctx 42%"):
             self.assertIn(part, out)
-
-    def test_ctx_fallback_found_for_non_ascii_project_dir(self):
-        pd = "/x/Đorđe ção/repo"
-        d = os.path.join(self.home, ".claude", "sessions", hashlib.md5(pd.encode()).hexdigest()[:8])
-        os.makedirs(d)
-        with open(os.path.join(d, "context-pct.txt"), "w", encoding="utf-8") as f:
-            f.write("42")
-        out = self.run_sl({"model": {"display_name": "Opus"}, "workspace": {"current_dir": self.tmp}},
-                          CLAUDE_PROJECT_DIR=pd, PYTHONUTF8="0",
-                          PYTHONIOENCODING="cp1252:surrogateescape")
-        self.assertIn("ctx ~42%", out)
 
     def test_plan_badge_from_a_subdirectory(self):
         r = self.repo("repo")

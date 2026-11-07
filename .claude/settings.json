@@ -10,30 +10,59 @@
       "WebSearch",
       "Read(**)"
     ],
-    "deny": [],
+    "deny": [
+      "Bash(git reset *--hard*)",
+      "Bash(git clean *)",
+      "Bash(git push *--force)",
+      "Bash(git push *--force *)",
+      "Bash(git push -f*)",
+      "Bash(git push * -f*)",
+      "Bash(git add -A*)",
+      "Bash(git add --all*)",
+      "Bash(git add . *)",
+      "Bash(git checkout -- . *)",
+      "Bash(git checkout . *)",
+      "Bash(git restore . *)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/credentials*)",
+      "Edit(.env)",
+      "Edit(.env.*)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Write(.env)",
+      "Write(.env.*)",
+      "Write(**/.env)",
+      "Write(**/.env.*)"
+    ],
     "blockWritesOutsideWorkingDirectories": true
   },
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash|Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/git-guardrails.py",
-            "timeout": 20,
-            "onFailure": "block"
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/root-of-trust-guard.py",
-            "timeout": 20,
-            "onFailure": "block"
+            "if": "Bash(git merge *)",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(git pull *)",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(git rebase *)",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
+            "timeout": 10
           }
         ]
       },
@@ -118,16 +147,6 @@
       }
     ],
     "PostToolUse": [
-      {
-        "matcher": "Bash|Agent|Task",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/context-monitor.py",
-            "timeout": 5
-          }
-        ]
-      },
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [

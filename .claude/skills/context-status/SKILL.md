@@ -13,26 +13,21 @@ metadata:
 
 # /context-status — Check Session Health
 
-Show the current session status including context usage estimate, active plan,
+Show the current session status including context usage, active plan,
 and preservation state.
 
 ## What This Skill Shows
 
-1. **Context usage estimate** — Approximate % of context window used
+1. **Context usage** — the % of the context window Claude Code reports
 2. **Active plan** — Current plan file and status
 3. **Session log** — Most recent session log
 4. **Preservation state** — What will survive compaction
 
 ## Workflow
 
-### Step 1: Check the Context Estimate
+### Step 1: Check Context Usage
 
-The context-monitor hook writes its estimate to `context-pct.txt` (and its counters and threshold flags to `context-monitor-cache.json`) in this project's session directory:
-
-```bash
-d=~/.claude/sessions/$(printf '%s' "${CLAUDE_PROJECT_DIR:-$PWD}" | python3 -c 'import sys,hashlib;print(hashlib.md5(sys.stdin.read().encode()).hexdigest()[:8])')
-cat "$d/context-pct.txt" 2>/dev/null; cat "$d/context-monitor-cache.json" 2>/dev/null | head -20
-```
+Claude Code reports it itself: the status line shows `ctx N%` (Claude Code's `context_window.used_percentage`), and the built-in `/context` command shows the full breakdown. Read the figure from either; this skill does not estimate it. (Until v2.9.1 a context-monitor hook kept its own estimate; it was removed.)
 
 ### Step 2: Find Active Plan
 
@@ -53,7 +48,7 @@ Format the output:
 ```
 📊 Session Status
 ─────────────────────────────────
-Context Usage:  ~XX% (estimated)
+Context Usage:  XX% (from the status line or /context)
 Auto-compact:   [approaching | not imminent]
 
 📋 Active Plan
@@ -72,6 +67,6 @@ File:   quality_reports/session_logs/YYYY-MM-DD_description.md
 
 ## Notes
 
-- Context % comes from Claude Code's own `context_window.used_percentage` where the status line shows it; the hook's `context-pct.txt` holds an estimate from transcript size (falling back to a tool-call count). The built-in `/context` shows exact usage
+- Context % comes from Claude Code's own `context_window.used_percentage`, shown by the status line; it can be empty early in a session. The built-in `/context` shows exact usage
 - Actual compaction is triggered by Claude Code automatically
 - All important state is saved to disk (plans, logs, MEMORY.md)

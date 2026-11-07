@@ -110,17 +110,14 @@ class HostMechanisms(unittest.TestCase):
     def test_the_suite_runs_where_os_symlink_is_refused(self):
         # #171 F4: Windows without Developer Mode refuses os.symlink (WinError 1314).
         # test_rot's setUpModule made four links unguarded, so every case in the file
-        # errored; notify.sh's fixture linked cat and tr. Here the link cases skip and
-        # the rest run.
+        # errored (test_rot went with root-of-trust-guard in v2.9.1); notify.sh's
+        # fixture linked cat and tr. Here the link cases skip and the rest run.
         refuse = ("import os, sys, unittest\n"
                   "def symlink(*a, **k):\n"
                   "    raise OSError(1314, 'A required privilege is not held by the client')\n"
                   "os.symlink = symlink\n"
                   "unittest.main(module=None, argv=['refused'] + sys.argv[1:], verbosity=2)\n")
-        expect = [("test_rot", "NativeTest", "test_link_claude_hooks", "skipped"),
-                  ("test_rot", "NativeTest", "test_scope_alias_project_dir", "skipped"),
-                  ("test_rot", "NativeTest", "test_exe_ctrl_status", "ok"),
-                  ("test_hooks", "NotifyWithoutJqAndOnWindows", "test_no_jq_still_notifies", "ok"),
+        expect = [("test_hooks", "NotifyWithoutJqAndOnWindows", "test_no_jq_still_notifies", "ok"),
                   ("test_gitout", "PreCommitQualityGate", "test_dangling_symlink_is_named_as_a_symlink",
                    "skipped")]
         r = subprocess.run([sys.executable, "-c", refuse, *(".".join(e[:3]) for e in expect)],

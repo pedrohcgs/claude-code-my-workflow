@@ -30,7 +30,7 @@ Spawn the **verifier** agent (via the `Agent` tool with `subagent_type=verifier`
 
 ### Step 0b: Consistency Gate (Pre-Commit)
 
-**Runs unconditionally.** The full backtest suite — all eleven gates (surface-sync count claims like `"18 agents, 62 skills, 37 rules, 11 hooks"` and marked tables, skill integrity, model currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage, hook battery, portability):
+**Runs unconditionally.** The full backtest suite — all eleven gates (surface-sync count claims like `"18 agents, 62 skills, 37 rules, 9 hooks"` and marked tables, skill integrity, model currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage, hook battery, portability):
 
 ```bash
 ./scripts/backtest.sh
@@ -133,13 +133,14 @@ git pull
 
 **Expect the tree to be dirty here — that is what Step 3 is for.** Staging specific files means
 everything the session touched but did not stage, plus every untracked artifact, is still in the
-tree when you arrive at this step. The `git-guardrails` hook this template ships **denies**
-`git pull` (and `merge`, and `rebase`) whenever `git status --porcelain` is non-empty, because a
+tree when you arrive at this step. The `dirty-tree-guard` hook this template ships **denies**
+`git pull` (and `merge`, and `rebase`) while tracked files have uncommitted changes, because a
 pull that resolves on top of uncommitted work cannot be reviewed afterwards — you can no longer
-tell which hunk came from the remote. Chaining a stash into the same command line does not help:
-the hook reads the tree, it does not predict what the line will do to it.
+tell which hunk came from the remote. Untracked files do not count: git itself refuses a pull
+that would overwrite one. The hook reads the tree before the command runs, so chaining a stash
+into the same command line does not help: it sees the tree as it was.
 
-Clear the tree deliberately, then pull:
+Clear the tree deliberately, then pull, each line as its own command:
 
 ```bash
 git stash push -u -m "post-merge: unstaged leftovers"   # -u, or untracked files stay behind
@@ -147,17 +148,7 @@ git pull
 git stash pop
 ```
 
-`git pull --autostash` is the one-command alternative, but only on a tree whose dirt is entirely
-**tracked**. `git stash` does not stash untracked files, so an autostash over a `??` entry starts
-the pull on the same dirty tree the check exists to refuse — the hook therefore reads porcelain
-and **denies** `--autostash` whenever any `??` entry is present. At this step that is the usual
-state, so the explicit `-u` stash above is the default route and `--autostash` is the shortcut for
-the case where `git status --porcelain` shows no `??` lines at all. Git agrees independently: if
-the incoming commits add a file at a path you are holding untracked, it aborts the merge
-(*"untracked working tree files would be overwritten"*) after the autostash has already been
-taken. Either route must be its **own** command — chaining the stash and the pull onto one line is
-denied outright, because an identified history op reaches the tree reading only as a standalone
-simple command.
+`git pull --autostash` is refused like any other pull while tracked files are dirty.
 
 `ALLOW_DIRTY_MERGE=1` is the hatch for a dirty state you have looked at and can justify out loud.
 It is not the routine remedy, and reaching for it because the block is inconvenient is the
