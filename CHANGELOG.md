@@ -21,8 +21,9 @@ Two small fixes found during the v2.9.1 work. A compaction no longer carries a h
 ### Changed
 
 - **`/commit` runs the backtest once per commit** (#190).
-  - When `git config --get core.hooksPath` prints `.githooks`, Step 0b says so and leaves the run to `.githooks/pre-commit`, which runs the same suite on the staged changes and refuses a red commit. `/verify` already worked this way.
-  - Without the git hook, Step 0b runs `./scripts/backtest.sh` as before.
+  - When `git config --get core.hooksPath` prints `.githooks` and `.githooks/pre-commit` is executable, Step 0b says so and leaves the run to that hook, which runs the same suite on the staged changes and refuses a red commit.
+  - Otherwise Step 0b runs `./scripts/backtest.sh` as before. That includes a hook file that is missing or not executable, which git skips while still committing (Codex review of #191, reproduced in a scratch repository).
+  - `/verify` made the same skip with only the `core.hooksPath` check, and now checks the hook file too.
   - TROUBLESHOOTING's "DRIFT DETECTED" entry now says the message can come from the git hook.
 
 **Inventory at release: 62 skills, 18 agents, 37 rules, 9 hooks, 11 gates**

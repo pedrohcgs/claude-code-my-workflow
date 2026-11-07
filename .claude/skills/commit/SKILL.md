@@ -32,14 +32,15 @@ Spawn the **verifier** agent (via the `Agent` tool with `subagent_type=verifier`
 
 **Runs once per commit, here or in the git hook.** The gate is the full backtest suite — all eleven gates (surface-sync count claims like `"18 agents, 62 skills, 37 rules, 9 hooks"` and marked tables, skill integrity, model currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage, hook battery, portability).
 
-First check whether the git pre-commit hook is installed:
+First check whether the git pre-commit hook is installed and will actually run:
 
 ```bash
 git config --get core.hooksPath
+test -x "$(git rev-parse --show-toplevel)/.githooks/pre-commit" && echo executable
 ```
 
-- **It prints `.githooks`:** `./scripts/install-hooks.sh` has been run, so `.githooks/pre-commit` runs this same backtest on the staged changes when Step 4 commits. Say so in one line and skip the run here: running it twice costs a minute or more and adds nothing. The gate still holds. If a gate is red, the hook refuses the commit and prints that gate's output in Step 4; treat that refusal exactly like a red result here.
-- **Anything else (no hook installed):** run the suite yourself:
+- **The first prints `.githooks` and the second prints `executable`:** `./scripts/install-hooks.sh` has been run, so `.githooks/pre-commit` runs this same backtest on the staged changes when Step 4 commits. Both checks are needed: git skips a hook file that is missing or not executable, and still commits. Say so in one line and skip the run here: running it twice costs a minute or more and adds nothing. The gate still holds. If a gate is red, the hook refuses the commit and prints that gate's output in Step 4; treat that refusal exactly like a red result here.
+- **Anything else (no hook installed, or a hook git would skip):** run the suite yourself:
 
 ```bash
 ./scripts/backtest.sh
