@@ -1563,7 +1563,7 @@ Session running → context fills up → PreCompact fires
                                     • Claude knows where it left off
 ```
 
-`pre-compact.py` also prints the plan, the next task and the recent decisions to stdout, which Claude Code uses as instructions for the compaction summary itself, so they survive inside the summary as well as through the restore hook. Long idle sessions can be compacted too (`idleCompaction: false` turns that off).
+`pre-compact.py` also prints the plan, the next task and the recent decisions to stdout, which Claude Code uses as instructions for the compaction summary itself, so they survive inside the summary as well as through the restore hook. Both label them as historical records to check against the current files, not as instructions. Long idle sessions can be compacted too (`idleCompaction: false` turns that off).
 
 #### What Gets Saved
 

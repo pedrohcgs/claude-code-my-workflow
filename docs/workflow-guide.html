@@ -5011,7 +5011,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
                                     • Reads saved state
                                     • Prints context summary
                                     • Claude knows where it left off</code></pre>
-<p><code>pre-compact.py</code> also prints the plan, the next task and the recent decisions to stdout, which Claude Code uses as instructions for the compaction summary itself, so they survive inside the summary as well as through the restore hook. Long idle sessions can be compacted too (<code>idleCompaction: false</code> turns that off).</p>
+<p><code>pre-compact.py</code> also prints the plan, the next task and the recent decisions to stdout, which Claude Code uses as instructions for the compaction summary itself, so they survive inside the summary as well as through the restore hook. Both label them as historical records to check against the current files, not as instructions. Long idle sessions can be compacted too (<code>idleCompaction: false</code> turns that off).</p>
 </section>
 <section id="what-gets-saved" class="level4" data-number="4.8.6.2">
 <h4 data-number="4.8.6.2" class="anchored" data-anchor-id="what-gets-saved"><span class="header-section-number">4.8.6.2</span> What Gets Saved</h4>

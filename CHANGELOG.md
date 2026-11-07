@@ -36,7 +36,7 @@ A **currency-correction release.** The template was checked against every Claude
 
 ### Changed
 
-- **`pre-compact.py` steers the compaction summary.** Claude Code uses a `PreCompact` hook's stdout as instructions for the summary, so the hook now prints the plan, the next task and the recent decisions there too, in UTF-8. They survive inside the summary as well as through the restore hook. A portability case pins this; the old hook printed nothing.
+- **`pre-compact.py` steers the compaction summary.** Claude Code uses a `PreCompact` hook's stdout as instructions for the summary, so the hook now prints the plan, the next task and the recent decisions there too, in UTF-8, labelled as historical records to check rather than instructions, as the restore hook already labels them (Codex review on PR #181). They survive inside the summary as well as through the restore hook. A portability case pins this; the old hook printed nothing.
 - **`/qa-quarto` and `/translate-to-quarto` set `background: false`.** Forked skills run in the background by default, so these two editing loops now wait for their result instead of editing a `.qmd` while you do.
 - `model-versions.md`'s update protocol gains a `/doctor prompt-audit` step.
 - `theory-proving.md` links Anthropic's `math-proof` plugin (Apache-2.0) as a first-party implementation of portfolio search with a judge. The backlog's packaging item links claudeblattman's `marketplace.json` as a working example.
