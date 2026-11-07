@@ -18,6 +18,7 @@ import io
 import json
 import os
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -34,6 +35,7 @@ HYGIENE = os.path.join(ROOT, "scripts", "check-repo-hygiene.py")
 LEDGER = os.path.join(ROOT, "scripts", "check-ledger-coverage.py")
 QSCORE = os.path.join(ROOT, "scripts", "quality_score.py")
 PRECOMMIT = os.path.join(ROOT, ".githooks", "pre-commit")
+BATTERY = os.path.join(ROOT, "scripts", "hook-battery.sh")
 BASH = shutil.which("bash")
 
 # Two hard-coded absolute paths: the scorer gives this R script 60/100 (exit 1)
@@ -541,6 +543,24 @@ class PreCommitQualityGate(unittest.TestCase):
         rc, out = self.hook(repo)
         self.assertEqual(rc, 0, out)
         self.assertEqual(self.battery_flag, "unset", out)
+
+    def test_every_file_the_battery_runs_triggers_it(self):
+        """precommit-battery-trigger-misses-file-issue (PR #191 review): the battery
+        also runs scripts/file-issue.py, which was not in the hook's trigger list, so
+        a commit changing only that script skipped the battery locally. Every $ROOT/
+        path the battery reads, staged alone, must make the hook run the battery."""
+        with open(BATTERY, encoding="utf-8") as f:
+            code = "\n".join(l for l in f.read().splitlines() if not l.lstrip().startswith("#"))
+        paths = sorted(set(re.findall(r"\$ROOT/([A-Za-z0-9_.][A-Za-z0-9_./-]*)", code)))
+        self.assertIn("scripts/file-issue.py", paths)   # the parse still finds what it is for
+        for rel in paths:
+            with self.subTest(path=rel):
+                repo = self.fixture()
+                target = rel if os.path.splitext(rel)[1] else rel + "/probe.py"
+                repo.write(target, "pass\n")
+                repo.add(target)
+                rc, out = self.hook(repo)
+                self.assertEqual(self.battery_flag, "unset", out)
 
     def test_control_valid_accented_file_passes(self):
         repo = self.fixture()

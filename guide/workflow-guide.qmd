@@ -2,8 +2,8 @@
 title: "My Claude Code Setup"
 subtitle: "A Comprehensive Guide to AI-Assisted Academic Workflows: Slides, Papers, Analysis, and Beyond"
 author: "Pedro H. C. Sant'Anna"
-date: "2026-11-06"
-version: "2.9.1"
+date: "2026-11-07"
+version: "2.9.2"
 date-modified: last-modified
 format:
   html:

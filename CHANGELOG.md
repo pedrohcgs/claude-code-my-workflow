@@ -6,6 +6,34 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
+## v2.9.2 — 2026-11-07
+
+Small fixes found during and after the v2.9.1 work, in compaction, in `/commit` and `/verify`, and in the git pre-commit hook. Nothing to migrate.
+
+### Fixed
+
+- **`pre-compact.py` read `log-reminder.py`'s notes as decisions** (#189).
+  - The newest session log is usually that hook's own `YYYY-MM-DD_auto.md`. Its `Slides/X.tex → no fresh .pdf` lines matched the `→` decision pattern, so a compaction could carry "no fresh .pdf" into the summary and the restored context as a recent decision.
+  - `extract_recent_decisions` now skips `*_auto.md` and reads the newest log a person or Claude wrote. A `→` line in that log still counts.
+  - A `**Decision:** X` line kept the marker's closing `**` in front of X. A small parser (`marker_decision`) now removes the marker's own emphasis and keeps the decision's: `**Decision:** X` and `**Decision: X**` give `X`, while `Decision:**X**` and `**Decision:** **X**` give `**X**`. Three regex-only attempts, each found wanting in the Codex review of #191, ate the decision's emphasis in one of these cases.
+  - Three portability cases pin both: two run the hook on scratch projects, and one checks the parser on every emphasis combination. Each fix, removed alone, fails its own cases. Recorded in the qualification ledger.
+- **The git pre-commit hook skipped the hook battery when only `scripts/file-issue.py` was staged.**
+  - The battery runs that script (section i), but the hook started the battery only for a staged hook, settings file, `.githooks/` file or the battery itself. CI still ran those cases.
+  - `scripts/file-issue.py` is now in the hook's list. A new portability case stages each file the battery runs, one at a time, and fails if one of them does not start the battery, so a battery that starts running another file fails it until the list includes that file.
+
+### Changed
+
+- **`/commit` runs the backtest once per commit** (#190).
+  - Step 0b leaves the run to `.githooks/pre-commit`, which runs the same suite on the staged changes and refuses a red commit, only when three things hold: `core.hooksPath` is `.githooks`, the hook file is executable, and nothing under `.githooks/` is changed, staged or untracked. Otherwise it runs `./scripts/backtest.sh` as before.
+  - Why all three: git skips a hook file that is missing or not executable and still commits, and an edited hook could exit 0 without running the suite. The Codex review of #191 found both cases, and both were reproduced in a scratch repository with git 2.52.0.
+  - `/verify` skipped its run on the `core.hooksPath` check alone, so it had both gaps. It now makes the same three checks.
+  - TROUBLESHOOTING's "DRIFT DETECTED" entry now says the message can come from the git hook.
+
+**Inventory at release: 62 skills, 18 agents, 37 rules, 9 hooks, 11 gates**
+(standing hook battery: 123 cases, seconds to run; portability suite: 134 cases).
+
+---
+
 ## v2.9.1 — 2026-11-06
 
 A **lighter hook layer.** The two guard hooks that ran before every Bash call, and a third that ran after it, slowed everyday work and refused ordinary commands too often. They are gone. Claude Code's own permission deny rules now refuse destructive git, and one small hook, started only for a merge, pull or rebase, refuses those while tracked files have uncommitted changes. The template also stops setting the block that kept Claude from editing its own settings files.

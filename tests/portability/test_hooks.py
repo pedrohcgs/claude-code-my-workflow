@@ -15,6 +15,7 @@ docstring; FindingIds, last, checks that) and fails on the hooks as they stood a
 """
 import ast
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -423,6 +424,65 @@ class CompactionUtf8(_Tmp):
         out = fire("post-compact-restore.py",
                    {"source": "compact", "transcript_path": "C:\\Users\\王\\.claude\\t.jsonl"}, env)[0]
         self.assertIn("Re-run table 3", out)
+
+
+class CompactionDecisions(_Tmp):
+    """precompact-auto-log-decisions (#189): the newest session log is usually
+    log-reminder's own YYYY-MM-DD_auto.md, and its "X → no fresh .pdf" lines matched the
+    "→" decision pattern, so they came back after a compaction as recent decisions.
+    A "**Decision:** X" line also kept the marker's closing "**" in front of X. Three
+    regex-only fixes for that each took the decision's own emphasis in some case
+    ("**Decision:** **X**" -> "X**", "Decision:*X*" -> "X*", "**Decision: X**" ->
+    "X**"), so the marker is now parsed, and every combination is pinned."""
+    AUTO = ("## 21:40 — 3 files changed\n- Uncompiled artifacts:\n"
+            "  - Slides/Lecture01_Intro.tex → no fresh .pdf\n"
+            "  - Quarto/Lecture01_Intro.qmd → no fresh .html\n")
+
+    def decisions(self, proj):
+        out = fire("pre-compact.py", {"trigger": "manual"},
+                   clean_env(self.home, CLAUDE_PROJECT_DIR=proj))[0]
+        h = hashlib.md5(proj.encode()).hexdigest()[:8]
+        with open(os.path.join(self.home, ".claude", "sessions", h, "pre-compact-state.json"),
+                  encoding="utf-8") as f:
+            return json.load(f)["decisions"], out
+
+    def test_auto_log_alone_gives_no_decisions(self):
+        proj = self.path("proj")
+        self.write("proj/quality_reports/session_logs/2026-11-06_auto.md", self.AUTO)
+        got, out = self.decisions(proj)
+        self.assertEqual(got, [])
+        self.assertNotIn("no fresh", out)
+
+    def test_decision_comes_from_the_written_log_not_the_newer_auto_log(self):
+        proj = self.path("proj")
+        hand = self.write("proj/quality_reports/session_logs/2026-11-06_review.md",
+                          "# Log\n**Decision:** keep the clustered errors for table 3\n")
+        t = time.time() - 3600
+        os.utime(hand, (t, t))
+        self.write("proj/quality_reports/session_logs/2026-11-06_auto.md", self.AUTO)
+        got, out = self.decisions(proj)
+        self.assertEqual(got, ["keep the clustered errors for table 3"])
+        self.assertIn("Recent decision: keep the clustered errors", out)
+        self.assertNotIn("no fresh", out)
+
+    def test_marker_emphasis_goes_and_decision_emphasis_stays(self):
+        spec = importlib.util.spec_from_file_location("pre_compact_under_test",
+                                                      os.path.join(HOOKS, "pre-compact.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        cases = {
+            "**Decision:** keep the clustered errors for table 3": "keep the clustered errors for table 3",
+            "*Decided:* cluster by state throughout": "cluster by state throughout",
+            "**Decision: keep the event window at four years**": "keep the event window at four years",
+            "**Decision:** **drop the 2019 wave from table 4**": "**drop the 2019 wave from table 4**",
+            "Decision:*use the balanced panel in table 5*": "*use the balanced panel in table 5*",
+            "Decision:**use the balanced panel in table 6**": "**use the balanced panel in table 6**",
+            "- Chose: the 2010 base year for all prices": "the 2010 base year for all prices",
+            "No marker on this line at all": "",
+        }
+        for line, want in cases.items():
+            with self.subTest(line=line):
+                self.assertEqual(mod.marker_decision(line), want)
 
 
 # ── other session hooks ─────────────────────────────────────────────────────

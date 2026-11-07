@@ -11,7 +11,7 @@ Since Claude Code 2.1.286, Claude is *told* to run a project skill named `verify
 
 ## Steps
 
-1. **Is the git hook already doing this?** Run `git config --get core.hooksPath`. If it prints `.githooks`, the pre-commit hook will run the backtest and the quality gate on this commit anyway. Say so in one line and stop, because running everything twice wastes a minute and adds nothing.
+1. **Is the git hook already doing this?** Only when all three checks from `/commit` Step 0b hold: `git config --get core.hooksPath` prints `.githooks`; `test -x "$(git rev-parse --show-toplevel)/.githooks/pre-commit" && echo executable` prints `executable` (git skips a hook file that is missing or not executable, and still commits); and `git status --porcelain -- ':/.githooks'` prints nothing (an edited hook is itself what needs testing, and it could exit 0 without running anything). Then the pre-commit hook will run the backtest and the quality gate on this commit anyway. Say so in one line and stop, because running everything twice wastes a minute and adds nothing. Otherwise go on to step 2.
 2. **Run the backtest:** `./scripts/backtest.sh`. Capture the exit code and the last lines. A non-zero exit fails `/verify`; report the failing gate's own message, not a summary of it.
 3. **Score staged prose and code:** for each staged file ending in `.qmd`, `.tex` or `.R` (`git diff --cached --name-only --diff-filter=ACMR`), run `python3 scripts/quality_score.py <file>`. A score below 80 fails `/verify`.
 4. **Report.** One line per check (`PASS` / `FAIL`, with the score or the gate's message), then the verdict.
