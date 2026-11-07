@@ -397,6 +397,7 @@ Rules use path-scoped loading: **always-on** rules load every session; **path-sc
 | R | Figures and analysis (`/data-analysis`, `scripts/R/` template) | [r-project.org](https://www.r-project.org/) |
 | pdf2svg | TikZ → SVG for Quarto (`/extract-tikz`) | `brew install pdf2svg` (macOS), `apt install pdf2svg` (Debian) |
 | [gh CLI](https://cli.github.com/) | PR / issue workflow | `brew install gh` (macOS), `apt install gh` (Debian) |
+| poppler (optional) | Beamer page screenshots, page-to-frame map and log digest (`scripts/beamer-qa.py`, run by `/visual-audit`) | `brew install poppler` (macOS), `apt install poppler-utils` (Debian) |
 | Playwright for Python (optional) | Browser-measured slide QA (`scripts/slide-qa.py`, run by `/visual-audit`, `/qa-quarto`, `/slide-excellence`); drives your installed Chrome | `python3 -m venv ~/.venvs/slide-qa && ~/.venvs/slide-qa/bin/pip install playwright`, then `export SLIDE_QA_PYTHON=~/.venvs/slide-qa/bin/python` |
 
 **Minimum to fork this template:** Claude Code + git + Python 3 (Python is already installed on macOS/Linux).

@@ -20,7 +20,9 @@ Perform a thorough visual layout audit of a slide deck.
    - If it exits 2 (usually Playwright is missing — the script prints the one-time venv install and the `SLIDE_QA_PYTHON` line to set), say so, fall back to reading the rendered HTML of the dense slides and any screenshot the user supplies, and name the slides the user should eyeball
 
 3. **For Beamer (.tex) files:**
-   - Compile (see `/compile-latex`), check the log for overfull hbox warnings, and Read the PDF pages that carry figures or dense content
+   - Compile (see `/compile-latex`), then run `python3 scripts/beamer-qa.py Slides/<deck>.pdf`. It saves one screenshot per page to `quality_reports/audits/beamer-qa/<deck>/`, prints which frame and overlay step each page is, and lists the errors and the warnings that matter from the `.log` beside the PDF (overfull boxes, undefined references, missing characters). Read the screenshots of dense pages and of every page the log names.
+   - A frame whose content runs into the footline often compiles with no warning. To flag it, add `--band-mm FROM TO`: any ink between FROM and TO mm above the bottom edge is reported. The band depends on the theme, so measure it once on a screenshot: pick a strip just above the footline that a correct page leaves empty, and add `--band-x-max PCT` to skip a page number or navigation symbols on the right.
+   - If it exits 2 (no PDF, or poppler missing; the script prints the install line), fall back to reading the PDF pages that carry figures or dense content
 
 4. **Audit every slide for:**
 
