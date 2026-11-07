@@ -96,6 +96,30 @@ def find_active_plan(project_dir: str) -> dict | None:
     return None
 
 
+_MARKER = re.compile(r"(\*{1,2})?(?:Decision|Decided|Chose):(\*{0,2})\s*(.+)")
+
+
+def marker_decision(line: str) -> str:
+    """The text after a Decision:/Decided:/Chose: marker, without the marker's own
+    emphasis and with the decision's (PR #191 review: three regex-only attempts each
+    ate one or the other):
+
+      **Decision:** X       -> X         the marker was bold on its own
+      **Decision: X**       -> X         the whole line was bold
+      Decision:**X**        -> **X**     the emphasis after the colon is the decision's
+      **Decision:** **X**   -> **X**
+    """
+    m = _MARKER.search(line)
+    if not m:
+        return ""
+    opened, after, rest = m.group(1) or "", m.group(2), m.group(3).strip()
+    if opened and after == opened:
+        return rest
+    if opened and not after and rest.endswith(opened):
+        return rest[:-len(opened)].rstrip()
+    return after + rest
+
+
 def extract_recent_decisions(project_dir: str, limit: int = 3) -> list[str]:
     """Extract recent decisions from the session log."""
     logs_dir = Path(project_dir) / "quality_reports" / "session_logs"
@@ -114,21 +138,13 @@ def extract_recent_decisions(project_dir: str, limit: int = 3) -> list[str]:
     content = log_files[0].read_text(encoding="utf-8", errors="replace")
     decisions = []
 
-    # Look for decision markers
-    patterns = [
-        # "\*{0,2}" takes the closing emphasis of a "**Decision:**" marker, and
-        # only that: emphasis on the decision itself is kept (PR #191 review).
-        r"Decision:\*{0,2}\s*(.+)",
-        r"Decided:\*{0,2}\s*(.+)",
-        r"Chose:\*{0,2}\s*(.+)",
-        r"→\s*(.+)",
-        r"•\s*(.+)"
-    ]
-
     for line in content.split("\n")[-50:]:  # Last 50 lines
-        for pattern in patterns:
-            match = re.search(pattern, line.strip())
-            text = match.group(1).strip() if match else ""
+        line = line.strip()
+        found = [marker_decision(line)]
+        for pattern in (r"→\s*(.+)", r"•\s*(.+)"):
+            match = re.search(pattern, line)
+            found.append(match.group(1).strip() if match else "")
+        for text in found:
             if len(text) > 10:
                 decisions.append(text[:100])
                 if len(decisions) >= limit:

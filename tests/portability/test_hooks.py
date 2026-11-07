@@ -15,6 +15,7 @@ docstring; FindingIds, last, checks that) and fails on the hooks as they stood a
 """
 import ast
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -429,8 +430,10 @@ class CompactionDecisions(_Tmp):
     """precompact-auto-log-decisions (#189): the newest session log is usually
     log-reminder's own YYYY-MM-DD_auto.md, and its "X → no fresh .pdf" lines matched the
     "→" decision pattern, so they came back after a compaction as recent decisions.
-    A "**Decision:** X" line also kept the marker's closing "**" in front of X, and the
-    first fix for that stripped every leading "*", so "**Decision:** **X**" became "X**"."""
+    A "**Decision:** X" line also kept the marker's closing "**" in front of X. Three
+    regex-only fixes for that each took the decision's own emphasis in some case
+    ("**Decision:** **X**" -> "X**", "Decision:*X*" -> "X*", "**Decision: X**" ->
+    "X**"), so the marker is now parsed, and every combination is pinned."""
     AUTO = ("## 21:40 — 3 files changed\n- Uncompiled artifacts:\n"
             "  - Slides/Lecture01_Intro.tex → no fresh .pdf\n"
             "  - Quarto/Lecture01_Intro.qmd → no fresh .html\n")
@@ -453,17 +456,33 @@ class CompactionDecisions(_Tmp):
     def test_decision_comes_from_the_written_log_not_the_newer_auto_log(self):
         proj = self.path("proj")
         hand = self.write("proj/quality_reports/session_logs/2026-11-06_review.md",
-                          "# Log\n**Decision:** keep the clustered errors for table 3\n"
-                          "**Decision:** **drop the 2019 wave from table 4**\n")
+                          "# Log\n**Decision:** keep the clustered errors for table 3\n")
         t = time.time() - 3600
         os.utime(hand, (t, t))
         self.write("proj/quality_reports/session_logs/2026-11-06_auto.md", self.AUTO)
         got, out = self.decisions(proj)
-        # The marker's own "**" goes; emphasis on the decision itself stays.
-        self.assertEqual(got, ["keep the clustered errors for table 3",
-                               "**drop the 2019 wave from table 4**"])
+        self.assertEqual(got, ["keep the clustered errors for table 3"])
         self.assertIn("Recent decision: keep the clustered errors", out)
         self.assertNotIn("no fresh", out)
+
+    def test_marker_emphasis_goes_and_decision_emphasis_stays(self):
+        spec = importlib.util.spec_from_file_location("pre_compact_under_test",
+                                                      os.path.join(HOOKS, "pre-compact.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        cases = {
+            "**Decision:** keep the clustered errors for table 3": "keep the clustered errors for table 3",
+            "*Decided:* cluster by state throughout": "cluster by state throughout",
+            "**Decision: keep the event window at four years**": "keep the event window at four years",
+            "**Decision:** **drop the 2019 wave from table 4**": "**drop the 2019 wave from table 4**",
+            "Decision:*use the balanced panel in table 5*": "*use the balanced panel in table 5*",
+            "Decision:**use the balanced panel in table 6**": "**use the balanced panel in table 6**",
+            "- Chose: the 2010 base year for all prices": "the 2010 base year for all prices",
+            "No marker on this line at all": "",
+        }
+        for line, want in cases.items():
+            with self.subTest(line=line):
+                self.assertEqual(mod.marker_decision(line), want)
 
 
 # ── other session hooks ─────────────────────────────────────────────────────
