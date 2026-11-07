@@ -189,7 +189,7 @@ def main():
     # 2b. paths that differ only by case (or Unicode normalisation) are two files to
     #     Linux CI and one to a macOS or Windows disk: git reports "paths have collided",
     #     one copy wins, the tree stays dirty for good (a stash just moves the change to
-    #     the other name), and git-guardrails then denies every pull and merge there.
+    #     the other name), and a dirty-tree check then refuses every pull and merge there.
     #     A directory spelt two ways is flagged once, not once per file under it.
     seen, reported = {}, set()
     for f in files:

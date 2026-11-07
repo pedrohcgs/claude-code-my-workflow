@@ -11,12 +11,14 @@ setting is `claude-md-and-agents-md`; leave that setting at its default in this 
 
 ## What Claude Code enforces that you must do by hand
 
-Claude Code runs guard hooks before its shell commands and file edits. You do not, so follow
-them yourself:
+Claude Code refuses destructive git through the deny rules in `.claude/settings.json`, and runs
+two small hooks: one before a merge, pull or rebase, one before a `gh` command. None of that
+applies to you, so follow these rules yourself:
 
-1. **No destructive git.** Never run `git reset --hard`, `git clean -f`, `git push --force`, or
-   `git add -A` / `git add .`; stage files by name. Never discard uncommitted work. Do not merge,
-   rebase or pull over a dirty tree: commit first, or stash under a label that says what it is.
+1. **No destructive git.** Never run `git reset --hard`, `git clean`, `git push --force`,
+   `git add -A` / `git add .`, or `git checkout -- .` / `git restore .`; stage files by name.
+   Never discard uncommitted work. Do not merge, rebase or pull while tracked files have
+   uncommitted changes: commit first, or stash under a label that says what it is.
 2. **Leave the gate files alone.** Do not change `.claude/settings*.json`, `.claude/hooks/` or
    `.githooks/` unless the user asks. If they ask, make the change an ordinary diff and say so
    in the pull request.

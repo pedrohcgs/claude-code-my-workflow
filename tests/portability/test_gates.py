@@ -619,7 +619,6 @@ class SyncToDocs(Tmp):
 # ── hook-battery.sh ───────────────────────────────────────────────────────────
 
 BATTERY = os.path.join(SCRIPTS, "hook-battery.sh")
-SYM_CASES = ("c57", "c58", "c59", "c60", "c61", "c62", "c63", "c64")
 
 
 def _battery_cases():
@@ -697,6 +696,7 @@ class BatteryPortability(unittest.TestCase):
             "elsewhere": subprocess.Popen([bash, BATTERY], cwd=outside, env=_env(CLAUDE_PROJECT_DIR=foreign),
                                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
             # battery-symlink-cases-unreachable-on-windows: Git Bash's ln and uname.
+            # (Its symlink cases are gone; the run still checks the battery under both.)
             "windows": subprocess.Popen([bash, BATTERY], cwd=ROOT,
                                         env=_env(PATH=shims + os.pathsep + os.environ.get("PATH", "")),
                                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT),
@@ -719,20 +719,15 @@ class BatteryPortability(unittest.TestCase):
         self.assertEqual(rc, 0, self.tail("elsewhere"))
         self.assertIn(f"hook-battery: ALL PASS ({self.cases} cases)", out)
 
-    def test_symlink_cases_still_run_on_posix(self):
-        # The same run: no shim, so c57-c64 are measured, not marked.
-        rc, out = self.res["elsewhere"]
-        for c in SYM_CASES:
-            self.assertRegex(out, rf"(?m)^  PASS  {c} ", c)
-        self.assertNotIn("UNREACHABLE", out)
-
-    def test_symlink_cases_are_unreachable_not_failed_on_windows(self):
+    def test_runs_under_git_bash_shims(self):
+        # Git Bash's ln (a deep copy) and uname (MINGW). The symlink cases c57-c64
+        # that this run once marked UNREACHABLE went with git-guardrails in v2.9.1, so
+        # every remaining case is measured here, none marked.
         rc, out = self.res["windows"]
         self.assertEqual(rc, 0, self.tail("windows"))
-        for c in SYM_CASES:
-            self.assertRegex(out, rf"(?m)^  UNREACHABLE  {c} ", c)
         self.assertNotRegex(out, r"(?m)^  FAIL  ")
-        self.assertIn(f"ALL PASS ({self.cases} cases; 8 UNREACHABLE on this platform", out)
+        self.assertNotIn("UNREACHABLE", out)
+        self.assertIn(f"hook-battery: ALL PASS ({self.cases} cases)", out)
 
 
 if __name__ == "__main__":

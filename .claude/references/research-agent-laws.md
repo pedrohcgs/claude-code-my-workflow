@@ -231,11 +231,13 @@ plain `git stash push -m …` does **not** stash untracked files (use `-u` when 
 what you meant to park); `--autostash` is **not** a general clean-tree operation for the same
 reason; and a pre-execution check can only ever establish that the tree was clean **when the
 command was authorized**, unless compound forms are refused outright.
-*Mechanised:* [`.claude/hooks/git-guardrails.py`](../hooks/git-guardrails.py) refuses the
-operation while the tree is dirty, and accepts a history op only as a standalone command — so a
-chain that dirties the tree before the op cannot slip through the gap between decision and
-execution. The hatch is `ALLOW_DIRTY_MERGE=1`: deliberately an explicit act, and one worth saying
-out loud when you use it.
+*Mechanised:* [`.claude/hooks/dirty-tree-guard.py`](../hooks/dirty-tree-guard.py) refuses a
+merge, pull or rebase while tracked files have uncommitted changes. It reads the tree when the
+command is authorized, not when git runs, so a chain that dirties the tree before the op can slip
+through that gap: run the stash and the op as separate commands. (Until v2.9.0 a larger hook,
+git-guardrails.py, refused compound forms outright; it was removed in v2.9.1 because it refused
+too much ordinary work.) The hatch is `ALLOW_DIRTY_MERGE=1`: deliberately an explicit act, and one
+worth saying out loud when you use it.
 
 ---
 

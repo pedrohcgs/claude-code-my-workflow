@@ -112,6 +112,12 @@ def n_battery_named(letters):
     # ungated: planting 99 in each left every gate green, which is the r7 defect
     # one document over.
     #
+    # UPDATE 2026-11-06 (v2.9.1): the two guards this note is about were removed.
+    # The remaining decision hooks import nothing from each other, and a
+    # re-measurement on that date found each stub reddening exactly its own
+    # section's deny/contains cases, so for them tally and outcome coincide. The
+    # note below is kept as the reason the row is still phrased as a tally.
+    #
     # NARROWED 2026-08-24, and the narrowing IS the fix. This comment used to
     # assert a premise the count does not support: "a stub allows everything, so
     # exactly the expect_deny / expect_contains cases in that guard's sections
@@ -440,13 +446,17 @@ CHECKS = [
     # The recipe used to hard-code the battery size of the day; once the battery
     # grew it returned 0, and a maintainer following it would have concluded the
     # REQ was wrong and dropped eight gated sites out of coverage.)
-    ("battery cases (ledger)", _NUM + r' cases, exit 0',    [REQ("quality_reports/qualification/LEDGER.md", 8)], n_hook_battery_cases()),
+    # 2026-11-06 (v2.9.1): FOUR sites. The removed guards' rows and reproduction
+    # notes moved to the ledger's "Retired at v2.9.1" section with each count
+    # reading "cases at the time", which this regex does not match on purpose:
+    # history is not compared with today's battery.
+    ("battery cases (ledger)", _NUM + r' cases, exit 0',    [REQ("quality_reports/qualification/LEDGER.md", 4)], n_hook_battery_cases()),
     # The claim these three read used to be phrased "(N cases named)" — the
     # cases a stubbed run NAMES — while the value is a SECTION TALLY. The
     # phrasing is now the quantity (2026-08-24); see n_battery_named() for the
     # measurement that separated the two and why the tally is what gets gated.
-    ("battery-named root-of-trust", r'`root-of-trust-guard\.py` \((\d+) cases in its own sections\)', ["quality_reports/qualification/LEDGER.md"], n_battery_named("a")),
-    ("battery-named git-guardrails", r'`git-guardrails\.py` \((\d+) cases in its own sections\)',     ["quality_reports/qualification/LEDGER.md"], n_battery_named("bc")),
+    ("battery-named dirty-tree-guard", r'`dirty-tree-guard\.py` \((\d+) cases in its own sections\)', ["quality_reports/qualification/LEDGER.md"], n_battery_named("j")),
+    ("battery-named issue-guard", r'`issue-guard\.py` \((\d+) cases in its own sections\)',          ["quality_reports/qualification/LEDGER.md"], n_battery_named("g")),
     ("battery-named claim-reconcile", r'`claim-reconcile\.py` \((\d+) cases in its own sections\)',   ["quality_reports/qualification/LEDGER.md"], n_battery_named("d")),
     # n_patterns() was COMPUTED (and printed as "sequential 1..N") but never
     # compared against the prose, so "Nineteen patterns is a reference shelf"

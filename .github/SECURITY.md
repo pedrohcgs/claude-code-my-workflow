@@ -9,7 +9,7 @@ This is a template for academic research workflows. It ships **hooks that execut
 
 In scope, for example:
 
-- Bypasses of `git-guardrails.py` (destructive-git blocking) or the pre-commit gate.
+- Bypasses of the destructive-git deny rules in `.claude/settings.json`, of `dirty-tree-guard.py`, or of the pre-commit gate. The rewritten spellings the deny rules are documented not to match (`git -C . push`, `git -c x=y push`, `bash -c '...'`) are known limits, not vulnerabilities.
 - A skill/hook that could exfiltrate or overwrite user data outside the repo.
 - Incorrect security guidance (e.g., a documented pattern that claims to sandbox but does not — see the `allowed-tools` vs `disallowed-tools` note in `templates/skill-template.md`).
 - Flaws in the confidential-data guidance (`.claude/rules/confidential-data.md`) that could lead to restricted-data exposure.
