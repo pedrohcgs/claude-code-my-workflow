@@ -72,6 +72,9 @@ being flagged would cost you — **run the actual detector and iterate against t
   sounds human.
 - Report the score, the tool, and the version — a measurement without its instrument is an
   anecdote.
+- For economics papers there is an open detector you can run yourself:
+  [`paulgp/econ-ai-detector`](https://github.com/paulgp/econ-ai-detector) (MIT), whose human
+  training text is NBER working papers and published articles. Use it to measure, never as a target to write towards.
 
 > **Do not use this to evade disclosure.** The point is prose a reader trusts and a voice that
 > is yours, not defeating a classifier. If a venue requires an AI-use statement, make it —

@@ -51,7 +51,7 @@ INCLUDE = [
     "teach-from-paper", "scaffold-exercises", "proofread", "visual-audit", "pedagogy-review",
     "devils-advocate", "validate-bib",
     # shipping and tracking
-    "commit", "issues",
+    "commit", "issues", "verify",
 ]
 EXCLUDE = {
     # The value is independent or parallel reviewers, which one agent cannot honestly supply.

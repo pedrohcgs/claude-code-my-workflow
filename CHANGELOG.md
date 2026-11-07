@@ -6,12 +6,22 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
-## Unreleased
+## v2.9.0 — 2026-11-06
+
+An **adoption release** carrying what the 2026-11-06 audit found worth building or linking: a `verify` skill that Claude Code runs before it commits, a triangulation-ledger template, guidance on using the template rather than forking it for unpublished work, an AI-generated-outputs section for replication packages, and readiness for the hook launcher on #180.
 
 ### Added
 
 - **The ledger-coverage gate understands an inline hook launcher.** `scripts/check-ledger-coverage.py` reads `sh -c '<code>' <name> <script>` as running `<script>`, so a settings file that starts its hooks through the launcher drafted for #179 and #180 is still checked hook by hook. A typo in the launcher's script path is still caught, and a launcher with no script fails loudly. Qualified in the ledger.
+- **`/verify`** (62nd skill). Claude Code 2.1.286 runs a project skill named `verify` right before it commits. This one runs the backtest, and the quality score on staged `.qmd`/`.tex`/`.R` files, and stops the commit on a failure. It skips itself when the git pre-commit hook will run the same gates. It is bridged for Codex and Antigravity.
+- **`templates/triangulation-ledger.md`.** For each robustness check, write down and commit what result would support the claim, weaken it or leave it undecided, before the check runs; the result is filled in afterwards in a new commit. It is method-neutral and links to `spec-ledger.md` by check ID.
+- **Template, not fork, for unpublished work** (README and guide, step 1). The repository is now a GitHub template repository, so a copy can be made private; a fork of a public repository cannot.
+- **`/replication-package`: AI-generated analytical outputs.** When a model produced data, the README records the model ID and date, the prompts, the parameters, the raw outputs, the post-processing and who checked them. AI coding help stays a disclosure matter. The idea follows the World Bank's reproducibility guidance; the wording is our own.
+- **Links:** Brodeur et al. 2026 (*PNAS*: AI-assisted teams reproduce about as often as human-only teams but catch fewer major coding errors; AI-led teams reproduce far less) in `verification-ladder.md`; `paulgp/econ-ai-detector` in `writing-with-ai.md` and the ecosystem section; `posit-dev/skills` in README and the guide.
 - **TROUBLESHOOTING: "Every Bash, Edit and Write is refused, with a hook error"**, covering a missing hook script (recovery from a terminal) and a missing `python3` on Windows.
+
+**Inventory at release: 62 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
+(standing hook battery: 322 cases, seconds to run; portability suite: 233 cases).
 
 ---
 
