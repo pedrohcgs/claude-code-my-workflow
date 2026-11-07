@@ -41,6 +41,8 @@ Track every route in a **route ledger**: route, status (live / blocked-at / merg
 theorem-strength gap where it blocks, and artifacts. **Artifacts required; status reports
 rejected** — "making progress on the empirical-process route" is not an entry.
 
+A first-party implementation exists: Anthropic's `math-proof` plugin (Apache-2.0, in [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/math-proof)) runs fresh-context workers with a judge and keeps a proved / refuted / open ledger. Read its README before a run: a large proof can take many subagent calls.
+
 ## 3. Computation as evidence — counterexample-hunt your own lemmas first
 
 Before investing in proving a lemma, **try to break it numerically**. For econometrics this is

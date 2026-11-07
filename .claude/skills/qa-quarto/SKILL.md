@@ -4,6 +4,7 @@ description: Adversarial Quarto-vs-Beamer parity QA. A critic agent compares the
 argument-hint: "[LectureN]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Agent", "Task"]
 context: fork
+background: false
 ---
 
 # Adversarial Quarto vs Beamer QA Workflow

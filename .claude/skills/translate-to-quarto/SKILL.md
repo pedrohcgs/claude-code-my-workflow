@@ -4,6 +4,7 @@ description: Translate a Beamer `.tex` lecture to a Quarto RevealJS `.qmd` mirro
 argument-hint: "[LectureN_Topic.tex]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "Agent", "Task"]
 context: fork
+background: false
 ---
 
 # Beamer → Quarto Translation Workflow

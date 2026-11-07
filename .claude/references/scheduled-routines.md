@@ -1,6 +1,6 @@
 # Scheduled & Background Routines
 
-The loop-first half of the workflow: recurring scholarly chores that should run *on a schedule* and surface only when they find something — not when you remember to run them. These are **Routines** (cron-scheduled remote agents managed by `/schedule`), not committed cron files, so they survive a closed laptop and run on web infrastructure.
+The loop-first half of the workflow: recurring scholarly chores that should run *on a schedule* and surface only when they find something — not when you remember to run them. These are cloud **scheduled tasks** (formerly *routines*; the old name still appears in `/schedule` and at claude.ai/code/routines), cron-scheduled remote agents managed by `/schedule`, not committed cron files, so they survive a closed laptop and run on web infrastructure.
 
 > **Use Routines, not `CronCreate`,** for any away-from-keyboard work — Routines run on managed infra and persist; a local cron dies with the REPL. Each routine below is a *prompt + interval*; set them up once with `/schedule`. **One exception:** inbox triage runs as a Desktop scheduled task on your machine, because its digest and referee tracker are gitignored and would not survive a routine's fresh clone.
 
@@ -31,7 +31,7 @@ If any claim FAILs (not EXPLAINED), summarize which tables are affected and noti
 otherwise exit quietly.
 ```
 
-A precise cron expression (e.g. `0 6 * * *`) is applied via `/schedule update` *after* the routine exists; manage with `/schedule list` / `update` / `remove`. Two scheduling constraints to design around: the **minimum interval is 1 hour**, and accounts carry a **daily run cap** — so batch checks into one routine rather than many small ones. Routines operate on **committed repos**: anything uncommitted or private-by-design (e.g. a local research vault) is invisible to them.
+A precise cron expression (e.g. `0 6 * * *`) is applied via `/schedule update` *after* the routine exists; manage with `/schedule list` / `update` / `remove`. Two scheduling constraints to design around: the **minimum interval is 1 hour**, and runs are rate-limited per hour (100 scheduled runs an hour per account; 30 **Run now** or API fires an hour per task) — so batch checks into one task rather than many small ones. Routines operate on **committed repos**: anything uncommitted or private-by-design (e.g. a local research vault) is invisible to them.
 
 `scripts/nightly-repro-check.sh` is the **local** runner for the nightly reproducibility check — required, not a preference, whenever the data is local or uncommitted (a cloud routine gets a fresh clone and cannot reach your data directory; see the mechanism table below). Schedule it via Desktop scheduled tasks or a machine cron. `/schedule` (cloud) fits only fully committed repos.
 
@@ -40,8 +40,9 @@ A precise cron expression (e.g. `0 6 * * *`) is applied via `/schedule update` *
 - **Never point an unattended loop at a submission portal, shared/restricted data, or a co-author's inbox without a human gate.** Routines *propose*; a human *sends*. (`/triage-inbox` never auto-sends; the [`git-guardrails`](../hooks/git-guardrails.py) hook still blocks destructive git even in a routine.)
 - **Say what "done" means, and which stops you want.** In an unattended run the current Opus sometimes ends a turn with a progress report instead of the next step (Anthropic's Opus 5.5 prompting guide, "Unattended agentic runs"). Put the completion condition in the routine prompt and name the only acceptable stops — e.g. "continue until every claim is re-checked; stop early only if a step is blocked, and say what blocks it" — while keeping human gates for anything risky or irreversible.
 - **Bound the cost.** A nightly full-manuscript re-audit is fine; a nightly 7× `/seven-pass-review` is not — cost-pilot first.
+- **A local unattended run should deny instead of waiting.** `permissions.denyInsteadOfPrompting` (Claude Code ≥ 2.1.319) denies any tool call that would wait on a permission prompt and lets the turn continue, so an overnight local run cannot hang on a prompt nobody sees.
 - **Check credential expiry before overnight headless runs.** Since Claude Code 2.1.318, `claude auth status` reports `loginExpiresAt` and `claude -p` JSON results carry `credential_expires_at` — the date a stored claude.ai sign-in ends. A local cron wrapper can read it before it starts the run (`scripts/nightly-repro-check.sh` does not), so an expiring sign-in does not fail silently at 3 a.m.
-- **Connectors are INCLUDED by default — least-privilege them.** Cloud Routines run with **all of your claude.ai connectors attached, write access included, and no approval prompts**. An unattended routine that only needs to read your repo should have Gmail/Calendar/Slack *removed from that routine's connector list* before it ever fires — the risk is not a missing connector but a fully-armed one acting without you. (Locally-authenticated MCP servers in your *terminal* sessions are a separate thing and may still be absent in other headless contexts — degrade gracefully either way.)
+- **Connectors are INCLUDED by default — least-privilege them.** Cloud scheduled tasks run with **all of your claude.ai connectors attached, write access included**, in auto mode: a classifier, not you, approves each action. A run that hits an ask rule, or repeated classifier blocks, stops on a permission prompt that appears only in the run's own session, so check the task's detail page. An unattended routine that only needs to read your repo should have Gmail/Calendar/Slack *removed from that routine's connector list* before it ever fires — the risk is not a missing connector but a fully-armed one acting without you. (Locally-authenticated MCP servers in your *terminal* sessions are a separate thing and may still be absent in other headless contexts — degrade gracefully either way.)
 
 ## Choosing a scheduling mechanism (verified 2026-08-21)
 
@@ -56,7 +57,7 @@ or restricted data.
 | Requires open session | No | **No** | **Yes** |
 | Persistent across restarts | Yes | Yes | restored on `--resume` if unexpired |
 | **Access to local files** | **No (fresh clone)** | **Yes** | Yes |
-| Permission prompts | none (autonomous) | configurable per task | inherits from session |
+| Permission prompts | auto mode; waits on a prompt after an ask rule or repeated blocks | configurable per task | inherits from session |
 | Minimum interval | **1 hour** | 1 minute | 1 minute |
 
 ### What this means for research workflows
