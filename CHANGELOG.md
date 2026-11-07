@@ -6,6 +6,53 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
+## v2.8.1 — 2026-11-06
+
+A **currency-correction release.** The template was checked against every Claude Code release from 2.1.257 to 2.1.319 and the current docs, and statements that had become false were fixed. One was a safety claim. Every correction below was checked against the changelog, the docs, or the 2.1.318 settings schema before it was made.
+
+### Fixed — statements that were no longer true
+
+- **"Deny rules hold in every permission mode" had an exception** (`confidential-data.md`, TROUBLESHOOTING, `/permission-check`, the guide's plugins section, README). Since Claude Code 2.1.287 a *mod* (plugin code that runs inside Claude Code) can approve a call that a deny rule refused or a `PreToolUse` hook blocked. Only managed settings or a Team or Enterprise login keep those outcomes in place. Restricted-data projects should install no third-party mods.
+- **Minimum versions were missing.**
+  - The shipped settings need Claude Code ≥ 2.1.314: 2.1.295 for `onFailure` and 2.1.314 for the write boundary. An older version skips them without a warning. This is now stated in the README and guide prerequisites, and Python 3 is listed as needed for the guard hooks, not only the checkers.
+  - The current Sonnet needs ≥ 2.1.284 and the current Haiku ≥ 2.1.293. On an older version `haiku` still means Haiku 4.5, which takes no `effort`.
+- **Effort advice.**
+  - The guide recommended `CLAUDE_CODE_EFFORT_LEVEL` as a session default, but it overrides every skill's `effort:` pin.
+  - `ultracode` no longer forces `xhigh` (2.1.284); `workflowSizeGuideline` caps the fan-out.
+  - `ultrathink` now runs its turn at `xhigh` (2.1.311).
+  - `CLAUDE_CODE_SUBAGENT_MODEL_FORCE` and `CLAUDE_CODE_EFFORT_LEVEL` have joined TROUBLESHOOTING's pin checks.
+- **Cost advice.** On a subscription, only the main conversation gets the 1-hour cache; subagents, workflows and forks get 5 minutes unless `subagentPromptCacheTtl` is set, and this template's reviewers are subagents. `/cost` is now part of `/usage`, whose `Prompt cache (main)` line is what to read.
+- **Fast mode** (`model-versions.md`, a v2.7.0 error): Opus 5.5 fast mode is available, not in preview, on the Claude API, Claude Models on Google Cloud and Microsoft Foundry. Opus 5 and Opus 4.8 fast mode are in research preview, and Opus 4.8's is removed on 2026-11-30.
+- **A cited source did not say what it was cited for.** `model-routing.md` and the guide called Anthropic's "Decoupling the brain from the hands" post the primary-source endorsement of tier routing. The post is about agent-harness design and says nothing about model tiers. The citation is withdrawn, with a note saying so.
+- **Scheduled tasks** (`scheduled-routines.md`). Routines are now *scheduled tasks*. Runs are limited per hour, not per day. A run works in auto mode and can stop on a permission prompt; it is not prompt-free. For local unattended runs, `permissions.denyInsteadOfPrompting` (2.1.319) is now documented.
+- **Smaller corrections:**
+  - Five hook handler types across 33 events, not "three types, 20+ events".
+  - Plugins are found with `/plugin`'s Discover tab, not `/discover-plugins`.
+  - All four built-in output styles are named, with a warning that **Proactive** skips plan mode.
+  - Forks are on by default in `-p`, the SDK, Desktop and VS Code too (2.1.302).
+  - The skill-description limit is 1,536 characters, with `skillOverrides: "name-only"`.
+  - The write boundary also removes the worktree tools.
+  - `AGENTS.md` and the guide now say that Claude Code reads `AGENTS.md` only when there is no `CLAUDE.md` or the *Project instructions* setting asks for both.
+
+### Changed
+
+- **`pre-compact.py` steers the compaction summary.** Claude Code uses a `PreCompact` hook's stdout as instructions for the summary, so the hook now prints the plan, the next task and the recent decisions there too, in UTF-8, labelled as historical records to check rather than instructions, as the restore hook already labels them (Codex review on PR #181). They survive inside the summary as well as through the restore hook. A portability case pins this; the old hook printed nothing.
+- **`/qa-quarto` and `/translate-to-quarto` set `background: false`.** Forked skills run in the background by default, so these two editing loops now wait for their result instead of editing a `.qmd` while you do.
+- `model-versions.md`'s update protocol gains a `/doctor prompt-audit` step.
+- `theory-proving.md` links Anthropic's `math-proof` plugin (Apache-2.0) as a first-party implementation of portfolio search with a judge. The backlog's packaging item links claudeblattman's `marketplace.json` as a working example.
+
+### Repository housekeeping (settings, not in the diff)
+
+- Dependabot alerts and security updates are on, and merged branches are deleted automatically. The twelve merged branches were removed; one unmerged branch is kept.
+- The description and topics are updated.
+- #151 and #171 are closed with closure comments, and PR #152 is closed as superseded, with credit.
+- The deferred Windows `python3` case is now #179.
+
+**Inventory at release: 61 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
+(standing hook battery: 322 cases, seconds to run; portability suite: 233 cases).
+
+---
+
 ## v2.8.0 — 2026-11-06
 
 A **second-agent release.** The template can now be worked on from Codex (the Codex CLI, its IDE extensions, or the Codex tab of the ChatGPT desktop app, which absorbed the Codex app) and Google Antigravity as well as Claude Code. Both read skills in the open Agent Skills format from `.agents/skills/`, and Codex reads `AGENTS.md`; this release gives them both, without a second copy of any skill to keep in sync.

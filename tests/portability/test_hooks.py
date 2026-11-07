@@ -502,8 +502,13 @@ class CompactionUtf8(_Tmp):
         self.write("proj/quality_reports/session_logs/2026-09-27_log.md",
                    "# Log\n→ Chose the clustered errors for table 3 ═ final\n")
         env = clean_env(self.home, CLAUDE_PROJECT_DIR=proj)
-        fire("pre-compact.py", {"trigger": "manual", "custom_instructions": "keep “this”"},
-             env, self.STRICT)
+        pre_out = fire("pre-compact.py", {"trigger": "manual", "custom_instructions": "keep “this”"},
+                       env, self.STRICT)[0]
+        # stdout becomes instructions for the compaction summary (Claude Code docs,
+        # hooks → PreCompact output): the facts the restore hook re-injects are also
+        # kept in the summary itself, in UTF-8.
+        self.assertIn("Re-run stage 2 → 3", pre_out)
+        self.assertIn("Chose the clustered errors", pre_out)
         h = hashlib.md5(proj.encode()).hexdigest()[:8]
         state = os.path.join(self.home, ".claude", "sessions", h, "pre-compact-state.json")
         self.assertTrue(os.path.exists(state), "pre-compact saved no state")

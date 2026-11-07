@@ -5,7 +5,9 @@ This repository was built for Claude Code. [`CLAUDE.md`](CLAUDE.md) and
 `CLAUDE.md` before your first change. This file adds what Claude Code would otherwise enforce
 for you. It is written for Codex (the Codex tab of the ChatGPT desktop app, the Codex CLI, or an
 IDE extension), Google Antigravity, and any other agent that reads
-`AGENTS.md` or the skills in `.agents/skills/`.
+`AGENTS.md` or the skills in `.agents/skills/`. Claude Code itself reads `CLAUDE.md` instead, and
+loads this file only when a repository has no `CLAUDE.md` or its **Project instructions**
+setting is `claude-md-and-agents-md`; leave that setting at its default in this repository.
 
 ## What Claude Code enforces that you must do by hand
 

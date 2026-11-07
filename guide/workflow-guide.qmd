@@ -3,7 +3,7 @@ title: "My Claude Code Setup"
 subtitle: "A Comprehensive Guide to AI-Assisted Academic Workflows: Slides, Papers, Analysis, and Beyond"
 author: "Pedro H. C. Sant'Anna"
 date: "2026-11-06"
-version: "2.8.0"
+version: "2.8.1"
 date-modified: last-modified
 format:
   html:
@@ -187,7 +187,7 @@ You need four things: install Claude Code, fork the repo, run `./scripts/install
 
 | Requirement | What It Is | How to Get It |
 |-------------|-----------|---------------|
-| **Claude Code** | The AI tool that powers this workflow | `curl -fsSL https://claude.ai/install.sh | bash` ([docs](https://code.claude.com/docs/en/overview)) |
+| **Claude Code** | The AI tool that powers this workflow — **2.1.314 or later** for the template's shipped settings (an older version skips them without a warning) | `curl -fsSL https://claude.ai/install.sh | bash` ([docs](https://code.claude.com/docs/en/overview)) |
 | **Node.js 18+** | Only for the npm install route — the recommended native installer bundles its own runtime | [nodejs.org](https://nodejs.org) |
 | **Claude account** | Authentication for Claude | [Claude Pro or Max subscription](https://claude.ai) or [Anthropic API key](https://console.anthropic.com) (pay per token) |
 | **git** | Version control (for fork/clone) | Pre-installed on Mac; `brew install git` or [git-scm.com](https://git-scm.com) |
@@ -293,7 +293,7 @@ Three things do not carry over, and `AGENTS.md` says what to do instead:
 - **Independent reviewers.** Skills whose value is several reviewers who do not see each other's work — `/review-paper --peer`, `/seven-pass-review`, `/verify-claims` — are not bridged: one agent playing every referee is not the same check. Where a bridged skill hands one step to a Claude Code agent, the other agent does that step where it appears, so a gate still gates. A step that needs a context that has not seen the work, such as `/lit-review`'s claim verifier, runs in a separate session. If the agent cannot start one, it marks those results *not independently verified* and tells you to repeat the check in Claude Code.
 - **Claude Code's own machinery.** Skills that manage Claude Code sessions, memory or permissions are not bridged.
 
-`scripts/sync-agent-skills.py` lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.
+Claude Code itself reads `CLAUDE.md`, not `AGENTS.md`, unless a repository has no `CLAUDE.md` or its **Project instructions** setting is `claude-md-and-agents-md`; leave that setting at its default here, because `AGENTS.md` tells other agents to do by hand what Claude Code's hooks already do. `scripts/sync-agent-skills.py` lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.
 
 **Keep reviewing agent-written changes.** A pull request written with another agent once passed every backtest gate with three wrong names of real people, a cited source that did not exist, and guessed version numbers. The gates check that the repository agrees with itself, not that it is true; `AGENTS.md` asks agents to source every fact, and a second model's review before merge is what caught the rest.
 :::
@@ -1115,7 +1115,7 @@ Cost is invisible until you look at the monthly invoice. Three levers, in order 
 
 **1. Prompt caching.** Anthropic's prompt cache lets repeated prefix tokens (system prompt, CLAUDE.md, large context blobs) hit a cached path at a fraction of the input price. Two things forkers should know:
 
-- **The default TTL dropped from 60 min to 5 min** in early 2026. A long `/review-paper --peer` pipeline that took 12 minutes between turns now starts the second turn with a cold cache. For long pipelines on API / Bedrock / Vertex / Foundry plans, the opt-in `ENABLE_PROMPT_CACHING_1H` environment variable restores 1-hour TTL. On Claude Pro / Max subscriptions, Claude Code requests the 1-hour TTL automatically at no extra cost.
+- **The default TTL dropped from 60 min to 5 min** in early 2026. A long `/review-paper --peer` pipeline that took 12 minutes between turns now starts the second turn with a cold cache. For long pipelines on API / Bedrock / Vertex / Foundry plans, the opt-in `ENABLE_PROMPT_CACHING_1H` environment variable restores 1-hour TTL. On Claude subscriptions within plan usage, Claude Code requests the 1-hour TTL automatically, but only for the main conversation: subagents, workflows and forks get 5 minutes unless you set `subagentPromptCacheTtl` to `"1h"` (Claude Code ≥ 2.1.242; `promptCacheTtl` sets the main conversation's). That matters here, because this template's reviewers run as subagents.
 - **`cache_miss_reason`** (Anthropic public beta, 2026-05-13) is now exposed on Messages requests. Use it to diagnose why a long-running pipeline isn't getting cache hits (most often: a hook injected a timestamp that broke the prefix; or system-prompt drift between turns).
 
 The Apr 2026 [TTL change cost analysis](https://dev.to/whoffagents/claude-prompt-caching-in-2026-the-5-minute-ttl-change-thats-costing-you-money-4363) estimates a 30–60% effective cost increase for long-running pipelines that don't opt into the 1-hour TTL. Worth a Saturday hour to instrument your most expensive skill (`/review-paper --peer` is typically the worst offender).
@@ -1128,17 +1128,17 @@ The Apr 2026 [TTL change cost analysis](https://dev.to/whoffagents/claude-prompt
 | **Sonnet tier** | ~20% | Review and critique: r-reviewer, slide-auditor, proofreader, quarto-fixer |
 | **Opus tier** | ~10% | High-judgment work: editor, domain-referee, methods-referee, claim-verifier, manuscript review |
 
-Set per-agent via `model:` in `.claude/agents/<name>.md` frontmatter. Typical savings vs. all-Opus in our use: **50–80% on routed skills**, with no quality loss observed on the mechanical tier (heuristic, not a benchmark). The community-converged ratio is documented in [Augment Code's routing data](https://augmentcode.com) and aligns with Aider's architect/editor split; we cite Anthropic's [Apr 8 2026 "Decoupling brain from hands"](https://www.anthropic.com/engineering) as the primary-source endorsement of the pattern.
+Set per-agent via `model:` in `.claude/agents/<name>.md` frontmatter. Typical savings vs. all-Opus in our use: **50–80% on routed skills**, with no quality loss observed on the mechanical tier (heuristic, not a benchmark). The community-converged ratio is documented in [Augment Code's routing data](https://augmentcode.com) and aligns with Aider's architect/editor split. (An earlier version cited Anthropic's "Decoupling the brain from the hands" post as the primary-source endorsement; that post is about agent-harness design and does not discuss routing work across model tiers.)
 
-**3. Effort budgeting.** The [Effort Levels](#sec-effort) section below covers the `low | medium | high | xhigh | max` ladder. **The current Opus tier defaults to `medium`** — and its `medium` matches or beats the prior Opus generation at `high` (Anthropic's evaluations), while at any given level it thinks more per turn. So: let `medium` be the default; pin `high` only on gates where a false PASS is expensive (the template does this for the editor, both referees, the claim verifier, and verification-gate or correctness-critical skills such as `/audit-reproducibility`, `/seven-pass-review`, and `/simulation-study` — the full list is in `model-routing.md`); drop to `low` for mechanical work; reach for `xhigh` only for extended exploration (deep search, big refactors, the hardest `/review-paper` runs); `ultracode` (xhigh + dynamic workflows) for repo-scale autonomous tasks. On a fixed grant budget, `maxEffortLevel` in settings caps effort everywhere.
+**3. Effort budgeting.** The [Effort Levels](#sec-effort) section below covers the `low | medium | high | xhigh | max` ladder. **The current Opus tier defaults to `medium`** — and its `medium` matches or beats the prior Opus generation at `high` (Anthropic's evaluations), while at any given level it thinks more per turn. So: let `medium` be the default; pin `high` only on gates where a false PASS is expensive (the template does this for the editor, both referees, the claim verifier, and verification-gate or correctness-critical skills such as `/audit-reproducibility`, `/seven-pass-review`, and `/simulation-study` — the full list is in `model-routing.md`); drop to `low` for mechanical work; reach for `xhigh` only for extended exploration (deep search, big refactors, the hardest `/review-paper` runs); the `ultracode` toggle (dynamic workflows; since Claude Code 2.1.284 it no longer forces `xhigh`) for repo-scale autonomous tasks, with `workflowSizeGuideline` to cap the fan-out. On a fixed grant budget, `maxEffortLevel` in settings caps effort everywhere.
 
 ::: {.callout-tip}
 ## Monitoring: `/cost` and `/usage`
 
-- **`/cost`** (Apr 2026 Week 15) — current session breakdown by model and cache hit-rate.
+- **`/cost`** (Apr 2026 Week 15) — now a shortcut that opens a tab of `/usage` (Claude Code 2.1.118 merged them).
 - **`/usage`** (Apr 2026 Week 16) — month-to-date totals + per-plan-tier remaining quota.
 
-Run `/cost` after any `/review-paper --peer` pipeline. If your cache hit-rate is under 60% for the second/third turn, you're almost certainly being bitten by the 5-min TTL.
+Run `/usage` after any `/review-paper --peer` pipeline and read its `Prompt cache (main)` line (Claude Code ≥ 2.1.251). If the hit rate is under 60% for the second or third turn, the 5-minute TTL is the likely cause, and the referees, as subagents, are on 5 minutes even on a subscription.
 :::
 
 ::: {.callout-warning}
@@ -1284,8 +1284,8 @@ A handful of commands cut friction in the actual editing loop. Worth knowing bef
 
 **Also new since mid-2026** (Claude Code release notes, Jun–Sep 2026):
 
-- **Subagents run in the background, and fork mode is on by default** in interactive sessions — Claude keeps working while subagents run, and `/fork` copies the conversation into a background session. A fork *inherits the conversation*, so reviews that must be independent (claim verification, referees) use fresh-context subagents, never a fork.
-- **Output styles:** `/output-style` switches how Claude writes. **Concise** leads with the result and skips preamble; **Learning** leaves parts for you to write — a good fit next to `/scaffold-exercises` for teaching.
+- **Subagents run in the background, and fork mode is on by default** — in interactive sessions and, since Claude Code 2.1.302, in `claude -p`, the Agent SDK, the desktop app and VS Code (`CLAUDE_CODE_FORK_SUBAGENT=0` turns forks off for a headless review run) — Claude keeps working while subagents run, and `/fork` copies the conversation into a background session. A fork *inherits the conversation*, so reviews that must be independent (claim verification, referees) use fresh-context subagents, never a fork.
+- **Output styles:** `/output-style` switches how Claude writes. **Concise** leads with the result and skips preamble; **Learning** leaves parts for you to write — a good fit next to `/scaffold-exercises` for teaching. **Explanatory** adds short *Insight* notes on its choices. **Proactive** starts implementing at once and does not enter plan mode unless you ask for a plan, which works against this template's plan-first habit; keep it for small, well-specified work.
 - **`/skill-doctor`** shows each skill's context cost and usage; **`claude plugin eval`** scores a plugin against test cases versus a no-plugin baseline.
 - **Deadline-safe updates:** `"autoUpdatesChannel": "stable"` (and `minimumVersion`) in `~/.claude/settings.json` — see TROUBLESHOOTING; `maxEffortLevel` caps effort for a fixed budget.
 
@@ -1326,8 +1326,8 @@ Claude Code lets you control how deeply it reasons about each task. Higher effor
 - **Per-session:** Type `/effort high` for a demanding session (the current Opus default is `medium`) or `/effort xhigh` for the hardest runs. Typing `/effort` on its own opens an **interactive slider** (Apr 2026 Week 16).
 - **Per-skill:** Add `effort: high` to skill frontmatter (see [Skill Frontmatter Reference](#skill-frontmatter))
 - **Keyboard toggle:** `Option+T` (Mac) / `Alt+T` (Windows/Linux) toggles thinking on models where it can be switched off; on the current Opus and Fable tiers thinking is always on, so `/effort` is the control
-- **In prompts:** on always-thinking tiers, raise `/effort` for a hard turn rather than relying on a keyword such as `ultrathink`; phrases like "think hard" are treated as regular instructions and do *not* allocate extra thinking
-- **Environment variable:** `CLAUDE_CODE_EFFORT_LEVEL=high` for all sessions, and `CLAUDE_CODE_SUBAGENT_EFFORT=medium` (Claude Code ≥ 2.1.316) to set the default effort for subagents
+- **In prompts:** `ultrathink` in a terminal prompt runs that one turn at `xhigh` on the current Opus, Sonnet, Haiku and Fable tiers (Claude Code ≥ 2.1.311; `CLAUDE_CODE_DISABLE_ULTRATHINK` turns it off). Other phrases like "think hard" are treated as regular instructions and do *not* allocate extra thinking
+- **Environment variable:** `CLAUDE_CODE_SUBAGENT_EFFORT=medium` (Claude Code ≥ 2.1.316) sets the effort for subagents that name none. Avoid `CLAUDE_CODE_EFFORT_LEVEL` as a session default: it overrides every skill's `effort:` pin, so the template's `high` gates and `medium` cost caps collapse to one level. Use `/effort` or the `effortLevel` setting instead
 - **Hooks can read it:** As of Apr 2026 Week 19, hook input includes `effort.level` and `$CLAUDE_EFFORT` is set in Bash subprocess env --- useful for skipping expensive verification on low-effort runs
 
 ::: {.callout-tip}
@@ -1562,6 +1562,8 @@ Session running → context fills up → PreCompact fires
                                     • Prints context summary
                                     • Claude knows where it left off
 ```
+
+`pre-compact.py` also prints the plan, the next task and the recent decisions to stdout, which Claude Code uses as instructions for the compaction summary itself, so they survive inside the summary as well as through the restore hook. Both label them as historical records to check against the current files, not as instructions. Long idle sessions can be compacted too (`idleCompaction: false` turns that off).
 
 #### What Gets Saved
 
@@ -3180,6 +3182,7 @@ The YAML frontmatter controls how your skill behaves. The most-used fields:
 | `arguments` | Named positional arguments for `$name` substitution | `[infile, outfile]` |
 | `effort` | Override reasoning effort level | `high` |
 | `context` | Set to `fork` to run in an isolated subagent | `fork` |
+| `background` | With `context: fork`, `false` waits for the forked skill's result instead of running it in the background (the default) | `false` |
 | `agent` | Link to an agent definition in `.claude/agents/` | `proofreader` |
 | `hooks` | Skill-specific hooks (same syntax as settings.json) | `{PreToolUse: [...]}` |
 | `model` | Force a specific model | `haiku` |
@@ -3274,7 +3277,7 @@ description: Helps with citations
 - [ ] Has a "Use when:" clause naming 2--4 situations.
 - [ ] Includes at least one verbatim phrasing a user might literally type.
 - [ ] Disambiguates from any sibling skills in the same domain.
-- [ ] Fits in roughly 2--4 lines (longer descriptions get truncated in Claude's skill index).
+- [ ] Fits in roughly 2--4 lines. The skill listing truncates a description at 1,536 characters, and a long list of skills can be shortened further; `skillOverrides` can list a rarely used skill by name only (`"name-only"`).
 
 ### Domain-Specific Examples
 
@@ -3372,7 +3375,7 @@ Start with skills and agents first; add MCP servers when you need external integ
 
 ## Extending with Plugins
 
-Claude Code supports **plugins** --- bundled collections of skills, agents, hooks, and MCP servers that can be installed from git repositories. Use `/plugin` to browse and manage plugins (it has a Discover tab for finding new ones). Plugins are a newer extension point; start with skills and rules (which you control entirely) before adopting third-party plugins. **Read before you install:** a skill, agent, hook or plugin from another repository is instructions your session will carry out. Under this template's broad allow rules (`Bash(*)`, `WebFetch(*)`) it can reach your files or the network without a prompt, and a hook runs without being invoked at all. Read every file first, and add nothing unread to a restricted-data project.
+Claude Code supports **plugins** --- bundled collections of skills, agents, hooks, and MCP servers that can be installed from git repositories. Use `/plugin` to browse and manage plugins (it has a Discover tab for finding new ones). Plugins are a newer extension point; start with skills and rules (which you control entirely) before adopting third-party plugins. **Read before you install:** a skill, agent, hook or plugin from another repository is instructions your session will carry out. Under this template's broad allow rules (`Bash(*)`, `WebFetch(*)`) it can reach your files or the network without a prompt, and a hook runs without being invoked at all. Read every file first, and add nothing unread to a restricted-data project. **Mods are different again:** since Claude Code 2.1.287 a plugin can ship a *mod*, code that runs inside Claude Code and can approve a tool call that a deny rule refused or a `PreToolUse` hook blocked, this template's guards included, unless managed settings are on the machine or you sign in with a Team or Enterprise account. Install no third-party mods in a restricted-data project.
 :::
 
 ---

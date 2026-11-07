@@ -115,7 +115,7 @@ Check for and explicitly call out:
 3. **VSCode-only bypass:** VSCode layers say bypass but no CLI layer does → terminal Claude Code will still prompt; the extension honours it only with *Allow dangerously skip permissions* on.
 4. **Empty allowlist + default mode:** `defaultMode: "default"` with empty `allow` → every tool prompts, as designed.
 5. **Stale session:** settings are correct but user reports prompts → almost always a session that pre-dates the fix. Advise "Cmd+Shift+P → Developer: Reload Window, then new Claude Code session."
-6. **`deny` wins:** any match in a `deny` list blocks the tool regardless of `allow`, in every mode including bypass — which is exactly why restricted-data projects use deny rules.
+6. **`deny` wins:** any match in a `deny` list blocks the tool regardless of `allow`, in every mode including bypass — which is exactly why restricted-data projects use deny rules. Exception: an installed *mod* can approve a call a deny rule refused, unless managed settings or a Team or Enterprise login are in place; check `/plugin` for active mods.
 
 ## Output format
 
