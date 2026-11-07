@@ -104,6 +104,15 @@ Good — the pre-check caught a P3 (bare `scale=`) or P4 (missing directional ke
 
 ## Git / hooks / CI
 
+### Every Bash, Edit and Write is refused, with a hook error
+
+Since v2.7.0 the guard hooks are registered with `"onFailure": "block"`, so a guard that cannot run blocks the call instead of letting it through. There are two causes; the message says which.
+
+- **`can't open file …/.claude/hooks/<name>.py`: the hook script is missing.** Usually a branch switch or an old checkout removed `.claude/hooks/` while the session still holds the settings that point there. Claude cannot repair this from inside the session, because the repair is itself a blocked call. From a terminal, run `git checkout -- .claude/hooks` (or switch back with `git switch -`), then start a new session. Tracked in [#180](https://github.com/pedrohcgs/claude-code-my-workflow/issues/180).
+- **`python3: command not found`, or a Microsoft Store message: no working `python3`.** On Windows, the python.org installer provides `python` and `py` but not `python3`, and the `python3` that ships with Windows opens the Store. Make `python3 --version` work in Git Bash, for example with the Microsoft Store's Python, which provides `python3`. Tracked in [#179](https://github.com/pedrohcgs/claude-code-my-workflow/issues/179).
+
+A launcher that warns and carries on when a hook script is missing, and finds `python`/`py` when `python3` does not work, is ready as a settings patch on #180. `scripts/check-ledger-coverage.py` already understands its `sh -c '…' hook <script>` form.
+
 ### On Windows, the guards do not see PowerShell commands
 
 Claude Code on Windows can run shell commands through two tools, Bash (Git Bash) and PowerShell. The template's guard hooks — `git-guardrails`, `root-of-trust-guard`, `issue-guard` — are wired to the **Bash** tool only, so a command Claude runs through PowerShell passes none of them.
