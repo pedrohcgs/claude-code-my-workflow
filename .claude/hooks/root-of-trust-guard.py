@@ -390,6 +390,14 @@ also why the event is read as UTF-8 BYTES with replacement (#171): a byte the
 machine's code page could not decode used to be exactly such an error, and so
 an allow.
 
+One exception, a DECISION and not an error (#186): a well-formed event that
+lacks the field this guard reads is DENIED. With no `tool_name`, or a Bash
+event with no string `tool_input.command`, the guard used to read "" and allow,
+so a Claude Code update that renamed the field would switch it off without a
+word. The check lives in this file, not in the sibling it imports, so a stubbed
+or broken git-guardrails.py cannot take it away. Unparseable input still fails
+open as above.
+
 Escape hatch: set ALLOW_ROOT_OF_TRUST_WRITE=1 in the ENVIRONMENT OF THE
 SESSION (`ALLOW_ROOT_OF_TRUST_WRITE=1 claude`, or export it in the shell
 that launches Claude Code). Prefixing the blocked Bash command with it does
@@ -1981,6 +1989,33 @@ def deny(reason: str) -> None:
     }}, sys.stdout)
 
 
+def payload_contract_break(data) -> str | None:
+    """What is missing from a well-formed event this guard has to read, or None (#186).
+
+    Kept here rather than imported from git-guardrails.py, so a stubbed sibling
+    cannot remove it. A non-object is malformed input, which fails open."""
+    if not isinstance(data, dict):
+        return None
+    tool = data.get("tool_name")
+    if not isinstance(tool, str) or not tool:
+        return "an event with no `tool_name`"
+    if tool == "Bash":
+        ti = data.get("tool_input")
+        if not isinstance(ti, dict) or not isinstance(ti.get("command"), str):
+            return "a Bash event with no string `tool_input.command`"
+    return None
+
+
+def contract_denial(what: str) -> str:
+    return (f"Blocked by root-of-trust-guard: Claude Code sent {what}, so this guard "
+            f"cannot read the command it exists to check. A Claude Code update may have "
+            f"changed the hook payload; the guard refuses rather than allow a command it "
+            f"cannot see (#186). Look for an update to this template's .claude/hooks/. "
+            f"Until then, run the command yourself in a terminal, or switch this "
+            f"project's hooks off with \"disableAllHooks\": true in "
+            f".claude/settings.local.json.")
+
+
 # Bash's THREE quoting characters, and they are the complete set: the escape
 # `\`, the single quote, and the double quote. Every other quoting form bash
 # has is one of these with a `$` glued to the front (`$'…'`, `$"…"`), and that
@@ -2116,6 +2151,11 @@ def main() -> int:
     try:
         data = json.loads(sys.stdin.buffer.read().decode("utf-8-sig", "replace"))
     except (json.JSONDecodeError, EOFError):
+        return 0
+
+    broken = payload_contract_break(data)
+    if broken:
+        deny(contract_denial(broken))
         return 0
 
     if data.get("tool_name", "") != "Bash":

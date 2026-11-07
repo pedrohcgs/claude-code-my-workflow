@@ -6,6 +6,29 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
+## v2.9.1 — 2026-11-06
+
+A **fix release.** The two guards that protect your work no longer treat a missing field as an empty command.
+
+### Fixed
+
+- **A Claude Code update that renamed a hook field would have switched two guards off without a word** ([#186](https://github.com/pedrohcgs/claude-code-my-workflow/issues/186)).
+  - `git-guardrails.py` and `root-of-trust-guard.py` read `tool_input.command`. When it was missing they treated the command as empty and allowed it.
+  - They now deny a well-formed event that has no `tool_name`, or a Bash event with no string `tool_input.command`. The reason names #186 and the way out (`"disableAllHooks": true` in `.claude/settings.local.json` until the hooks are updated).
+  - The refusal is a deny decision, so it works on every Claude Code version, not only those that honour `onFailure`.
+  - Recorded per guard:
+    - unparseable input still fails open;
+    - a Write/Edit event with no `file_path` still fails open, because that check is advisory;
+    - `issue-guard.py` is unchanged: it is not a security boundary, and Claude Code starts it only for `gh` commands.
+  - Twelve battery cases pin it, and five mutants each fail the cases aimed at them.
+  - The rest of #186, a run log and a session-start check after clo-author 26.09, stays open.
+- TROUBLESHOOTING's "Every Bash, Edit and Write is refused" entry names this as a third cause.
+
+**Inventory at release: 62 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
+(standing hook battery: 334 cases, seconds to run; portability suite: 245 cases).
+
+---
+
 ## v2.9.0 — 2026-11-06
 
 An **adoption release** carrying what the 2026-11-06 audit found worth building or linking. Everything in it is additive: a new skill, new scripts and a template, guidance, and links to outside work, each listed below.
