@@ -32,22 +32,28 @@ Spawn the **verifier** agent (via the `Agent` tool with `subagent_type=verifier`
 
 **Runs once per commit, here or in the git hook.** The gate is the full backtest suite — all eleven gates (surface-sync count claims like `"18 agents, 62 skills, 37 rules, 9 hooks"` and marked tables, skill integrity, model currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage, hook battery, portability).
 
-First check whether the git pre-commit hook is installed and will actually run:
+First decide where it runs. **Leave it to the git hook only when all three of these hold**, because only then is the hook sure to run this same suite on this commit:
 
 ```bash
-git config --get core.hooksPath
-test -x "$(git rev-parse --show-toplevel)/.githooks/pre-commit" && echo executable
+git config --get core.hooksPath                                                    # must print .githooks
+test -x "$(git rev-parse --show-toplevel)/.githooks/pre-commit" && echo executable # must print executable
+git status --porcelain -- ':/.githooks'                                            # must print nothing
 ```
 
-- **The first prints `.githooks` and the second prints `executable`:** `./scripts/install-hooks.sh` has been run, so `.githooks/pre-commit` runs this same backtest on the staged changes when Step 4 commits. Both checks are needed: git skips a hook file that is missing or not executable, and still commits. Say so in one line and skip the run here: running it twice costs a minute or more and adds nothing. The gate still holds. If a gate is red, the hook refuses the commit and prints that gate's output in Step 4; treat that refusal exactly like a red result here.
-- **Anything else (no hook installed, or a hook git would skip):** run the suite yourself:
+1. **`core.hooksPath` is `.githooks`:** `./scripts/install-hooks.sh` has been run.
+2. **The hook file is executable.** Git skips a hook file that is missing or not executable, and still commits.
+3. **Nothing under `.githooks/` is changed, staged or untracked.** An edited hook is itself what needs testing, and it could exit 0 without running the suite. Git refuses a commit only when the hook exits nonzero.
+
+If all three hold, say so in one line and skip the run here: running it twice costs a minute or more and adds nothing. A red gate then shows up in Step 4, where the hook refuses the commit and prints that gate's output. Treat that refusal exactly like a red result below; the fix is never `--no-verify`.
+
+**Otherwise, run the suite here:**
 
 ```bash
 ./scripts/backtest.sh
 ```
 
 - **Exit 0:** all gates green — continue.
-- **Nonzero:** at least one gate is red — print its output and halt. Fix, then re-run. Do not proceed past this gate on a red result, even with "commit anyway": a red gate is drift that the next reader inherits, and small count drift has repeatedly cost follow-up PRs. The same holds for a commit the git hook refuses, and the fix is never `--no-verify`.
+- **Nonzero:** at least one gate is red — print its output and halt. Fix, then re-run. Do not proceed past this gate on a red result, even with "commit anyway": a red gate is drift that the next reader inherits, and small count drift has repeatedly cost follow-up PRs.
 
 ### Step 0c: Passport Check (Pre-Commit)
 
