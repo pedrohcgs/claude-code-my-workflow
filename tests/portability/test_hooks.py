@@ -429,7 +429,8 @@ class CompactionDecisions(_Tmp):
     """precompact-auto-log-decisions (#189): the newest session log is usually
     log-reminder's own YYYY-MM-DD_auto.md, and its "X → no fresh .pdf" lines matched the
     "→" decision pattern, so they came back after a compaction as recent decisions.
-    A "**Decision:** X" line also kept the closing "**" in front of X."""
+    A "**Decision:** X" line also kept the marker's closing "**" in front of X, and the
+    first fix for that stripped every leading "*", so "**Decision:** **X**" became "X**"."""
     AUTO = ("## 21:40 — 3 files changed\n- Uncompiled artifacts:\n"
             "  - Slides/Lecture01_Intro.tex → no fresh .pdf\n"
             "  - Quarto/Lecture01_Intro.qmd → no fresh .html\n")
@@ -452,12 +453,15 @@ class CompactionDecisions(_Tmp):
     def test_decision_comes_from_the_written_log_not_the_newer_auto_log(self):
         proj = self.path("proj")
         hand = self.write("proj/quality_reports/session_logs/2026-11-06_review.md",
-                          "# Log\n**Decision:** keep the clustered errors for table 3\n")
+                          "# Log\n**Decision:** keep the clustered errors for table 3\n"
+                          "**Decision:** **drop the 2019 wave from table 4**\n")
         t = time.time() - 3600
         os.utime(hand, (t, t))
         self.write("proj/quality_reports/session_logs/2026-11-06_auto.md", self.AUTO)
         got, out = self.decisions(proj)
-        self.assertEqual(got, ["keep the clustered errors for table 3"])
+        # The marker's own "**" goes; emphasis on the decision itself stays.
+        self.assertEqual(got, ["keep the clustered errors for table 3",
+                               "**drop the 2019 wave from table 4**"])
         self.assertIn("Recent decision: keep the clustered errors", out)
         self.assertNotIn("no fresh", out)
 

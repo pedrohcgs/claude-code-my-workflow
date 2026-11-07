@@ -116,9 +116,11 @@ def extract_recent_decisions(project_dir: str, limit: int = 3) -> list[str]:
 
     # Look for decision markers
     patterns = [
-        r"Decision:\s*(.+)",
-        r"Decided:\s*(.+)",
-        r"Chose:\s*(.+)",
+        # "\*{0,2}" takes the closing emphasis of a "**Decision:**" marker, and
+        # only that: emphasis on the decision itself is kept (PR #191 review).
+        r"Decision:\*{0,2}\s*(.+)",
+        r"Decided:\*{0,2}\s*(.+)",
+        r"Chose:\*{0,2}\s*(.+)",
         r"→\s*(.+)",
         r"•\s*(.+)"
     ]
@@ -126,8 +128,7 @@ def extract_recent_decisions(project_dir: str, limit: int = 3) -> list[str]:
     for line in content.split("\n")[-50:]:  # Last 50 lines
         for pattern in patterns:
             match = re.search(pattern, line.strip())
-            # "**Decision:** X" leaves the closing "**" in front of X.
-            text = match.group(1).lstrip("* ").strip() if match else ""
+            text = match.group(1).strip() if match else ""
             if len(text) > 10:
                 decisions.append(text[:100])
                 if len(decisions) >= limit:

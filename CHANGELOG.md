@@ -8,15 +8,18 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ## v2.9.2 — 2026-11-07
 
-Two small fixes found during the v2.9.1 work. A compaction no longer carries a hook's file notes over as decisions, and `/commit` no longer runs the backtest a second time when the git pre-commit hook will run it. Nothing to migrate.
+Small fixes found during and after the v2.9.1 work, in compaction, in `/commit` and `/verify`, and in the git pre-commit hook. Nothing to migrate.
 
 ### Fixed
 
 - **`pre-compact.py` read `log-reminder.py`'s notes as decisions** (#189).
   - The newest session log is usually that hook's own `YYYY-MM-DD_auto.md`. Its `Slides/X.tex → no fresh .pdf` lines matched the `→` decision pattern, so a compaction could carry "no fresh .pdf" into the summary and the restored context as a recent decision.
   - `extract_recent_decisions` now skips `*_auto.md` and reads the newest log a person or Claude wrote. A `→` line in that log still counts.
-  - A `**Decision:** X` line kept the closing `**` in front of X. It no longer does.
-  - Two portability cases pin both. Each fails on the v2.9.1 hook, and each of the two fixes, removed alone, fails its own case. Recorded in the qualification ledger.
+  - A `**Decision:** X` line kept the marker's closing `**` in front of X. The marker pattern now takes that `**` itself, so emphasis on the decision (`**Decision:** **X**`) is kept as written.
+  - Two portability cases pin both. Each fails on the v2.9.1 hook, and each fix, removed alone, fails its own case. Recorded in the qualification ledger.
+- **The git pre-commit hook skipped the hook battery when only `scripts/file-issue.py` was staged.**
+  - The battery runs that script (section i), but the hook started the battery only for a staged hook, settings file, `.githooks/` file or the battery itself. CI still ran those cases.
+  - `scripts/file-issue.py` is now in the hook's list. A new portability case stages each file the battery runs, one at a time, and fails if one of them does not start the battery, so a battery that starts running another file fails it until the list includes that file.
 
 ### Changed
 
@@ -27,7 +30,7 @@ Two small fixes found during the v2.9.1 work. A compaction no longer carries a h
   - TROUBLESHOOTING's "DRIFT DETECTED" entry now says the message can come from the git hook.
 
 **Inventory at release: 62 skills, 18 agents, 37 rules, 9 hooks, 11 gates**
-(standing hook battery: 123 cases, seconds to run; portability suite: 132 cases).
+(standing hook battery: 123 cases, seconds to run; portability suite: 133 cases).
 
 ---
 

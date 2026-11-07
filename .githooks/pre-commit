@@ -45,7 +45,7 @@ _HOOK_STAGED=0
 while IFS= read -r -d '' _f; do
     _STAGED_ALL+=("$_f")
     case "$_f" in
-        .claude/hooks/*|.githooks/*|scripts/hook-battery.sh)
+        .claude/hooks/*|.githooks/*|scripts/hook-battery.sh|scripts/file-issue.py)
             _HOOK_STAGED=1 ;;
         .claude/settings*.json)
             case "${_f#.claude/}" in */*) ;; *) _HOOK_STAGED=1 ;; esac ;;
@@ -125,8 +125,10 @@ FAIL=0
 
 # The hook battery re-fires every guard hook and is most of the suite's run time.
 # Its result can only change when a hook, the settings that wire them, this git
-# hook or the battery itself changes — so skip it here when none of those is
-# staged. CI runs the full suite on every push; nothing merges unbatteried.
+# hook, the battery itself or a script it runs (scripts/file-issue.py, section i)
+# changes — so skip it here when none of those is staged. A portability case
+# (test_gitout.py) stages every $ROOT/ path the battery runs and fails if one is
+# missing from the list above. CI runs the full suite on every push; nothing merges unbatteried.
 if [ "$_HOOK_STAGED" = "1" ]; then
     unset BACKTEST_SKIP_HOOK_BATTERY      # a hook is staged: run it, whatever the shell inherited
 else
