@@ -102,7 +102,12 @@ def extract_recent_decisions(project_dir: str, limit: int = 3) -> list[str]:
     if not logs_dir.exists():
         return []
 
-    log_files = sorted(logs_dir.glob("*.md"), key=lambda f: f.stat().st_mtime, reverse=True)
+    # Skip log-reminder's YYYY-MM-DD_auto.md: it records changed files and
+    # "X → no fresh .pdf" lines, never decisions, and the "→" pattern below
+    # read those lines as decisions (#189). Decisions come from the newest log
+    # a person (or Claude) wrote.
+    log_files = sorted((f for f in logs_dir.glob("*.md") if not f.name.endswith("_auto.md")),
+                       key=lambda f: f.stat().st_mtime, reverse=True)
     if not log_files:
         return []
 
@@ -121,8 +126,10 @@ def extract_recent_decisions(project_dir: str, limit: int = 3) -> list[str]:
     for line in content.split("\n")[-50:]:  # Last 50 lines
         for pattern in patterns:
             match = re.search(pattern, line.strip())
-            if match and len(match.group(1)) > 10:
-                decisions.append(match.group(1)[:100])
+            # "**Decision:** X" leaves the closing "**" in front of X.
+            text = match.group(1).lstrip("* ").strip() if match else ""
+            if len(text) > 10:
+                decisions.append(text[:100])
                 if len(decisions) >= limit:
                     return decisions
 

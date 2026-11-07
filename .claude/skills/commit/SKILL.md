@@ -30,14 +30,23 @@ Spawn the **verifier** agent (via the `Agent` tool with `subagent_type=verifier`
 
 ### Step 0b: Consistency Gate (Pre-Commit)
 
-**Runs unconditionally.** The full backtest suite — all eleven gates (surface-sync count claims like `"18 agents, 62 skills, 37 rules, 9 hooks"` and marked tables, skill integrity, model currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage, hook battery, portability):
+**Runs once per commit, here or in the git hook.** The gate is the full backtest suite — all eleven gates (surface-sync count claims like `"18 agents, 62 skills, 37 rules, 9 hooks"` and marked tables, skill integrity, model currency, links, spec conformance, staleness, repo hygiene, derived counts, ledger coverage, hook battery, portability).
+
+First check whether the git pre-commit hook is installed:
+
+```bash
+git config --get core.hooksPath
+```
+
+- **It prints `.githooks`:** `./scripts/install-hooks.sh` has been run, so `.githooks/pre-commit` runs this same backtest on the staged changes when Step 4 commits. Say so in one line and skip the run here: running it twice costs a minute or more and adds nothing. The gate still holds. If a gate is red, the hook refuses the commit and prints that gate's output in Step 4; treat that refusal exactly like a red result here.
+- **Anything else (no hook installed):** run the suite yourself:
 
 ```bash
 ./scripts/backtest.sh
 ```
 
 - **Exit 0:** all gates green — continue.
-- **Nonzero:** at least one gate is red — print its output and halt. Fix, then re-run. Do not proceed past this gate on a red result, even with "commit anyway": a red gate is drift that the next reader inherits, and small count drift has repeatedly cost follow-up PRs.
+- **Nonzero:** at least one gate is red — print its output and halt. Fix, then re-run. Do not proceed past this gate on a red result, even with "commit anyway": a red gate is drift that the next reader inherits, and small count drift has repeatedly cost follow-up PRs. The same holds for a commit the git hook refuses, and the fix is never `--no-verify`.
 
 ### Step 0c: Passport Check (Pre-Commit)
 

@@ -6,6 +6,30 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
+## v2.9.2 — 2026-11-07
+
+Two small fixes found during the v2.9.1 work. A compaction no longer carries a hook's file notes over as decisions, and `/commit` no longer runs the backtest a second time when the git pre-commit hook will run it. Nothing to migrate.
+
+### Fixed
+
+- **`pre-compact.py` read `log-reminder.py`'s notes as decisions** (#189).
+  - The newest session log is usually that hook's own `YYYY-MM-DD_auto.md`. Its `Slides/X.tex → no fresh .pdf` lines matched the `→` decision pattern, so a compaction could carry "no fresh .pdf" into the summary and the restored context as a recent decision.
+  - `extract_recent_decisions` now skips `*_auto.md` and reads the newest log a person or Claude wrote. A `→` line in that log still counts.
+  - A `**Decision:** X` line kept the closing `**` in front of X. It no longer does.
+  - Two portability cases pin both. Each fails on the v2.9.1 hook, and each of the two fixes, removed alone, fails its own case. Recorded in the qualification ledger.
+
+### Changed
+
+- **`/commit` runs the backtest once per commit** (#190).
+  - When `git config --get core.hooksPath` prints `.githooks`, Step 0b says so and leaves the run to `.githooks/pre-commit`, which runs the same suite on the staged changes and refuses a red commit. `/verify` already worked this way.
+  - Without the git hook, Step 0b runs `./scripts/backtest.sh` as before.
+  - TROUBLESHOOTING's "DRIFT DETECTED" entry now says the message can come from the git hook.
+
+**Inventory at release: 62 skills, 18 agents, 37 rules, 9 hooks, 11 gates**
+(standing hook battery: 123 cases, seconds to run; portability suite: 132 cases).
+
+---
+
 ## v2.9.1 — 2026-11-06
 
 A **lighter hook layer.** The two guard hooks that ran before every Bash call, and a third that ran after it, slowed everyday work and refused ordinary commands too often. They are gone. Claude Code's own permission deny rules now refuse destructive git, and one small hook, started only for a merge, pull or rebase, refuses those while tracked files have uncommitted changes. The template also stops setting the block that kept Claude from editing its own settings files.

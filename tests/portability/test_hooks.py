@@ -425,6 +425,43 @@ class CompactionUtf8(_Tmp):
         self.assertIn("Re-run table 3", out)
 
 
+class CompactionDecisions(_Tmp):
+    """precompact-auto-log-decisions (#189): the newest session log is usually
+    log-reminder's own YYYY-MM-DD_auto.md, and its "X → no fresh .pdf" lines matched the
+    "→" decision pattern, so they came back after a compaction as recent decisions.
+    A "**Decision:** X" line also kept the closing "**" in front of X."""
+    AUTO = ("## 21:40 — 3 files changed\n- Uncompiled artifacts:\n"
+            "  - Slides/Lecture01_Intro.tex → no fresh .pdf\n"
+            "  - Quarto/Lecture01_Intro.qmd → no fresh .html\n")
+
+    def decisions(self, proj):
+        out = fire("pre-compact.py", {"trigger": "manual"},
+                   clean_env(self.home, CLAUDE_PROJECT_DIR=proj))[0]
+        h = hashlib.md5(proj.encode()).hexdigest()[:8]
+        with open(os.path.join(self.home, ".claude", "sessions", h, "pre-compact-state.json"),
+                  encoding="utf-8") as f:
+            return json.load(f)["decisions"], out
+
+    def test_auto_log_alone_gives_no_decisions(self):
+        proj = self.path("proj")
+        self.write("proj/quality_reports/session_logs/2026-11-06_auto.md", self.AUTO)
+        got, out = self.decisions(proj)
+        self.assertEqual(got, [])
+        self.assertNotIn("no fresh", out)
+
+    def test_decision_comes_from_the_written_log_not_the_newer_auto_log(self):
+        proj = self.path("proj")
+        hand = self.write("proj/quality_reports/session_logs/2026-11-06_review.md",
+                          "# Log\n**Decision:** keep the clustered errors for table 3\n")
+        t = time.time() - 3600
+        os.utime(hand, (t, t))
+        self.write("proj/quality_reports/session_logs/2026-11-06_auto.md", self.AUTO)
+        got, out = self.decisions(proj)
+        self.assertEqual(got, ["keep the clustered errors for table 3"])
+        self.assertIn("Recent decision: keep the clustered errors", out)
+        self.assertNotIn("no fresh", out)
+
+
 # ── other session hooks ─────────────────────────────────────────────────────
 class SessionHandoffStdin(_Tmp):
     """nonguard-hooks-stdin-silent (session-handoff): on a CJK code page the prompt did

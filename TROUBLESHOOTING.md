@@ -236,7 +236,7 @@ Use `--peer <journal> --r2` / `--r3` to continue a prior review. The editor skip
 
 ### `/commit` fails at Step 0b with "DRIFT DETECTED"
 
-Step 0b runs `./scripts/backtest.sh`. Its surface-sync gate (`scripts/check-surface-sync.py`) found that a count claimed in the docs, or the number of rows in a `<!-- surface-sync-table -->` table, does not match what is on disk (skills / agents / rules / hooks). It lists each stale surface as `file:line  asserts N <kind> (actual: M)`. Fix every surface it flags, then re-run `./scripts/backtest.sh` (or `python3 scripts/check-surface-sync.py` alone). If a different gate is red, read that gate's own output. **Do not bypass** — the gate exists because manual `replace_all` has missed sibling phrasings three times (PRs #70/#76/#78 in v1.5.x).
+Step 0b runs `./scripts/backtest.sh`, or, when `./scripts/install-hooks.sh` has installed the git hook, leaves it to `.githooks/pre-commit`, which then refuses the commit itself with the same message. Its surface-sync gate (`scripts/check-surface-sync.py`) found that a count claimed in the docs, or the number of rows in a `<!-- surface-sync-table -->` table, does not match what is on disk (skills / agents / rules / hooks). It lists each stale surface as `file:line  asserts N <kind> (actual: M)`. Fix every surface it flags, then re-run `./scripts/backtest.sh` (or `python3 scripts/check-surface-sync.py` alone). If a different gate is red, read that gate's own output. **Do not bypass** — the gate exists because manual `replace_all` has missed sibling phrasings three times (PRs #70/#76/#78 in v1.5.x).
 
 ### Adding a new skill / agent / rule breaks the gate
 
