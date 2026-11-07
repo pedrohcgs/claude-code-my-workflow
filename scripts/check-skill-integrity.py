@@ -21,6 +21,11 @@ Checks:
      RULE_KEYWORDS is passed by omission. Any rule scoping itself to
      `.claude/skills/` must be registered, with keywords or with an
      explicit `[]` and the reason it is not keyword-checkable.
+  6. The `.agents/skills/` bridge is current — every generated wrapper that
+     Codex and Antigravity read matches its `.claude/skills/` source (P1: a
+     stale wrapper routes those agents with an old description). A skill in
+     neither list of scripts/sync-agent-skills.py is a P2 advisory: it stays
+     Claude-only until someone bridges or excludes it.
 
 Exit codes:
   0 = all checks pass, or only P2 advisories
@@ -606,6 +611,23 @@ def _fmt(findings: Iterable[tuple[str, str, str]]) -> str:
     return "\n".join(out) if out else ""
 
 
+def check_agent_skill_bridge() -> list[tuple[str, str, str]]:
+    """Check 6: the generated .agents/skills/ wrappers match .claude/skills/.
+
+    The bridge's own script decides what the wrappers should contain; this
+    imports it rather than restating its rules, so the two cannot disagree.
+    """
+    import importlib.util
+    script = REPO / "scripts" / "sync-agent-skills.py"
+    if not script.is_file():
+        return []                           # no bridge in this tree (a fork removed it, a test fixture)
+    spec = importlib.util.spec_from_file_location("sync_agent_skills", script)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)            # type: ignore[union-attr]
+    return ([("P1", "scripts/sync-agent-skills.py --check", e) for e in mod.problems()]
+            + [("P2", "scripts/sync-agent-skills.py", w) for w in mod.unclassified()])
+
+
 def main() -> int:
     verbose = "--verbose" in sys.argv
     all_findings: list[tuple[str, str, str]] = []
@@ -615,6 +637,7 @@ def main() -> int:
         ("anchor resolution", check_anchor_resolution),
         ("rule-skill parity", check_rule_skill_parity),
         ("rule registry completeness", check_rule_registry_completeness),
+        ("agent-skill bridge", check_agent_skill_bridge),
     ]:
         try:
             findings = fn()

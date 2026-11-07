@@ -6,6 +6,29 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
+## v2.8.0 — 2026-11-06
+
+A **second-agent release.** The template can now be worked on from Codex (the Codex CLI, its IDE extensions, or the Codex tab of the ChatGPT desktop app, which absorbed the Codex app) and Google Antigravity as well as Claude Code. Both read skills in the open Agent Skills format from `.agents/skills/`, and Codex reads `AGENTS.md`; this release gives them both, without a second copy of any skill to keep in sync.
+
+### Added
+
+- **`AGENTS.md`** at the root, for agents other than Claude Code. It points to `CLAUDE.md` and turns each of Claude Code's guard hooks, which other agents do not run, into a rule followed by hand: no destructive git, gate files left alone, issues only through `scripts/file-issue.py`, pull requests to the agent's own `origin`. It also states the commit routine (branch, backtest, never merge) and a sourcing rule for facts. That rule comes from PR #177, which passed all eleven gates with three wrong names of real people, a cited source that did not exist, and guessed version numbers.
+- **`.agents/skills/`: 42 generated wrappers**, one per skill that one agent can run end to end (research, data and reproducibility, slides and teaching, `/commit`, `/issues`). Each has its skill's name and `description:` line and sends the agent to the real instructions in `.claude/skills/`, with notes on what does not carry over. Thirteen wrappers also carry `agents/openai.yaml` with `allow_implicit_invocation: false`: the twelve skills Claude Code marks `disable-model-invocation: true`, and `/commit`. Codex runs those only when they are asked for by name. The 19 skills left out are either built on several independent reviewers (`/review-paper --peer`, `/seven-pass-review`, `/verify-claims`, …) or manage Claude Code itself (`/checkpoint`, `/learn`, …). Each one's reason is recorded in the script.
+- **`scripts/sync-agent-skills.py`** regenerates the wrappers. `--check` (or `--dry-run`) changes nothing and exits 1 when they are out of date.
+- **`check-skill-integrity.py` check 6** (inside the existing skill-integrity gate; still eleven gates). A missing or stale wrapper, a wrapper with no source, or a skill in both lists fails the backtest. A skill in neither list is a P2 reminder, so a fork's own new skill stays Claude-only until someone decides. Qualified on seeded copies outside the checkout (ledger row).
+- README, the guide (*Using Codex or Antigravity instead of Claude Code?*), the landing page, `/new-skill`, and `.github/CONTRIBUTING.md` now describe the bridge.
+
+### Changed defaults
+
+- **New root entries:** `AGENTS.md` and `.agents/`, allowlisted in `scripts/check-repo-hygiene.py`.
+- **Editing a bridged skill's `description:` now means re-running `python3 scripts/sync-agent-skills.py`.** Otherwise the backtest fails, and it names the fix.
+- **Repository settings (not in the diff):** the backtest check is now required before a pull request can merge into `main`.
+
+**Inventory at release: 61 skills, 18 agents, 37 rules, 11 hooks, 11 gates**
+(standing hook battery: 322 cases, seconds to run; portability suite: 233 cases).
+
+---
+
 ## v2.7.0 — 2026-11-06
 
 A **model-currency, fork-safety, ecosystem, and pedagogical tightening release.** Anthropic completed the Claude 5.5 lineup after v2.6.0 shipped (**Claude Sonnet 5.5** on 2026-09-28 and **Claude Haiku 5.5** on 2026-10-07, succeeding Haiku 4.5, which is still served), and Claude Code added `"onFailure": "block"` for command hooks (2.1.295) and `permissions.blockWritesOutsideWorkingDirectories` (2.1.314). This release updates the model SSoT and routing docs, closes a live fork footgun where `scripts/file-issue.py` and `/commit --pr` could reach the public template from a fork (#174, #175, #176), refreshes the economics ecosystem and MCP coverage, and tightens beginner onboarding in `README.md` and Chapter 4 of the guide.

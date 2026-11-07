@@ -2994,6 +2994,30 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Using Codex or Antigravity instead of Claude Code?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The template is built for Claude Code, but two other agents can use much of it. Codex — the Codex CLI, its IDE extensions, and the Codex tab of the ChatGPT desktop app — reads <a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/AGENTS.md"><code>AGENTS.md</code></a> at the repository root, and both Codex and Google Antigravity read skills in the open Agent Skills format from <code>.agents/skills/</code>. That folder holds generated wrappers, one per skill that a single agent can run end to end: each has the same name and description as its Claude Code skill and sends the agent to the real instructions in <code>.claude/skills/</code>. In the ChatGPT app, type <code>@</code> to pick a skill; in the Codex CLI or an IDE extension, mention one with <code>$name</code> or list them with <code>/skills</code>; in Antigravity, type <code>/name</code>.</p>
+<p>Three things do not carry over, and <code>AGENTS.md</code> says what to do instead:</p>
+<ul>
+<li><strong>The guard hooks.</strong> <code>git-guardrails</code>, <code>root-of-trust-guard</code> and <code>issue-guard</code> are Claude Code hooks, so another agent is not stopped from running <code>git reset --hard</code> or a raw <code>gh issue create</code>. <code>AGENTS.md</code> turns each hook into a rule the agent follows by hand. The git pre-commit gate (<code>./scripts/install-hooks.sh</code>) and CI apply to every agent’s commits.</li>
+<li><strong>Independent reviewers.</strong> Skills whose value is several reviewers who do not see each other’s work — <code>/review-paper --peer</code>, <code>/seven-pass-review</code>, <code>/verify-claims</code> — are not bridged: one agent playing every referee is not the same check. Where a bridged skill hands one step to a Claude Code agent, the other agent does that step where it appears, so a gate still gates. A step that needs a context that has not seen the work, such as <code>/lit-review</code>’s claim verifier, runs in a separate session. If the agent cannot start one, it marks those results <em>not independently verified</em> and tells you to repeat the check in Claude Code.</li>
+<li><strong>Claude Code’s own machinery.</strong> Skills that manage Claude Code sessions, memory or permissions are not bridged.</li>
+</ul>
+<p><code>scripts/sync-agent-skills.py</code> lists every skill as bridged or excluded, with the reason, and regenerates the wrappers after a skill changes; the backtest fails while a wrapper is out of date.</p>
+<p><strong>Keep reviewing agent-written changes.</strong> A pull request written with another agent once passed every backtest gate with three wrong names of real people, a cited source that did not exist, and guessed version numbers. The gates check that the repository agrees with itself, not that it is true; <code>AGENTS.md</code> asks agents to source every fact, and a second model’s review before merge is what caught the rest.</p>
+</div>
+</div>
+</div>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -3017,7 +3041,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 <h2 data-number="2.4" class="anchored" data-anchor-id="optional-manual-setup"><span class="header-section-number">2.4</span> Optional: Manual Setup</h2>
 <p>If you prefer to configure things yourself instead of letting Claude handle it:</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3026,7 +3050,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Customize CLAUDE.md</strong> — Open <code>CLAUDE.md</code> and replace all <code>[BRACKETED PLACEHOLDERS]</code>:</p>
 <ol type="1">
@@ -3556,7 +3580,7 @@ APPROVED   NEEDS WORK
 <h3 data-number="3.6.2" class="anchored" data-anchor-id="what-happens-when-the-bound-is-missed"><span class="header-section-number">3.6.2</span> What happens when the bound is missed</h3>
 <p>A qualification bound only means something if failing it costs something. When a measured campaign misses a bound that was fixed in advance, the disposition is <strong>WITHDRAW</strong>: the thing that failed is demoted to explicit opt-in, and the bound is <strong>never widened</strong>. A bound moved after seeing the number is not a bound — it is a description of the result, and every claim that later cites it is circular. Demotion rather than deletion keeps the thing usable by someone who has read the number and accepted it, while deletion destroys the trail. The withdrawal is finished only when the failing number, the bound it missed, and the disposition are published where users read (release notes <em>and</em> the verdict artifact), the failing campaign is preserved as negative calibration evidence, and every adjacent surface is listed as affected or explicitly not.</p>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3565,7 +3589,7 @@ APPROVED   NEEDS WORK
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><em>A constructed illustration, not a logged incident — the mechanism is real, the numbers are chosen to make it concrete.</em></p>
 <p>An R package for assay analysis ships an automatic baseline-correction routine as its default. The maintainers wrote the bound before running anything, and wrote what would count as missing it: over the preregistered holdout of 300 spike-in samples of known concentration, the nominal 95% intervals must cover the true concentration at <strong>94% or better</strong>, counted as missed only if the measurement falls below that by more than two standard errors, and confirmed by one pre-committed re-run on fresh seeds at the same budget before any disposition fires. The campaign runs. Measured coverage: <strong>267 of 300 = 89.0%</strong>, with a standard error of 1.8 percentage points — not a near miss, and not noise. The confirming re-run misses too.</p>
@@ -4865,7 +4889,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </table>
 <p>Two of these deserve a note, because both encode a lesson rather than a preference. <strong>Git guardrails</strong> refuses a merge, rebase, or pull while the working tree is dirty: the operation either aborts mid-way or quietly folds uncommitted work into the result, and neither outcome announces itself. Stash with a label first, or set <code>ALLOW_DIRTY_MERGE=1</code> if you mean it. <code>--abort</code> and <code>--continue</code> are exempt outright — they are how you get <em>out</em> of a dirty in-progress operation. <code>--autostash</code> is not: it is allowed only when <code>git status --porcelain</code> reports no untracked entry, because <code>git stash</code> does not stash untracked files, so an autostash over a <code>??</code> line leaves that line exactly where it was. All three <code>PreToolUse</code> guards (<code>git-guardrails.py</code>, <code>root-of-trust-guard.py</code>, and <code>issue-guard.py</code>) are registered in <code>.claude/settings.json</code> with <code>&quot;onFailure&quot;: &quot;block&quot;</code> (Claude Code ≥ 2.1.295): a guard that cannot start (<code>python3</code> missing, a moved script), times out, exits with an unexpected code or prints invalid output now blocks the call instead of letting it through. An exception <em>inside</em> a guard still fails open: each guard catches its own errors and exits 0, so that a guard bug cannot block unrelated work.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4874,7 +4898,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div id="callout-31" class="callout-31-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>It refuses <strong>even when the same command line would have cleaned the tree first</strong> — <code>git stash push -m wip &amp;&amp; git merge</code> is denied, and you run the two steps separately instead. That looks pedantic until you see what the alternative cost. The check originally tried to <em>predict</em>, from the text of a chained command, whether the tree would still be dirty by the time the merge ran. Round after round of adversarial review found one more thing the prediction got wrong — stash flags, then stash subcommands, then intervening segments, then output redirection, then command substitution, and finally the plain fact that <code>git stash</code> does not stash untracked files at all, so even a correctly-parsed “this cleans the tree” was sometimes false. The rule now reads the tree as it <em>actually is</em> and refuses.</p>
 <p>The reading has to be earned, though, and that is <strong>rule 0: standalone or nothing.</strong> A <code>PreToolUse</code> hook decides before bash runs the line, so a reading taken now says nothing about the tree the op will actually start from — <code>printf &#39;\n# note\n&#39; &gt;&gt; analysis.R &amp;&amp; git merge main</code> reads clean at hook time and executes dirty. So an identified merge, rebase, or pull reaches the tree reading only as a <em>standalone simple command</em>. A second shell segment, a pipeline, a redirection, a command or process substitution in its arguments, a grouping, a <code>cd</code>, or a variable assignment on the same line is denied outright, without the tree being read at all. That closes every write-then-op ordering by construction instead of by enumeration, and it also denies ordinary trailing conveniences — <code>git pull | tail -5</code>, <code>git pull &gt; log 2&gt;&amp;1</code>, <code>git merge x &amp;&amp; npm install</code>. <strong>Deleting the prediction took the whole class of defect with it</strong> — at the cost of one extra tool call, with its own hook cycle and agent round trip.</p>
@@ -4890,7 +4914,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </div>
 <p>Verification and Beamer-Quarto sync are enforced via auto-loaded rules, which are the right tool for nuanced judgment. Hooks are reserved for enforcement that <em>must</em> survive context compression.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4899,7 +4923,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-31" class="callout-31-contents callout-collapse collapse">
+<div id="callout-32" class="callout-32-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><em>A constructed illustration, not a logged incident — the failure mode is real, the scenario is invented to make it concrete.</em></p>
 <p>Picture a lab’s shared template that registers a guard hook to refuse writes to its instrument-calibration files. Someone reorganises the hooks directory and updates <code>settings.json</code> to match, but types <code>.claude/hooks/calibration_guard.py</code> where the file on disk is <code>calibration-guard.py</code>.</p>
@@ -5215,7 +5239,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 <p><strong>During implementation</strong> — append to the log as you work. Every time a design decision is made, a problem is discovered, or the approach deviates from the plan, write a 1-3 line entry immediately. This is the most important behavior: context gets compressed as the session progresses, and decisions that live only in the conversation will be lost.</p>
 <p><strong>At session end</strong> — add a final section with what was accomplished, open questions, and unresolved issues.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-34-contents" aria-controls="callout-34" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5224,7 +5248,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-34" class="callout-34-contents callout-collapse collapse">
+<div id="callout-35" class="callout-35-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Git records what; session logs record why.</strong> A commit message says “Update Lecture 5 TikZ diagrams.” A session log says “Redesigned the TWFE decomposition diagram because the DA challenge revealed students couldn’t trace the path from weights to bias. Considered a table format but chose a flow diagram because it shows directionality.”</p>
 <p><strong>Incremental logging is the key.</strong> A 4-hour session that only logs at the start and end loses everything in the middle. Appending decisions as they happen means auto-compression can never erase them — they are already on disk.</p>
@@ -5233,7 +5257,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </div>
 <p>Claude writes all three log entries automatically — no need to ask.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-36-contents" aria-controls="callout-36" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5242,7 +5266,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-35" class="callout-35-contents callout-collapse collapse">
+<div id="callout-36" class="callout-36-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For multi-project academics, start each week by asking Claude to read all session logs from the past week and synthesize a status report with priorities and open questions. The session log infrastructure already captures what you need — the weekly review is just a synthesis prompt: <em>“Read all session logs from this week. Summarize: what was accomplished, what’s blocked, what should I prioritize next?”</em></p>
 </div>
@@ -5360,7 +5384,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </ul>
 <p>The difference: when you invoke a skill directly, it runs its specific workflow. The orchestrator runtime lives <em>inside</em> each skill — there is no repo-wide orchestrator that activates on its own or chains skills together. A skill is always user- or skill-initiated; nothing fires the runtime unattended.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-36-contents" aria-controls="callout-36" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-37-contents" aria-controls="callout-37" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5369,7 +5393,7 @@ Orchestrator executes the plan end-to-end --- no prompts.</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-36" class="callout-36-contents callout-collapse collapse">
+<div id="callout-37" class="callout-37-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Natural-language task</strong> → Claude picks a skill: “Translate Lecture 5 to Quarto” → Claude invokes <code>/translate-to-quarto</code>, and that skill runs the orchestrator pattern (translate → verify → review → fix → score) internally.</p>
 <p><strong>Explicit skill call:</strong> <code>/qa-quarto Lecture5</code> — you specifically want the adversarial critic-fixer loop, nothing else.</p>
@@ -5488,7 +5512,7 @@ Phase 4: Only then extend
 </ol>
 <p><code>STALE</code> widened to match: a claim goes stale when the source script, the output file, <strong>or any declared <code>appears_in</code> path</strong> is modified after <code>last_verified_on</code>. A touched display is as much a reason to re-check as a touched script — it is the edit that puts two artifacts out of step. Three surfaces act on this: the claim-reconcile hook nudges when a display is edited, <code>nightly-repro-check</code> marks display-touches STALE, and <code>/commit</code> triggers the passport check on display diffs rather than only on script diffs.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-39-contents" aria-controls="callout-39" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-40-contents" aria-controls="callout-40" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5497,7 +5521,7 @@ Phase 4: Only then extend
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-39" class="callout-39-contents callout-collapse collapse">
+<div id="callout-40" class="callout-40-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><em>A constructed illustration, not a logged incident — the mechanism is real, the scenario is invented to make it concrete.</em></p>
 <p>A structural-biology group revises a methods paper. A reviewer asks for a different background correction; the pipeline is rerun, and the reported binding-affinity shift moves from 0.42 to 0.38 log units. The manuscript and the supplement are both generated from the output files, so both update on the next build. The vertical audit is entirely green: every number in the paper traces to the script and line that produced it, within tolerance.</p>
@@ -5652,7 +5676,7 @@ Phase 4: QUALITY GATE
 <li>Cognitive load issues</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-41-contents" aria-controls="callout-41" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-42-contents" aria-controls="callout-42" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5661,7 +5685,7 @@ Phase 4: QUALITY GATE
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-41" class="callout-41-contents callout-collapse collapse">
+<div id="callout-42" class="callout-42-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A stronger variant: when Claude reviews its own work in the same conversation, it suffers <strong>confirmation bias</strong> — it has internalized its own reasoning and will systematically find the work acceptable. The fix: spawn a new agent via the <code>Agent</code> tool with NO access to the original conversation. Give it only the artifact and a critique prompt. The fresh agent has no sunk cost in the work and will be ruthless.</p>
 <blockquote class="blockquote">
@@ -5676,7 +5700,7 @@ Phase 4: QUALITY GATE
 <p>A forked reviewer is independent in <em>context</em>. It is not independent in <em>filesystem</em>. It still holds the repository checkout, and that checkout contains the previous round’s review reports, the judge’s verdict, the passport recording every number the paper claims, the ledger of what each checker has been shown to detect, and the render stamp saying what the current build came from. Telling an agent to “review this independently” while it can <code>grep</code> for the answer is an honour system with a search tool attached.</p>
 <p><a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/.claude/rules/review-fencing.md"><code>review-fencing.md</code></a> (v2.5.1, path-scoped to the artifacts and answer keys a fenced run touches — <code>*.tex</code>, <code>*.qmd</code>, <code>master_supporting_docs/</code>, the qualification ledger, passports, the replication and specification logs, and audit reports — plus the <code>claim-verifier</code> agent) states the rule as a question to ask before dispatch: what would this reviewer’s <em>environment</em> reveal if it looked — and then remove that, rather than instructing it not to look. In practice that means a copy of the artifact placed outside the checkout under a neutral filename (<code>artifact-a.tex</code>, not <code>paper_round3_after_referee_fixes.tex</code> — a filename announcing the round has already reported what was found last time), prior verdicts withheld, and the reviewer’s own reading recorded before it is shown anyone else’s findings. Fencing is for reviews whose output is about to be <strong>compared</strong> against something; an in-repo review is right when the repository context is the point, as in cross-artifact traversal from paper to table to output to script.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-42-contents" aria-controls="callout-42" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-43-contents" aria-controls="callout-43" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5685,7 +5709,7 @@ Phase 4: QUALITY GATE
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-42" class="callout-42-contents callout-collapse collapse">
+<div id="callout-43" class="callout-43-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><em>A constructed illustration, not a logged incident — the failure mode is real, the scenario is invented to make it concrete.</em></p>
 <p><code>-0.07314</code>, in nine seconds. Correct to the last printed digit. That is what a team qualifying its reproduction agent got back from a positive control — reproduce a pinned coefficient from a published analysis and report it.</p>
@@ -5774,7 +5798,7 @@ Phase 4: QUALITY GATE
 <p><a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/templates/executor-contract.md"><code>templates/executor-contract.md</code></a> is the shape of a dispatchable task: the <strong>goal</strong>, the <strong>acceptance bar</strong> that decides done, the exact <strong>paths</strong> to touch, the <strong>gates</strong> the work must pass, the <strong>output contract</strong> it must return, and the mechanisms it is allowed to <strong>refuse</strong>. An agent that does not know the bar will report success, because from inside the task there is nothing else to report.</p>
 <p><a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/templates/screening-rubric.md"><code>templates/screening-rubric.md</code></a> covers the other case — deciding which candidates survive, whether they are papers, datasets, specifications, or findings. It makes the <strong>default verdict a declared decision rather than a constant</strong>: a precision-first shortlist defaults to EXCLUDE, so a candidate is out unless a written criterion admits it, while a recall-first sweep must not, because a wrong exclusion leaves no trace for anything downstream to catch. Either way the evidence is recorded per candidate. It ends in an adjudication table and a dispatcher spot-check of a few decisions, because the person who wrote the rubric is the only one who can tell whether it was applied or merely cited. And a fan-out is adjudicated as a whole wave — bank every return, reconcile them together, then decide — rather than acting on whichever agent finished first.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-43-contents" aria-controls="callout-43" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-44-contents" aria-controls="callout-44" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -5783,7 +5807,7 @@ Phase 4: QUALITY GATE
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-43" class="callout-43-contents callout-collapse collapse">
+<div id="callout-44" class="callout-44-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><em>A constructed illustration, not a logged incident — the failure mode is real, the scenario is invented to make it concrete.</em></p>
 <p>A doctoral student delegates a first-pass screen of twenty candidate papers for a methods review: <em>“read each one and tell me which are relevant to measurement error in self-reported exposure.”</em> The agents come back fast and agreeable. Nineteen are marked relevant. The summaries are fluent, each one names a plausible connection, and the shortlist is useless — it is the original list with one paper missing.</p>
@@ -6009,7 +6033,7 @@ Decision point (1-2 hours):
                            work backwards)</code></pre>
 <p><strong>Enter mid-pipeline.</strong> You do not have to start from ideation. If you already have data, start with <code>/data-analysis</code> and work backwards to the research question. If you already have a draft, start with <code>/review-paper</code>. The skills are modular — use what you need, skip what you don’t.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-46-contents" aria-controls="callout-46" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-47-contents" aria-controls="callout-47" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6018,7 +6042,7 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-46" class="callout-46-contents callout-collapse collapse">
+<div id="callout-47" class="callout-47-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For a production-grade paper pipeline, a dedicated fork takes these same skills and wraps them in full research infrastructure: 6 worker-critic agent pairs plus specialized agents (data-engineer, referees, verifier), simulated blind peer review, weighted aggregate scoring, journal targeting, and R&amp;R response routing. If your primary output is research papers, see <a href="#sec-ecosystem">The Ecosystem</a> for details.</p>
 </div>
@@ -6042,7 +6066,7 @@ Decision point (1-2 hours):
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-48-contents" aria-controls="callout-48" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-49-contents" aria-controls="callout-49" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6051,7 +6075,7 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-48" class="callout-48-contents callout-collapse collapse">
+<div id="callout-49" class="callout-49-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Strong statisticians hit these six walls more than any others; each has a one-line diagnosis:</p>
 <ol type="1">
@@ -6306,7 +6330,7 @@ Decision point (1-2 hours):
 <section id="pre-submission-checklist" class="level4" data-number="5.10.1.3">
 <h4 data-number="5.10.1.3" class="anchored" data-anchor-id="pre-submission-checklist"><span class="header-section-number">5.10.1.3</span> Pre-Submission Checklist</h4>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-50-contents" aria-controls="callout-50" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-51-contents" aria-controls="callout-51" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6315,7 +6339,7 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-50" class="callout-50-contents callout-collapse collapse">
+<div id="callout-51" class="callout-51-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Documentation:</strong></p>
 <ul class="task-list">
@@ -6364,7 +6388,7 @@ Decision point (1-2 hours):
 └── output/                 # Tables, figures, logs, sessionInfo.txt</code></pre>
 <p>These standards do not load on their own. <code>replication-protocol.md</code> is path-scoped to R scripts (<code>scripts/**/*.R</code>, <code>Figures/**/*.R</code>); it covers the replication-first phases, the tolerance thresholds and the <code>passport.yaml</code> claims provenance, but not the checklist or directory structure above. To build the deposit, ask Claude to <em>“prepare a replication package”</em> or run <a href="#all-skills"><code>/replication-package</code></a>. It writes the README and captures the environment first, then calls <code>/audit-reproducibility</code> and stops on any FAIL; only then does it assemble the rest of the DCAS tree under <code>replication_package/</code> (<code>data/</code>, <code>code/</code>, <code>output/</code>) and write a <code>DCAS_checklist.md</code> that marks each item PASS / FAIL / <code>[FILL]</code>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-51-contents" aria-controls="callout-51" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-52-contents" aria-controls="callout-52" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6373,7 +6397,7 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-51" class="callout-51-contents callout-collapse collapse">
+<div id="callout-52" class="callout-52-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A key principle that maps directly to this workflow: <strong>separate scientific reasoning from computational execution.</strong> Humans design diagnostic templates (what to measure); AI handles execution (how to run it).</p>
 <p>This is the template-executor architecture — and you are already using it:</p>
@@ -6469,7 +6493,7 @@ Decision point (1-2 hours):
 <h4 data-number="5.10.2.4" class="anchored" data-anchor-id="how-existing-agents-support-this"><span class="header-section-number">5.10.2.4</span> How Existing Agents Support This</h4>
 <p>The <code>/slide-excellence</code> skill already invokes the pedagogy-reviewer and slide-auditor, which enforce many of these principles automatically. To enforce <em>all</em> of them — including title-as-assertion and MB/MC smoothness — customize the <strong>domain-reviewer</strong> agent (<code>.claude/agents/domain-reviewer.md</code>) with rhetoric-of-decks lenses. <code>/slide-excellence</code> then applies them through its substance-review agent whenever you run it on a deck (<code>/seven-pass-review</code> also uses domain-reviewer, for its methods lens).</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-52-contents" aria-controls="callout-52" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-53-contents" aria-controls="callout-53" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6478,7 +6502,7 @@ Decision point (1-2 hours):
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-52" class="callout-52-contents callout-collapse collapse">
+<div id="callout-53" class="callout-53-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For the complete philosophical treatment — from Aristotle’s three modes of persuasion through neuroaesthetics and the Netflix analogy — see <a href="https://github.com/scunning1975/MixtapeTools/tree/main/presentations">The Rhetoric of Decks</a>. The repository includes a full essay, example Beamer decks with professional color palettes, a <code>theme_rhetoric()</code> ggplot2 theme, and a tested deck generation prompt for Claude Code.</p>
 </div>
@@ -7383,7 +7407,7 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 <li><strong>Use <code>CLAUDE.local.md</code> for personal overrides.</strong> This file is automatically gitignored and loaded alongside <code>CLAUDE.md</code>. Put machine-specific paths, personal preferences, and local tool versions here — they won’t pollute the shared repo.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-59-contents" aria-controls="callout-59" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-60-contents" aria-controls="callout-60" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -7392,7 +7416,7 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-59" class="callout-59-contents callout-collapse collapse">
+<div id="callout-60" class="callout-60-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For capabilities beyond file editing and shell commands — live statistical sessions, economic data retrieval, package documentation lookup, or reference manager integration (Zotero) — Claude Code supports <a href="https://modelcontextprotocol.io">MCP servers</a>. Add them with <code>claude mcp add</code> (use <code>--scope project</code> to write a shared <code>.mcp.json</code> at the repo root, or <code>--scope user</code> to make a server available across all your projects; the default <code>local</code> scope keeps it private to you in this project). A ready-to-copy starter config is in <a href="https://github.com/pedrohcgs/claude-code-my-workflow/blob/main/templates/mcp.example.json"><code>templates/mcp.example.json</code></a>:</p>
 <ul>
