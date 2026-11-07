@@ -17,6 +17,8 @@ Usage:
   --band-x-max 85    look only at the left 85% of that band (skip a page number on the right)
 
 Screenshots go to quality_reports/audits/beamer-qa/<deck>/ (gitignored) unless --out is given.
+A full run first deletes the page screenshots an earlier run left there, and nothing else;
+a run with --pages replaces only the pages it renders.
 Exit: 0 nothing found; 1 a log error, a warning that matters, or a page in the band;
 2 could not run (no PDF, no poppler).
 
@@ -168,6 +170,10 @@ def main() -> int:
     stem = os.path.splitext(pdf)[0]
     out = os.path.abspath(a.out or os.path.join(ROOT, "quality_reports", "audits", "beamer-qa", os.path.basename(stem)))
     os.makedirs(out, exist_ok=True)
+    if not a.pages:          # a full run: an earlier, longer build's pages must not look current
+        for old in os.listdir(out):
+            if re.fullmatch(r"\d+(\.png|_g\.pgm)", old):
+                os.remove(os.path.join(out, old))
     try:
         n, page_mm = pdf_info(pdf)
         frames = frame_map(stem + ".nav")

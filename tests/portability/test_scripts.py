@@ -523,6 +523,22 @@ class BeamerQa(unittest.TestCase):
         self.assertEqual(rc, 1, out)
         self.assertTrue(os.path.exists(os.path.join(self.tmp, "shots", "01.png")))
 
+    @unittest.skipUnless(shutil.which("pdftoppm") and shutil.which("pdfinfo") and shutil.which("pdftotext"),
+                         "poppler not installed")
+    def test_a_full_run_drops_pages_an_earlier_longer_build_left_and_nothing_else(self):
+        """PR #185 review: a deck that lost pages kept its old screenshots beside the new ones,
+        where /visual-audit reads them as current."""
+        pdf = _pdf(os.path.join(self.tmp, "one.pdf"), [])
+        shots = os.path.join(self.tmp, "shots")
+        for name in ("02.png", "17.png", "notes.txt", "cover.png"):
+            _write(shots, name, b"old")
+        rc, out = self.run_qa(pdf, "--pages", "1")              # a partial run keeps the others
+        self.assertEqual(rc, 0, out)
+        self.assertTrue(os.path.exists(os.path.join(shots, "02.png")))
+        rc, out = self.run_qa(pdf)                              # a full run does not
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(sorted(os.listdir(shots)), ["01.png", "cover.png", "notes.txt"])
+
 
 if __name__ == "__main__":
     unittest.main()
