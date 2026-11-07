@@ -237,14 +237,15 @@ class GuardStdinCodePage(_Tmp):
     @_winsim.needs_encoding_warning
     def test_status_read_is_not_locale_decoded(self):
         """Default-encoding decoding is made an error, which trips the call itself
-        whatever git prints, on any OS."""
-        repo = self.path("clean")
-        os.makedirs(repo)
-        git(repo, "init", "-q")
+        whatever git prints, on any OS. The tree is DIRTY and the case requires a
+        deny: the hook fails open, so a decoding error would show as silence, which
+        a clean-tree fixture could not tell apart from a correct reading (Codex CLI
+        review of PR #188)."""
+        repo = self.tracked_repo("dirty")
         ev = {"tool_name": "Bash", "tool_input": {"command": "git merge feature"}, "cwd": repo}
         out = fire("dirty-tree-guard.py", ev, clean_env(self.home),
                    ("-X", "warn_default_encoding", "-W", "error::EncodingWarning"))[0]
-        self.assertEqual(decision(out), "silent", out)
+        self.assertEqual(decision(out), "deny", out)
 
     def test_a_name_the_locale_cannot_decode_still_reads_dirty(self):
         """The Windows effect itself, with an ASCII locale standing in for a code page

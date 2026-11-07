@@ -116,7 +116,7 @@ for h in dirty-tree-guard.py claim-reconcile.py session-handoff.py \
     fi
 done
 if ! command -v git >/dev/null 2>&1; then
-    echo "hook-battery: CANNOT RUN — git is not on PATH (cases j1-j16 need throwaway repos)" >&2
+    echo "hook-battery: CANNOT RUN — git is not on PATH (cases j1-j29 need throwaway repos)" >&2
     exit 2
 fi
 if ! command -v python3 >/dev/null 2>&1; then
@@ -776,6 +776,40 @@ expect_silent "j15 a directory that is not a repository fails open"
 printf 'not json' > "$TMP/j-bad.json"
 fire dirty-tree-guard.py "$TMP/j-bad.json"
 expect_silent "j16 malformed input fails open"
+# j17-j24 (Codex CLI review of PR #188): the command is read as the shell splits
+# it, not searched as text. A `--abort` in a comment or a -m message is not a
+# resume; a quoted mention is not a command; `>` ends a word; wrappers and
+# newlines do not hide the operation.
+jfire 'git merge main # use --abort if needed' "$DT"
+expect_deny   "j17 a --abort inside a comment does not exempt a real merge"
+jfire "git merge -m 'document --abort behavior' main" "$DT"
+expect_deny   "j18 a --abort inside a -m message does not exempt a real merge"
+jfire "grep -n 'git pull origin' \"\$HOME/notes.md\"" "$DT"
+expect_silent "j19 CONTROL: a quoted mention with arguments, started by the \$VAR over-match, is not the command"
+jfire 'git pull>"$HOME/pull.log"' "$DT"
+expect_deny   "j20 a pull redirected with no space before > is still a pull"
+jfire 'git rebase --continue>rebase.log' "$DT"
+expect_silent "j21 CONTROL: --continue redirected with no space before > is still a resume step"
+jfire 'git rebase "--continue"' "$DT"
+expect_silent "j22 CONTROL: a quoted --continue is still a resume step"
+jfire 'git rebase > rebase.log --continue' "$DT"
+expect_silent "j25 CONTROL: a resume flag after a redirection is still the program's argument"
+# j26-j29: found live on 2026-11-07, when this hook refused one of the session's
+# own commands: a heredoc whose text held a backticked `git pull`. A heredoc body
+# is data and single-quoted backticks are literal, so neither is a command; a
+# backticked pull inside DOUBLE quotes is run by bash, so it is.
+jfire $'git commit -F - <<\'EOF\'\nRun `git pull` first.\ngit pull\nEOF' "$DT"
+expect_silent "j26 CONTROL: a heredoc body that mentions git pull, even on a line of its own, is not a command"
+jfire "git commit -m 'run \`git pull\` first'" "$DT"
+expect_silent "j27 CONTROL: backticks inside single quotes are literal text"
+jfire 'git commit -m "run `git pull` first"' "$DT"
+expect_deny   "j28 backticks inside double quotes run the pull, so it is denied"
+jfire $'cat <<\'EOF\' > x\ntext\nEOF\ngit pull' "$DT"
+expect_deny   "j29 a pull after the end of a heredoc still counts"
+jfire 'timeout 60 git pull' "$DT"
+expect_deny   "j23 a wrapper (timeout 60) does not hide the pull"
+jfire $'git status\ngit pull' "$DT"
+expect_deny   "j24 a pull on the next line of a multi-line command is denied"
 
 # ── (e) the battery's own isolation from git's hook environment ────────────
 # This battery runs INSIDE .githooks/pre-commit. Everything above is worthless

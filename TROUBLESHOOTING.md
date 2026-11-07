@@ -111,7 +111,7 @@ Good — the pre-check caught a P3 (bare `scale=`) or P4 (missing directional ke
 - **`can't open file …/.claude/hooks/issue-guard.py`: the hook script is missing.** Usually a branch switch or an old checkout removed it while the session still holds the settings that point there. Restore it with `git checkout -- .claude/hooks/issue-guard.py` (or switch back with `git switch -`).
 - **`python3: command not found`, or a Microsoft Store message: no working `python3`.** On Windows, the python.org installer provides `python` and `py` but not `python3`, and the `python3` that ships with Windows opens the Store. Make `python3 --version` work in Git Bash, for example with the Microsoft Store's Python, which provides `python3`.
 
-If `git merge`, `git pull` or `git rebase` is refused with `can't open file …/.claude/hooks/dirty-tree-guard.py`, that hook's file is missing: Python exits 2 for a missing script, which Claude Code reads as a refusal. The same `git checkout -- .claude/hooks` restores it; nothing else is affected.
+`dirty-tree-guard` is not affected either way: its registration starts it through a one-line launcher that exits 0 when the file is missing, and it is not registered to fail closed. A missing file means merges go unchecked until `git checkout -- .claude/hooks` restores it.
 
 Before v2.9.1, two more hooks were registered this way on every Bash, Edit and Write, so either cause refused all of them ([#179](https://github.com/pedrohcgs/claude-code-my-workflow/issues/179), [#180](https://github.com/pedrohcgs/claude-code-my-workflow/issues/180)). Those hooks were removed, and the launcher patch on #180 is no longer needed.
 

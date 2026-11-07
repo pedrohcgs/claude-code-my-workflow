@@ -555,7 +555,7 @@ A skeptical reader should distinguish "Claude was told to check" from "a determi
 |---|---|---|---|---|---|
 | Backtest (11 gates) | scripts, pre-commit + CI | repo-wide consistency/currency, **plus the gate layer itself** — ledger coverage and hook wiring (gate 9), the guard hooks re-fired against their target failures (gate 10) | **closed** — commit blocked | `--no-verify` | gate output, CI log |
 | Quality score ≥ 80 | script, pre-commit | staged `.tex`/`.qmd`/`.R` | **closed**; render checks best-effort → `UNVERIFIED` noted, not failed | `SKIP_QUALITY_GATE=1` | score report |
-| Destructive-git deny rules | permission `deny` rules in `.claude/settings.json`, checked by Claude Code | `git reset --hard`, `git clean`, `git push --force`/`-f`, `git add -A`/`--all`/`.`, `git checkout .`, `git restore .` in-session, as Claude usually spells them (a guard, not a security boundary: `git -C . …` and `bash -c '…'` are not matched) | **closed** — call refused | run it yourself in a terminal | the refusal in the transcript |
+| Destructive-git deny rules | permission `deny` rules in `.claude/settings.json`, checked by Claude Code | `git reset --hard`, `git clean`, `git push --force`/`-f`, `git add -A`/`--all`/`.` in any argument position, a checkout or restore of the whole tree (`git checkout HEAD -- .`, `git restore -- .`) in-session, as Claude usually spells them (a guard, not a security boundary: `git -C . …` and `bash -c '…'` are not matched) | **closed** — call refused | run it yourself in a terminal | the refusal in the transcript |
 | Dirty-tree guard | PreToolUse hook (`Bash`, started only for `git merge`, `pull`, `rebase`) | a history operation while tracked files have uncommitted changes, in the session's directory | **closed** — call blocked; the hook itself fails open | `ALLOW_DIRTY_MERGE=1` | hook message |
 | Issue guard | PreToolUse hook (`Bash`, spawned only for `gh` commands) | `gh issue create`, or a REST/GraphQL issue create, in-session (a best-effort tripwire, not a security boundary) | **closed** — call blocked, pointed to `scripts/file-issue.py` | run `gh` yourself in a terminal | hook message; the duplicate check recorded in the issue body |
 | Numeric-claim passport | script + skill | claims declared per paper | FAIL/STALE = must-fix at `/commit` | named override, recorded | `passport.yaml` rows |
@@ -1167,18 +1167,31 @@ Since 2026-06-15, `claude -p` headless subprocess calls (used by `scripts/run-sk
       "Read(**)"
     ],
     "deny": [
-      "Bash(git reset *--hard*)",
+      "Bash(git reset --hard *)",
+      "Bash(git reset * --hard)",
+      "Bash(git reset * --hard *)",
       "Bash(git clean *)",
-      "Bash(git push *--force)",
-      "Bash(git push *--force *)",
-      "Bash(git push -f*)",
-      "Bash(git push * -f*)",
-      "Bash(git add -A*)",
-      "Bash(git add --all*)",
+      "Bash(git push --force *)",
+      "Bash(git push * --force)",
+      "Bash(git push * --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push * -f)",
+      "Bash(git push * -f *)",
+      "Bash(git add -A *)",
+      "Bash(git add * -A)",
+      "Bash(git add * -A *)",
+      "Bash(git add --all *)",
+      "Bash(git add * --all)",
+      "Bash(git add * --all *)",
       "Bash(git add . *)",
+      "Bash(git add * .)",
+      "Bash(git add * . *)",
       "Bash(git checkout -- . *)",
       "Bash(git checkout . *)",
+      "Bash(git checkout * .)",
       "Bash(git restore . *)",
+      "Bash(git restore * .)",
+      "Bash(git restore * . *)",
       "Read(.env)",
       "Read(.env.*)",
       "Read(**/.env)",
@@ -1492,9 +1505,9 @@ One of these deserves a note, because it encodes a lesson rather than a preferen
 ::: {.callout-note collapse="true"}
 ## What the deny rules and the dirty-tree guard catch, and what they miss
 
-**Denied natively.** The `deny` list in `.claude/settings.json` (shown in [Settings](#settings---permissions-and-hooks)) is checked by Claude Code itself, so it starts no process and adds no delay. It refuses `git reset --hard`, every `git clean` (dry runs included), `git push --force` and `-f` (`--force-with-lease` still runs), `git add -A`, `--all` and `.`, and `git checkout .`, `git checkout -- .` and `git restore .`. It also refuses reads and edits of `.env` files, including a Bash command that reads or writes a `.env` path, and reads of `*.pem`, `*.key` and `credentials*` files. Per the Claude Code permissions docs (read 2026-11-06), a deny rule applies to every subcommand of a compound command, including one inside a subshell, a command substitution or a control-flow body; it strips wrappers such as `timeout`, `nice`, `nohup` and leading `VAR=` assignments; and it holds in every permission mode. Each rule was checked live on 2026-11-06 in a scratch repository, including `(git reset --hard)` and `echo "$(git reset --hard)"`, the forms issue #172 recorded the old hook missing. `git reset --soft`, `git add <named files>`, `git restore --staged <file>` and `git checkout -- <file>` still run.
+**Denied natively.** The `deny` list in `.claude/settings.json` (shown in [Settings](#settings---permissions-and-hooks)) is checked by Claude Code itself, so it starts no process and adds no delay. It refuses `git reset --hard`, every `git clean` (dry runs included), `git push --force` and `-f` (`--force-with-lease` still runs), `git add -A`, `--all` and `.` wherever they appear among the arguments, and a checkout or restore of the whole tree (`git checkout .`, `git checkout -- .`, `git checkout HEAD -- .`, `git restore .`, `git restore -- .`; also `git restore --staged .`, which only unstages). It also refuses reads and edits of `.env` files, including a Bash command that reads or writes a `.env` path, and reads of `*.pem`, `*.key` and `credentials*` files. Per the Claude Code permissions docs (read 2026-11-06), a deny rule applies to every subcommand of a compound command, including one inside a subshell, a command substitution or a control-flow body; it strips wrappers such as `timeout`, `nice`, `nohup` and leading `VAR=` assignments; and it holds in every permission mode. Each rule was checked live on 2026-11-06 in a scratch repository, including `(git reset --hard)` and `echo "$(git reset --hard)"`, the forms issue #172 recorded the old hook missing. `git reset --soft`, `git add <named files>`, `git restore --staged <file>` and `git checkout -- <file>` still run.
 
-**The dirty-tree check.** Claude Code starts `dirty-tree-guard.py` only for a command that contains `git merge`, `git pull` or `git rebase`. The hook runs `git status --porcelain --untracked-files=no` in the session's directory and refuses if a tracked file has uncommitted changes. Untracked files do not count, because git itself refuses a merge that would overwrite one. The hook reads the tree before the command line runs, so `git stash && git merge` on a dirty tree is refused too: run the two as separate commands.
+**The dirty-tree check.** Claude Code starts `dirty-tree-guard.py` only for a command that contains `git merge`, `git pull` or `git rebase`, and, by the `if` filter's documented fallback, for any command containing `$(…)`, backticks or `$VAR`. So the hook first checks that a real merge, pull or rebase is present, reading the command the way the shell splits it: quoted text, comments and heredoc bodies are not commands, and `--abort` or `--continue` inside a message is not a resume step. A one-line launcher in the registration skips the hook if its file is missing, so a missing file refuses nothing. The hook runs `git status --porcelain --untracked-files=no` in the session's directory and refuses if a tracked file has uncommitted changes. Untracked files do not count, because git itself refuses a merge that would overwrite one. The hook reads the tree before the command line runs, so `git stash && git merge` on a dirty tree is refused too: run the two as separate commands.
 
 **What neither catches.** A deny rule does not match a rewritten spelling: `git -C . push --force`, `git -c x=y push`, `git 'push'`, `/usr/bin/git`, or a command inside `bash -c '…'`. The docs call Bash deny rules a guard on the invocation Claude usually produces, not a security boundary. The dirty-tree guard reads the session's directory, so it misses a repository reached by `cd elsewhere &&` or `git -C`, and it does not look inside `bash -c`, an alias, a script or a Makefile. It fails open: if git cannot answer or the hook has a bug, the command runs. No hook refuses a shell write into `.claude/settings*.json`, `.claude/hooks/` or `.githooks/`; `blockWritesOutsideWorkingDirectories` still refuses file-tool writes to the settings files. And none of this recovers anything: `git reflog` restores a moved commit pointer, but not an uncommitted edit or an untracked file, which is what `reset --hard` and `clean` destroy.
 
@@ -1537,7 +1550,7 @@ But a wired hook is not yet a working hook. A guard can keep its path, keep firi
 denying — an over-broad exception, a regex loosened during a debugging session, an early
 `return allow` left in. Gate 10, the hook battery, drives each active guard with synthetic events
 and requires it to still go red on the failure it was written for, and to stay green on the clean
-controls. 110 cases, and it finishes in seconds.
+controls. 123 cases, and it finishes in seconds.
 :::
 
 **Hook handler types.** The examples above use `command` hooks (shell scripts), but Claude Code supports five handler types:

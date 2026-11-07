@@ -35,21 +35,23 @@ This release deletes `git-guardrails.py`, `root-of-trust-guard.py` and `context-
 ### Added
 
 - **Native deny rules** in `.claude/settings.json`. Claude Code checks them itself, with no process and no delay.
-  - **What they refuse:** `git reset --hard`, every `git clean`, `git push --force` and `-f` (`--force-with-lease` still runs), `git add -A`, `--all` and `.`, `git checkout -- .`, `git checkout .` and `git restore .`. Also reads and edits of `.env` files, and reads of `*.pem`, `*.key` and `credentials*`.
+  - **What they refuse:** `git reset --hard`, every `git clean`, `git push --force` and `-f` (`--force-with-lease` still runs), `git add -A`, `--all` and `.` wherever they appear among the arguments, and a checkout or restore of the whole tree (`git checkout .`, `git checkout -- .`, `git checkout HEAD -- .`, `git restore .`, `git restore -- .`; also `git restore --staged .`, which only unstages). Also reads and edits of `.env` files, and reads of `*.pem`, `*.key` and `credentials*`.
   - **Coverage:** a deny rule applies to every part of a compound command, including a subshell and a `$(…)` substitution, and holds in every permission mode.
   - **Limit:** it does not match a rewritten spelling, such as `git -C . push --force`, `git -c x=y push` or `bash -c '…'`. Anthropic's permissions docs call Bash deny rules a guard on the usual invocation, not a security boundary.
   - **Verified live** in a scratch repository after the settings change. Every rule refused its command, including `(git reset --hard)` and `echo "$(git reset --hard)"`. The controls ran. The `.env` rules also refused a shell command that would have written one. Recorded in the qualification ledger.
+  - **Extended after review.** An independent Codex CLI review found variants the removed hook had caught and the first list missed (`git restore -- .`, `git checkout HEAD -- .`, `git add -v -A`, `git add file .`), and two refusals of ordinary commands (`git push origin feature--force`, `git reset -- tracked--hard.txt`). The list now matches each option as a whole word in any argument position. The extended list was verified live the same way.
 - **`dirty-tree-guard.py`.** It refuses a merge, pull or rebase while tracked files have uncommitted changes.
   - Untracked files do not count, because git refuses an overwrite itself. `--abort`, `--continue`, `--skip`, `--quit` and `--edit-todo` pass. `ALLOW_DIRTY_MERGE=1` overrides it.
   - Claude Code starts it only for those three commands, through `if` filters. Because a filter that names more than the program also starts it for any command containing `$()`, it checks first that a real merge, pull or rebase is present.
-  - It fails open, so a missing `python3` lets the command run. Only a missing hook file refuses: Python exits 2, and then only merge, pull and rebase are refused.
+  - It reads the command the way the shell splits it, so quoted text, comments and heredoc bodies are not commands, and a `--abort` inside a `-m` message is not a resume step. Because the `if` filter also starts it for any command with `$(…)`, backticks or `$VAR`, this is what keeps ordinary commands from being refused.
+  - It fails open: a missing `python3` lets the command run, and its registration starts it through a one-line launcher (`sh -c '[ -f "$1" ] || exit 0; exec python3 "$1"'`) that exits 0 when the file is missing. Without the launcher, Python's exit 2 for a missing script would refuse every command the filter starts the hook for.
   - It reads the session's directory, so it misses a repository reached by `cd elsewhere &&` or `git -C`.
-  - Sixteen battery cases (section j) pin it. Six mutants each fail their own cases. The Windows code-page cases that protected git-guardrails now protect it.
+  - Twenty-nine battery cases (section j) pin it. Fifteen mutants each fail their own cases. The Windows code-page cases that protected git-guardrails now protect it, and the one meant to catch a locale-decoded `git status` now uses a dirty tree, so it can fail.
 
 ### Changed
 
 - **`issue-guard.py` is the only hook left with `"onFailure": "block"`,** and it runs only for `gh` commands. A missing `python3` or hook file no longer refuses every Bash, Edit and Write, so #179 and #180 are resolved by the removal. The launcher patch drafted on #180 is not needed.
-- **The hook battery** drops the 228 cases of the removed hooks and gains section (j): 110 cases. Grading the grader was re-measured: each remaining decision hook, stubbed to always allow, reddens exactly its own cases.
+- **The hook battery** drops the 228 cases of the removed hooks and gains section (j): 123 cases. Grading the grader was re-measured: each remaining decision hook, stubbed to always allow, reddens exactly its own cases.
 - **The qualification ledger** moves the removed hooks' rows, reproduction notes and drift record, unedited, to a *Retired at v2.9.1* section. Their counts now read "at the time".
 - **Updated to match:** README, the guide, TROUBLESHOOTING, `docs/index.html`, `AGENTS.md` (what Codex and Antigravity must do by hand), `.github/SECURITY.md`, `confidential-data.md`, the `commit`, `context-status` and `diagnose` skills, and the status line.
 
@@ -58,7 +60,7 @@ This release deletes `git-guardrails.py`, `root-of-trust-guard.py` and `context-
 - **Destructive git inside a subshell or a command substitution ran unchecked** (#172). git-guardrails parsed the command line itself and missed `(git reset --hard)` and `$(git reset --hard)`. Native deny rules apply inside both, verified live.
 
 **Inventory at release: 62 skills, 18 agents, 37 rules, 9 hooks, 11 gates**
-(standing hook battery: 110 cases, seconds to run; portability suite: 130 cases).
+(standing hook battery: 123 cases, seconds to run; portability suite: 130 cases).
 
 ---
 
