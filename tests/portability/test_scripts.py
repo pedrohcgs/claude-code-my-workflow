@@ -485,6 +485,8 @@ class BeamerQa(unittest.TestCase):
             "Package hyperref Warning: Token not allowed in a PDF string (Unicode):",
             "(hyperref)                removing `\\\\' on input line 7.",
             "LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.",
+            "Package rerunfilecheck Warning: File `d.out' has changed.",
+            "(rerunfilecheck)                Rerun to get outlines right",
             "Overfull \\hbox (12.0pt too wide) in paragraph at lines 20--21",
             "Overfull \\hbox (12.0pt too wide) in paragraph at lines 20--21",
             "Missing character: There is no ß in font cmr10!"]))
@@ -493,6 +495,19 @@ class BeamerQa(unittest.TestCase):
         self.assertIn("l.12", found[0])
         self.assertIn("removing", found[1])
         self.assertFalse(any("Rerun" in f for f in found))
+
+    def test_file_line_errors_count_without_the_word_error(self):
+        """PR #185 review: under -file-line-error an error reads `./deck.tex:42: Undefined
+        control sequence.`, with no "!" and no "Error", and was dropped."""
+        log = _write(self.tmp, "fle.log", "\n".join([
+            "This is XeTeX, Version 3.141592653 (preloaded format=xelatex)  6 NOV 2026 21:45",
+            "./deck.tex:42: Undefined control sequence.", "l.42 \\foo",
+            "C:/talks/deck.tex:7: Missing $ inserted.",
+            "Document Class: beamer 2024/01/06 v3.71 A class for typesetting presentations"]))
+        found = self.m.log_problems(log)
+        self.assertEqual(len(found), 2, found)
+        self.assertIn("l.42", found[0])
+        self.assertTrue(found[1].startswith("C:/talks/deck.tex:7:"))
 
     def run_qa(self, pdf, *args, **env):
         return _run([sys.executable, self.SCRIPT, pdf, "--out", os.path.join(self.tmp, "shots"), *args],

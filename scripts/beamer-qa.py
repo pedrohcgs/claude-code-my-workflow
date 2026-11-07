@@ -110,16 +110,18 @@ def log_problems(log: str) -> list[str]:
     found = []
     for i, line in enumerate(lines):
         msg = None
-        if line.startswith("!") or (re.match(r"^.*:\d+: ", line) and "Error" in line):
+        # an error starts with "!", or under -file-line-error with "file.ext:line: "
+        # ("./deck.tex:42: Undefined control sequence." says neither "!" nor "Error")
+        if line.startswith("!") or re.match(r"^(?:[A-Za-z]:)?[^:]+\.\w+:\d+: ", line):
             msg = line + " " + (lines[i + 1].strip() if i + 1 < len(lines) else "")
         elif re.match(r"^(Package \w+ Warning|LaTeX Warning|Overfull|Missing character)", line):
-            if "Rerun" in line or "may have changed" in line:
-                continue
             msg = line
             for nxt in lines[i + 1:i + 3]:                 # "(hyperref)  removing ..." continues it
                 if not nxt.startswith("("):
                     break
                 msg += " " + nxt.strip()
+            if "Rerun" in msg or "may have changed" in msg:  # rerunfilecheck says "Rerun" on line 2
+                continue
         if msg:
             found.append(re.sub(r"\s+", " ", msg).strip())
     return list(dict.fromkeys(found))
