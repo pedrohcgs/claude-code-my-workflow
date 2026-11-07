@@ -6,6 +6,15 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ---
 
+## Unreleased
+
+### Added
+
+- **The ledger-coverage gate understands an inline hook launcher.** `scripts/check-ledger-coverage.py` reads `sh -c '<code>' <name> <script>` as running `<script>`, so a settings file that starts its hooks through the launcher drafted for #179 and #180 is still checked hook by hook. A typo in the launcher's script path is still caught, and a launcher with no script fails loudly. Qualified in the ledger.
+- **TROUBLESHOOTING: "Every Bash, Edit and Write is refused, with a hook error"**, covering a missing hook script (recovery from a terminal) and a missing `python3` on Windows.
+
+---
+
 ## v2.8.1 — 2026-11-06
 
 A **currency-correction release.** The template was checked against every Claude Code release from 2.1.257 to 2.1.319 and the current docs, and statements that had become false were fixed. One was a safety claim. Every correction below was checked against the changelog, the docs, or the 2.1.318 settings schema before it was made.

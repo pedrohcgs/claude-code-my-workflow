@@ -27,6 +27,9 @@ Registered checks are derived LIVE from three sources of truth — the `run` lin
 `.githooks/pre-commit` entry point. Never a hardcoded list: a list here would drift
 exactly the way the ledger does, and this checker would be the last to notice.
 
+A hook command is read as `<interpreter> <script>`, or as the inline launcher
+`sh -c '<code>' <$0 name> <script>` (#179, #180), whose script is the argument after the name.
+
 Exit: 0 agreement (warnings allowed), 1 disagreement, 2 could not run.
 """
 import json, os, re, shlex, subprocess, sys
@@ -85,8 +88,18 @@ def script_of(command, where):
     interp, i = None, 0
     if os.path.basename(toks[0]) in INTERPRETERS:
         interp, i = os.path.basename(toks[0]), 1
+        flags = []
         while i < len(toks) and toks[i].startswith("-"):
+            flags.append(toks[i])
             i += 1
+        # `sh -c '<launcher>' <$0 name> <script>`: the inline hook launcher (#179, #180).
+        # The code finds a working Python and survives a missing script; what runs is the
+        # argument after the $0 name, and it only has to exist and be readable.
+        if interp in ("sh", "bash") and any(f[0] == "-" and f[1:2] != "-" and "c" in f[1:]
+                                            for f in flags):
+            if i + 2 >= len(toks):
+                raise CannotRun(f"{where}: `{interp} -c` names no script after its code and $0: {command}")
+            i += 2
     if i >= len(toks):
         raise CannotRun(f"{where}: no script path in command: {command}")
     p = expand(toks[i])
