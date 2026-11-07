@@ -37,7 +37,7 @@ A precise cron expression (e.g. `0 6 * * *`) is applied via `/schedule update` *
 
 ## Guardrails for unattended runs
 
-- **Never point an unattended loop at a submission portal, shared/restricted data, or a co-author's inbox without a human gate.** Routines *propose*; a human *sends*. (`/triage-inbox` never auto-sends; the [`git-guardrails`](../hooks/git-guardrails.py) hook still blocks destructive git even in a routine.)
+- **Never point an unattended loop at a submission portal, shared/restricted data, or a co-author's inbox without a human gate.** Routines *propose*; a human *sends*. (`/triage-inbox` never auto-sends; the deny rules in `.claude/settings.json` still refuse destructive git in a routine.)
 - **Say what "done" means, and which stops you want.** In an unattended run the current Opus sometimes ends a turn with a progress report instead of the next step (Anthropic's Opus 5.5 prompting guide, "Unattended agentic runs"). Put the completion condition in the routine prompt and name the only acceptable stops — e.g. "continue until every claim is re-checked; stop early only if a step is blocked, and say what blocks it" — while keeping human gates for anything risky or irreversible.
 - **Bound the cost.** A nightly full-manuscript re-audit is fine; a nightly 7× `/seven-pass-review` is not — cost-pilot first.
 - **A local unattended run should deny instead of waiting.** `permissions.denyInsteadOfPrompting` (Claude Code ≥ 2.1.319) denies any tool call that would wait on a permission prompt and lets the turn continue, so an overnight local run cannot hang on a prompt nobody sees.

@@ -95,7 +95,7 @@ echo ""
 
 echo -e "${BOLD}Claude Code hooks:${RESET}"
 # Executable bit only, and only where it matters. settings.json runs every .py hook
-# as `python3 <file>`, so their mode is irrelevant (six ship 100644); the .sh hook it
+# as `python3 <file>`, so their mode is irrelevant (five ship 100644); the .sh hook it
 # runs directly (notify.sh) needs +x. Checking the .py hooks warned on every fresh
 # clone, and the advised chmod then showed up as a mode change in git status.
 # Whether each hook registered in .claude/settings.json — and the

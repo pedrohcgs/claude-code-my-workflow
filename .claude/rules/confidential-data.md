@@ -48,10 +48,10 @@ If the data is human-subjects: record the IRB protocol number, the approved use,
 
 ## Multi-author git topology (restricted-data-safe collaboration)
 
-- **Feature branches per author**, merged via PR — the same flow the rest of the template uses; no author force-pushes shared history (the [`git-guardrails`](../hooks/git-guardrails.py) hook blocks `--force` and `git add -A`, which is how raw data usually leaks into a commit).
+- **Feature branches per author**, merged via PR — the same flow the rest of the template uses; no author force-pushes shared history (the deny rules in `.claude/settings.json` refuse `--force` and `git add -A`, which is how raw data usually leaks into a commit).
 - **`MEMORY.md` syncs via git; native auto memory (`~/.claude/projects/<project>/memory/`) stays machine-local** (`meta-governance.md`). Machine-specific restricted-data *paths* live in native auto memory, never in committed files.
 - A collaborator joining a restricted-data project gets a [`/coauthor-brief`](../skills/coauthor-brief/SKILL.md) with environment setup ([`/capture-environment`](../skills/capture-environment/SKILL.md) lockfiles) and **access-request steps**, not a data drop.
-- Enable strict path-leak protection while in restricted dirs: `CLAUDE_STRICT_PATHS=1` makes `git-guardrails` *deny* (not just warn) hardcoded machine paths in code.
+- Check code for hardcoded machine paths before it leaves a restricted directory, by reading it: nothing refuses them now. `CLAUDE_STRICT_PATHS=1`, which made a hook deny them, was removed with that hook in v2.9.1. `scripts/quality_score.py` deducts 20 points per hardcoded path in an `.R` file, so a script with one path still scores 80 and passes the commit gate.
 
 ## Cross-references
 

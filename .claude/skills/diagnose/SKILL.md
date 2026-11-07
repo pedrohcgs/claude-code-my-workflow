@@ -83,7 +83,7 @@ Each hypothesis (whether tested by hand or by a fan-out `Task`) returns `{hypoth
 Test the ranked hypotheses cheaply:
 
 - **Bisect the pipeline** — check the intermediate value at the midpoint of the data flow; the bug is upstream or downstream of it. Repeat. Binary search finds the offending line in `log2(n)` steps, not `n`.
-- **Bisect history** — if it "worked yesterday", compare against the last-good commit/output to pin the change that introduced it. (`git bisect` is fine here — it never discards work; the destructive git commands are blocked by `git-guardrails.py`, this is not one of them.)
+- **Bisect history** — if it "worked yesterday", compare against the last-good commit/output to pin the change that introduced it. (`git bisect` is fine here — it never discards work; the destructive git commands are refused by the deny rules in `.claude/settings.json`, and this is not one of them.)
 - **Instrument with diagnostic primitives**, not guesses — at each stage inspect: `str()` / `summary()` for types & NA patterns; row & column counts *before and after* every transform; `table(factor)` to catch a silently dropped level; `cor()` / VIF for unexpected collinearity; weight diagnostics `range(w)`, `sum(w)`, `table(is.na(w))`; and the regression's convergence flag. **The stage where a count drops unexpectedly, a factor level vanishes, correlation jumps, or weights go sparse is the culprit stage.**
 
 End Phase 4 with a one-sentence root cause naming the exact line/step and mechanism.
