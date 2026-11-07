@@ -364,5 +364,51 @@ class ValidateSetupIdentity(unittest.TestCase):
         self.assertIn("git user: global <g@example.invalid>", out)
 
 
+# ── scripts/data-inventory.py: a manifest that never carries a value ─────────
+class DataInventory(unittest.TestCase):
+    """The inventory is what may leave a restricted machine, so its one promise is
+    that no data value appears in it, under any encoding or file name."""
+    SCRIPT = os.path.join(ROOT, "scripts", "data-inventory.py")
+    SECRETS = ("s3cr3t-VALUE", "ana@x.org", "Fulton", "17,3.5")
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.raw = os.path.join(self.tmp, "raw")
+        self.csv = _write(self.raw, "survey.csv",
+                          "person_id,firstName,email,income,County\n1,Ana,ana@x.org,s3cr3t-VALUE,Fulton\n")
+        _write(self.raw, "sub/noheader.csv", "17,3.5,88\n18,4.1,90\n")
+        _write(self.raw, "sub/café.tsv", "a\tb\nx\ty\n")
+
+    def inventory(self, *args, **env):
+        return _run([sys.executable, self.SCRIPT, self.raw, *args], cwd=self.tmp, **env)
+
+    def test_no_value_reaches_the_output_in_either_format(self):
+        for fmt in ("csv", "md"):
+            rc, out = self.inventory("--format", fmt)
+            self.assertEqual(rc, 0, out)
+            for s in self.SECRETS:
+                self.assertNotIn(s, out, f"{fmt}: a data value leaked: {s}")
+            self.assertIn("firstName; email", out)      # names are listed, and flagged
+
+    def test_a_first_row_that_looks_like_data_withholds_the_names(self):
+        rc, out = self.inventory()
+        line = next(l for l in out.splitlines() if l.startswith("raw/sub/noheader.csv"))
+        self.assertIn("column names withheld", line)
+        self.assertNotIn("17", line.split(",", 4)[4])    # nothing after the hash repeats the row
+
+    def test_hash_and_a_non_ascii_name_survive_a_cp1252_pipe(self):
+        import hashlib
+        rc, out = self.inventory(PYTHONIOENCODING="cp1252")
+        self.assertEqual(rc, 0, out)
+        with open(self.csv, "rb") as f:
+            self.assertIn(hashlib.sha256(f.read()).hexdigest(), out)
+        self.assertIn("raw/sub/café.tsv", unicodedata.normalize("NFC", out))
+
+    def test_a_missing_path_is_an_error_not_an_empty_manifest(self):
+        rc, out = _run([sys.executable, self.SCRIPT, os.path.join(self.tmp, "nope")], cwd=self.tmp)
+        self.assertEqual(rc, 2, out)
+
+
 if __name__ == "__main__":
     unittest.main()
