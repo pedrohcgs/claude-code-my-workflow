@@ -11,18 +11,31 @@
       "Read(**)"
     ],
     "deny": [
-      "Bash(git reset *--hard*)",
+      "Bash(git reset --hard *)",
+      "Bash(git reset * --hard)",
+      "Bash(git reset * --hard *)",
       "Bash(git clean *)",
-      "Bash(git push *--force)",
-      "Bash(git push *--force *)",
-      "Bash(git push -f*)",
-      "Bash(git push * -f*)",
-      "Bash(git add -A*)",
-      "Bash(git add --all*)",
+      "Bash(git push --force *)",
+      "Bash(git push * --force)",
+      "Bash(git push * --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push * -f)",
+      "Bash(git push * -f *)",
+      "Bash(git add -A *)",
+      "Bash(git add * -A)",
+      "Bash(git add * -A *)",
+      "Bash(git add --all *)",
+      "Bash(git add * --all)",
+      "Bash(git add * --all *)",
       "Bash(git add . *)",
+      "Bash(git add * .)",
+      "Bash(git add * . *)",
       "Bash(git checkout -- . *)",
       "Bash(git checkout . *)",
+      "Bash(git checkout * .)",
       "Bash(git restore . *)",
+      "Bash(git restore * .)",
+      "Bash(git restore * . *)",
       "Read(.env)",
       "Read(.env.*)",
       "Read(**/.env)",
@@ -38,8 +51,7 @@
       "Write(.env.*)",
       "Write(**/.env)",
       "Write(**/.env.*)"
-    ],
-    "blockWritesOutsideWorkingDirectories": true
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -49,19 +61,19 @@
           {
             "type": "command",
             "if": "Bash(git merge *)",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
+            "command": "sh -c '[ -f \"$1\" ] || exit 0; exec python3 \"$1\"' dirty-tree-guard \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
             "timeout": 10
           },
           {
             "type": "command",
             "if": "Bash(git pull *)",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
+            "command": "sh -c '[ -f \"$1\" ] || exit 0; exec python3 \"$1\"' dirty-tree-guard \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
             "timeout": 10
           },
           {
             "type": "command",
             "if": "Bash(git rebase *)",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
+            "command": "sh -c '[ -f \"$1\" ] || exit 0; exec python3 \"$1\"' dirty-tree-guard \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/dirty-tree-guard.py",
             "timeout": 10
           }
         ]

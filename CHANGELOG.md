@@ -8,18 +8,20 @@ If you have forked this template, see the **Upgrading** section at the bottom fo
 
 ## v2.9.1 — 2026-11-06
 
-A **lighter hook layer.** The two guard hooks that ran before every Bash call, and a third that ran after it, slowed everyday work and refused ordinary commands too often. They are gone. Claude Code's own permission deny rules now refuse destructive git, and one small hook, started only for a merge, pull or rebase, refuses those while tracked files have uncommitted changes.
+A **lighter hook layer.** The two guard hooks that ran before every Bash call, and a third that ran after it, slowed everyday work and refused ordinary commands too often. They are gone. Claude Code's own permission deny rules now refuse destructive git, and one small hook, started only for a merge, pull or rebase, refuses those while tracked files have uncommitted changes. The template also stops setting the block that kept Claude from editing its own settings files.
 
 ### Upgrading — read this before you pull into a fork
 
 This release deletes `git-guardrails.py`, `root-of-trust-guard.py` and `context-monitor.py` from `.claude/hooks/`.
 
 - **If you never changed `.claude/settings.json`,** the pull updates it along with the hooks, and nothing else is needed.
-- **If you changed it,** make the same three changes by hand:
+- **If you changed it,** make the same changes by hand:
   1. remove the `git-guardrails.py` and `root-of-trust-guard.py` entries under `PreToolUse`, and the `context-monitor.py` entry under `PostToolUse`;
   2. add the three `dirty-tree-guard.py` entries (`"if": "Bash(git merge *)"`, `"Bash(git pull *)"` and `"Bash(git rebase *)"`; no `onFailure`);
-  3. add the `permissions.deny` list.
+  3. add the `permissions.deny` list;
+  4. remove `"blockWritesOutsideWorkingDirectories": true` from `permissions`, unless you want to keep that block.
 - **Why it matters:** an old registration of a deleted guard has `"onFailure": "block"`, so Claude Code refuses every Bash, Edit and Write until it is fixed. Claude cannot fix it from inside that session, because its own edit is refused too. Edit the file in a terminal or an editor. Claude Code picks up the change without a restart.
+- **Restart once after the pull.** Claude Code keeps the write block in a running session after its key is removed.
 
 ### Removed
 
@@ -28,9 +30,13 @@ This release deletes `git-guardrails.py`, `root-of-trust-guard.py` and `context-
   - Its `CLAUDE_STRICT_PATHS` check on code edits is gone. `scripts/quality_score.py` still deducts 20 points per hardcoded path in an `.R` file, so a script with one such path still passes the commit gate. `confidential-data.md` now says so.
 - **`root-of-trust-guard.py`** (2,200 lines, on every Bash call).
   - Nothing replaces its tripwire on shell writes into `.claude/settings*.json`, `.claude/hooks/` and `.githooks/`, and `ALLOW_ROOT_OF_TRUST_WRITE` is gone.
-  - `permissions.blockWritesOutsideWorkingDirectories` (Claude Code ≥ 2.1.314) still refuses file-tool writes to Claude Code's settings files.
+  - The write block that refused file-tool writes to the settings files is removed too (below), so nothing refuses a write to these paths now.
 - **`context-monitor.py`** (after every Bash call). The status line shows Claude Code's own `context_window.used_percentage`, and `/context-status` points to it and to `/context`.
-- **Restoring one:** each file is at tag `v2.9.0` (`git show v2.9.0:.claude/hooks/<file>`), with its registration in that tag's `.claude/settings.json`. The guide's hook section says how.
+- **`permissions.blockWritesOutsideWorkingDirectories: true`** (added in v2.7.0).
+  - While it is on, Claude Code's file tools refuse every Claude Code settings file, even inside the repository, so every allow rule, deny rule or hook change had to be made by hand.
+  - A `true` in any settings file applies and a local `false` does not lift it, so it could not be turned off for one machine while the committed file kept it.
+  - **To keep it in a fork,** add the key back under `permissions` (Claude Code ≥ 2.1.314). It also removes the `EnterWorktree` and `ExitWorktree` tools from the session.
+- **Restoring a hook:** each file is at tag `v2.9.0` (`git show v2.9.0:.claude/hooks/<file>`), with its registration in that tag's `.claude/settings.json`. The guide's hook section says how.
 
 ### Added
 
@@ -53,7 +59,7 @@ This release deletes `git-guardrails.py`, `root-of-trust-guard.py` and `context-
 - **`issue-guard.py` is the only hook left with `"onFailure": "block"`,** and it runs only for `gh` commands. A missing `python3` or hook file no longer refuses every Bash, Edit and Write, so #179 and #180 are resolved by the removal. The launcher patch drafted on #180 is not needed.
 - **The hook battery** drops the 228 cases of the removed hooks and gains section (j): 123 cases. Grading the grader was re-measured: each remaining decision hook, stubbed to always allow, reddens exactly its own cases.
 - **The qualification ledger** moves the removed hooks' rows, reproduction notes and drift record, unedited, to a *Retired at v2.9.1* section. Their counts now read "at the time".
-- **Updated to match:** README, the guide, TROUBLESHOOTING, `docs/index.html`, `AGENTS.md` (what Codex and Antigravity must do by hand), `.github/SECURITY.md`, `confidential-data.md`, the `commit`, `context-status` and `diagnose` skills, and the status line.
+- **Updated to match:** README, the guide, TROUBLESHOOTING, `docs/index.html`, `MEMORY.md`, `AGENTS.md` (what Codex and Antigravity must do by hand), `.github/SECURITY.md`, `confidential-data.md`, the `commit`, `context-status` and `diagnose` skills, and the status line.
 
 ### Fixed
 

@@ -1207,8 +1207,7 @@ Since 2026-06-15, `claude -p` headless subprocess calls (used by `scripts/run-sk
       "Write(.env.*)",
       "Write(**/.env)",
       "Write(**/.env.*)"
-    ],
-    "blockWritesOutsideWorkingDirectories": true
+    ]
   },
   "hooks": {
     "Stop": [
@@ -1509,7 +1508,7 @@ One of these deserves a note, because it encodes a lesson rather than a preferen
 
 **The dirty-tree check.** Claude Code starts `dirty-tree-guard.py` only for a command that contains `git merge`, `git pull` or `git rebase`, and, by the `if` filter's documented fallback, for any command containing `$(…)`, backticks or `$VAR`. So the hook first checks that a real merge, pull or rebase is present, reading the command the way the shell splits it: quoted text, comments and heredoc bodies are not commands, and `--abort` or `--continue` inside a message is not a resume step. A one-line launcher in the registration skips the hook if its file is missing, so a missing file refuses nothing. The hook runs `git status --porcelain --untracked-files=no` in the session's directory and refuses if a tracked file has uncommitted changes. Untracked files do not count, because git itself refuses a merge that would overwrite one. The hook reads the tree before the command line runs, so `git stash && git merge` on a dirty tree is refused too: run the two as separate commands.
 
-**What neither catches.** A deny rule does not match a rewritten spelling: `git -C . push --force`, `git -c x=y push`, `git 'push'`, `/usr/bin/git`, or a command inside `bash -c '…'`. The docs call Bash deny rules a guard on the invocation Claude usually produces, not a security boundary. The dirty-tree guard reads the session's directory, so it misses a repository reached by `cd elsewhere &&` or `git -C`, and it does not look inside `bash -c`, an alias, a script or a Makefile. It fails open: if git cannot answer or the hook has a bug, the command runs. No hook refuses a shell write into `.claude/settings*.json`, `.claude/hooks/` or `.githooks/`; `blockWritesOutsideWorkingDirectories` still refuses file-tool writes to the settings files. And none of this recovers anything: `git reflog` restores a moved commit pointer, but not an uncommitted edit or an untracked file, which is what `reset --hard` and `clean` destroy.
+**What neither catches.** A deny rule does not match a rewritten spelling: `git -C . push --force`, `git -c x=y push`, `git 'push'`, `/usr/bin/git`, or a command inside `bash -c '…'`. The docs call Bash deny rules a guard on the invocation Claude usually produces, not a security boundary. The dirty-tree guard reads the session's directory, so it misses a repository reached by `cd elsewhere &&` or `git -C`, and it does not look inside `bash -c`, an alias, a script or a Makefile. It fails open: if git cannot answer or the hook has a bug, the command runs. Nothing refuses a write into `.claude/settings*.json`, `.claude/hooks/` or `.githooks/`: no hook watches them, and the template no longer sets `blockWritesOutsideWorkingDirectories`. And none of this recovers anything: `git reflog` restores a moved commit pointer, but not an uncommitted edit or an untracked file, which is what `reset --hard` and `clean` destroy.
 
 **Restoring a removed hook.** v2.9.1 removed `git-guardrails.py`, `root-of-trust-guard.py` and `context-monitor.py`. They ran on every Bash call, and together they slowed work and refused too often. To bring one back, copy it from the `v2.9.0` tag (`git show v2.9.0:.claude/hooks/git-guardrails.py > .claude/hooks/git-guardrails.py`) and register it again in `.claude/settings.json` the way it was at that tag (`git show v2.9.0:.claude/settings.json`).
 :::
