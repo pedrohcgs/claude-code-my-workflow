@@ -22,6 +22,8 @@ A ready-to-fork foundation for AI-assisted academic work. You describe what you 
 
 ### 1. Fork & Clone
 
+**Unpublished work? Choose before you copy.** GitHub keeps a fork of a public repository public, and its visibility cannot be changed. For a paper, data or anything not yet public, click **Use this template** on the repository page instead, set the new repository to **Private**, and clone that one: `git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git my-project`. Fork only for work that can be public.
+
 ```bash
 # Fork this repo on GitHub (click "Fork" on the repo page), then:
 git clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project
@@ -196,7 +198,7 @@ This workflow is designed as a **single hub for an entire research program** —
 ## What's Included
 
 <details>
-<summary><strong>18 agents, 61 skills, 37 rules, 11 hooks</strong> (click to expand)</summary>
+<summary><strong>18 agents, 62 skills, 37 rules, 11 hooks</strong> (click to expand)</summary>
 
 ### Agents (`.claude/agents/`)
 
@@ -252,6 +254,7 @@ This workflow is designed as a **single hub for an entire research program** —
 | `/verify-artifact` | Prove the file you are about to send IS the thing you mean — rebuild, verify integrity, diff against source |
 | `/voice-profile` | Extract a written voice profile from your own prior papers, then audit drafts against it — the positive counterpart to `/humanize`, which only detects AI tells |
 | `/validate-bib` | Cross-reference citations against bibliography |
+| `/verify` | Run the backtest and the quality score on what is about to be committed; Claude Code tells Claude to run it before committing (2.1.286+), a reminder next to the enforcing pre-commit hook |
 | `/devils-advocate` | Challenge design decisions before committing |
 | `/create-lecture` | Full lecture creation workflow |
 | `/commit` | Run the gates, then commit on a branch; `--pr` also pushes and opens a pull request. Never merges — that waits for your say-so |
@@ -375,6 +378,7 @@ Rules use path-scoped loading: **always-on** rules load every session; **path-sc
 | `passport-template.yaml` (v1.9.0) | Per-paper YAML passport for numeric-claim provenance (used by `/audit-reproducibility`) |
 | `response-to-referees.md` | R&R response document scaffold |
 | `executor-contract.md` (v2.5.1) | Dispatchable goal contract for a delegated task — goal, acceptance bar, exact paths, gates it must pass, output contract, and the mechanisms the executor may refuse |
+| `triangulation-ledger.md` | What each robustness check will mean, fixed and committed before it runs; joins `spec-ledger.md` on date and `Script:line` |
 | `screening-rubric.md` (v2.5.1) | Screening rubric — written before the screen runs, with per-candidate evidence, an adjudication table, and a dispatcher spot-check |
 
 </details>
@@ -438,6 +442,7 @@ Research groups across economics, energy, political science, and engineering hav
 - **[claudeblattman](https://github.com/chrisblattman/claudeblattman)** by Chris Blattman (U Chicago) — Comprehensive guide for non-technical academics: executive assistant workflows, proposal writing, parallel critics with a separate synthesis, and self-improving configuration
 - **[MixtapeTools](https://github.com/scunning1975/MixtapeTools)** by Scott Cunningham (Baylor) — The Rhetoric of Decks, Referee 2 (a five-audit replication protocol whose audits include an R ↔ Stata ↔ Python cross-language replication), and Blindspot (a "peripheral vision" audit of empirical output)
 - **[Paul Goldsmith-Pinkham's research tools](https://github.com/paulgp)** (Yale) — [`claude-container`](https://github.com/paulgp/claude-container) (sandboxed Docker execution), [`exhibit-review`](https://github.com/paulgp/exhibit-review) (spatial table/figure review), and [`margin`](https://github.com/paulgp/margin) (source-first writing review)
+- **[posit-dev/skills](https://github.com/posit-dev/skills)** by Posit (MIT) — Skills for R packages, Quarto and accessibility, including `alt-text` for figure alt text in Quarto documents
 - **[awesome-ai-for-economists](https://github.com/hanlulong/awesome-ai-for-economists)** by Lu Han (Bank of Canada) — Curated directory of AI workflows, MCP servers (`mcp-for-stata`, FRED, World Bank, Census), and replication tools for economists
 - **[autoresearch](https://github.com/karpathy/autoresearch)** by Andrej Karpathy — Constraint-based autonomous research with `program.md` as constitutional document
 - **[Claude-Code-Presentation](https://github.com/aspi6246/Claude-Code-Presentation)** (formerly `ClaudeCodeTools`) by Alessandro Spina (UTS) — "The Editor" persona: seven-audit sequential paper review protocol

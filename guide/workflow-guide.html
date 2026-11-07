@@ -2770,7 +2770,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>You talk, Claude orchestrates.</strong> The 18 agents, 61 skills, and 37 rules exist so you don’t have to think about them. Describe your goal, approve the plan, and let the system work.</p>
+<p><strong>You talk, Claude orchestrates.</strong> The 18 agents, 62 skills, and 37 rules exist so you don’t have to think about them. Describe your goal, approve the plan, and let the system work.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -2783,7 +2783,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This guide describes the full system — 18 agents, 61 skills, 37 rules. That is the ceiling, not the floor. <strong>Start with just CLAUDE.md and 2–3 skills</strong> (<code>/compile-latex</code>, <code>/proofread</code>, <code>/commit</code>). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you’re ready.</p>
+<p>This guide describes the full system — 18 agents, 62 skills, 37 rules. That is the ceiling, not the floor. <strong>Start with just CLAUDE.md and 2–3 skills</strong> (<code>/compile-latex</code>, <code>/proofread</code>, <code>/commit</code>). Add rules and agents as you discover what you need. The template is designed for progressive adoption: fork it, fill in the placeholders, and start working. Everything else is there when you’re ready.</p>
 </div>
 </div>
 <hr>
@@ -2969,6 +2969,7 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 </section>
 <section id="step-1-fork-clone" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="step-1-fork-clone"><span class="header-section-number">2.2</span> Step 1: Fork &amp; Clone</h2>
+<p><strong>Unpublished work? Choose before you copy.</strong> GitHub keeps a fork of a public repository public, and its visibility cannot be changed. For a paper, data or anything not yet public, click <strong>Use this template</strong> on the repository page instead, set the new repository to <strong>Private</strong>, and clone that one: <code>git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git my-project</code>. Fork only for work that can be public.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fork this repo on GitHub (click &quot;Fork&quot; on the repo page), then:</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -4012,7 +4013,7 @@ APPROVED   NEEDS WORK
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Claude Code ships with built-in skills beyond this template’s 61 (as of Aug 2026): <code>/batch</code> orchestrates parallel refactoring across your codebase (using git worktrees for isolation), <code>/simplify</code> reviews recent changes for simplification opportunities, and <code>/debug</code> helps troubleshoot sessions. These complement the academic skills above.</p>
+<p>Claude Code ships with built-in skills beyond this template’s 62 (as of Aug 2026): <code>/batch</code> orchestrates parallel refactoring across your codebase (using git worktrees for isolation), <code>/simplify</code> reviews recent changes for simplification opportunities, and <code>/debug</code> helps troubleshoot sessions. These complement the academic skills above.</p>
 </div>
 </div>
 </section>
@@ -6989,6 +6990,8 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 <li><strong>DuckDB + Parquet for large administrative panels</strong> — converting multi-gigabyte CSV/DTA extracts to partitioned Parquet and querying out-of-core via <code>duckdb</code> in R (<code>duckplyr</code>/<code>arrow</code>) or Python (<code>duckdb</code>/<code>polars</code>) before passing summary objects to estimation scripts, keeping raw microdata out of memory and out of LLM context.</li>
 </ul></li>
 <li><strong>Anton Korinek (University of Virginia &amp; NBER):</strong> <em>“Generative AI for Economic Research”</em> (<em>Journal of Economic Literature</em>) and <em>“AI Agents for Economic Research”</em> (NBER Working Paper series) — the canonical disciplinary references tracing the progression from single-turn chatbots (System 1) to reasoning models (System 2) to multi-agent verification workflows.</li>
+<li><strong><a href="https://github.com/paulgp/econ-ai-detector"><code>paulgp/econ-ai-detector</code></a></strong> (MIT) — an open detector of AI-generated text in economics working papers, built alongside Goldsmith-Pinkham’s Pangram study of NBER papers; a free way to <em>measure</em>, in the sense of <code>writing-with-ai.md</code>, not a score to write towards.</li>
+<li><strong><a href="https://github.com/posit-dev/skills"><code>posit-dev/skills</code></a></strong> (Posit, MIT) — skills for R packages, Quarto and accessibility; its <code>alt-text</code> skill writes figure alt text for Quarto documents.</li>
 <li><strong><a href="https://github.com/hanlulong/awesome-ai-for-economists"><code>hanlulong/awesome-ai-for-economists</code></a></strong> (Lu Han, Bank of Canada; 700+ stars) — curated directory of AI workflows, MCP servers, literature tools, and replication utilities across economics (where this repository is also indexed).</li>
 </ul>
 </section>
@@ -7084,7 +7087,7 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 </section>
 <section id="sec-create-skills" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="sec-create-skills"><span class="header-section-number">7.4</span> Step 4: Creating Custom Skills</h2>
-<p>The guide includes 61 <a href="#skills---reusable-slash-commands">skills</a> for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.</p>
+<p>The guide includes 62 <a href="#skills---reusable-slash-commands">skills</a> for common academic tasks. But if you have repetitive workflows specific to your domain, you can create your own.</p>
 <section id="when-to-create-a-skill" class="level3" data-number="7.4.1">
 <h3 data-number="7.4.1" class="anchored" data-anchor-id="when-to-create-a-skill"><span class="header-section-number">7.4.1</span> When to Create a Skill</h3>
 <p>Create a skill when: - You repeatedly explain the same 3+ step workflow to Claude - You need domain-specific quality checks (citation style, notation consistency, lab protocols) - You enforce field-specific output formats (thesis structure, journal templates) - You coordinate multi-tool workflows (data → analysis → manuscript)</p>
@@ -7669,206 +7672,211 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 <td>Bibliography validation</td>
 </tr>
 <tr class="odd">
+<td><code>/verify</code></td>
+<td><code>.claude/skills/verify/</code></td>
+<td>The gates before a commit: backtest plus quality score on staged files; Claude Code tells Claude to run it before committing (2.1.286+), a reminder next to the enforcing pre-commit hook</td>
+</tr>
+<tr class="even">
 <td><code>/devils-advocate</code></td>
 <td><code>.claude/skills/devils-advocate/</code></td>
 <td>Design challenge questions</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/create-lecture</code></td>
 <td><code>.claude/skills/create-lecture/</code></td>
 <td>Full lecture creation</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/commit</code></td>
 <td><code>.claude/skills/commit/</code></td>
 <td>Run the gates and commit; <code>--pr</code> pushes and opens a pull request; never merges</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/lit-review</code></td>
 <td><code>.claude/skills/lit-review/</code></td>
 <td>Literature search and synthesis</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/research-ideation</code></td>
 <td><code>.claude/skills/research-ideation/</code></td>
 <td>Research questions and strategies</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/interview-me</code></td>
 <td><code>.claude/skills/interview-me/</code></td>
 <td>Interactive research interview</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/review-paper</code></td>
 <td><code>.claude/skills/review-paper/</code></td>
 <td>Manuscript review</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/respond-to-referees</code></td>
 <td><code>.claude/skills/respond-to-referees/</code></td>
 <td>R&amp;R cross-reference and response draft</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/data-analysis</code></td>
 <td><code>.claude/skills/data-analysis/</code></td>
 <td>End-to-end R analysis</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/audit-reproducibility</code></td>
 <td><code>.claude/skills/audit-reproducibility/</code></td>
 <td>Enforce replication tolerance thresholds on paper ↔︎ code</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/learn</code></td>
 <td><code>.claude/skills/learn/</code></td>
 <td>Extract discoveries into persistent skills</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/context-status</code></td>
 <td><code>.claude/skills/context-status/</code></td>
 <td>Show session health and context usage</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/deep-audit</code></td>
 <td><code>.claude/skills/deep-audit/</code></td>
 <td>Adversarial audit of a theory, proof, paper, codebase or set of claims (decompose, independent skeptics, a separate judge per finding, fix, re-verify); the repo-consistency audit is one application, in <code>references/repo-infrastructure-audit.md</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/seven-pass-review</code></td>
 <td><code>.claude/skills/seven-pass-review/</code></td>
 <td>Seven-pass adversarial manuscript review (parallel forked subagents)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/permission-check</code></td>
 <td><code>.claude/skills/permission-check/</code></td>
 <td>Diagnose permission layers (6-tier stack)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/verify-claims</code></td>
 <td><code>.claude/skills/verify-claims/</code></td>
 <td>Chain-of-Verification fact-check on any draft (v1.7.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/checkpoint</code></td>
 <td><code>.claude/skills/checkpoint/</code></td>
 <td>Structured session-handoff snapshot — companion to narrative session logs (v1.8.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/preregister</code></td>
 <td><code>.claude/skills/preregister/</code></td>
 <td>Generate a preregistration document (OSF / AsPredicted / AEA RCT Registry) from a research spec (v1.8.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/humanize</code></td>
 <td><code>.claude/skills/humanize/</code></td>
 <td>Detect AI-voice tells in academic prose (read-only audit; no rewrite) (v1.9.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/compress-session</code></td>
 <td><code>.claude/skills/compress-session/</code></td>
 <td>Distil the current session into a structured note (decisions, files, open questions, next actions, discarded-as-noise) before auto-compaction (v1.9.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/promote-memory</code></td>
 <td><code>.claude/skills/promote-memory/</code></td>
 <td>Five-critic council that votes on whether candidate <code>[LEARN]</code> entries should be promoted from native auto memory to MEMORY.md (v1.9.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/stata-replication</code></td>
 <td><code>.claude/skills/stata-replication/</code></td>
 <td>End-to-end Stata pipeline scaffold + execution via the <code>stata-mcp</code> MCP server (mirrors <code>/data-analysis</code> for R-first projects; v1.9.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/simulation-study</code></td>
 <td><code>.claude/skills/simulation-study/</code></td>
 <td>Reproducible Monte Carlo study — DGP, estimator grid, seeded reps, bias/RMSE/coverage/size/power with Monte Carlo SEs (v1.10.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/r-package-check</code></td>
 <td><code>.claude/skills/r-package-check/</code></td>
 <td>R package release gate — <code>devtools::document()</code> + tests + <code>R CMD check --as-cran</code> + CRAN-policy triage (v1.10.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/replication-package</code></td>
 <td><code>.claude/skills/replication-package/</code></td>
 <td>Assemble a submission-ready DCAS / openICPSR replication package; calls <code>/audit-reproducibility</code> and blocks on FAIL (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/challenge</code></td>
 <td><code>.claude/skills/challenge/</code></td>
 <td>Stress-test a finding against the choices you didn’t make — specification curve over the discrete forks, then named sensitivity statistics (E-value, Cinelli–Hazlett RV, Oster δ) against the identifying assumption</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/capture-environment</code></td>
 <td><code>.claude/skills/capture-environment/</code></td>
 <td>Snapshot the computational environment (renv.lock / sessionInfo / requirements.txt / uv.lock + optional Dockerfile + seeds) (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/power-analysis</code></td>
 <td><code>.claude/skills/power-analysis/</code></td>
 <td>Power / required-N / MDE for study design (RCT, clustered/ICC, multi-arm, or simulation-based) + a methods paragraph for <code>/preregister</code> (v2.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/disclosure-check</code></td>
 <td><code>.claude/skills/disclosure-check/</code></td>
 <td>Pre-screen restricted-data outputs for SDL violations (small cells, dominance, PII); gates on any CRITICAL (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/grant-proposal</code></td>
 <td><code>.claude/skills/grant-proposal/</code></td>
 <td>Scaffold a grant proposal (NSF/NIH/ERC/foundation) from an <code>/interview-me</code> spec; delegates DMP + facilities; aims↔︎methods↔︎budget coherence pass (v2.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/data-management-plan</code></td>
 <td><code>.claude/skills/data-management-plan/</code></td>
 <td>Draft a funder-compliant Data Management Plan (NSF/NIH 2023/ERC/Horizon) (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/coauthor-brief</code></td>
 <td><code>.claude/skills/coauthor-brief/</code></td>
 <td>Generate a collaborator handoff brief: git delta, per-artifact state, open questions, reproduce-locally + restricted-data steps (v2.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/triage-inbox</code></td>
 <td><code>.claude/skills/triage-inbox/</code></td>
 <td>Triage academic email + calendar (Gmail/Calendar MCP) into a prioritized digest + referee-obligations tracker; human-gated actions only (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/issues</code></td>
 <td><code>.claude/skills/issues/</code></td>
 <td>File findings as GitHub issues (deduplicated against open and closed ones), list what is open, and close an issue with a comment on what was tried and how it was fixed; posts nothing without a yes (v2.6)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/syllabus</code></td>
 <td><code>.claude/skills/syllabus/</code></td>
 <td>Build a course syllabus from a topic/reading list (schedule, objectives, assessment + rubric, per-week <code>/create-lecture</code> work-list) (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/teach-from-paper</code></td>
 <td><code>.claude/skills/teach-from-paper/</code></td>
 <td>Turn a paper into a lecture outline, teachable results, slide skeleton (→ <code>/create-lecture</code>), discussion questions, exercise brief (v2.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/respond-to-eval</code></td>
 <td><code>.claude/skills/respond-to-eval/</code></td>
 <td>Turn student course evaluations into a classified teaching-improvement plan (Keep/Change/Investigate/Out-of-scope) (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/scaffold-exercises</code></td>
 <td><code>.claude/skills/scaffold-exercises/</code></td>
 <td>Scaffold a graded problem set (analytical/empirical/coding) with worked solutions; clean student set + separate solution key (v2.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/new-skill</code></td>
 <td><code>.claude/skills/new-skill/</code></td>
 <td>Scaffold a convention-compliant skill (interview → write <code>SKILL.md</code> with gate-passing frontmatter) (v2.0)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>/diagnose</code></td>
 <td><code>.claude/skills/diagnose/</code></td>
 <td>Root-cause a wrong or failing empirical result — reproduce → minimise → hypothesise → instrument (bisect) → fix; <code>--no-fix</code> localizes without editing (v2.0)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>/submission-disclosures</code></td>
 <td><code>.claude/skills/submission-disclosures/</code></td>
 <td>Submission-time disclosure block: journal-matched AI-use, CRediT roles, conflict-of-interest, and data-availability statements (v2.1)</td>

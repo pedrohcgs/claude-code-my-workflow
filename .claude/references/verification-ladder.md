@@ -290,6 +290,13 @@ human invoked. An unattended multi-agent fix loop pointed at a submission, share
 co-author's draft is the failure mode this template refuses. **Documented non-goal, not a
 missing feature.**
 
+The evidence points the same way. In a randomised experiment with 288 researchers in 103 teams
+(Brodeur et al. 2026, *PNAS* 123(22), [doi:10.1073/pnas.2524747123](https://doi.org/10.1073/pnas.2524747123)),
+human-only and AI-assisted teams reproduced published social-science results at similar rates
+(94% and 91%), but the human-only teams found significantly more major coding errors. AI-led teams,
+with minimal human oversight, reproduced 37%. The authors read the AI-led arm as a lower bound on
+what AI can do. Assistance, with a human deciding, is the shape this ladder assumes.
+
 ---
 
 ## Cross-references
