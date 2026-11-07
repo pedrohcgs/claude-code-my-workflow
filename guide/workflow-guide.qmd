@@ -262,6 +262,8 @@ That loop — green, seeded defect, red, restore, green — is the whole philoso
 
 ## Step 1: Fork & Clone
 
+**Unpublished work? Choose before you copy.** GitHub keeps a fork of a public repository public, and its visibility cannot be changed. For a paper, data or anything not yet public, click **Use this template** on the repository page instead, set the new repository to **Private**, and clone that one: `git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git my-project`. Fork only for work that can be public.
+
 ```bash
 # Fork this repo on GitHub (click "Fork" on the repo page), then:
 git clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project
@@ -269,8 +271,6 @@ cd my-project
 ```
 
 Replace `YOUR_USERNAME` with your GitHub username.
-
-**Unpublished work? Use the template, not a fork.** GitHub keeps a fork of a public repository public, and its visibility cannot be changed. **Use this template** (the green button on the repository page) makes a fresh repository you can set to private before anything is in it. Then clone that instead.
 
 ## Step 2: Start Claude Code and Paste This Prompt {#sec-first-session}
 
@@ -3433,7 +3433,7 @@ Claude Code supports **plugins** --- bundled collections of skills, agents, hook
 | `/verify-artifact` | `.claude/skills/verify-artifact/` | Prove the file you are about to send IS the thing you mean — rebuild, verify integrity, diff against source |
 | `/voice-profile` | `.claude/skills/voice-profile/` | Extract a written voice profile from your own prior papers, then audit drafts against it — the positive counterpart to `/humanize`, which only detects AI tells |
 | `/validate-bib` | `.claude/skills/validate-bib/` | Bibliography validation |
-| `/verify` | `.claude/skills/verify/` | The gates before a commit: backtest plus quality score on staged files; Claude Code runs it before committing (2.1.286+) |
+| `/verify` | `.claude/skills/verify/` | The gates before a commit: backtest plus quality score on staged files; Claude Code tells Claude to run it before committing (2.1.286+), a reminder next to the enforcing pre-commit hook |
 | `/devils-advocate` | `.claude/skills/devils-advocate/` | Design challenge questions |
 | `/create-lecture` | `.claude/skills/create-lecture/` | Full lecture creation |
 | `/commit` | `.claude/skills/commit/` | Run the gates and commit; `--pr` pushes and opens a pull request; never merges |

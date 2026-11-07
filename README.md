@@ -22,6 +22,8 @@ A ready-to-fork foundation for AI-assisted academic work. You describe what you 
 
 ### 1. Fork & Clone
 
+**Unpublished work? Choose before you copy.** GitHub keeps a fork of a public repository public, and its visibility cannot be changed. For a paper, data or anything not yet public, click **Use this template** on the repository page instead, set the new repository to **Private**, and clone that one: `git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git my-project`. Fork only for work that can be public.
+
 ```bash
 # Fork this repo on GitHub (click "Fork" on the repo page), then:
 git clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project
@@ -30,8 +32,6 @@ cd my-project
 ```
 
 Replace `YOUR_USERNAME` with your GitHub username.
-
-**Unpublished work? Use the template, not a fork.** GitHub keeps a fork of a public repository public, and its visibility cannot be changed. **Use this template** (the green button on the repository page) makes a fresh repository you can set to private before anything is in it. Then clone that instead.
 
 ### 2. Start Claude Code and Paste This Prompt
 
@@ -254,7 +254,7 @@ This workflow is designed as a **single hub for an entire research program** —
 | `/verify-artifact` | Prove the file you are about to send IS the thing you mean — rebuild, verify integrity, diff against source |
 | `/voice-profile` | Extract a written voice profile from your own prior papers, then audit drafts against it — the positive counterpart to `/humanize`, which only detects AI tells |
 | `/validate-bib` | Cross-reference citations against bibliography |
-| `/verify` | Run the backtest and the quality score on what is about to be committed; Claude Code runs it before committing (2.1.286+) |
+| `/verify` | Run the backtest and the quality score on what is about to be committed; Claude Code tells Claude to run it before committing (2.1.286+), a reminder next to the enforcing pre-commit hook |
 | `/devils-advocate` | Challenge design decisions before committing |
 | `/create-lecture` | Full lecture creation workflow |
 | `/commit` | Run the gates, then commit on a branch; `--pr` also pushes and opens a pull request. Never merges — that waits for your say-so |
@@ -378,7 +378,7 @@ Rules use path-scoped loading: **always-on** rules load every session; **path-sc
 | `passport-template.yaml` (v1.9.0) | Per-paper YAML passport for numeric-claim provenance (used by `/audit-reproducibility`) |
 | `response-to-referees.md` | R&R response document scaffold |
 | `executor-contract.md` (v2.5.1) | Dispatchable goal contract for a delegated task — goal, acceptance bar, exact paths, gates it must pass, output contract, and the mechanisms the executor may refuse |
-| `triangulation-ledger.md` | What each robustness check will mean, fixed and committed before it runs; links to `spec-ledger.md` by check ID |
+| `triangulation-ledger.md` | What each robustness check will mean, fixed and committed before it runs; joins `spec-ledger.md` on date and `Script:line` |
 | `screening-rubric.md` (v2.5.1) | Screening rubric — written before the screen runs, with per-candidate evidence, an adjudication table, and a dispatcher spot-check |
 
 </details>

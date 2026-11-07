@@ -1,13 +1,13 @@
 ---
 name: verify
-description: Run this repository's gates on the work about to be committed — the backtest suite, and the quality score for every staged `.qmd`, `.tex` or `.R` file — and stop the commit if one fails. Claude Code runs a project skill named `verify` right before it commits; also use it when the user says "verify", "run the gates", "check before I commit", or "is this ready to commit?". It checks and reports; it never commits, pushes or fixes anything itself.
+description: Run this repository's gates on the work about to be committed — the backtest suite, and the quality score for every staged `.qmd`, `.tex` or `.R` file — and stop the commit if one fails. Claude Code tells Claude to run a project skill named `verify` right before committing (not for docs-only or tests-only commits); also use it when the user says "verify", "run the gates", "check before I commit", or "is this ready to commit?". It checks and reports; it never commits, pushes or fixes anything itself.
 allowed-tools: ["Bash", "Read"]
 effort: low
 ---
 
 # /verify — the gates, before a commit
 
-Since Claude Code 2.1.286, a project skill named `verify` is run right before Claude commits (docs-only and tests-only commits excepted). This one runs the same gates `/commit` runs, so a commit Claude makes without `/commit` is still gated. It **does not** commit, push, stage, or edit anything.
+Since Claude Code 2.1.286, Claude is *told* to run a project skill named `verify` right before it commits, except for docs-only and tests-only commits. This one runs the same gates `/commit` runs. It is a reminder, not enforcement: Claude can skip it, and an exempt commit never triggers it, even one that changes a `.qmd` or `.tex` file. The enforcing gates are the git pre-commit hook (`./scripts/install-hooks.sh`) and `/commit`. It **does not** commit, push, stage, or edit anything.
 
 ## Steps
 

@@ -2969,11 +2969,11 @@ You see: &quot;Analysis complete. 3 tables, 4 figures.&quot;</code></pre>
 </section>
 <section id="step-1-fork-clone" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="step-1-fork-clone"><span class="header-section-number">2.2</span> Step 1: Fork &amp; Clone</h2>
+<p><strong>Unpublished work? Choose before you copy.</strong> GitHub keeps a fork of a public repository public, and its visibility cannot be changed. For a paper, data or anything not yet public, click <strong>Use this template</strong> on the repository page instead, set the new repository to <strong>Private</strong>, and clone that one: <code>git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git my-project</code>. Fork only for work that can be public.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fork this repo on GitHub (click &quot;Fork&quot; on the repo page), then:</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/YOUR_USERNAME/claude-code-my-workflow.git my-project</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> my-project</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Replace <code>YOUR_USERNAME</code> with your GitHub username.</p>
-<p><strong>Unpublished work? Use the template, not a fork.</strong> GitHub keeps a fork of a public repository public, and its visibility cannot be changed. <strong>Use this template</strong> (the green button on the repository page) makes a fresh repository you can set to private before anything is in it. Then clone that instead.</p>
 </section>
 <section id="sec-first-session" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="sec-first-session"><span class="header-section-number">2.3</span> Step 2: Start Claude Code and Paste This Prompt</h2>
@@ -7674,7 +7674,7 @@ research_spec_&lt;topic&gt;.md  ──────→  YYYY-MM-DD_&lt;slug&gt;.m
 <tr class="odd">
 <td><code>/verify</code></td>
 <td><code>.claude/skills/verify/</code></td>
-<td>The gates before a commit: backtest plus quality score on staged files; Claude Code runs it before committing (2.1.286+)</td>
+<td>The gates before a commit: backtest plus quality score on staged files; Claude Code tells Claude to run it before committing (2.1.286+), a reminder next to the enforcing pre-commit hook</td>
 </tr>
 <tr class="even">
 <td><code>/devils-advocate</code></td>

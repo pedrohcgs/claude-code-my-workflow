@@ -2,7 +2,7 @@
 
 A robustness check, a placebo, an alternative sample, a second data source: each is evidence only if you decided **beforehand** what its result would mean. Decide afterwards and every outcome can be read as support. This ledger fixes the reading first.
 
-`quality_reports/spec-ledger.md` records each specification *after* it runs. This file records, *before* a check runs, what result would support the claim, what would weaken it, and what would leave it undecided. The two link by **Check ID**.
+`quality_reports/spec-ledger.md` records each specification *after* it runs. This file records, *before* a check runs, what result would support the claim, what would weaken it, and what would leave it undecided. The two join on what both record: this file's *Ran on* cell (date and `script:line`) matches a spec-ledger row's `Date` and `Script:line`.
 
 **Rules.**
 - A row is written and committed **before** the check runs. Its *Supports*, *Weakens* and *Ambiguous* cells are then frozen.
