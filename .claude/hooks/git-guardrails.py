@@ -369,6 +369,14 @@ Decision protocol (modern PreToolUse): exit 0 + JSON
   {"hookSpecificOutput": {"hookEventName": "PreToolUse",
     "permissionDecision": "deny", "permissionDecisionReason": "..."}}.
 Fail-open: any error → exit 0 with no decision (allow).
+
+One exception, a DECISION and not an error (#186): a well-formed event that
+lacks the field this guard reads is DENIED. With no `tool_name`, or a Bash
+event with no string `tool_input.command`, the guard used to read "" and allow
+the command, so a Claude Code update that renamed the field would switch this
+guard off without a word. Now it refuses and says why. A Write/Edit/MultiEdit
+event with no `file_path` still fails open: that check is advisory (a warning
+unless CLAUDE_STRICT_PATHS=1). Unparseable input still fails open as before.
 """
 
 from __future__ import annotations
@@ -1182,6 +1190,32 @@ def deny(reason: str) -> None:
     }}, sys.stdout)
 
 
+def payload_contract_break(data) -> str | None:
+    """What is missing from a well-formed event this guard has to read, or None (#186).
+
+    A non-object is not judged here: it is malformed input, which fails open.
+    Only the fields a DENY depends on are required, so only Bash is checked."""
+    if not isinstance(data, dict):
+        return None
+    tool = data.get("tool_name")
+    if not isinstance(tool, str) or not tool:
+        return "an event with no `tool_name`"
+    if tool == "Bash":
+        ti = data.get("tool_input")
+        if not isinstance(ti, dict) or not isinstance(ti.get("command"), str):
+            return "a Bash event with no string `tool_input.command`"
+    return None
+
+
+def contract_denial(guard: str, what: str) -> str:
+    return (f"Blocked by {guard}: Claude Code sent {what}, so this guard cannot read "
+            f"the command it exists to check. A Claude Code update may have changed the "
+            f"hook payload; the guard refuses rather than allow a command it cannot see "
+            f"(#186). Look for an update to this template's .claude/hooks/. Until then, "
+            f"run the command yourself in a terminal, or switch this project's hooks off "
+            f"with \"disableAllHooks\": true in .claude/settings.local.json.")
+
+
 def _repo_neutral_env() -> dict:
     """The process environment with git's REPOSITORY-SCOPING variables removed.
 
@@ -1729,6 +1763,11 @@ def main() -> int:
     try:
         data = json.loads(sys.stdin.buffer.read().decode("utf-8", "replace"))
     except (json.JSONDecodeError, EOFError):
+        return 0
+
+    broken = payload_contract_break(data)
+    if broken:
+        deny(contract_denial("git-guardrails", broken))
         return 0
 
     tool = data.get("tool_name", "")

@@ -1277,6 +1277,44 @@ expect_deny   "a121 r21 CONTROL, the sharp one: the TWO-operand form writing INT
 fire root-of-trust-guard.py "$TMP/a122.json"
 expect_deny   "a122 r21 CONTROL: an ordinary two-operand cp INTO the root of trust still DENIES — the DEST_LAST branch is intact for every real write"
 
+# a123-a129 (#186): a WELL-FORMED event that lacks the field this guard reads is
+# DENIED. The guard used to read "" and allow, so a Claude Code update that
+# renamed or dropped the field would have switched it off without a word.
+# Malformed input (a3) still fails open, and a non-Bash event is still ignored:
+# only the fields a deny depends on are required.
+cat > "$TMP/a123.json" <<'EOF'
+{"tool_name":"Bash","tool_input":{"cmd":"printf disabled > .claude/settings.json"}}
+EOF
+cat > "$TMP/a124.json" <<'EOF'
+{"tool_input":{"command":"printf disabled > .claude/settings.json"}}
+EOF
+cat > "$TMP/a125.json" <<'EOF'
+{"tool_name":"Bash","tool_input":{"command":["printf","disabled"]}}
+EOF
+cat > "$TMP/a126.json" <<'EOF'
+{"tool_name":"Bash"}
+EOF
+cat > "$TMP/a127.json" <<'EOF'
+{"tool_name":"Read","tool_input":{"file_path":".claude/settings.json"}}
+EOF
+cat > "$TMP/a128.json" <<'EOF'
+{"tool_name":"Bash","tool_input":{"command":"","description":"x"}}
+EOF
+fire root-of-trust-guard.py "$TMP/a123.json"
+expect_deny   "a123 #186: a Bash event whose command field was RENAMED (cmd) is denied, not read as an empty command and allowed"
+fire root-of-trust-guard.py "$TMP/a124.json"
+expect_deny   "a124 #186: an event with NO tool_name is denied"
+fire root-of-trust-guard.py "$TMP/a125.json"
+expect_deny   "a125 #186: a command that is not a STRING (a list) is denied"
+fire root-of-trust-guard.py "$TMP/a126.json"
+expect_contains "a126 #186: a Bash event with no tool_input at all is denied, and the reason names the missing field" "tool_input.command"
+fire root-of-trust-guard.py "$TMP/a127.json"
+expect_silent "a127 #186 CONTROL: a non-Bash event is still ignored — only the fields a deny depends on are required"
+fire root-of-trust-guard.py "$TMP/a128.json"
+expect_silent "a128 #186 CONTROL: an EMPTY command string is present and well-typed, so it is read, not refused"
+fire_from "$ROT_EX" root-of-trust-guard.py "$TMP/a123.json"
+expect_deny   "a129 #186: with a sibling git-guardrails.py that blows up at import, the renamed field is still denied — the check lives in this file, so a broken or stubbed sibling cannot take it away"
+
 # ── (b) git-guardrails: the deny list ──────────────────────────────────────
 echo ""
 echo "  (b) git-guardrails.py — destructive git"
@@ -1574,6 +1612,37 @@ fire git-guardrails.py "$TMP/b37.json"
 expect_deny   "b37 r20 THE SHARP ONE: the split inside the PROGRAM WORD (gi\\<newline>t reset --hard) is denied — with the word broken the segment carried no basename 'git' at all, so neither the deny list NOR the clean-tree precondition ever ran"
 fire git-guardrails.py "$TMP/b38.json"
 expect_silent "b38 r20 CONTROL: a continuation inside a word of an ORDINARY command (echo re\\<newline>set is a word here) stays silent — joining the halves did not make every spliced word a destructive verb, and the basename is echo"
+
+# b39-b43 (#186): the same contract in git-guardrails. A Bash event that lacks
+# the field the deny list reads is denied. A Write/Edit/MultiEdit event without
+# file_path still fails open: that check is advisory (a warning unless
+# CLAUDE_STRICT_PATHS=1), and refusing every edit for it would cost more than
+# the warning is worth.
+cat > "$TMP/b39.json" <<'EOF'
+{"tool_name":"Bash","tool_input":{"cmd":"git reset --hard HEAD~1"}}
+EOF
+cat > "$TMP/b40.json" <<'EOF'
+{"tool_input":{"command":"git reset --hard HEAD~1"}}
+EOF
+cat > "$TMP/b41.json" <<'EOF'
+{"tool_name":"Bash","tool_input":null}
+EOF
+cat > "$TMP/b42.json" <<'EOF'
+{"tool_name":"Edit","tool_input":{"path":"analysis.R","new_string":"x <- read.csv('/Users/me/data.csv')"}}
+EOF
+cat > "$TMP/b43.json" <<'EOF'
+{"tool_name":"Write"}
+EOF
+fire git-guardrails.py "$TMP/b39.json"
+expect_deny   "b39 #186: a Bash event whose command field was RENAMED (cmd) is denied — a git reset --hard it cannot read is not allowed"
+fire git-guardrails.py "$TMP/b40.json"
+expect_deny   "b40 #186: an event with NO tool_name is denied"
+fire git-guardrails.py "$TMP/b41.json"
+expect_contains "b41 #186: a Bash event whose tool_input is null is denied, and the reason names the missing field" "tool_input.command"
+fire git-guardrails.py "$TMP/b42.json" CLAUDE_STRICT_PATHS=1
+expect_silent "b42 #186 CONTROL: an Edit whose file_path was renamed still fails OPEN, even under CLAUDE_STRICT_PATHS=1 — the path check is advisory, and a recorded decision keeps it from blocking every edit"
+fire git-guardrails.py "$TMP/b43.json"
+expect_silent "b43 #186 CONTROL: a Write with no tool_input at all fails open the same way"
 
 # ── (c) git-guardrails: the clean-tree precondition ────────────────────────
 # Needs a real repository to answer `git status --porcelain`, so build a
